@@ -363,27 +363,8 @@
     </div>
   </div>
 
-  <!-- ═══════ RESULTS ═══════ -->
+  <!-- ═══════ RESULTS / SUBMISSION CONFIRMATION ═══════ -->
   <div id="screen-results">
-    <div class="rt">
-      <div class="v-badge" id="v-badge"></div>
-      <div class="r-name" id="r-name"></div>
-      <div class="r-meta" id="r-meta"></div>
-      <div class="r-comp"><span class="r-big" id="r-score">—</span><span class="r-denom">/ 5.00</span></div>
-    </div>
-    <div class="sgrid" id="score-grid"></div>
-    <div class="fbox" id="flags-box" style="display:none"><h3>⚠ Red Flag Responses</h3><div id="flags-list"></div></div>
-    <div class="sbox" id="sum-box"></div>
-    <div class="wbox">
-      <h3>Workable Notes — Copy &amp; Paste</h3>
-      <p>Paste into the candidate's Notes tab in Workable.</p>
-      <div class="wtext" id="wtext"></div>
-      <button class="btn-cp" onclick="copyReport()">Copy to Clipboard</button>
-    </div>
-    <div class="exp-row">
-      <button class="btn-p" onclick="window.print()">Print / Save PDF</button>
-      <button class="btn-o" onclick="location.reload()">New Assessment</button>
-    </div>
   </div>
 
 </main>
@@ -912,12 +893,21 @@ async function sendToFlow(data) {
 }
 
 function copyReport(){
-  navigator.clipboard.writeText(document.getElementById('wtext').textContent).then(()=>{
+  const target=document.getElementById('wtext');
+  if(!target) return;
+  navigator.clipboard.writeText(target.textContent).then(()=>{
     const b=document.querySelector('.btn-cp');
+    if(!b) return;
     b.textContent='✓ Copied!';
     setTimeout(()=>b.textContent='Copy to Clipboard',2000);
   });
 }
+
+// Explicitly expose handlers for GitHub Pages/browser compatibility.
+window.startAssessment = startAssessment;
+window.nextSec = nextSec;
+window.prevSec = prevSec;
+window.copyReport = copyReport;
 </script>
 </body>
 </html>
