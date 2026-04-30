@@ -663,8 +663,10 @@ function startAssessment() {
   const em=document.getElementById('i-em').value.trim();
   if(!fn||!ln||!em){alert('Please enter your first name, last name, and email.');return;}
   cand={
-    firstName:fn, lastName:ln,
-    name:fn+' '+ln, email:em,
+    firstName:fn,
+    lastName:ln,
+    name:fn+' '+ln,
+    email:em,
     phone:document.getElementById('i-ph').value.trim(),
     position:document.getElementById('i-pos').value.trim()||'Administrative Staff',
     date:new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'})
@@ -796,7 +798,7 @@ function getVerdict(c,rf,integrity,conf){
 // ══════════════════════════════════════════════════════════════
 // RESULTS
 // ══════════════════════════════════════════════════════════════
-async function showResults(){
+function showResults(){
   document.getElementById('screen-assessment').style.display='none';
   document.getElementById('screen-results').style.display='block';
   document.getElementById('hRight').style.display='none';
@@ -874,11 +876,11 @@ async function showResults(){
 
   document.getElementById('wtext').textContent=report;
 
-  await sendToFlow({
-    firstName: cand.firstName,
-    lastName: cand.lastName,
-    email: cand.email,
-    position: cand.position,
+  sendToFlow({
+    firstName: cand.firstName || '',
+    lastName: cand.lastName || '',
+    email: cand.email || '',
+    position: cand.position || '',
     assessmentType: 'Admin',
     score: composite.toFixed(2),
     recommendation: verdict.label,
@@ -893,7 +895,7 @@ async function sendToFlow(data) {
       method: 'POST',
       mode: 'no-cors',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'text/plain'
       },
       body: JSON.stringify(data)
     });
