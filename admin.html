@@ -802,7 +802,7 @@ async function showResults(){
   let sum='';
   if(verdict.cls==='vb-hire')sum='This candidate demonstrates strong alignment with professional ethics, confidentiality standards, and workplace reliability across all measured dimensions.';
   else if(verdict.cls==='vb-review')sum='This candidate shows generally positive work attitudes with some areas warranting closer discussion. Probe any flagged responses and explore reliability and information-handling habits in interview.';
-  else sum='This candidate\\'s responses indicate concerns in one or more key areas. Review hard-stop criteria and discuss with the hiring manager before advancing.';
+  else sum="This candidate's responses indicate concerns in one or more key areas. Review hard-stop criteria and discuss with the hiring manager before advancing.";
 
   if((avg['Integrity']||0)<3.8)sum+=` Integrity score (${(avg['Integrity']||0).toFixed(1)}) is below target — probe honesty and accuracy habits in interview.`;
   if((avg['Confidentiality']||0)<3.8)sum+=` Confidentiality score (${(avg['Confidentiality']||0).toFixed(1)}) warrants close attention for any role with access to sensitive information.`;
