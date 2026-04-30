@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- NWA_LEADERSHIP_HIDDEN_RESULTS_BUILD_2026_04_30_V1 -->
 <title>EMS Leadership Assessment</title>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,600;0,700;1,400&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
@@ -672,6 +673,8 @@
 </main>
 
 <script>
+const FLOW_URL = "https://defaultb9fe31c2de0742529875da1c500446.c8.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/7b0c2902b6a34df88a3879469437fed0/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=LAbOa6U8xvED2R3HDjai7nhtgI7-u8z5zjhj8Ma-q0E";
+
 // =====================================================================
 // QUESTION DATA — 70 questions across 7 leadership categories
 // =====================================================================
@@ -1099,66 +1102,39 @@ function getVerdict(composite, redFlagCount, integrity, safety) {
 // =====================================================================
 // RESULTS
 // =====================================================================
-function showResults() {
+async function showResults() {
   document.getElementById('screen-assessment').style.display = 'none';
   document.getElementById('screen-results').style.display = 'block';
   document.getElementById('headerRight').style.display = 'none';
   window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  const results = document.getElementById('screen-results');
+  results.innerHTML = `
+    <div class="results-top">
+      <div class="verdict-pill vp-review">Submitting</div>
+      <div class="r-name">Submitting your assessment...</div>
+      <div class="r-meta">Please do not close this page yet.</div>
+    </div>
+  `;
 
   const { avg, composite } = computeScores();
   const redFlags = getRedFlags();
   const validity = getValidityConcerns();
   const verdict = getVerdict(composite, redFlags.length, avg['Integrity']||0, avg['Safety Leadership']||0);
 
-  // Header
-  const vp = document.getElementById('v-pill');
-  vp.textContent = verdict.label;
-  vp.className = 'verdict-pill ' + verdict.cls;
-  document.getElementById('r-name').textContent = candidate.name;
-  document.getElementById('r-meta').textContent = candidate.position + ' · ' + candidate.date;
-  document.getElementById('r-score').textContent = composite.toFixed(2);
-
-  // Score cards
-  const grid = document.getElementById('score-grid');
-  grid.innerHTML = '';
-  DISPLAY_CATS.forEach(({ key, label }) => {
-    const val = avg[key] || 0;
-    const pct = ((val - 1) / 4) * 100;
-    const color = val >= 4.2 ? '#6dbf8b' : val >= 3.4 ? '#e8b84b' : '#e05c6a';
-    const card = document.createElement('div');
-    card.className = 'sc-card';
-    card.innerHTML = `
-      <div class="sc-label">${label}</div>
-      <div class="sc-bar-wrap">
-        <div class="sc-bar-bg"><div class="sc-bar-fill" style="width:${pct}%;background:${color}"></div></div>
-        <div class="sc-val" style="color:${color}">${val.toFixed(1)}</div>
-      </div>`;
-    grid.appendChild(card);
-  });
-
-  // Red flags
-  if (redFlags.length > 0) {
-    document.getElementById('flags-box').style.display = 'block';
-    document.getElementById('flags-list').innerHTML =
-      redFlags.map(f => `<div class="flag-item">• "${f.text}" — <strong>${f.ans}</strong></div>`).join('');
-  }
-
-  // Summary
   let summary = '';
   if (verdict.cls === 'vp-hire') {
     summary = 'This candidate demonstrates strong alignment with EMS leadership standards across all measured dimensions. Scores indicate integrity, sound judgment under pressure, and a healthy approach to team development and accountability.';
   } else if (verdict.cls === 'vp-review') {
     summary = 'This candidate shows generally positive leadership attributes with some areas warranting discussion in the interview. Pay close attention to any red flags and probe decision-making and conflict management scenarios directly.';
   } else {
-    summary = 'This candidate\'s responses indicate significant concerns in key leadership areas. A thorough review is recommended before advancing. Hard stops in integrity or safety leadership should be discussed with the hiring manager before proceeding.';
+    summary = "This candidate's responses indicate significant concerns in key leadership areas. A thorough review is recommended before advancing. Hard stops in integrity or safety leadership should be discussed with the hiring manager before proceeding.";
   }
   if ((avg['Integrity']||0) < 3.8) summary += ` Leadership Integrity score (${(avg['Integrity']||0).toFixed(1)}) is below target — probe accountability and transparency in interview.`;
   if ((avg['Safety Leadership']||0) < 3.8) summary += ` Safety Leadership score (${(avg['Safety Leadership']||0).toFixed(1)}) warrants close attention.`;
   if ((avg['Conflict Management']||0) < 3.5) summary += ` Conflict Management score (${(avg['Conflict Management']||0).toFixed(1)}) is low — explore personnel management situations directly.`;
   if (validity >= 2) summary += ' Validity check flags suggest possible impression-management responding — interpret all scores with additional caution.';
-  document.getElementById('summary-box').textContent = summary;
 
-  // Workable report
   const mr = avg['Misconduct Risk'] || 0;
   const report = [
     '=== EMS Leadership Assessment Results ===',
@@ -1187,7 +1163,42 @@ function showResults() {
     summary
   ].join('\n');
 
-  document.getElementById('copy-area').textContent = report;
+  const nameParts = candidate.name.trim().split(/\s+/);
+  const submitted = await sendToFlow({
+    firstName: nameParts[0] || '',
+    lastName: nameParts.slice(1).join(' '),
+    email: candidate.email,
+    position: candidate.position,
+    assessmentType: "Leadership",
+    score: composite.toFixed(2),
+    recommendation: verdict.label,
+    redFlags: redFlags.length.toString(),
+    report: report
+  });
+
+  if (submitted) {
+    results.innerHTML = `
+      <div class="results-top">
+        <div class="verdict-pill vp-hire">Submitted</div>
+        <div class="r-name">Thank you for submitting your assessment.</div>
+        <div class="r-meta">Please monitor your email for next steps from our hiring team.</div>
+      </div>
+      <div class="summary-box" style="text-align:center;">
+        Your assessment has been received. You may now close this page.
+      </div>
+    `;
+  } else {
+    results.innerHTML = `
+      <div class="results-top">
+        <div class="verdict-pill vp-review">Submission Issue</div>
+        <div class="r-name">We could not confirm your submission.</div>
+        <div class="r-meta">Please notify the hiring team that your assessment did not submit successfully.</div>
+      </div>
+      <div class="summary-box" style="text-align:center;">
+        You may keep this page open and contact the hiring team for next steps.
+      </div>
+    `;
+  }
 }
 
 function copyReport() {
@@ -1197,6 +1208,23 @@ function copyReport() {
     setTimeout(() => btn.textContent = 'Copy to Clipboard', 2000);
   });
 }
+
+async function sendToFlow(data) {
+  try {
+    const response = await fetch(FLOW_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(data)
+    });
+    return response.ok;
+  } catch (e) {
+    console.error("Flow submission failed", e);
+    return false;
+  }
+}
+
 </script>
 </body>
 </html>
