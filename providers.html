@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- NWA_PROVIDERS_HIDDEN_RESULTS_BUILD_2026_04_30_V1 -->
 <title>EMS Professional Conduct & Work Style Assessment</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
@@ -751,6 +752,8 @@
 </main>
 
 <script>
+const FLOW_URL = "https://defaultb9fe31c2de0742529875da1c500446.c8.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/7b0c2902b6a34df88a3879469437fed0/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=LAbOa6U8xvED2R3HDjai7nhtgI7-u8z5zjhj8Ma-q0E";
+
 // ============================================================
 // QUESTION DATA
 // ============================================================
@@ -1113,11 +1116,20 @@ function getVerdict(weightedSum, redFlagCount, integrityScore, safetyScore) {
 // ============================================================
 // RESULTS
 // ============================================================
-function showResults() {
+async function showResults() {
   document.getElementById('screen-assessment').style.display = 'none';
   document.getElementById('screen-results').style.display = 'block';
   document.getElementById('headerProgress').style.display = 'none';
   window.scrollTo({ top:0, behavior:'smooth' });
+
+  const results = document.getElementById('screen-results');
+  results.innerHTML = `
+    <div class="results-header">
+      <div class="result-verdict verdict-review">Submitting</div>
+      <div class="results-name">Submitting your assessment...</div>
+      <div class="results-meta">Please do not close this page yet.</div>
+    </div>
+  `;
 
   const { avg, weightedSum } = computeScores();
   const redFlags = getRedFlags();
@@ -1127,49 +1139,6 @@ function showResults() {
   const safetyScore = avg["Safety Orientation"] || 0;
   const verdict = getVerdict(weightedSum, redFlags.length, integrityScore, safetyScore);
 
-  // Header
-  const vb = document.getElementById('verdict-badge');
-  vb.textContent = verdict.label;
-  vb.className = 'result-verdict ' + verdict.cls;
-  document.getElementById('result-name').textContent = candidate.name;
-  document.getElementById('result-meta').textContent = `${candidate.position} · ${candidate.date}`;
-
-  // Score cards
-  const displayGroups = [
-    { key:"Integrity", label:"Integrity" },
-    { key:"Safety Orientation", label:"Safety Orientation" },
-    { key:"Professionalism", label:"Professionalism" },
-    { key:"Team Reliability", label:"Team Reliability" },
-    { key:"Stress Tolerance", label:"Stress Tolerance" },
-    { key:"Situational Judgment", label:"Situational Judgment" },
-  ];
-
-  const grid = document.getElementById('scores-grid');
-  grid.innerHTML = '';
-  displayGroups.forEach(({ key, label }) => {
-    const val = avg[key] || 0;
-    const pct = ((val - 1) / 4) * 100;
-    const color = val >= 4.2 ? '#81c784' : val >= 3.4 ? '#ffd54f' : '#ef9a9a';
-    const card = document.createElement('div');
-    card.className = 'score-card';
-    card.innerHTML = `
-      <div class="score-card-label">${label}</div>
-      <div class="score-bar-wrap">
-        <div class="score-bar-bg"><div class="score-bar-fill" style="width:${pct}%;background:${color}"></div></div>
-        <div class="score-val" style="color:${color}">${val.toFixed(1)}</div>
-      </div>`;
-    grid.appendChild(card);
-  });
-
-  // Red flags
-  const rfBox = document.getElementById('red-flags-box');
-  if (redFlags.length > 0) {
-    rfBox.style.display = 'block';
-    document.getElementById('red-flags-list').innerHTML =
-      redFlags.map(f => `<div class="red-flag-item">• "${f.text}" — Answered: <strong>${f.answer}</strong></div>`).join('');
-  }
-
-  // Summary
   const summaryLines = [];
   if (verdict.cls === 'verdict-hire') summaryLines.push("This candidate demonstrates strong alignment with EMS professional standards across all measured dimensions.");
   else if (verdict.cls === 'verdict-review') summaryLines.push("This candidate shows generally positive work attitudes with some areas warranting further discussion during the interview.");
@@ -1179,9 +1148,6 @@ function showResults() {
   if (safetyScore < 3.8) summaryLines.push(`Safety Orientation score (${safetyScore.toFixed(1)}) is below target — explore safety habits in depth.`);
   if (validityConcerns >= 2) summaryLines.push("Validity check flags suggest possible socially desirable responding — interpret scores with caution.");
 
-  document.getElementById('summary-box').textContent = summaryLines.join(' ');
-
-  // Workable paste text
   const mjScore = avg["Misconduct Risk"] || 0;
   const report = `=== EMS Assessment Results ===
 Candidate: ${candidate.name}
@@ -1208,7 +1174,42 @@ Validity Concerns: ${validityConcerns}
 --- SUMMARY ---
 ${summaryLines.join(' ')}`;
 
-  document.getElementById('workable-copy-text').textContent = report;
+  const nameParts = candidate.name.trim().split(/\s+/);
+  const submitted = await sendToFlow({
+    firstName: nameParts[0] || '',
+    lastName: nameParts.slice(1).join(' '),
+    email: candidate.email,
+    position: candidate.position,
+    assessmentType: "EMS",
+    score: weightedSum.toFixed(2),
+    recommendation: verdict.label,
+    redFlags: redFlags.length.toString(),
+    report: report
+  });
+
+  if (submitted) {
+    results.innerHTML = `
+      <div class="results-header">
+        <div class="result-verdict verdict-hire">Submitted</div>
+        <div class="results-name">Thank you for submitting your assessment.</div>
+        <div class="results-meta">Please monitor your email for next steps from our hiring team.</div>
+      </div>
+      <div class="summary-box" style="text-align:center;">
+        Your assessment has been received. You may now close this page.
+      </div>
+    `;
+  } else {
+    results.innerHTML = `
+      <div class="results-header">
+        <div class="result-verdict verdict-review">Submission Issue</div>
+        <div class="results-name">We could not confirm your submission.</div>
+        <div class="results-meta">Please notify the hiring team that your assessment did not submit successfully.</div>
+      </div>
+      <div class="summary-box" style="text-align:center;">
+        You may keep this page open and contact the hiring team for next steps.
+      </div>
+    `;
+  }
 }
 
 function copyReport() {
@@ -1223,6 +1224,23 @@ function copyReport() {
 function printReport() {
   window.print();
 }
+
+async function sendToFlow(data) {
+  try {
+    const response = await fetch(FLOW_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(data)
+    });
+    return response.ok;
+  } catch (e) {
+    console.error("Flow submission failed", e);
+    return false;
+  }
+}
+
 </script>
 
 <style>
