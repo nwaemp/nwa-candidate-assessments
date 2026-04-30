@@ -1,696 +1,68 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Administrative Staff Assessment</title>
-<link href="https://fonts.googleapis.com/css2?family=Cabinet+Grotesk:wght@400;500;700;800&family=Instrument+Serif:ital@0;1&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
-<style>
-  :root {
-    --bg:       #f4f1ec;
-    --bg2:      #ede9e1;
-    --ink:      #1c1c1c;
-    --ink2:     #3a3a3a;
-    --muted:    #8a8076;
-    --border:   rgba(28,28,28,0.1);
-    --border2:  rgba(28,28,28,0.18);
-    --teal:     #2a6b6b;
-    --teal-lt:  #3d9999;
-    --teal-bg:  rgba(42,107,107,0.08);
-    --teal-bd:  rgba(42,107,107,0.25);
-    --card:     #ffffff;
-    --green:    #2d7a4f;
-    --green-bg: rgba(45,122,79,0.1);
-    --green-bd: rgba(45,122,79,0.3);
-    --amber:    #a06020;
-    --amber-bg: rgba(160,96,32,0.1);
-    --amber-bd: rgba(160,96,32,0.3);
-    --red:      #b03030;
-    --red-bg:   rgba(176,48,48,0.08);
-    --red-bd:   rgba(176,48,48,0.25);
-  }
-
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-
-  body {
-    font-family: 'Cabinet Grotesk', sans-serif;
-    background: var(--bg);
-    color: var(--ink);
-    min-height: 100vh;
-    font-size: 15px;
-    line-height: 1.65;
-  }
-
-  body::before {
-    content: '';
-    position: fixed; inset: 0;
-    background-image: radial-gradient(circle, rgba(28,28,28,0.1) 1px, transparent 1px);
-    background-size: 28px 28px;
-    pointer-events: none; z-index: 0;
-  }
-
-  /* ── HEADER ─────────────────── */
-  .header {
-    background: var(--ink);
-    padding: 0 40px; height: 58px;
-    display: flex; align-items: center; gap: 14px;
-    position: sticky; top: 0; z-index: 100;
-  }
-
-  .h-badge {
-    background: var(--teal); color: #fff;
-    font-size: 10px; font-weight: 800;
-    letter-spacing: 0.1em; text-transform: uppercase;
-    padding: 4px 9px; border-radius: 3px; flex-shrink: 0;
-  }
-
-  .h-title {
-    font-size: 13px; font-weight: 700;
-    letter-spacing: 0.06em; text-transform: uppercase;
-    color: rgba(255,255,255,0.85);
-  }
-
-  .h-div { width: 1px; height: 18px; background: rgba(255,255,255,0.12); }
-
-  .h-sub { font-size: 11px; color: rgba(255,255,255,0.38); letter-spacing: 0.03em; }
-
-  .h-right { margin-left: auto; display: flex; align-items: center; gap: 10px; }
-
-  .prog-cap {
-    display: flex; align-items: center; gap: 8px;
-    background: rgba(255,255,255,0.06);
-    border: 1px solid rgba(255,255,255,0.09);
-    border-radius: 99px; padding: 4px 14px;
-  }
-
-  .prog-num { font-family: 'DM Mono', monospace; font-size: 11px; color: rgba(255,255,255,0.45); }
-  .prog-track { width: 88px; height: 3px; background: rgba(255,255,255,0.1); border-radius: 2px; overflow: hidden; }
-  .prog-fill { height: 100%; background: var(--teal-lt); border-radius: 2px; transition: width 0.35s ease; width: 0%; }
-
-  /* ── MAIN ───────────────────── */
-  .main { max-width: 760px; margin: 0 auto; padding: 48px 24px 100px; position: relative; z-index: 1; }
-
-  /* ── WELCOME ────────────────── */
-  #screen-welcome { display: block; }
-
-  .w-kicker {
-    font-family: 'DM Mono', monospace;
-    font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase;
-    color: var(--teal); margin-bottom: 20px;
-    display: flex; align-items: center; gap: 10px;
-  }
-  .w-kicker::after { content:''; width:40px; height:1px; background:var(--teal); }
-
-  .w-title {
-    font-family: 'Instrument Serif', serif;
-    font-size: clamp(32px, 5.5vw, 52px);
-    font-weight: 400; line-height: 1.04;
-    letter-spacing: -0.02em; color: var(--ink); margin-bottom: 20px;
-  }
-  .w-title em { font-style: italic; color: var(--teal); }
-
-  .w-desc { font-size: 15px; color: var(--muted); max-width: 500px; line-height: 1.75; margin-bottom: 36px; }
-
-  .stats-strip {
-    display: flex; max-width: 400px;
-    border: 1px solid var(--border2); border-radius: 10px;
-    overflow: hidden; margin-bottom: 44px; background: var(--card);
-  }
-
-  .stat { flex:1; padding: 14px 18px; border-right: 1px solid var(--border); }
-  .stat:last-child { border-right: none; }
-  .stat-val { font-family: 'Instrument Serif', serif; font-size: 26px; color: var(--ink); line-height:1; }
-  .stat-lbl { font-size: 10px; letter-spacing: 0.07em; text-transform: uppercase; color: var(--muted); margin-top: 2px; }
-
-  /* FORM */
-  .cform { max-width: 480px; margin-bottom: 36px; }
-  .frow { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
-  .fg { display: flex; flex-direction: column; gap: 5px; }
-  .fg label { font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
-  .fg input {
-    background: var(--card); border: 1px solid var(--border2);
-    border-radius: 7px; padding: 9px 12px;
-    color: var(--ink); font-size: 13px;
-    font-family: 'Cabinet Grotesk', sans-serif;
-    outline: none; transition: border-color 0.2s;
-  }
-  .fg input:focus { border-color: var(--teal); }
-  .fg input::placeholder { color: rgba(28,28,28,0.22); }
-
-  /* BUTTONS */
-  .btn-p {
-    background: var(--teal); color: #fff;
-    border: none; border-radius: 7px;
-    padding: 13px 28px;
-    font-family: 'Cabinet Grotesk', sans-serif;
-    font-size: 14px; font-weight: 700;
-    cursor: pointer; transition: background 0.2s, transform 0.1s;
-    display: inline-flex; align-items: center; gap: 8px;
-  }
-  .btn-p:hover { background: #235a5a; }
-  .btn-p:active { transform: scale(0.98); }
-
-  .btn-o {
-    background: transparent; color: var(--muted);
-    border: 1px solid var(--border2); border-radius: 7px;
-    padding: 11px 22px;
-    font-family: 'Cabinet Grotesk', sans-serif;
-    font-size: 13px; cursor: pointer; transition: all 0.15s;
-  }
-  .btn-o:hover { border-color: var(--ink2); color: var(--ink); }
-
-  /* ── ASSESSMENT ─────────────── */
-  #screen-assessment { display: none; }
-
-  .sec-tag {
-    font-family: 'DM Mono', monospace;
-    font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase;
-    color: var(--teal); margin-bottom: 5px;
-  }
-  .sec-title {
-    font-family: 'Instrument Serif', serif;
-    font-size: 26px; font-weight: 400; color: var(--ink); margin-bottom: 4px;
-  }
-  .sec-sub { font-size: 12px; color: var(--muted); margin-bottom: 30px; }
-
-  .q-block { animation: qin 0.22s ease both; }
-  @keyframes qin { from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);} }
-
-  .q-div { height: 1px; background: var(--border); margin: 22px 0; }
-
-  .q-num { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--teal); letter-spacing: 0.1em; margin-bottom: 6px; }
-  .q-text { font-size: 15px; color: var(--ink); line-height: 1.55; margin-bottom: 14px; }
-
-  /* LIKERT */
-  .lw { display: flex; gap: 5px; flex-wrap: wrap; }
-  .lo {
-    flex: 1 1 0; min-width: 88px;
-    background: var(--card); border: 1px solid var(--border2);
-    border-radius: 6px; padding: 9px 6px;
-    text-align: center; cursor: pointer;
-    font-size: 11px; color: var(--muted);
-    line-height: 1.3; transition: all 0.15s; user-select: none;
-  }
-  .lo:hover { background: var(--teal-bg); color: var(--ink); }
-  .lo.sel { background: var(--teal-bg); border-color: var(--teal-bd); color: var(--ink); font-weight: 700; }
-  .l-ends { display: flex; justify-content: space-between; font-size: 10px; color: var(--muted); margin-top: 5px; padding: 0 2px; letter-spacing: 0.04em; }
-
-  /* SCENARIO */
-  .so-wrap { display: flex; flex-direction: column; gap: 6px; }
-  .so {
-    display: flex; align-items: flex-start; gap: 12px;
-    background: var(--card); border: 1px solid var(--border2);
-    border-radius: 8px; padding: 12px 15px;
-    cursor: pointer; transition: all 0.15s; user-select: none;
-  }
-  .so:hover { background: var(--teal-bg); }
-  .so.sel { background: var(--teal-bg); border-color: var(--teal-bd); }
-  .so-letter {
-    width: 22px; height: 22px; border-radius: 50%;
-    border: 1.5px solid var(--muted);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 10px; font-weight: 700; flex-shrink: 0; margin-top: 1px;
-    font-family: 'DM Mono', monospace; transition: all 0.15s;
-  }
-  .so.sel .so-letter { background: var(--teal); border-color: var(--teal); color: #fff; }
-  .so-text { font-size: 13px; color: var(--ink2); line-height: 1.5; }
-
-  /* NAV */
-  .q-nav {
-    display: flex; justify-content: space-between; align-items: center;
-    margin-top: 32px; padding-top: 22px; border-top: 1px solid var(--border);
-  }
-  .nav-info { font-size: 11px; color: var(--muted); font-family: 'DM Mono', monospace; }
-  .nav-btns { display: flex; gap: 10px; }
-
-  /* ── RESULTS ────────────────── */
-  #screen-results { display: none; }
-
-  .rt { text-align: center; padding: 36px 0 24px; }
-
-  .v-badge {
-    display: inline-block;
-    font-family: 'DM Mono', monospace;
-    font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase;
-    padding: 6px 18px; border-radius: 99px; margin-bottom: 14px;
-  }
-  .vb-hire   { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-bd); }
-  .vb-review { background: var(--amber-bg); color: var(--amber); border: 1px solid var(--amber-bd); }
-  .vb-no     { background: var(--red-bg);   color: var(--red);   border: 1px solid var(--red-bd); }
-
-  .r-name { font-family: 'Instrument Serif', serif; font-size: 34px; color: var(--ink); margin-bottom: 5px; }
-  .r-meta { font-size: 12px; color: var(--muted); }
-  .r-comp { margin-top: 14px; display: inline-flex; align-items: baseline; gap: 4px; }
-  .r-big { font-family: 'Instrument Serif', serif; font-size: 52px; color: var(--teal); line-height: 1; }
-  .r-denom { font-size: 18px; color: var(--muted); }
-
-  .sgrid { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin: 24px 0; }
-  .sc { background: var(--card); border: 1px solid var(--border2); border-radius: 10px; padding: 14px 16px; }
-  .sc-lbl { font-size: 10px; letter-spacing: 0.07em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
-  .sc-bar-w { display: flex; align-items: center; gap: 8px; }
-  .sc-bar-bg { flex:1; height: 4px; background: var(--border2); border-radius: 2px; overflow: hidden; }
-  .sc-bar-fill { height: 100%; border-radius: 2px; transition: width 1s ease; }
-  .sc-val { font-family: 'DM Mono', monospace; font-size: 14px; font-weight: 500; width: 30px; text-align: right; flex-shrink: 0; }
-
-  .fbox { background: var(--red-bg); border: 1px solid var(--red-bd); border-radius: 10px; padding: 16px 20px; margin-bottom: 14px; }
-  .fbox h3 { font-size: 13px; font-weight: 700; color: var(--red); margin-bottom: 8px; }
-  .fi { font-size: 12px; color: var(--muted); padding: 4px 0; border-bottom: 1px solid var(--border); }
-  .fi:last-child { border-bottom: none; }
-
-  .sbox { background: var(--card); border: 1px solid var(--border2); border-radius: 10px; padding: 16px 20px; margin-bottom: 18px; font-size: 13px; color: var(--muted); line-height: 1.75; }
-
-  .wbox { background: var(--ink); border-radius: 10px; padding: 20px; margin-top: 20px; }
-  .wbox h3 { font-size: 14px; font-weight: 700; color: var(--bg); margin-bottom: 5px; }
-  .wbox p { font-size: 12px; color: rgba(255,255,255,0.38); margin-bottom: 12px; }
-  .wtext {
-    background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08);
-    border-radius: 7px; padding: 14px;
-    font-family: 'DM Mono', monospace; font-size: 11px;
-    color: rgba(255,255,255,0.5); white-space: pre-wrap; line-height: 1.7; margin-bottom: 10px;
-  }
-  .btn-cp {
-    font-size: 12px; color: rgba(255,255,255,0.45);
-    background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 6px; padding: 7px 14px; cursor: pointer; transition: all 0.15s;
-    font-family: 'Cabinet Grotesk', sans-serif;
-  }
-  .btn-cp:hover { background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.8); }
-
-  .exp-row { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 26px; }
-
-  @media (max-width: 560px) {
-    .header { padding: 0 14px; }
-    .main { padding: 22px 12px 80px; }
-    .frow { grid-template-columns: 1fr; }
-    .stats-strip { flex-wrap: wrap; }
-    .sgrid { grid-template-columns: 1fr 1fr; }
-    .lw { gap: 4px; }
-    .lo { min-width: 56px; padding: 7px 3px; font-size: 10px; }
-    .prog-cap { display: none; }
-  }
-
-  @media print {
-    body::before { display: none; }
-    body { background: white; }
-    .header { position: static; }
-    .btn-p, .btn-o, .btn-cp, .exp-row { display: none !important; }
-    .wbox { background: #1c1c1c; }
-  }
-</style>
-</head>
-<body>
-
-<header class="header">
-  <div class="h-badge">Staff</div>
-  <div class="h-title">Professional Conduct Assessment</div>
-  <div class="h-div"></div>
-  <div class="h-sub">Talent Acquisition</div>
-  <div class="h-right" id="hRight" style="display:none">
-    <div class="prog-cap">
-      <span class="prog-num" id="prog-num">0 / 70</span>
-      <div class="prog-track"><div class="prog-fill" id="prog-fill"></div></div>
-    </div>
-  </div>
-</header>
-
-<main class="main">
-
-  <!-- ═══════ WELCOME ═══════ -->
-  <div id="screen-welcome">
-    <div class="w-kicker">Administrative &amp; Support Staff</div>
-    <h2 class="w-title">Professional Conduct<br>&amp; <em>Work Style</em><br>Assessment</h2>
-    <p class="w-desc">
-      This assessment is for administrative and non-clinical support roles. Answer honestly — there are no trick questions.
-      We are looking for self-awareness and genuine work values, not perfection.
-    </p>
-
-    <div class="stats-strip">
-      <div class="stat"><div class="stat-val">70</div><div class="stat-lbl">Questions</div></div>
-      <div class="stat"><div class="stat-val">15–20</div><div class="stat-lbl">Minutes</div></div>
-      <div class="stat"><div class="stat-val">7</div><div class="stat-lbl">Categories</div></div>
-    </div>
-
-    <div class="cform">
-      <div class="frow">
-        <div class="fg"><label>First Name *</label><input type="text" id="i-fn" placeholder="Jane"></div>
-        <div class="fg"><label>Last Name *</label><input type="text" id="i-ln" placeholder="Smith"></div>
-      </div>
-      <div class="frow">
-        <div class="fg"><label>Email *</label><input type="email" id="i-em" placeholder="jane@email.com"></div>
-        <div class="fg"><label>Phone</label><input type="tel" id="i-ph" placeholder="(555) 000-0000"></div>
-      </div>
-      <div class="fg" style="margin-bottom:12px">
-        <label>Position Applied For</label>
-        <input type="text" id="i-pos" placeholder="e.g. Office Coordinator, Billing Specialist">
-      </div>
-    </div>
-
-    <button class="btn-p" onclick="startAssessment()">Begin Assessment →</button>
-  </div>
-
-  <!-- ═══════ ASSESSMENT ═══════ -->
-  <div id="screen-assessment">
-    <div class="sec-tag" id="sec-tag">Section 1 of 7</div>
-    <div class="sec-title" id="sec-title">Integrity &amp; Honesty</div>
-    <div class="sec-sub" id="sec-sub">Questions 1–12</div>
-    <div id="q-container"></div>
-    <div class="q-nav">
-      <span class="nav-info" id="nav-info"></span>
-      <div class="nav-btns">
-        <button class="btn-o" id="btn-prev" onclick="prevSec()" style="display:none">← Back</button>
-        <button class="btn-p" id="btn-next" onclick="nextSec()">Next Section →</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- ═══════ RESULTS ═══════ -->
-  <div id="screen-results">
-    <div class="rt">
-      <div class="v-badge" id="v-badge"></div>
-      <div class="r-name" id="r-name"></div>
-      <div class="r-meta" id="r-meta"></div>
-      <div class="r-comp"><span class="r-big" id="r-score">—</span><span class="r-denom">/ 5.00</span></div>
-    </div>
-    <div class="sgrid" id="score-grid"></div>
-    <div class="fbox" id="flags-box" style="display:none"><h3>⚠ Red Flag Responses</h3><div id="flags-list"></div></div>
-    <div class="sbox" id="sum-box"></div>
-    <div class="wbox">
-      <h3>Workable Notes — Copy &amp; Paste</h3>
-      <p>Paste into the candidate's Notes tab in Workable.</p>
-      <div class="wtext" id="wtext"></div>
-      <button class="btn-cp" onclick="copyReport()">Copy to Clipboard</button>
-    </div>
-    <div class="exp-row">
-      <button class="btn-p" onclick="window.print()">Print / Save PDF</button>
-      <button class="btn-o" onclick="location.reload()">New Assessment</button>
-    </div>
-  </div>
-
-</main>
-
 <script>
-// ══════════════════════════════════════════════════════════════
-// QUESTION BANK — 70 questions, 7 sections
-// All questions are generic workplace / administrative context.
-// No EMS-specific, no clinical, no HR-department-specific content.
-// ══════════════════════════════════════════════════════════════
+const FLOW_URL = "https://defaultb9fe31c2de0742529875da1c500446.c8.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/7b0c2902b6a34df88a3879469437fed0/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=LAbOa6U8xvED2R3HDjai7nhtgI7-u8z5zjhj8Ma-q0E";
+
 const LIKERT = ["Strongly Disagree","Disagree","Neutral","Agree","Strongly Agree"];
 
-const QS = [
+// KEEP YOUR EXISTING QS, SECTIONS, DCATS ARRAYS EXACTLY AS THEY ARE.
+// Do not delete or modify them.
 
-  // ── SECTION 1: Integrity & Honesty (Q1–12) ── weight 25%
-  // Core honesty, rule-following, accurate work, not cutting corners
-  { id:1,  s:"Integrity & Honesty", g:"Integrity", t:"l", rev:false,
-    q:"I complete work accurately even when no one is checking on me." },
-  { id:2,  s:"Integrity & Honesty", g:"Integrity", t:"l", rev:true,
-    q:"It is acceptable to exaggerate slightly on a report if it makes the results look more favorable.",
-    rf:["Agree","Strongly Agree"] },
-  { id:3,  s:"Integrity & Honesty", g:"Integrity", t:"l", rev:false,
-    q:"When I make a mistake, I acknowledge it and correct it promptly." },
-  { id:4,  s:"Integrity & Honesty", g:"Integrity", t:"l", rev:true,
-    q:"Minor inaccuracies in documents or records are not worth correcting after the fact.",
-    rf:["Agree","Strongly Agree"] },
-  { id:5,  s:"Integrity & Honesty", g:"Integrity", t:"l", rev:false,
-    q:"I follow organizational policies consistently, not only when I know I am being observed." },
-  { id:6,  s:"Integrity & Honesty", g:"Integrity", t:"l", rev:false,
-    q:"Being honest with a supervisor or colleague matters even when it creates extra work for me." },
-  { id:7,  s:"Integrity & Honesty", g:"Integrity", t:"l", rev:true,
-    q:"Occasionally using office supplies or equipment for minor personal tasks is a harmless perk.",
-    rf:["Agree","Strongly Agree"] },
-  { id:8,  s:"Integrity & Honesty", g:"Integrity", t:"l", rev:false,
-    q:"I would report a billing or records error even if it reflected poorly on my team." },
-  { id:9,  s:"Integrity & Honesty", g:"Integrity", t:"l", rev:true,
-    q:"Rules that slow me down are usually not worth following strictly.",
-    rf:["Agree","Strongly Agree"] },
-  { id:10, s:"Integrity & Honesty", g:"Integrity", t:"l", rev:false,
-    q:"Accurate record-keeping is an ethical responsibility, not just an administrative task." },
-  { id:11, s:"Integrity & Honesty", g:"Integrity", t:"l", rev:false,
-    q:"I take responsibility for errors in my work without deflecting to other factors." },
-  { id:12, s:"Integrity & Honesty", g:"Integrity", t:"l", rev:false,
-    q:"Professional integrity is important regardless of role or seniority." },
-
-  // ── SECTION 2: Confidentiality & Information Handling (Q13–22) ── weight 25%
-  // Information security, discretion, appropriate access, data handling
-  { id:13, s:"Confidentiality & Information Handling", g:"Confidentiality", t:"l", rev:false,
-    q:"I treat sensitive organizational information as confidential regardless of my role." },
-  { id:14, s:"Confidentiality & Information Handling", g:"Confidentiality", t:"l", rev:true,
-    q:"If information seems unlikely to cause harm, sharing it informally with a colleague is generally fine.",
-    rf:["Agree","Strongly Agree"] },
-  { id:15, s:"Confidentiality & Information Handling", g:"Confidentiality", t:"l", rev:false,
-    q:"I lock or log out of computer systems when stepping away, even briefly." },
-  { id:16, s:"Confidentiality & Information Handling", g:"Confidentiality", t:"l", rev:false,
-    q:"Accessing records or files beyond what my role requires is inappropriate, even out of curiosity." },
-  { id:17, s:"Confidentiality & Information Handling", g:"Confidentiality", t:"l", rev:true,
-    q:"Forwarding a work document to my personal email for convenience is an acceptable shortcut.",
-    rf:["Agree","Strongly Agree"] },
-  { id:18, s:"Confidentiality & Information Handling", g:"Confidentiality", t:"l", rev:false,
-    q:"I verify I am sending information to the correct recipient before transmitting it." },
-  { id:19, s:"Confidentiality & Information Handling", g:"Confidentiality", t:"l", rev:false,
-    q:"Privacy and confidentiality obligations apply equally when working remotely." },
-  { id:20, s:"Confidentiality & Information Handling", g:"Confidentiality", t:"l", rev:true,
-    q:"Sharing login credentials with a colleague temporarily to cover work is acceptable if no alternative exists.",
-    rf:["Agree","Strongly Agree"] },
-  { id:21, s:"Confidentiality & Information Handling", g:"Confidentiality", t:"l", rev:false,
-    q:"I would report a suspected unauthorized access or data issue even if I was not directly involved." },
-  { id:22, s:"Confidentiality & Information Handling", g:"Confidentiality", t:"l", rev:false,
-    q:"How I handle information reflects on the organization, not just on me personally." },
-
-  // ── SECTION 3: Professionalism & Workplace Respect (Q23–32) ── weight 20%
-  // Conduct, tone, respect, composure
-  { id:23, s:"Professionalism & Workplace Respect", g:"Professionalism", t:"l", rev:false,
-    q:"I treat all colleagues respectfully regardless of their role or seniority." },
-  { id:24, s:"Professionalism & Workplace Respect", g:"Professionalism", t:"l", rev:false,
-    q:"I maintain a professional tone in emails and written communications, even under pressure." },
-  { id:25, s:"Professionalism & Workplace Respect", g:"Professionalism", t:"l", rev:true,
-    q:"Complaining about coworkers to other colleagues is a normal and harmless way to manage workplace stress.",
-    rf:["Agree","Strongly Agree"] },
-  { id:26, s:"Professionalism & Workplace Respect", g:"Professionalism", t:"l", rev:false,
-    q:"I remain calm and composed when interacting with difficult colleagues or external contacts." },
-  { id:27, s:"Professionalism & Workplace Respect", g:"Professionalism", t:"l", rev:false,
-    q:"Respectful disagreement with a supervisor is handled through proper channels, not venting to others." },
-  { id:28, s:"Professionalism & Workplace Respect", g:"Professionalism", t:"l", rev:true,
-    q:"A few minutes spent on personal tasks at work is not really a conduct issue if work is otherwise complete.",
-    rf:["Agree","Strongly Agree"] },
-  { id:29, s:"Professionalism & Workplace Respect", g:"Professionalism", t:"l", rev:false,
-    q:"I represent the organization professionally in every interaction, whether internal or external." },
-  { id:30, s:"Professionalism & Workplace Respect", g:"Professionalism", t:"l", rev:false,
-    q:"I treat people equitably regardless of their background, personal situation, or relationship to me." },
-  { id:31, s:"Professionalism & Workplace Respect", g:"Professionalism", t:"l", rev:false,
-    q:"Consistent professional conduct is important even during routine or low-visibility tasks." },
-  { id:32, s:"Professionalism & Workplace Respect", g:"Professionalism", t:"l", rev:false,
-    q:"How I behave at work reflects on my team and the organization, not just on myself." },
-
-  // ── SECTION 4: Reliability & Follow-Through (Q33–42) ── weight 20%
-  // Deadlines, accuracy, ownership, proactive communication
-  { id:33, s:"Reliability & Follow-Through", g:"Reliability", t:"l", rev:false,
-    q:"I meet deadlines consistently, including for routine or unglamorous tasks." },
-  { id:34, s:"Reliability & Follow-Through", g:"Reliability", t:"l", rev:false,
-    q:"I review my work carefully before submitting it, especially for documents that others rely on." },
-  { id:35, s:"Reliability & Follow-Through", g:"Reliability", t:"l", rev:true,
-    q:"If a task is mostly correct, spending additional time on minor details is rarely worth it.",
-    rf:["Agree","Strongly Agree"] },
-  { id:36, s:"Reliability & Follow-Through", g:"Reliability", t:"l", rev:false,
-    q:"When I take on a task, I follow it through to completion without needing reminders." },
-  { id:37, s:"Reliability & Follow-Through", g:"Reliability", t:"l", rev:false,
-    q:"I communicate proactively when I anticipate a delay or a problem before it becomes critical." },
-  { id:38, s:"Reliability & Follow-Through", g:"Reliability", t:"l", rev:true,
-    q:"It is better to submit work on time even if it means not flagging that more time was needed.",
-    rf:["Agree","Strongly Agree"] },
-  { id:39, s:"Reliability & Follow-Through", g:"Reliability", t:"l", rev:false,
-    q:"I prioritize tasks methodically when multiple urgent items are competing for my attention." },
-  { id:40, s:"Reliability & Follow-Through", g:"Reliability", t:"l", rev:false,
-    q:"I maintain organized files and records so information is easy to locate later." },
-  { id:41, s:"Reliability & Follow-Through", g:"Reliability", t:"l", rev:false,
-    q:"Consistently reliable performance on everyday tasks is as important as handling high-profile projects." },
-  { id:42, s:"Reliability & Follow-Through", g:"Reliability", t:"l", rev:false,
-    q:"I take ownership of my errors without looking for contributing factors to blame." },
-
-  // ── SECTION 5: Teamwork & Communication (Q43–50) ── weight 15%
-  { id:43, s:"Teamwork & Communication", g:"Teamwork", t:"l", rev:false,
-    q:"I collaborate effectively with colleagues across different teams or departments." },
-  { id:44, s:"Teamwork & Communication", g:"Teamwork", t:"l", rev:false,
-    q:"I communicate clearly and concisely in writing and in conversation." },
-  { id:45, s:"Teamwork & Communication", g:"Teamwork", t:"l", rev:true,
-    q:"Keeping key information to myself is sometimes a useful advantage in the workplace.",
-    rf:["Agree","Strongly Agree"] },
-  { id:46, s:"Teamwork & Communication", g:"Teamwork", t:"l", rev:false,
-    q:"I respond to requests from colleagues and supervisors in a timely and professional way." },
-  { id:47, s:"Teamwork & Communication", g:"Teamwork", t:"l", rev:false,
-    q:"I support teammates during busy or high-pressure periods, even when it falls outside my usual duties." },
-  { id:48, s:"Teamwork & Communication", g:"Teamwork", t:"l", rev:true,
-    q:"Staying out of other departments' issues is always the safest approach.",
-    rf:["Agree","Strongly Agree"] },
-  { id:49, s:"Teamwork & Communication", g:"Teamwork", t:"l", rev:false,
-    q:"I accept constructive feedback from supervisors and colleagues in a professional manner." },
-  { id:50, s:"Teamwork & Communication", g:"Teamwork", t:"l", rev:false,
-    q:"A well-functioning team depends on trust, clear communication, and mutual accountability." },
-
-  // ── SECTION 6: Workplace Scenarios (Q51–56) ── Situational Judgment
-  { id:51, s:"Workplace Scenarios", g:"Situational Judgment", t:"s",
-    q:"You notice what appears to be an error in a report that has not yet been sent to a client or manager.",
-    opts:[
-      "Send it on time — minor errors are usually overlooked",
-      "Correct it yourself and send without noting the change",
-      "Flag it to your supervisor before sending",
-      "Send it and mention the possible error in a follow-up email"
-    ],
-    sc:{A:1,B:3,C:5,D:3} },
-
-  { id:52, s:"Workplace Scenarios", g:"Situational Judgment", t:"s",
-    q:"A colleague asks you to cover their work while they are out and offers you their system login to do so.",
-    opts:[
-      "Use the credentials — it is temporary and practical",
-      "Decline and ask a supervisor or IT for an approved alternative",
-      "Use them just this once and say nothing",
-      "Ask another colleague what they would do first"
-    ],
-    sc:{A:1,B:5,C:2,D:3} },
-
-  { id:53, s:"Workplace Scenarios", g:"Situational Judgment", t:"s",
-    q:"Your workload is heavier than expected and you will not meet a deadline without reducing the quality of your work.",
-    opts:[
-      "Submit on time regardless of quality",
-      "Request a brief extension and explain the situation to your supervisor",
-      "Submit it and say nothing about the quality concern",
-      "Quietly pass part of the work to a colleague without telling anyone"
-    ],
-    sc:{A:2,B:5,C:3,D:2} },
-
-  { id:54, s:"Workplace Scenarios", g:"Situational Judgment", t:"s",
-    q:"You come across a file containing sensitive internal information that you were not meant to receive.",
-    opts:[
-      "Read through it since you have already opened it",
-      "Close it and notify the sender it was sent in error",
-      "Keep it in case it becomes useful",
-      "Delete it and say nothing"
-    ],
-    sc:{A:1,B:5,C:1,D:3} },
-
-  { id:55, s:"Workplace Scenarios", g:"Situational Judgment", t:"s",
-    q:"During a routine task you discover a process error made by a previous employee that could cause downstream problems.",
-    opts:[
-      "Leave it — it is old and not your responsibility",
-      "Fix it quietly and move on",
-      "Correct it, document the change, and inform your supervisor",
-      "Flag it to your supervisor before making any changes"
-    ],
-    sc:{A:1,B:3,C:4,D:5} },
-
-  { id:56, s:"Workplace Scenarios", g:"Situational Judgment", t:"s",
-    q:"You overhear a colleague sharing details about a coworker's personal situation with someone who has no need to know.",
-    opts:[
-      "Do nothing — it is not your business",
-      "Mention casually to the colleague that it might be sensitive",
-      "Report your concern to a supervisor through an appropriate channel",
-      "Confront the colleague directly in the moment"
-    ],
-    sc:{A:1,B:3,C:5,D:2} },
-
-  // ── SECTION 7: Work Attitudes & Validity (Q57–70) ─────────────
-  { id:57, s:"Work Attitudes & Validity", g:"Misconduct Risk", t:"l", rev:true,
-    q:"Workplace rules are often excessive and can reasonably be ignored when inconvenient.",
-    rf:["Agree","Strongly Agree"] },
-  { id:58, s:"Work Attitudes & Validity", g:"Misconduct Risk", t:"l", rev:false,
-    q:"Organizational policies exist for legitimate reasons even when they create extra steps." },
-  { id:59, s:"Work Attitudes & Validity", g:"Misconduct Risk", t:"l", rev:true,
-    q:"If a colleague bends a rule without consequences, it is reasonable to assume the rule does not matter.",
-    rf:["Agree","Strongly Agree"] },
-  { id:60, s:"Work Attitudes & Validity", g:"Misconduct Risk", t:"l", rev:false,
-    q:"Completing time records accurately is an obligation, not just a formality." },
-  { id:61, s:"Work Attitudes & Validity", g:"Misconduct Risk", t:"l", rev:true,
-    q:"Personal use of work systems for minor tasks — like online shopping — is harmless if work is otherwise done.",
-    rf:["Agree","Strongly Agree"] },
-  { id:62, s:"Work Attitudes & Validity", g:"Misconduct Risk", t:"l", rev:false,
-    q:"Raising a concern about a process problem is a professional responsibility, not overstepping." },
-  { id:63, s:"Work Attitudes & Validity", g:"Misconduct Risk", t:"l", rev:true,
-    q:"Being a few minutes late on a regular basis is not a serious workplace issue.",
-    rf:["Agree","Strongly Agree"] },
-  { id:64, s:"Work Attitudes & Validity", g:"Misconduct Risk", t:"l", rev:false,
-    q:"Organizational policies deserve respect even when I personally disagree with them." },
-  { id:65, s:"Work Attitudes & Validity", g:"Misconduct Risk", t:"l", rev:true,
-    q:"Minor personal use of organization resources — printing, postage, equipment — is a harmless perk.",
-    rf:["Agree","Strongly Agree"] },
-  { id:66, s:"Work Attitudes & Validity", g:"Misconduct Risk", t:"l", rev:false,
-    q:"Consistent and dependable performance on routine tasks is just as important as performing well on big projects." },
-
-  // Validity items — intentionally impossible to answer honestly with "Agree"
-  { id:67, s:"Work Attitudes & Validity", g:"Validity", t:"l", rev:false,
-    q:"I have never made a mistake at work.",
-    rf:["Agree","Strongly Agree"] },
-  { id:68, s:"Work Attitudes & Validity", g:"Validity", t:"l", rev:false,
-    q:"I have never missed a deadline or failed to follow up on something I was asked to do.",
-    rf:["Agree","Strongly Agree"] },
-  { id:69, s:"Work Attitudes & Validity", g:"Validity", t:"l", rev:false,
-    q:"I have always agreed with every policy or rule I have had to follow at work.",
-    rf:["Agree","Strongly Agree"] },
-  { id:70, s:"Work Attitudes & Validity", g:"Validity", t:"l", rev:false,
-    q:"I have never found a coworker difficult to work with.",
-    rf:["Agree","Strongly Agree"] },
-];
-
-const SECTIONS = [
-  { name:"Integrity & Honesty",                   tag:"Section 1 of 7", range:[1,12] },
-  { name:"Confidentiality & Information Handling", tag:"Section 2 of 7", range:[13,22] },
-  { name:"Professionalism & Workplace Respect",    tag:"Section 3 of 7", range:[23,32] },
-  { name:"Reliability & Follow-Through",           tag:"Section 4 of 7", range:[33,42] },
-  { name:"Teamwork & Communication",               tag:"Section 5 of 7", range:[43,50] },
-  { name:"Workplace Scenarios",                    tag:"Section 6 of 7", range:[51,56] },
-  { name:"Work Attitudes & Validity",              tag:"Section 7 of 7", range:[57,70] },
-];
-
-const DCATS = [
-  { key:"Integrity",            label:"Integrity & Honesty",      w:0.25 },
-  { key:"Confidentiality",      label:"Confidentiality",          w:0.25 },
-  { key:"Professionalism",      label:"Professionalism",          w:0.20 },
-  { key:"Reliability",          label:"Reliability",              w:0.20 },
-  { key:"Teamwork",             label:"Teamwork",                 w:0.15 },
-  { key:"Situational Judgment", label:"Situational Judgment",     w:0.20 },
-];
-
-// ══════════════════════════════════════════════════════════════
 // STATE
-// ══════════════════════════════════════════════════════════════
 let cand={}, ans={}, curS=0;
 
-// ══════════════════════════════════════════════════════════════
 // START
-// ══════════════════════════════════════════════════════════════
 function startAssessment() {
   const fn=document.getElementById('i-fn').value.trim();
   const ln=document.getElementById('i-ln').value.trim();
   const em=document.getElementById('i-em').value.trim();
-  if(!fn||!ln||!em){alert('Please enter your first name, last name, and email.');return;}
+
+  if(!fn||!ln||!em){
+    alert('Please enter your first name, last name, and email.');
+    return;
+  }
+
   cand={
-    name:fn+' '+ln, email:em,
-    phone:document.getElementById('i-ph').value.trim(),
-    position:document.getElementById('i-pos').value.trim()||'Administrative Staff',
-    date:new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'})
+    firstName: fn,
+    lastName: ln,
+    name: fn+' '+ln,
+    email: em,
+    phone: document.getElementById('i-ph').value.trim(),
+    position: document.getElementById('i-pos').value.trim() || 'Administrative Staff',
+    date: new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'})
   };
+
   document.getElementById('screen-welcome').style.display='none';
   document.getElementById('screen-assessment').style.display='block';
   document.getElementById('hRight').style.display='flex';
-  curS=0; renderSec();
+  curS=0;
+  renderSec();
 }
 
-// ══════════════════════════════════════════════════════════════
 // RENDER
-// ══════════════════════════════════════════════════════════════
 function renderSec(){
   const sec=SECTIONS[curS],[s,e]=sec.range;
   document.getElementById('sec-tag').textContent=sec.tag;
   document.getElementById('sec-title').textContent=sec.name;
   document.getElementById('sec-sub').textContent=`Questions ${s}–${e} of ${QS.length}`;
+
   const qs=QS.filter(q=>q.id>=s&&q.id<=e);
   const cont=document.getElementById('q-container');
   cont.innerHTML='';
+
   qs.forEach((q,i)=>{
-    if(i>0){const d=document.createElement('div');d.className='q-div';cont.appendChild(d);}
+    if(i>0){
+      const d=document.createElement('div');
+      d.className='q-div';
+      cont.appendChild(d);
+    }
+
     const b=document.createElement('div');
-    b.className='q-block';b.style.animationDelay=(i*35)+'ms';
+    b.className='q-block';
+    b.style.animationDelay=(i*35)+'ms';
     b.innerHTML=`<div class="q-num">Q${q.id}</div><div class="q-text">${q.q}</div>`;
     b.appendChild(q.t==='l'?mkLikert(q):mkScenario(q));
     cont.appendChild(b);
   });
+
   document.getElementById('btn-prev').style.display=curS>0?'':'none';
   document.getElementById('btn-next').textContent=curS<SECTIONS.length-1?'Next Section →':'Submit Assessment';
   updateProg();
@@ -699,31 +71,50 @@ function renderSec(){
 
 function mkLikert(q){
   const wrap=document.createElement('div');
-  const lw=document.createElement('div');lw.className='lw';lw.id='lw'+q.id;
+  const lw=document.createElement('div');
+  lw.className='lw';
+  lw.id='lw'+q.id;
+
   LIKERT.forEach(lbl=>{
     const o=document.createElement('div');
     o.className='lo'+(ans[q.id]===lbl?' sel':'');
     o.textContent=lbl;
-    o.onclick=()=>{lw.querySelectorAll('.lo').forEach(x=>x.classList.remove('sel'));o.classList.add('sel');ans[q.id]=lbl;updateProg();};
+    o.onclick=()=>{
+      lw.querySelectorAll('.lo').forEach(x=>x.classList.remove('sel'));
+      o.classList.add('sel');
+      ans[q.id]=lbl;
+      updateProg();
+    };
     lw.appendChild(o);
   });
-  const ends=document.createElement('div');ends.className='l-ends';
+
+  const ends=document.createElement('div');
+  ends.className='l-ends';
   ends.innerHTML='<span>Strongly Disagree</span><span>Strongly Agree</span>';
-  wrap.appendChild(lw);wrap.appendChild(ends);
+  wrap.appendChild(lw);
+  wrap.appendChild(ends);
   return wrap;
 }
 
 function mkScenario(q){
   const letters=['A','B','C','D'];
-  const wrap=document.createElement('div');wrap.className='so-wrap';
+  const wrap=document.createElement('div');
+  wrap.className='so-wrap';
+
   q.opts.forEach((txt,i)=>{
     const l=letters[i];
     const o=document.createElement('div');
     o.className='so'+(ans[q.id]===l?' sel':'');
     o.innerHTML=`<div class="so-letter">${l}</div><div class="so-text">${txt}</div>`;
-    o.onclick=()=>{wrap.querySelectorAll('.so').forEach(x=>x.classList.remove('sel'));o.classList.add('sel');ans[q.id]=l;updateProg();};
+    o.onclick=()=>{
+      wrap.querySelectorAll('.so').forEach(x=>x.classList.remove('sel'));
+      o.classList.add('sel');
+      ans[q.id]=l;
+      updateProg();
+    };
     wrap.appendChild(o);
   });
+
   return wrap;
 }
 
@@ -731,6 +122,7 @@ function updateProg(){
   const n=Object.keys(ans).length,total=QS.length;
   document.getElementById('prog-num').textContent=n+' / '+total;
   document.getElementById('prog-fill').style.width=Math.round((n/total)*100)+'%';
+
   const sec=SECTIONS[curS];
   const qs=QS.filter(q=>q.id>=sec.range[0]&&q.id<=sec.range[1]);
   const done=qs.filter(q=>ans[q.id]!==undefined).length;
@@ -740,30 +132,52 @@ function updateProg(){
 function nextSec(){
   const sec=SECTIONS[curS];
   const missing=QS.filter(q=>q.id>=sec.range[0]&&q.id<=sec.range[1]&&ans[q.id]===undefined);
-  if(missing.length){alert('Please answer all questions before continuing. ('+missing.length+' remaining)');return;}
-  if(curS<SECTIONS.length-1){curS++;renderSec();}else showResults();
+
+  if(missing.length){
+    alert('Please answer all questions before continuing. ('+missing.length+' remaining)');
+    return;
+  }
+
+  if(curS<SECTIONS.length-1){
+    curS++;
+    renderSec();
+  } else {
+    showResults();
+  }
 }
 
-function prevSec(){if(curS>0){curS--;renderSec();}}
+function prevSec(){
+  if(curS>0){
+    curS--;
+    renderSec();
+  }
+}
 
-// ══════════════════════════════════════════════════════════════
 // SCORING
-// ══════════════════════════════════════════════════════════════
 function scoreQ(q,a){
-  if(q.t==='l'){const r=LIKERT.indexOf(a)+1;return q.rev?(6-r):r;}
+  if(q.t==='l'){
+    const r=LIKERT.indexOf(a)+1;
+    return q.rev?(6-r):r;
+  }
   return q.sc[a]||0;
 }
 
 function computeScores(){
   const grps={};
+
   QS.forEach(q=>{
     if(q.g==='Validity')return;
     const v=scoreQ(q,ans[q.id]);
     if(!grps[q.g])grps[q.g]=[];
     grps[q.g].push(v);
   });
+
   const avg={};
-  Object.entries(grps).forEach(([g,vals])=>{avg[g]=vals.reduce((a,b)=>a+b,0)/vals.length;});
+
+  Object.entries(grps).forEach(([g,vals])=>{
+    avg[g]=vals.reduce((a,b)=>a+b,0)/vals.length;
+  });
+
   const raw=
     (avg['Integrity']||0)*0.25+
     (avg['Confidentiality']||0)*0.25+
@@ -771,6 +185,7 @@ function computeScores(){
     (avg['Reliability']||0)*0.20+
     (avg['Teamwork']||0)*0.15+
     (avg['Situational Judgment']||0)*0.20;
+
   return{avg,composite:raw/1.25};
 }
 
@@ -790,10 +205,8 @@ function getVerdict(c,rf,integrity,conf){
   return{label:'Do Not Advance',cls:'vb-no'};
 }
 
-// ══════════════════════════════════════════════════════════════
 // RESULTS
-// ══════════════════════════════════════════════════════════════
-function showResults(){
+async function showResults(){
   document.getElementById('screen-assessment').style.display='none';
   document.getElementById('screen-results').style.display='block';
   document.getElementById('hRight').style.display='none';
@@ -805,17 +218,22 @@ function showResults(){
   const verdict=getVerdict(composite,flags.length,avg['Integrity']||0,avg['Confidentiality']||0);
 
   const vb=document.getElementById('v-badge');
-  vb.textContent=verdict.label;vb.className='v-badge '+verdict.cls;
+  vb.textContent=verdict.label;
+  vb.className='v-badge '+verdict.cls;
+
   document.getElementById('r-name').textContent=cand.name;
   document.getElementById('r-meta').textContent=cand.position+' · '+cand.date;
   document.getElementById('r-score').textContent=composite.toFixed(2);
 
-  const grid=document.getElementById('score-grid');grid.innerHTML='';
+  const grid=document.getElementById('score-grid');
+  grid.innerHTML='';
+
   DCATS.forEach(({key,label})=>{
     const val=avg[key]||0;
     const pct=((val-1)/4)*100;
     const col=val>=4.2?'#2d7a4f':val>=3.4?'#a06020':'#b03030';
-    const card=document.createElement('div');card.className='sc';
+    const card=document.createElement('div');
+    card.className='sc';
     card.innerHTML=`
       <div class="sc-lbl">${label}</div>
       <div class="sc-bar-w">
@@ -835,10 +253,12 @@ function showResults(){
   if(verdict.cls==='vb-hire')sum='This candidate demonstrates strong alignment with professional ethics, confidentiality standards, and workplace reliability across all measured dimensions.';
   else if(verdict.cls==='vb-review')sum='This candidate shows generally positive work attitudes with some areas warranting closer discussion. Probe any flagged responses and explore reliability and information-handling habits in interview.';
   else sum='This candidate\'s responses indicate concerns in one or more key areas. Review hard-stop criteria and discuss with the hiring manager before advancing.';
+
   if((avg['Integrity']||0)<3.8)sum+=` Integrity score (${(avg['Integrity']||0).toFixed(1)}) is below target — probe honesty and accuracy habits in interview.`;
   if((avg['Confidentiality']||0)<3.8)sum+=` Confidentiality score (${(avg['Confidentiality']||0).toFixed(1)}) warrants close attention for any role with access to sensitive information.`;
   if((avg['Reliability']||0)<3.5)sum+=` Reliability score (${(avg['Reliability']||0).toFixed(1)}) is low — explore follow-through and error-handling directly.`;
   if(validity>=2)sum+=' Validity check flags suggest possible impression-management responding — interpret all scores with additional caution and probe directly in interview.';
+
   document.getElementById('sum-box').textContent=sum;
 
   const mr=avg['Misconduct Risk']||0;
@@ -870,6 +290,33 @@ function showResults(){
   ].join('\n');
 
   document.getElementById('wtext').textContent=report;
+
+  await sendToFlow({
+    firstName: cand.firstName,
+    lastName: cand.lastName,
+    email: cand.email,
+    position: cand.position,
+    assessmentType: "Admin",
+    score: composite.toFixed(2),
+    recommendation: verdict.label,
+    redFlags: flags.length.toString(),
+    report: report
+  });
+}
+
+async function sendToFlow(data) {
+  try {
+    await fetch(FLOW_URL, {
+      method: "POST",
+      mode: "no-cors",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(data)
+    });
+  } catch (e) {
+    console.error("Flow submission failed", e);
+  }
 }
 
 function copyReport(){
@@ -880,5 +327,3 @@ function copyReport(){
   });
 }
 </script>
-</body>
-</html>
