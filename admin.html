@@ -665,7 +665,8 @@ function startAssessment() {
   cand={
     firstName:fn,
     lastName:ln,
-    name:fn+' '+ln, email:em,
+    name:fn+' '+ln,
+    email:em,
     phone:document.getElementById('i-ph').value.trim(),
     position:document.getElementById('i-pos').value.trim()||'Administrative Staff',
     date:new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'})
@@ -855,19 +856,19 @@ async function showResults(){
     sum
   ].join('\n');
 
-  try {
-    await sendToFlow({
-      firstName: cand.firstName,
-      lastName: cand.lastName,
-      email: cand.email,
-      position: cand.position,
-      assessmentType: "Admin",
-      score: composite.toFixed(2),
-      recommendation: verdict.label,
-      redFlags: flags.length.toString(),
-      report: report
-    });
+  const submitted = await sendToFlow({
+    firstName: cand.firstName,
+    lastName: cand.lastName,
+    email: cand.email,
+    position: cand.position,
+    assessmentType: "Admin",
+    score: composite.toFixed(2),
+    recommendation: verdict.label,
+    redFlags: flags.length.toString(),
+    report: report
+  });
 
+  if(submitted){
     results.innerHTML=`
       <div class="rt">
         <div class="v-badge vb-hire">Submitted</div>
@@ -878,15 +879,35 @@ async function showResults(){
         Your assessment has been received. You may now close this page.
       </div>
     `;
-  } catch (e) {
-    console.error('Assessment submission failed', e);
+  } else {
     results.innerHTML=`
       <div class="rt">
-        <div class="v-badge vb-review">Submission Pending</div>
-        <div class="r-name">Thank you for completing your assessment.</div>
-        <div class="r-meta">Please contact the hiring team if you are unsure whether your submission was received.</div>
+        <div class="v-badge vb-review">Submission Issue</div>
+        <div class="r-name">We could not confirm your submission.</div>
+        <div class="r-meta">Please notify the hiring team that your assessment did not submit successfully.</div>
+      </div>
+      <div class="sbox" style="text-align:center;">
+        You may keep this page open and contact the hiring team for next steps.
       </div>
     `;
+  }
+}
+
+
+async function sendToFlow(data) {
+  try {
+    const response = await fetch(FLOW_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(data)
+    });
+
+    return response.ok;
+  } catch (e) {
+    console.error("Flow submission failed", e);
+    return false;
   }
 }
 
