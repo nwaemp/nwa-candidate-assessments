@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Administrative Staff Assessment</title>
+<!-- NWA_ADMIN_REDFLAG_DATE_BUILD_2026_05_05_V5 -->
 <!-- NWA_ADMIN_HIDDEN_RESULTS_BUILD_2026_04_30_V3 -->
 <link href="https://fonts.googleapis.com/css2?family=Cabinet+Grotesk:wght@400;500;700;800&family=Instrument+Serif:ital@0;1&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
@@ -761,7 +762,7 @@ function computeScores(){
 }
 
 function getFlags(){
-  return QS.filter(q=>q.rf&&q.rf.includes(ans[q.id])).map(q=>({text:q.q,a:ans[q.id]}));
+  return QS.filter(q=>q.rf&&q.rf.includes(ans[q.id])).map(q=>({id:q.id,text:q.q,a:ans[q.id]}));
 }
 
 function getValidity(){
@@ -798,6 +799,10 @@ async function showResults(){
   const flags=getFlags();
   const validity=getValidity();
   const verdict=getVerdict(composite,flags.length,avg['Integrity']||0,avg['Confidentiality']||0);
+  const completionDate = new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'});
+  const redFlagResponses = flags.length
+    ? flags.map(f => `Q${f.id}: ${f.text} — Answered: ${f.a}`).join('\n')
+    : 'None';
 
   let sum='';
   if(verdict.cls==='vb-hire')sum='This candidate demonstrates strong alignment with professional ethics, confidentiality standards, and workplace reliability across all measured dimensions.';
@@ -831,6 +836,8 @@ async function showResults(){
     `Misconduct Risk:          ${mr.toFixed(2)} (lower = better)`,
     '',
     `Red Flag Count:    ${flags.length}`,
+    'Red Flag Responses:',
+    redFlagResponses,
     `Validity Concerns: ${validity}`,
     '',
     '--- SUMMARY ---',
@@ -846,6 +853,8 @@ async function showResults(){
     score: composite.toFixed(2),
     recommendation: verdict.label,
     redFlags: flags.length.toString(),
+    redFlagResponses: redFlagResponses,
+    completionDate: completionDate,
     report: report
   });
 
@@ -877,6 +886,7 @@ async function showResults(){
 
 async function sendToFlow(data) {
   try {
+    console.log('Assessment payload sent to Power Automate:', data);
     const response = await fetch(FLOW_URL, {
       method: "POST",
       headers: {
