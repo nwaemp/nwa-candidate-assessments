@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <!-- NWA_PROVIDERS_HIDDEN_RESULTS_BUILD_2026_04_30_V1 -->
 <title>EMS Professional Conduct & Work Style Assessment</title>
+<!-- NWA_PROVIDERS_REDFLAG_DATE_ISO_CLEAN_REPORT_BUILD_2026_05_06_V1 -->
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -1090,7 +1091,7 @@ function getRedFlags() {
   QUESTIONS.forEach(q => {
     if (q.redFlags && answers[q.id]) {
       if (q.type === 'likert' && q.redFlags.includes(answers[q.id])) {
-        flags.push({ text: q.text, answer: answers[q.id] });
+        flags.push({ id: q.id, text: q.text, answer: answers[q.id] });
       }
     }
   });
@@ -1138,6 +1139,10 @@ async function showResults() {
   const integrityScore = avg["Integrity"] || 0;
   const safetyScore = avg["Safety Orientation"] || 0;
   const verdict = getVerdict(weightedSum, redFlags.length, integrityScore, safetyScore);
+  const completionDate = new Date().toISOString().split('T')[0];
+  const redFlagResponses = redFlags.length
+    ? redFlags.map(f => `Q${f.id}: ${f.text} — Answered: ${f.answer}`).join('\n')
+    : 'None';
 
   const summaryLines = [];
   if (verdict.cls === 'verdict-hire') summaryLines.push("This candidate demonstrates strong alignment with EMS professional standards across all measured dimensions.");
@@ -1184,6 +1189,8 @@ ${summaryLines.join(' ')}`;
     score: weightedSum.toFixed(2),
     recommendation: verdict.label,
     redFlags: redFlags.length.toString(),
+    redFlagResponses: redFlagResponses,
+    completionDate: completionDate,
     report: report
   });
 
