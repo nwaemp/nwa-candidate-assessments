@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <!-- NWA_LEADERSHIP_HIDDEN_RESULTS_BUILD_2026_04_30_V1 -->
 <title>EMS Leadership Assessment</title>
+<!-- NWA_LEADERSHIP_REDFLAG_DATE_ISO_CLEAN_REPORT_BUILD_2026_05_06_V1 -->
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,600;0,700;1,400&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -1080,7 +1081,7 @@ function computeScores() {
 
 function getRedFlags() {
   return QUESTIONS.filter(q => q.rf && q.rf.includes(answers[q.id]))
-    .map(q => ({ text: q.text, ans: answers[q.id] }));
+    .map(q => ({ id: q.id, text: q.text, ans: answers[q.id] }));
 }
 
 function getValidityConcerns() {
@@ -1121,6 +1122,10 @@ async function showResults() {
   const redFlags = getRedFlags();
   const validity = getValidityConcerns();
   const verdict = getVerdict(composite, redFlags.length, avg['Integrity']||0, avg['Safety Leadership']||0);
+  const completionDate = new Date().toISOString().split('T')[0];
+  const redFlagResponses = redFlags.length
+    ? redFlags.map(f => `Q${f.id}: ${f.text} — Answered: ${f.ans}`).join('\n')
+    : 'None';
 
   let summary = '';
   if (verdict.cls === 'vp-hire') {
@@ -1173,6 +1178,8 @@ async function showResults() {
     score: composite.toFixed(2),
     recommendation: verdict.label,
     redFlags: redFlags.length.toString(),
+    redFlagResponses: redFlagResponses,
+    completionDate: completionDate,
     report: report
   });
 
