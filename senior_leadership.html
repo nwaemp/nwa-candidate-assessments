@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Leadership Profile Assessment — EMS Operations</title>
+<!-- NWA_SENIOR_LEADERSHIP_CLEAN_RECOMMENDATION_BUILD_2026_05_06_V2 -->
 <!-- NWA_SENIOR_LEADERSHIP_REDFLAG_DATE_ISO_CLEAN_REPORT_BUILD_2026_05_06_V1 -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@500&display=swap" rel="stylesheet">
@@ -812,7 +813,7 @@ function getVerdict(composite, redFlags, orgCourage, orgAcct){
   if(redFlags >= 4 || orgCourage < 3.0 || orgAcct < 3.2)
     return { label:'Do Not Advance', cls:'vp-no' };
   if(composite >= 4.3 && redFlags === 0)
-    return { label:'Recommended: Hire', cls:'vp-hire' };
+    return { label:'Hire', cls:'vp-hire' };
   if(composite >= 3.9 && redFlags <= 1)
     return { label:'Hire with Review', cls:'vp-review' };
   if(composite >= 3.5)
