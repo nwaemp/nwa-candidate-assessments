@@ -1,0 +1,1059 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Leadership Profile Assessment — EMS Operations</title>
+<!-- NWA_SENIOR_LEADERSHIP_REDFLAG_DATE_ISO_CLEAN_REPORT_BUILD_2026_05_06_V1 -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:         #0F1117;
+    --surface:    #181C25;
+    --card:       #1E2330;
+    --border:     rgba(255,255,255,0.07);
+    --border-hi:  rgba(255,255,255,0.15);
+    --text:       #E8EAF0;
+    --muted:      #8B92A5;
+    --gold:       #C9A84C;
+    --gold-light: #E8C96A;
+    --accent:     #3B6FE8;
+    --accent-dim: rgba(59,111,232,0.15);
+    --green:      #2E7D4F;
+    --green-bg:   rgba(46,125,79,0.15);
+    --amber:      #B47B28;
+    --amber-bg:   rgba(180,123,40,0.15);
+    --red:        #C0392B;
+    --red-bg:     rgba(192,57,43,0.12);
+    --red-border: rgba(192,57,43,0.3);
+    --radius:     14px;
+    --radius-sm:  8px;
+  }
+
+  html { scroll-behavior: smooth; }
+  body { background: var(--bg); color: var(--text);
+    font-family: 'DM Sans', sans-serif; font-size: 15px;
+    min-height: 100vh; }
+
+  /* ── HEADER ── */
+  .header {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: rgba(15,17,23,0.9); backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 28px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .logo-mark { display: flex; align-items: center; gap: 12px; }
+  .logo-diamond {
+    width: 36px; height: 36px; background: var(--gold);
+    transform: rotate(45deg); border-radius: 6px;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .logo-diamond span {
+    transform: rotate(-45deg); font-size: 9px; font-weight: 700;
+    color: #1a1200; letter-spacing: 0.05em;
+  }
+  .logo-text { font-size: 14px; font-weight: 600; color: var(--text); line-height: 1.3; }
+  .logo-text small { display: block; font-size: 11px; color: var(--muted); font-weight: 400; }
+  .prog-pill {
+    display: flex; align-items: center; gap: 10px;
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 30px; padding: 6px 14px;
+  }
+  .prog-label { font-size: 12px; font-family: 'DM Mono', monospace; color: var(--muted); white-space: nowrap; }
+  .prog-outer { width: 100px; height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px; overflow: hidden; }
+  .prog-inner { height: 100%; background: var(--gold); border-radius: 2px; transition: width 0.4s ease; }
+
+  /* ── MAIN LAYOUT ── */
+  .main { max-width: 680px; margin: 0 auto; padding: 96px 20px 80px; }
+
+  /* ── WELCOME SCREEN ── */
+  .eyebrow {
+    font-size: 11px; font-weight: 600; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--gold); margin-bottom: 20px;
+  }
+  .welcome-title {
+    font-family: 'Fraunces', serif; font-size: clamp(32px,6vw,52px);
+    font-weight: 700; line-height: 1.15; margin-bottom: 20px;
+    color: var(--text);
+  }
+  .welcome-title em { color: var(--gold-light); font-style: italic; }
+  .welcome-desc { color: var(--muted); line-height: 1.75; margin-bottom: 32px; font-size: 15px; }
+
+  .meta-row {
+    display: flex; gap: 12px; margin-bottom: 36px; flex-wrap: wrap;
+  }
+  .meta-cell {
+    flex: 1; min-width: 100px;
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: var(--radius-sm); padding: 16px; text-align: center;
+  }
+  .meta-val { font-size: 28px; font-weight: 700; color: var(--gold-light); line-height: 1; }
+  .meta-lbl { font-size: 11px; color: var(--muted); margin-top: 4px; }
+
+  .notice-box {
+    background: var(--accent-dim); border: 1px solid rgba(59,111,232,0.3);
+    border-radius: var(--radius-sm); padding: 16px 20px;
+    color: #93B4F0; font-size: 14px; line-height: 1.7; margin-bottom: 28px;
+  }
+  .notice-box strong { color: #BDD0F8; }
+
+  /* CANDIDATE FORM */
+  .cand-form { background: var(--card); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 24px; margin-bottom: 28px; }
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+  .form-group label { display: block; font-size: 12px; font-weight: 600;
+    color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; }
+  .form-group input {
+    width: 100%; background: var(--bg); border: 1px solid var(--border-hi);
+    border-radius: var(--radius-sm); padding: 10px 14px; color: var(--text);
+    font-size: 15px; font-family: 'DM Sans', sans-serif; outline: none;
+    transition: border-color 0.2s;
+  }
+  .form-group input:focus { border-color: var(--gold); }
+  .form-group input::placeholder { color: var(--muted); }
+
+  .btn-primary {
+    width: 100%; background: var(--gold); color: #1a1200; border: none;
+    border-radius: var(--radius-sm); padding: 16px; font-size: 16px;
+    font-weight: 700; cursor: pointer; font-family: 'DM Sans', sans-serif;
+    transition: background 0.2s, transform 0.1s;
+  }
+  .btn-primary:hover { background: var(--gold-light); transform: translateY(-1px); }
+  .btn-primary:active { transform: translateY(0); }
+  .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+
+  .btn-ghost {
+    background: transparent; border: 1px solid var(--border-hi);
+    color: var(--muted); border-radius: var(--radius-sm); padding: 12px 20px;
+    font-size: 14px; font-weight: 500; cursor: pointer;
+    font-family: 'DM Sans', sans-serif; transition: all 0.2s;
+  }
+  .btn-ghost:hover { border-color: var(--text); color: var(--text); }
+
+  /* ── ASSESSMENT SCREEN ── */
+  #screen-assessment, #screen-results { display: none; }
+
+  .sec-eyebrow { font-size: 11px; font-weight: 600; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--gold); margin-bottom: 8px; }
+  .sec-title { font-family: 'Fraunces', serif; font-size: 26px;
+    font-weight: 700; color: var(--text); margin-bottom: 4px; }
+  .sec-sub { font-size: 14px; color: var(--muted); margin-bottom: 32px; }
+
+  /* QUESTION CARD */
+  .q-wrap {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 26px 28px; margin-bottom: 14px;
+    transition: border-color 0.2s;
+  }
+  .q-wrap.answered { border-color: rgba(201,168,76,0.4); }
+  .q-num { font-size: 10px; font-weight: 600; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
+  .q-text { font-size: 16px; line-height: 1.65; color: var(--text); margin-bottom: 22px; }
+  .q-text em { color: var(--gold-light); font-style: normal; font-weight: 600; }
+
+  /* LIKERT */
+  .likert-wrap { display: flex; flex-direction: column; gap: 8px; }
+  .likert-labels {
+    display: flex; justify-content: space-between;
+    font-size: 10px; color: var(--muted); padding: 0 2px; margin-bottom: 2px;
+  }
+  .likert-btns { display: flex; gap: 6px; }
+  .likert-btn { flex: 1; }
+  .likert-btn input { display: none; }
+  .likert-btn label {
+    display: flex; flex-direction: column; align-items: center; gap: 5px;
+    padding: 10px 4px; border-radius: var(--radius-sm);
+    border: 1px solid var(--border-hi); cursor: pointer;
+    transition: all 0.15s; font-size: 12px; font-weight: 600; color: var(--muted);
+  }
+  .likert-btn label:hover { border-color: var(--gold); color: var(--gold); background: rgba(201,168,76,0.08); }
+  .likert-btn input:checked + label { border-color: var(--gold); background: rgba(201,168,76,0.2); color: var(--gold-light); }
+  .l-dot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
+
+  /* SCENARIO */
+  .scenario-ctx {
+    background: rgba(59,111,232,0.08); border: 1px solid rgba(59,111,232,0.2);
+    border-radius: var(--radius-sm); padding: 14px 18px;
+    font-size: 14px; color: #93B4F0; line-height: 1.65; margin-bottom: 18px;
+  }
+  .scenario-q { font-size: 15px; color: var(--muted); margin-bottom: 14px; }
+  .sc-options { display: flex; flex-direction: column; gap: 8px; }
+  .sc-opt { display: none; }
+  .sc-opt + label {
+    display: flex; align-items: flex-start; gap: 12px; padding: 13px 16px;
+    border: 1px solid var(--border-hi); border-radius: var(--radius-sm);
+    cursor: pointer; transition: all 0.15s; font-size: 14px; color: var(--muted); line-height: 1.5;
+  }
+  .sc-opt + label:hover { border-color: var(--gold); color: var(--text); background: rgba(201,168,76,0.06); }
+  .sc-opt:checked + label { border-color: var(--gold); background: rgba(201,168,76,0.12); color: var(--text); }
+  .opt-letter {
+    flex-shrink: 0; width: 22px; height: 22px; border-radius: 50%;
+    border: 1.5px solid currentColor; display: flex; align-items: center;
+    justify-content: center; font-size: 10px; font-weight: 700; margin-top: 1px;
+  }
+
+  /* NAV */
+  .q-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 32px; }
+  .nav-info { font-size: 13px; color: var(--muted); }
+  .nav-btns { display: flex; gap: 10px; }
+
+  /* ── RESULTS ── */
+  .results-top {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 36px; text-align: center;
+    margin-bottom: 24px;
+  }
+  .verdict-pill {
+    display: inline-block; font-size: 12px; font-weight: 700;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    padding: 6px 18px; border-radius: 30px; margin-bottom: 20px;
+  }
+  .vp-hire   { background: var(--green-bg); color: #5AC888; border: 1px solid rgba(46,125,79,0.4); }
+  .vp-review { background: var(--amber-bg); color: #E8A840; border: 1px solid rgba(180,123,40,0.4); }
+  .vp-no     { background: var(--red-bg);   color: #E85050; border: 1px solid var(--red-border); }
+
+  .r-name { font-family: 'Fraunces', serif; font-size: 26px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+  .r-meta { font-size: 13px; color: var(--muted); margin-bottom: 20px; }
+  .r-composite { display: inline-flex; align-items: baseline; gap: 4px; margin-top: 8px; }
+  .r-composite .big { font-family: 'Fraunces', serif; font-size: 52px; font-weight: 700; color: var(--gold-light); line-height: 1; }
+  .r-composite .denom { font-size: 18px; color: var(--muted); }
+
+  .score-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin: 24px 0; }
+  .sc-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 16px; }
+  .sc-label { font-size: 10px; letter-spacing: 0.07em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
+  .sc-bar-wrap { display: flex; align-items: center; gap: 8px; }
+  .sc-bar-bg { flex: 1; height: 4px; background: rgba(255,255,255,0.07); border-radius: 2px; overflow: hidden; }
+  .sc-bar-fill { height: 100%; border-radius: 2px; transition: width 1s ease; }
+  .sc-val { font-family: 'DM Mono', monospace; font-size: 14px; font-weight: 500; width: 30px; text-align: right; flex-shrink: 0; }
+
+  .flags-box { background: var(--red-bg); border: 1px solid var(--red-border); border-radius: var(--radius); padding: 24px; margin-bottom: 20px; }
+  .flags-box h3 { color: #E85050; font-size: 15px; margin-bottom: 14px; }
+  .flag-item { display: flex; gap: 10px; margin-bottom: 10px; font-size: 13px; }
+  .flag-q { color: var(--muted); flex: 1; line-height: 1.5; }
+  .flag-a { color: #E85050; font-weight: 600; font-family: 'DM Mono', monospace; font-size: 12px; white-space: nowrap; }
+
+  .validity-box { background: var(--amber-bg); border: 1px solid rgba(180,123,40,0.4); border-radius: var(--radius); padding: 20px 24px; margin-bottom: 20px; }
+  .validity-box h3 { color: #E8A840; font-size: 14px; margin-bottom: 6px; }
+  .validity-box p { color: var(--amber); font-size: 13px; line-height: 1.6; }
+
+  .summary-box { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; margin-bottom: 20px; }
+  .summary-box h3 { font-size: 15px; font-weight: 600; color: var(--text); margin-bottom: 14px; }
+  .sum-item { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 13px; }
+  .sum-item:last-child { border: none; }
+  .sum-label { color: var(--muted); }
+  .sum-val { color: var(--text); font-weight: 500; text-align: right; }
+  .sum-note { font-size: 12px; color: var(--muted); margin-top: 3px; }
+
+  .workable-box { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; margin-bottom: 20px; }
+  .workable-box h3 { font-size: 15px; font-weight: 600; color: var(--text); margin-bottom: 6px; }
+  .workable-box p { font-size: 13px; color: var(--muted); margin-bottom: 14px; }
+  .copy-area { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 14px; font-family: 'DM Mono', monospace; font-size: 12px; color: var(--muted); line-height: 1.7; white-space: pre-wrap; margin-bottom: 12px; max-height: 200px; overflow-y: auto; }
+  .btn-copy { background: var(--accent); color: white; border: none; border-radius: var(--radius-sm); padding: 10px 20px; font-size: 13px; font-weight: 600; cursor: pointer; font-family: 'DM Sans', sans-serif; }
+  .btn-copy:hover { background: #2D5FD8; }
+
+  .export-row { display: flex; gap: 10px; margin-top: 20px; }
+  .export-row .btn-primary { flex: 1; }
+  .export-row .btn-ghost { flex: 1; }
+
+  /* SENIOR NOTE BOX */
+  .senior-note {
+    background: rgba(201,168,76,0.08); border: 1px solid rgba(201,168,76,0.25);
+    border-radius: var(--radius-sm); padding: 14px 18px;
+    font-size: 13px; color: #C9A84C; line-height: 1.7; margin-bottom: 28px;
+  }
+  .senior-note strong { color: var(--gold-light); }
+
+  @media(max-width:540px){
+    .form-grid { grid-template-columns: 1fr; }
+    .score-grid { grid-template-columns: repeat(2,1fr); }
+    .likert-labels { display: none; }
+    .export-row { flex-direction: column; }
+    .q-wrap { padding: 18px 16px; }
+  }
+  @media print {
+    .header, .q-nav, .export-row, .btn-copy, .workable-box { display: none !important; }
+    body { background: white; color: black; }
+    .results-top, .summary-box, .flags-box, .score-grid, .validity-box { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="logo-mark">
+    <div class="logo-diamond"><span>EMS</span></div>
+    <div class="logo-text">Leadership Profile Assessment<small>EMS Operations</small></div>
+  </div>
+  <div id="headerRight" style="display:none">
+    <div class="prog-pill">
+      <span class="prog-label" id="prog-label">0 / 70</span>
+      <div class="prog-outer"><div class="prog-inner" id="prog-bar"></div></div>
+    </div>
+  </div>
+</header>
+
+<main class="main">
+
+<!-- WELCOME -->
+<div id="screen-welcome">
+  <div class="eyebrow">Leadership Selection · EMS Operations</div>
+  <h2 class="welcome-title">Leadership Profile<br><em>Assessment</em></h2>
+  <p class="welcome-desc">
+    This assessment is calibrated for senior operational leaders with significant supervisory experience.
+    It measures dimensions that first-line supervisor assessments do not reach — organizational accountability,
+    strategic thinking, culture ownership, decision quality under constraint, and organizational courage.<br><br>
+    Answer based on how you <strong>actually operate</strong>, not how you believe a leader should ideally operate.
+    Self-aware, honest responses are the most useful — and the most valued at this level.
+  </p>
+
+  
+
+  <div class="meta-row">
+    <div class="meta-cell"><div class="meta-val">70</div><div class="meta-lbl">Questions</div></div>
+    <div class="meta-cell"><div class="meta-val">20–30</div><div class="meta-lbl">Minutes</div></div>
+    <div class="meta-cell"><div class="meta-val">8</div><div class="meta-lbl">Dimensions</div></div>
+    <div class="meta-cell"><div class="meta-val">DO</div><div class="meta-lbl">Level</div></div>
+  </div>
+
+  <div class="cand-form">
+    <div class="form-grid">
+      <div class="form-group"><label>First Name *</label><input type="text" id="i-fname" placeholder="First"></div>
+      <div class="form-group"><label>Last Name *</label><input type="text" id="i-lname" placeholder="Last"></div>
+    </div>
+    <div class="form-grid">
+      <div class="form-group"><label>Email *</label><input type="email" id="i-email" placeholder="email@domain.com"></div>
+      <div class="form-group"><label>Phone</label><input type="tel" id="i-phone" placeholder="(555) 000-0000"></div>
+    </div>
+    <div class="form-group" style="margin-top:4px">
+      <label>Position Applied For</label>
+      <input type="text" id="i-position" placeholder="Position applied for">
+    </div>
+  </div>
+  <button class="btn-primary" onclick="startAssessment()">Begin Assessment →</button>
+</div>
+
+<!-- ASSESSMENT -->
+<div id="screen-assessment">
+  <div class="sec-eyebrow" id="sec-tag">Section 1 of 8</div>
+  <div class="sec-title" id="sec-title">Organizational Accountability</div>
+  <div class="sec-sub" id="sec-sub">Questions 1–9</div>
+  <div id="q-container"></div>
+  <div class="q-nav">
+    <span class="nav-info" id="nav-info"></span>
+    <div class="nav-btns">
+      <button class="btn-ghost" id="btn-prev" onclick="prevSec()" style="display:none">← Back</button>
+      <button class="btn-primary" id="btn-next" onclick="nextSec()">Next Section →</button>
+    </div>
+  </div>
+</div>
+
+<!-- SUBMISSION STATUS -->
+<div id="screen-results" style="display:none"></div>
+
+</main>
+
+<script>
+const FLOW_URL = 'https://defaultb9fe31c2de0742529875da1c500446.c8.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/7b0c2902b6a34df88a3879469437fed0/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=LAbOa6U8xvED2R3HDjai7nhtgI7-u8z5zjhj8Ma-q0E';
+
+// ═══════════════════════════════════════════════════════
+// DATA
+// ═══════════════════════════════════════════════════════
+const LIKERT = ['Strongly Disagree','Disagree','Neutral','Agree','Strongly Agree'];
+
+const QUESTIONS = [
+
+  // ── SECTION 1: Organizational Accountability (Q1–9) ──────────────
+  // Senior-level: do they build accountability systems, hold themselves,
+  // and hold people above them? Distinct from personal integrity (original Sec 1)
+  { id:1,  s:"Organizational Accountability", g:"Org Accountability", type:"likert", rev:false,
+    text:"When a supervisor on my team consistently underperforms, I examine whether the <em>system or structure</em> around them is contributing before concluding it is solely a personal failure." },
+  { id:2,  s:"Organizational Accountability", g:"Org Accountability", type:"likert", rev:false,
+    text:"I hold myself to the same documentation and accountability standards I require of the leaders who report to me." },
+  { id:3,  s:"Organizational Accountability", g:"Org Accountability", type:"likert", rev:false,
+    text:"I have delivered direct critical feedback to someone above me — a peer executive, an owner, or a board member — when I believed they were making a significant error." },
+  { id:4,  s:"Organizational Accountability", g:"Org Accountability", type:"likert", rev:true,
+    text:"If a capable supervisor is underperforming, the most effective approach is to work around them rather than address the performance directly.",
+    rf:["Agree","Strongly Agree"] },
+  { id:5,  s:"Organizational Accountability", g:"Org Accountability", type:"likert", rev:false,
+    text:"Accountability at the senior level means the organization's outcomes are my responsibility, not just the outcomes within my direct chain." },
+  { id:6,  s:"Organizational Accountability", g:"Org Accountability", type:"likert", rev:true,
+    text:"Senior leaders should shield their teams from organizational pressure rather than passing accountability expectations downward.",
+    rf:["Agree","Strongly Agree"] },
+  { id:7,  s:"Organizational Accountability", g:"Org Accountability", type:"likert", rev:false,
+    text:"I build systems and processes that maintain accountability standards even when I am not present." },
+  { id:8,  s:"Organizational Accountability", g:"Org Accountability", type:"likert", rev:true,
+    text:"A senior leader who micromanages accountability details is demonstrating a lack of trust in their leadership team.",
+    rf:["Agree","Strongly Agree"] },
+  { id:9,  s:"Organizational Accountability", g:"Org Accountability", type:"likert", rev:false,
+    text:"I have ended a working relationship with a leader who could not or would not meet the accountability standard, even when it was organizationally difficult to do so." },
+
+  // ── SECTION 2: Strategic Thinking & Patience (Q10–18) ────────────
+  // Distinguishes strategic patience from avoidance, long-term thinking
+  // from short-term reaction — tested under sustained pressure
+  { id:10, s:"Strategic Thinking & Patience", g:"Strategic Thinking", type:"likert", rev:false,
+    text:"I can hold a strategic position under short-term pressure without abandoning it when the discomfort increases." },
+  { id:11, s:"Strategic Thinking & Patience", g:"Strategic Thinking", type:"likert", rev:true,
+    text:"When a decision I made stops producing results quickly, I typically revisit and revise it before giving it adequate time to work.",
+    rf:["Agree","Strongly Agree"] },
+  { id:12, s:"Strategic Thinking & Patience", g:"Strategic Thinking", type:"likert", rev:false,
+    text:"I distinguish clearly between situations that require urgent action and those that require deliberate patience." },
+  { id:13, s:"Strategic Thinking & Patience", g:"Strategic Thinking", type:"likert", rev:false,
+    text:"I make decisions based on what is right for the organization's long-term health, even when the short-term cost is visible and uncomfortable." },
+  { id:14, s:"Strategic Thinking & Patience", g:"Strategic Thinking", type:"likert", rev:true,
+    text:"A leader who resists reacting quickly to problems is usually slower than the situation requires.",
+    rf:["Agree","Strongly Agree"] },
+  { id:15, s:"Strategic Thinking & Patience", g:"Strategic Thinking", type:"likert", rev:false,
+    text:"I regularly consider second-order effects of decisions — what the decision will set in motion beyond the immediate outcome." },
+  { id:16, s:"Strategic Thinking & Patience", g:"Strategic Thinking", type:"likert", rev:false,
+    text:"When I face ambiguity at an organizational level, I can function and lead effectively without requiring resolution before proceeding." },
+  { id:17, s:"Strategic Thinking & Patience", g:"Strategic Thinking", type:"likert", rev:true,
+    text:"Strategic plans are most effective when they are updated frequently in response to real-time operational feedback.",
+    rf:["Agree","Strongly Agree"] },
+  { id:18, s:"Strategic Thinking & Patience", g:"Strategic Thinking", type:"likert", rev:false,
+    text:"I have maintained an unpopular organizational position over months when I believed the evidence supported it, even while absorbing sustained internal criticism." },
+
+  // ── SECTION 3: Developing Leaders (Q19–27) ───────────────────────
+  // CRITICAL distinction from original assessment: senior leaders develop
+  // supervisors who develop crews — not direct crew development.
+  // Also fixes the feelings question by asking correctly.
+  { id:19, s:"Developing Leaders", g:"Leader Development", type:"likert", rev:false,
+    text:"My primary development responsibility is building the capability of the supervisors who report to me — not the crews they supervise." },
+  { id:20, s:"Developing Leaders", g:"Leader Development", type:"likert", rev:false,
+    text:"I give feedback to supervisors based on the outcomes and behaviors I observe — I do not soften or withhold that feedback because of how they might feel about receiving it." },
+  { id:21, s:"Developing Leaders", g:"Leader Development", type:"likert", rev:true,
+    text:"When delivering difficult feedback, I consider how the supervisor is likely to receive it and adjust the content of the message accordingly.",
+    rf:["Agree","Strongly Agree"] },
+  { id:22, s:"Developing Leaders", g:"Leader Development", type:"likert", rev:false,
+    text:"While I do not let feelings drive <em>what</em> feedback I deliver, I do consider how to deliver it in a way that is direct, heard, and actionable." },
+  { id:23, s:"Developing Leaders", g:"Leader Development", type:"likert", rev:false,
+    text:"I actively create development opportunities for supervisors — including opportunities that involve risk and the possibility of failure." },
+  { id:24, s:"Developing Leaders", g:"Leader Development", type:"likert", rev:true,
+    text:"Senior leaders who invest significant time developing subordinate leaders are doing work that should be delegated to HR.",
+    rf:["Agree","Strongly Agree"] },
+  { id:25, s:"Developing Leaders", g:"Leader Development", type:"likert", rev:false,
+    text:"I hire and promote people who have the potential to exceed my own capability in their role." },
+  { id:26, s:"Developing Leaders", g:"Leader Development", type:"likert", rev:false,
+    text:"I measure my own effectiveness as a senior leader in part by how well the leaders beneath me perform when I am not present." },
+  { id:27, s:"Developing Leaders", g:"Leader Development", type:"likert", rev:true,
+    text:"A supervisor who needs frequent guidance and feedback from senior leadership has probably been placed in the wrong role.",
+    rf:["Agree","Strongly Agree"] },
+
+  // ── SECTION 4: Culture Ownership (Q28–35) ────────────────────────
+  // Senior leaders ARE the culture — not managers of it. Tests whether
+  // they understand their behavior sets the ceiling for the whole org.
+  { id:28, s:"Culture Ownership", g:"Culture", type:"likert", rev:false,
+    text:"The culture of an organization is primarily a reflection of what senior leaders tolerate, not what they declare." },
+  { id:29, s:"Culture Ownership", g:"Culture", type:"likert", rev:false,
+    text:"My behavior in unobserved moments — when I believe no one is watching — is consistent with the standards I enforce on others." },
+  { id:30, s:"Culture Ownership", g:"Culture", type:"likert", rev:true,
+    text:"Culture problems in an organization are primarily driven by frontline behavior and are best addressed at that level.",
+    rf:["Agree","Strongly Agree"] },
+  { id:31, s:"Culture Ownership", g:"Culture", type:"likert", rev:false,
+    text:"I understand that my emotional state and composure are contagious — they set a tone that ripples through the organization beneath me." },
+  { id:32, s:"Culture Ownership", g:"Culture", type:"likert", rev:false,
+    text:"When I observe a cultural problem in the organization, I examine what I am doing or not doing that allows it to persist." },
+  { id:33, s:"Culture Ownership", g:"Culture", type:"likert", rev:true,
+    text:"Organizational culture is largely self-sustaining once established — senior leaders do not need to actively maintain it.",
+    rf:["Agree","Strongly Agree"] },
+  { id:34, s:"Culture Ownership", g:"Culture", type:"likert", rev:false,
+    text:"I deliberately model the behaviors I want to see in my supervisors — not just describe them in meetings." },
+  { id:35, s:"Culture Ownership", g:"Culture", type:"likert", rev:false,
+    text:"I take personal responsibility for the organizational culture I inherit — including problems that existed before my tenure." },
+
+  // ── SECTION 5: Decision Quality Under Constraint (Q36–44) ────────
+  // Senior leaders make decisions under resource, time, political, and
+  // information constraints simultaneously. Tests trade-off thinking.
+  { id:36, s:"Decision Quality Under Constraint", g:"Decision Quality", type:"likert", rev:false,
+    text:"When facing a decision with no good options, I can commit to the best available choice without requiring a better option to appear first." },
+  { id:37, s:"Decision Quality Under Constraint", g:"Decision Quality", type:"likert", rev:false,
+    text:"I make resource allocation decisions based on organizational need rather than the political visibility of the request." },
+  { id:38, s:"Decision Quality Under Constraint", g:"Decision Quality", type:"likert", rev:true,
+    text:"Senior leaders should avoid decisions that cannot be reversed if more information becomes available later.",
+    rf:["Agree","Strongly Agree"] },
+  { id:39, s:"Decision Quality Under Constraint", g:"Decision Quality", type:"likert", rev:false,
+    text:"I can separate the decision that is right from the decision that is popular, and I make the right one when they differ." },
+  { id:40, s:"Decision Quality Under Constraint", g:"Decision Quality", type:"likert", rev:false,
+    text:"When constrained by budget or staffing, I make explicit trade-offs and communicate them clearly rather than pretending all priorities can be met equally." },
+  { id:41, s:"Decision Quality Under Constraint", g:"Decision Quality", type:"likert", rev:true,
+    text:"The best decisions are those that the majority of stakeholders would choose if they had full visibility into the situation.",
+    rf:["Agree","Strongly Agree"] },
+  { id:42, s:"Decision Quality Under Constraint", g:"Decision Quality", type:"likert", rev:false,
+    text:"I distinguish between decisions I should make unilaterally and those that require input — and I do not confuse the two out of convenience." },
+  { id:43, s:"Decision Quality Under Constraint", g:"Decision Quality", type:"likert", rev:false,
+    text:"I have reversed a significant organizational decision when new evidence warranted it, and I did so without framing it as anything other than a correction." },
+  { id:44, s:"Decision Quality Under Constraint", g:"Decision Quality", type:"likert", rev:false,
+    text:"When time pressure forces a decision with incomplete information, my process remains consistent with my values — the pressure does not change how I make the call." },
+
+  // ── SECTION 6: Self-Regulation Without External Accountability ────
+  // Senior leaders are less supervised than anyone they oversee.
+  // Tests whether standards are intrinsic or performance-contingent.
+  { id:45, s:"Self-Regulation & Standards", g:"Self-Regulation", type:"likert", rev:false,
+    text:"My standards and effort do not vary based on whether I believe anyone in a position of authority will observe my work." },
+  { id:46, s:"Self-Regulation & Standards", g:"Self-Regulation", type:"likert", rev:true,
+    text:"Senior leaders who consistently work beyond their contracted hours are signaling poor boundary-setting rather than strong commitment.",
+    rf:["Agree","Strongly Agree"] },
+  { id:47, s:"Self-Regulation & Standards", g:"Self-Regulation", type:"likert", rev:false,
+    text:"I regulate my emotional state deliberately as a leadership responsibility — not because I am expected to, but because I understand the organizational cost of not doing so." },
+  { id:48, s:"Self-Regulation & Standards", g:"Self-Regulation", type:"likert", rev:false,
+    text:"I have accurate self-knowledge about the conditions under which my judgment or performance degrades, and I manage accordingly." },
+  { id:49, s:"Self-Regulation & Standards", g:"Self-Regulation", type:"likert", rev:true,
+    text:"A senior leader's private beliefs about the organization's direction should remain private to preserve institutional stability.",
+    rf:["Agree","Strongly Agree"] },
+  { id:50, s:"Self-Regulation & Standards", g:"Self-Regulation", type:"likert", rev:false,
+    text:"I consistently apply the same standards to my own administrative and documentation obligations that I require of the leaders I supervise." },
+  { id:51, s:"Self-Regulation & Standards", g:"Self-Regulation", type:"likert", rev:false,
+    text:"When I am frustrated with the organization, I do not allow that frustration to reduce the quality of supervision I provide to the leaders who report to me." },
+
+  // ── SECTION 7: Organizational Courage (Q52–60) ───────────────────
+  // Can they push back on ownership? Report upward problems?
+  // Maintain positions under sustained institutional pressure?
+  { id:52, s:"Organizational Courage", g:"Org Courage", type:"likert", rev:false,
+    text:"I have told ownership or a board member that their direction was wrong, and I did so directly and with evidence — not in a softened way that left the problem unresolved." },
+  { id:53, s:"Organizational Courage", g:"Org Courage", type:"likert", rev:true,
+    text:"When ownership or senior leadership makes a decision I disagree with, my role is to implement it fully regardless of my assessment of the decision.",
+    rf:["Agree","Strongly Agree"] },
+  { id:54, s:"Organizational Courage", g:"Org Courage", type:"likert", rev:false,
+    text:"I distinguish clearly between disagreement with a direction (which I raise formally) and disloyalty (which I do not engage in)." },
+  { id:55, s:"Organizational Courage", g:"Org Courage", type:"likert", rev:false,
+    text:"I would escalate a significant organizational compliance or ethics concern even if doing so created personal professional risk for me." },
+  { id:56, s:"Organizational Courage", g:"Org Courage", type:"likert", rev:true,
+    text:"Maintaining good relationships with senior stakeholders is more important than consistently raising uncomfortable operational realities.",
+    rf:["Agree","Strongly Agree"] },
+  { id:57, s:"Organizational Courage", g:"Org Courage", type:"likert", rev:false,
+    text:"I give the same quality of direct, unvarnished feedback to people above me as I give to people below me." },
+  { id:58, s:"Organizational Courage", g:"Org Courage", type:"likert", rev:false,
+    text:"I have maintained an organizational position that was correct but unpopular, under sustained pressure to abandon it, and I did not abandon it." },
+  { id:59, s:"Organizational Courage", g:"Org Courage", type:"likert", rev:true,
+    text:"Senior leaders should pick their battles carefully — most issues do not warrant the political capital required to push back.",
+    rf:["Agree","Strongly Agree"] },
+
+  // ── SECTION 8: Systemic Thinking & Legacy (Q60–66) ───────────────
+  // Senior leaders fix systems, not incidents. And they build
+  // organizations that outlast them.
+  { id:60, s:"Systemic Thinking & Legacy", g:"Systemic Thinking", type:"likert", rev:false,
+    text:"When the same problem recurs, I treat the recurrence as evidence of a system failure — not repeated individual failures." },
+  { id:61, s:"Systemic Thinking & Legacy", g:"Systemic Thinking", type:"likert", rev:true,
+    text:"Protecting institutional knowledge and processes from disruption is more important than building successors who can eventually replace senior leaders.",
+    rf:["Agree","Strongly Agree"] },
+  { id:62, s:"Systemic Thinking & Legacy", g:"Systemic Thinking", type:"likert", rev:false,
+    text:"I measure my success as a senior leader partly by how well the organization functions in my absence." },
+  { id:63, s:"Systemic Thinking & Legacy", g:"Systemic Thinking", type:"likert", rev:false,
+    text:"I actively build succession — I identify and develop people who could step into my role, not because I am leaving, but because the organization needs that depth." },
+  { id:64, s:"Systemic Thinking & Legacy", g:"Systemic Thinking", type:"likert", rev:true,
+    text:"A senior leader who gives significant credit to their team for organizational successes may undermine their own authority.",
+    rf:["Agree","Strongly Agree"] },
+  { id:65, s:"Systemic Thinking & Legacy", g:"Systemic Thinking", type:"likert", rev:false,
+    text:"When I make decisions, I consider what organizational patterns or precedents they will set — not just the immediate outcome." },
+  { id:66, s:"Systemic Thinking & Legacy", g:"Systemic Thinking", type:"likert", rev:false,
+    text:"I consider my primary leadership legacy to be the quality and capability of the people I have developed — not the metrics achieved during my tenure." },
+
+  // ── VALIDITY ITEMS (Q67–70) — embedded, not scored ───────────────
+  // Same structure as original — catch over-claimers
+  { id:67, s:"Systemic Thinking & Legacy", g:"Validity", type:"likert", rev:false,
+    text:"I have never made a significant organizational decision that I later regretted.",
+    rf:["Agree","Strongly Agree"] },
+  { id:68, s:"Systemic Thinking & Legacy", g:"Validity", type:"likert", rev:false,
+    text:"Every leader I have developed has gone on to perform at or above the level I expected.",
+    rf:["Agree","Strongly Agree"] },
+  { id:69, s:"Systemic Thinking & Legacy", g:"Validity", type:"likert", rev:false,
+    text:"I have never struggled to maintain my own standards during a period of significant organizational pressure.",
+    rf:["Agree","Strongly Agree"] },
+  { id:70, s:"Systemic Thinking & Legacy", g:"Validity", type:"likert", rev:false,
+    text:"I have always delivered difficult messages to ownership or senior stakeholders without any hesitation or adjustment to preserve the relationship.",
+    rf:["Agree","Strongly Agree"] },
+
+  // ── SCENARIOS (Q71–76) ────────────────────────────────────────────
+  { id:71, s:"Senior Leadership Scenarios", g:"Scenarios", type:"scenario",
+    text:"Ownership directs you to approve a budget request that you believe will create a significant operational risk within 6 months. The request has already been verbally approved at the board level.",
+    opts:["Implement it — the board has spoken and your role is execution","Approve it but document your concerns in writing and share them with ownership","Push back formally with a written risk assessment before implementing","Quietly implement the parts you agree with and delay the rest"],
+    sc:{A:2,B:4,C:5,D:1} },
+
+  { id:72, s:"Senior Leadership Scenarios", g:"Scenarios", type:"scenario",
+    text:"Six months after you restructure a zone's supervisory coverage, the same performance gaps that triggered the restructure have returned. Your operations supervisor reports the supervisors are following the new structure correctly.",
+    opts:["Reassign the supervisors who are underperforming","Restructure the zone again with a different model","Investigate whether the problem is in the supervisors, the structure, or the standard you set","Tell the operations supervisor to enforce the model more strictly"],
+    sc:{A:2,B:1,C:5,D:3} },
+
+  { id:73, s:"Senior Leadership Scenarios", g:"Scenarios", type:"scenario",
+    text:"One of your most effective operations supervisors tells you privately that they are considering leaving because they feel undervalued. They are performing at the highest level and are difficult to replace.",
+    opts:["Thank them for telling you and tell them you will look into what can be done","Ask them specifically what would change their decision and whether it is within your authority to address it","Tell them you understand but the organization cannot make exceptions for individuals","Offer them a title change or public recognition to demonstrate their value"],
+    sc:{A:3,B:5,C:1,D:2} },
+
+  { id:74, s:"Senior Leadership Scenarios", g:"Scenarios", type:"scenario",
+    text:"Your analysis shows that response time performance data being reported to ownership has been selectively compiled — presenting results in the best light but not reflecting the full operational picture. The reporting was not your work.",
+    opts:["Raise it with the person responsible before going further","Report it directly to ownership with the full accurate data","Revise your own reports to present full data going forward and wait to see if anyone notices the discrepancy","Bring it to your peer leadership group first to assess organizational appetite for raising it"],
+    sc:{A:3,B:5,C:2,D:1} },
+
+  { id:75, s:"Senior Leadership Scenarios", g:"Scenarios", type:"scenario",
+    text:"A 20-year employee who everyone respects is consistently failing to meet the documentation standards your organization has established. Multiple supervisors have had conversations with this person. Nothing has changed.",
+    opts:["Continue the informal conversation approach — this person is too valuable to risk a formal process","Initiate formal progressive discipline regardless of their tenure or relationships","Discuss it with ownership before taking formal action, given the relationship dynamics","Transfer them to a role where documentation standards are lower"],
+    sc:{A:1,B:5,C:3,D:2} },
+
+  { id:76, s:"Senior Leadership Scenarios", g:"Scenarios", type:"scenario",
+    text:"You inherit an organization where the culture is significantly more permissive than the standards you intend to enforce. The team is experienced and generally respected. Your first 90 days have been positive relationally.",
+    opts:["Begin raising standards gradually over 6-12 months to avoid disruption","Establish the new standards clearly and explicitly in the first 30 days, accepting that some disruption will follow","Wait until you have built more relational capital before introducing accountability changes","Focus on culture first through values conversations and let standards follow organically"],
+    sc:{A:3,B:5,C:2,D:2} },
+];
+
+// ═══════════════════════════════════════════════════════
+// SECTIONS MAP
+// ═══════════════════════════════════════════════════════
+const SECTIONS = [
+  { name:"Organizational Accountability",      range:"Questions 1–9",   ids:range(1,9)   },
+  { name:"Strategic Thinking & Patience",      range:"Questions 10–18", ids:range(10,18) },
+  { name:"Developing Leaders",                 range:"Questions 19–27", ids:range(19,27) },
+  { name:"Culture Ownership",                  range:"Questions 28–35", ids:range(28,35) },
+  { name:"Decision Quality Under Constraint",  range:"Questions 36–44", ids:range(36,44) },
+  { name:"Self-Regulation & Standards",        range:"Questions 45–51", ids:range(45,51) },
+  { name:"Organizational Courage",             range:"Questions 52–59", ids:range(52,59) },
+  { name:"Senior Leadership Scenarios",        range:"Questions 60–76", ids:range(60,76) },
+];
+
+const DISPLAY_CATS = [
+  { key:"Org Accountability",  label:"Org Accountability",  color:"#3B6FE8" },
+  { key:"Strategic Thinking",  label:"Strategic Thinking",  color:"#2E7D4F" },
+  { key:"Leader Development",  label:"Leader Development",  color:"#7C3AED" },
+  { key:"Culture",             label:"Culture Ownership",   color:"#B47B28" },
+  { key:"Decision Quality",    label:"Decision Quality",    color:"#1D4ED8" },
+  { key:"Self-Regulation",     label:"Self-Regulation",     color:"#166534" },
+  { key:"Org Courage",         label:"Org Courage",         color:"#991B1B" },
+  { key:"Systemic Thinking",   label:"Systemic Thinking",   color:"#374151" },
+];
+
+function range(a, b){ return Array.from({length:b-a+1},(_,i)=>a+i); }
+
+// ═══════════════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════════════
+let answers = {};
+let curSec  = 0;
+let candidate = {};
+
+// ═══════════════════════════════════════════════════════
+// START
+// ═══════════════════════════════════════════════════════
+function startAssessment(){
+  const fn = document.getElementById('i-fname').value.trim();
+  const ln = document.getElementById('i-lname').value.trim();
+  const em = document.getElementById('i-email').value.trim();
+  if(!fn||!ln||!em){ alert('Please enter your first name, last name, and email to begin.'); return; }
+  candidate = {
+    firstName: fn,
+    lastName: ln,
+    name: fn+' '+ln, email: em,
+    phone: document.getElementById('i-phone').value.trim(),
+    position: document.getElementById('i-position').value.trim() || 'Director of Operations',
+    date: new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'})
+  };
+  document.getElementById('screen-welcome').style.display = 'none';
+  document.getElementById('screen-assessment').style.display = 'block';
+  document.getElementById('headerRight').style.display = 'block';
+  curSec = 0;
+  renderSection();
+}
+
+// ═══════════════════════════════════════════════════════
+// RENDER
+// ═══════════════════════════════════════════════════════
+function renderSection(){
+  const sec = SECTIONS[curSec];
+  document.getElementById('sec-tag').textContent = `Section ${curSec+1} of ${SECTIONS.length}`;
+  document.getElementById('sec-title').textContent = sec.name;
+  document.getElementById('sec-sub').textContent = sec.range;
+
+  const qs = QUESTIONS.filter(q => sec.ids.includes(q.id));
+  const container = document.getElementById('q-container');
+  container.innerHTML = '';
+
+  qs.forEach(q => {
+    const div = document.createElement('div');
+    div.className = 'q-wrap' + (answers[q.id] ? ' answered' : '');
+    div.id = `qwrap-${q.id}`;
+
+    if(q.type === 'likert'){
+      div.innerHTML = `
+        <div class="q-num">Question ${q.id} of 76</div>
+        <div class="q-text">${q.text}</div>
+        <div class="likert-wrap">
+          <div class="likert-labels">
+            <span>Strongly Disagree</span><span>Strongly Agree</span>
+          </div>
+          <div class="likert-btns">
+            ${LIKERT.map((l,i)=>`
+              <div class="likert-btn">
+                <input type="radio" name="q${q.id}" id="q${q.id}_${i}"
+                  value="${l}" ${answers[q.id]===l?'checked':''} onchange="setAnswer(${q.id},'${l}')">
+                <label for="q${q.id}_${i}">
+                  <div class="l-dot"></div>
+                  ${i+1}
+                </label>
+              </div>`).join('\n')}
+          </div>
+        </div>`;
+    } else {
+      div.innerHTML = `
+        <div class="q-num">Question ${q.id} of 76</div>
+        <div class="scenario-ctx">${q.text}</div>
+        <div class="scenario-q">Which response best reflects how you would handle this situation?</div>
+        <div class="sc-options">
+          ${['A','B','C','D'].map((l,i)=>`
+            <input class="sc-opt" type="radio" name="q${q.id}" id="q${q.id}_${l}"
+              value="${l}" ${answers[q.id]===l?'checked':''} onchange="setAnswer(${q.id},'${l}')">
+            <label for="q${q.id}_${l}">
+              <span class="opt-letter">${l}</span>
+              ${q.opts[i]}
+            </label>`).join('\n')}
+        </div>`;
+    }
+    container.appendChild(div);
+  });
+
+  document.getElementById('btn-prev').style.display = curSec > 0 ? 'inline-block' : 'none';
+  document.getElementById('btn-next').textContent = curSec === SECTIONS.length - 1
+    ? 'Submit Assessment →' : 'Next Section →';
+  updateProgress();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function setAnswer(id, val){
+  answers[id] = val;
+  const wrap = document.getElementById(`qwrap-${id}`);
+  if(wrap) wrap.classList.add('answered');
+  updateProgress();
+}
+
+function updateProgress(){
+  const total = QUESTIONS.length;
+  const done  = Object.keys(answers).length;
+  document.getElementById('prog-label').textContent = `${done} / ${total}`;
+  document.getElementById('prog-bar').style.width = `${(done/total)*100}%`;
+  document.getElementById('nav-info').textContent =
+    `${done} of ${total} answered`;
+}
+
+function prevSec(){
+  if(curSec > 0){ curSec--; renderSection(); }
+}
+
+function nextSec(){
+  const sec = SECTIONS[curSec];
+  const qs  = QUESTIONS.filter(q => sec.ids.includes(q.id));
+  const missing = qs.filter(q => !answers[q.id]);
+  if(missing.length > 0){
+    alert(`Please answer all questions in this section before continuing.\n${missing.length} question(s) remaining.`);
+    document.getElementById(`qwrap-${missing[0].id}`).scrollIntoView({behavior:'smooth',block:'center'});
+    return;
+  }
+  if(curSec < SECTIONS.length - 1){ curSec++; renderSection(); }
+  else { showResults(); }
+}
+
+// ═══════════════════════════════════════════════════════
+// SCORING
+// ═══════════════════════════════════════════════════════
+function scoreQ(q, ans){
+  if(q.type === 'likert'){
+    const raw = LIKERT.indexOf(ans) + 1;
+    return q.rev ? (6 - raw) : raw;
+  }
+  return q.sc[ans] || 0;
+}
+
+function computeScores(){
+  const groups = {};
+  QUESTIONS.forEach(q => {
+    if(q.g === 'Validity' || q.g === 'Scenarios') return;
+    const v = scoreQ(q, answers[q.id]);
+    if(!groups[q.g]) groups[q.g] = [];
+    groups[q.g].push(v);
+  });
+  // Scenario score
+  const scenQs = QUESTIONS.filter(q => q.g === 'Scenarios');
+  const scenVals = scenQs.map(q => scoreQ(q, answers[q.id]));
+  const scenAvg  = scenVals.reduce((a,b)=>a+b,0) / scenVals.length;
+
+  const avg = {};
+  Object.entries(groups).forEach(([g,vals]) => {
+    avg[g] = vals.reduce((a,b)=>a+b,0) / vals.length;
+  });
+  avg['Scenarios'] = scenAvg;
+
+  // Weighted composite — senior weights
+  // Org Courage + Decision Quality weighted highest (most senior-specific)
+  const composite =
+    (avg['Org Accountability'] || 0) * 0.14 +
+    (avg['Strategic Thinking'] || 0) * 0.12 +
+    (avg['Leader Development'] || 0) * 0.13 +
+    (avg['Culture']            || 0) * 0.12 +
+    (avg['Decision Quality']   || 0) * 0.15 +
+    (avg['Self-Regulation']    || 0) * 0.12 +
+    (avg['Org Courage']        || 0) * 0.14 +
+    (avg['Systemic Thinking']  || 0) * 0.08 +
+    (avg['Scenarios']          || 0) * 0.20;
+
+  // Weights sum to 1.20 — normalize
+  return { avg, composite: composite / 1.20 };
+}
+
+function getRedFlags(){
+  return QUESTIONS.filter(q => q.rf && q.rf.includes(answers[q.id]))
+    .map(q => ({ id:q.id, text:q.text.replace(/<[^>]+>/g,''), ans:answers[q.id] }));
+}
+
+function getValidityConcerns(){
+  return [67,68,69,70].filter(id => ['Agree','Strongly Agree'].includes(answers[id])).length;
+}
+
+function getVerdict(composite, redFlags, orgCourage, orgAcct){
+  // Critical gates for senior leadership
+  if(redFlags >= 4 || orgCourage < 3.0 || orgAcct < 3.2)
+    return { label:'Do Not Advance', cls:'vp-no' };
+  if(composite >= 4.3 && redFlags === 0)
+    return { label:'Recommended: Hire', cls:'vp-hire' };
+  if(composite >= 3.9 && redFlags <= 1)
+    return { label:'Hire with Review', cls:'vp-review' };
+  if(composite >= 3.5)
+    return { label:'Review Further', cls:'vp-review' };
+  return { label:'Do Not Advance', cls:'vp-no' };
+}
+
+// ═══════════════════════════════════════════════════════
+// RESULTS / SUBMISSION
+// ═══════════════════════════════════════════════════════
+async function showResults(){
+  document.getElementById('screen-assessment').style.display = 'none';
+  document.getElementById('screen-results').style.display = 'block';
+  document.getElementById('headerRight').style.display = 'none';
+  window.scrollTo({top:0,behavior:'smooth'});
+
+  const results = document.getElementById('screen-results');
+  results.innerHTML = `
+    <div class="results-top">
+      <div class="verdict-pill vp-review">Submitting</div>
+      <div class="r-name">Submitting your assessment...</div>
+      <div class="r-meta">Please do not close this page yet.</div>
+    </div>
+  `;
+
+  const { avg, composite } = computeScores();
+  const redFlags = getRedFlags();
+  const validity = getValidityConcerns();
+  const verdict = getVerdict(composite, redFlags.length, avg['Org Courage']||0, avg['Org Accountability']||0);
+  const completionDate = new Date().toISOString().split('T')[0];
+
+  const redFlagResponses = redFlags.length
+    ? redFlags.map(f => `Q${f.id}: ${f.text} — Answered: ${f.ans}`).join('\\n')
+    : 'None';
+
+  const summary = buildSummaryText(avg, redFlags, validity, composite, verdict);
+
+  const report = [
+    '=== Senior Leadership Assessment Results ===',
+    `Candidate: ${candidate.name}`,
+    `Email:     ${candidate.email}`,
+    `Phone:     ${candidate.phone || 'N/A'}`,
+    `Position:  ${candidate.position}`,
+    `Date:      ${completionDate}`,
+    '',
+    `RECOMMENDATION: ${verdict.label}`,
+    `Weighted Composite Score: ${composite.toFixed(2)} / 5.00`,
+    '',
+    '--- CATEGORY SCORES ---',
+    `Organizational Accountability:     ${(avg['Org Accountability']||0).toFixed(2)}`,
+    `Strategic Thinking & Patience:     ${(avg['Strategic Thinking']||0).toFixed(2)}`,
+    `Developing Leaders:                ${(avg['Leader Development']||0).toFixed(2)}`,
+    `Culture Ownership:                 ${(avg['Culture']||0).toFixed(2)}`,
+    `Decision Quality Under Constraint: ${(avg['Decision Quality']||0).toFixed(2)}`,
+    `Self-Regulation & Standards:       ${(avg['Self-Regulation']||0).toFixed(2)}`,
+    `Organizational Courage:            ${(avg['Org Courage']||0).toFixed(2)}`,
+    `Systemic Thinking & Legacy:        ${(avg['Systemic Thinking']||0).toFixed(2)}`,
+    `Scenarios:                         ${(avg['Scenarios']||0).toFixed(2)}`,
+    '',
+    `Red Flag Count:    ${redFlags.length}`,
+    `Validity Concerns: ${validity}`,
+    '',
+    '--- SUMMARY ---',
+    summary,
+    '',
+    'Assessment: Senior Leadership DO-Level Assessment v1.0'
+  ].join('\\n');
+
+  const submitted = await sendToFlow({
+    firstName: candidate.firstName,
+    lastName: candidate.lastName,
+    email: candidate.email,
+    position: candidate.position,
+    assessmentType: "Senior Leadership",
+    score: composite.toFixed(2),
+    recommendation: verdict.label,
+    redFlags: redFlags.length.toString(),
+    redFlagResponses: redFlagResponses,
+    completionDate: completionDate,
+    report: report
+  });
+
+  if(submitted){
+    results.innerHTML = `
+      <div class="results-top">
+        <div class="verdict-pill vp-hire">Submitted</div>
+        <div class="r-name">Thank you for submitting your assessment.</div>
+        <div class="r-meta">Please monitor your email for next steps from our hiring team.</div>
+      </div>
+      <div class="summary-box" style="text-align:center;">
+        Your assessment has been received. You may now close this page.
+      </div>
+    `;
+  } else {
+    results.innerHTML = `
+      <div class="results-top">
+        <div class="verdict-pill vp-review">Submission Issue</div>
+        <div class="r-name">We could not confirm your submission.</div>
+        <div class="r-meta">Please notify the hiring team that your assessment did not submit successfully.</div>
+      </div>
+      <div class="summary-box" style="text-align:center;">
+        You may keep this page open and contact the hiring team for next steps.
+      </div>
+    `;
+  }
+}
+
+function buildSummaryText(avg, redFlags, validity, composite, verdict){
+  const notes = [];
+  if(verdict.cls === 'vp-hire'){
+    notes.push('This candidate demonstrates strong senior leadership alignment across organizational courage, accountability, decision quality, and culture ownership.');
+  } else if(verdict.cls === 'vp-review'){
+    notes.push('This candidate shows generally viable senior leadership attributes with areas requiring oral board follow-up.');
+  } else {
+    notes.push('This candidate’s responses indicate significant concerns for senior leadership placement. Review hard-stop criteria and probe carefully before advancing.');
+  }
+
+  if((avg['Org Courage']||0) < 3.5) notes.push(`Organizational Courage score (${(avg['Org Courage']||0).toFixed(1)}) is below senior leadership target — probe upward feedback, ownership pushback, and ethics escalation examples.`);
+  if((avg['Org Accountability']||0) < 3.5) notes.push(`Organizational Accountability score (${(avg['Org Accountability']||0).toFixed(1)}) is below target — probe whether the candidate builds accountability systems or relies on individual effort.`);
+  if((avg['Culture']||0) < 3.5) notes.push(`Culture Ownership score (${(avg['Culture']||0).toFixed(1)}) warrants discussion — assess whether the candidate understands senior leaders set the cultural ceiling.`);
+  if((avg['Decision Quality']||0) < 3.5) notes.push(`Decision Quality score (${(avg['Decision Quality']||0).toFixed(1)}) is below target — probe trade-off thinking under resource, political, and information constraints.`);
+  if(validity >= 2) notes.push('Validity check flags suggest possible impression-management responding — interpret all scores with added caution and probe directly in the oral board.');
+  if(redFlags.length > 0) notes.push(`${redFlags.length} red flag response(s) identified. Details are stored separately in the Red Flag Responses column.`);
+
+  notes.push(`Composite score: ${composite.toFixed(2)} / 5.00. Verdict: ${verdict.label}.`);
+  return notes.join('\n');
+}
+
+async function sendToFlow(data) {
+  try {
+    console.log('Senior leadership assessment payload sent to Power Automate:', data);
+    const response = await fetch(FLOW_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(data)
+    });
+
+    return response.ok;
+  } catch (e) {
+    console.error("Flow submission failed", e);
+    return false;
+  }
+}
+
+function generateFindings(avg, redFlags, validity, composite, verdict){
+  const findings = [];
+
+  // Org Courage — the most senior-specific dimension
+  const courage = avg['Org Courage'] || 0;
+  findings.push({ label:"Organizational Courage", value: scoreLabel(courage),
+    note: courage < 3.5 ? "Below threshold for senior leadership — tendency to avoid upward confrontation. Probe directly in oral board." :
+          courage >= 4.3 ? "Strong — willing to push back up the chain and hold uncomfortable positions." :
+          "Adequate — will benefit from specific scenario probing in oral board." });
+
+  // Org Accountability
+  const acct = avg['Org Accountability'] || 0;
+  findings.push({ label:"Organizational Accountability", value: scoreLabel(acct),
+    note: acct < 3.5 ? "Below senior leadership threshold — accountability may be personally strong but not yet systemically built." :
+          "Builds accountability structures, not just enforces personal standards." });
+
+  // Culture ownership
+  const cult = avg['Culture'] || 0;
+  findings.push({ label:"Culture Ownership", value: scoreLabel(cult),
+    note: cult >= 4.0 ? "Understands they are the culture — not a manager of it." :
+          cult < 3.3 ? "May view culture as frontline-driven rather than senior-leader-set. Probe in oral board." : "Moderate — explore their specific culture-building examples." });
+
+  // Decision Quality
+  const dec = avg['Decision Quality'] || 0;
+  findings.push({ label:"Decision Quality Under Constraint", value: scoreLabel(dec),
+    note: dec >= 4.2 ? "Strong trade-off thinking. Can commit to imperfect decisions without requiring ideal conditions." :
+          dec < 3.4 ? "Risk of decision paralysis under constraint or political pressure." : "Adequate. Probe scenario-based decision examples." });
+
+  // Developing Leaders
+  const ld = avg['Leader Development'] || 0;
+  findings.push({ label:"Developing Leaders", value: scoreLabel(ld),
+    note: ld >= 4.0 ? "Invests in leader development — hires people who can exceed them. Succession-minded." :
+          ld < 3.4 ? "Development philosophy may be more operational than developmental. Explore their specific leader development examples." :
+          "Moderate. Explore who they have developed and what the outcomes were." });
+
+  // Validity context
+  if(validity > 0){
+    findings.push({ label:"Self-Report Reliability", value: validity >= 2 ? "Concern — inflate" : "Minor flag",
+      note:`${validity} of 4 validity items flagged. ${validity >= 2 ? 'Suggests inflated self-presentation — increase oral board scrutiny.' : 'One item — may be within normal range.'}` });
+  }
+
+  // Red flags
+  findings.push({ label:"Red Flag Responses", value: redFlags.length === 0 ? "None" : `${redFlags.length} flagged`,
+    note: redFlags.length === 0 ? "No disqualifying response patterns identified." :
+          `${redFlags.length} response(s) flagged as concerning for senior leadership role. See detail above.` });
+
+  // Composite
+  findings.push({ label:"Composite Score", value: `${composite.toFixed(2)} / 5.00`,
+    note: `Verdict: ${verdict.label}` });
+
+  return findings;
+}
+
+function scoreLabel(v){
+  if(v >= 4.5) return "Exceptional ("+v.toFixed(2)+")";
+  if(v >= 4.0) return "Strong ("+v.toFixed(2)+")";
+  if(v >= 3.5) return "Adequate ("+v.toFixed(2)+")";
+  if(v >= 3.0) return "Below Threshold ("+v.toFixed(2)+")";
+  return "Concern ("+v.toFixed(2)+")";
+}
+
+function buildWorkableText(avg, composite, redFlags, validity, verdict){
+  const date = new Date().toLocaleDateString();
+  const lines = [
+    `SENIOR LEADERSHIP ASSESSMENT — ${candidate.name.toUpperCase()}`,
+    `Position: ${candidate.position}   |   Date: ${date}`,
+    `Verdict: ${verdict.label}   |   Composite: ${composite.toFixed(2)}/5.00`,
+    ``,
+    `DIMENSION SCORES:`,
+    ...DISPLAY_CATS.map(d => `  ${d.label}: ${(avg[d.key]||0).toFixed(2)}/5.00`),
+    `  Scenarios: ${(avg['Scenarios']||0).toFixed(2)}/5.00`,
+    ``,
+    `RED FLAGS: ${redFlags.length > 0 ? redFlags.length + ' identified' : 'None'}`,
+    ...redFlags.map(f => `  • ${f.text.replace(/<[^>]+>/g,'')} [${f.ans}]`),
+    ``,
+    `VALIDITY CONCERNS: ${validity}/4 perfection items flagged`,
+    ``,
+    `KEY NOTES:`,
+    `  Org Courage: ${(avg['Org Courage']||0).toFixed(2)} — ${(avg['Org Courage']||0) < 3.5 ? 'Below threshold — probe upward feedback examples' : 'Adequate or above'}`,
+    `  Culture Ownership: ${(avg['Culture']||0).toFixed(2)} — ${(avg['Culture']||0) < 3.5 ? 'May view culture as frontline-driven' : 'Accepts senior responsibility for culture'}`,
+    `  Leader Development: ${(avg['Leader Development']||0).toFixed(2)} — ${(avg['Leader Development']||0) < 3.5 ? 'Probe succession and development track record' : 'Invests in leader pipeline'}`,
+    ``,
+    `Assessment: Senior Leadership DO-Level Assessment v1.0`,
+  ];
+  document.getElementById('copy-area').textContent = lines.join('\n');
+}
+
+function copyReport(){
+  const text = document.getElementById('copy-area').textContent;
+  navigator.clipboard.writeText(text).then(()=>{
+    const btn = document.querySelector('.btn-copy');
+    btn.textContent = '✓ Copied';
+    setTimeout(()=>{ btn.textContent = 'Copy to Clipboard'; }, 2000);
+  });
+}
+</script>
+</body>
+</html>
