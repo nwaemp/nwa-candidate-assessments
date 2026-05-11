@@ -2,171 +2,583 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Leadership Profile Assessment</title>
-<!-- NWA_LEADERSHIP_PROFILE_V2_FORMATTED_REDFLAGS_BUILD_2026_05_07_V2 -->
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,700;1,400&family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@500&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EMS Leadership Assessment</title>
+<!-- NWA_EMS_LEADERSHIP_POWER_AUTOMATE_HIDDEN_FORMATTED_REDFLAGS_BUILD_2026_05_07_V1 -->
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,600;0,700;1,400&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{
-  --bg:#0F1117;--surface:#181C25;--card:#1E2330;
-  --border:rgba(255,255,255,0.07);--border-hi:rgba(255,255,255,0.14);
-  --text:#E8EAF0;--muted:#8B92A5;--faint:#4B5263;
-  --gold:#C9A84C;--gold-light:#E8C96A;--gold-dim:rgba(201,168,76,0.15);
-  --blue:#3B6FE8;--blue-dim:rgba(59,111,232,0.15);
-  --green:#2E7D4F;--green-bg:rgba(46,125,79,0.15);--green-light:#5AC888;
-  --red:#C0392B;--red-bg:rgba(192,57,43,0.12);--red-border:rgba(192,57,43,0.3);
-  --amber:#B47B28;--amber-bg:rgba(180,123,40,0.15);
-  --r:12px;--r-sm:8px;
-}
-html{scroll-behavior:smooth}
-body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:15px;min-height:100vh}
+  :root {
+    --ink: #1a1a2e;
+    --ink2: #16213e;
+    --gold: #c9a84c;
+    --gold-light: #e8c97a;
+    --gold-pale: rgba(201,168,76,0.12);
+    --gold-border: rgba(201,168,76,0.25);
+    --cream: #f5f0e8;
+    --cream2: #ede7d9;
+    --muted: #8b8097;
+    --border: rgba(255,255,255,0.07);
+    --card: rgba(255,255,255,0.03);
+    --green: #6dbf8b;
+    --green-bg: rgba(109,191,139,0.12);
+    --green-border: rgba(109,191,139,0.3);
+    --amber: #e8b84b;
+    --amber-bg: rgba(232,184,75,0.12);
+    --amber-border: rgba(232,184,75,0.3);
+    --red: #e05c6a;
+    --red-bg: rgba(224,92,106,0.12);
+    --red-border: rgba(224,92,106,0.3);
+  }
 
-/* HEADER */
-.hdr{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(15,17,23,0.92);backdrop-filter:blur(14px);border-bottom:1px solid var(--border);padding:12px 24px;display:flex;align-items:center;justify-content:space-between}
-.hdr-left{display:flex;align-items:center;gap:12px}
-.diamond{width:34px;height:34px;background:var(--gold);border-radius:6px;transform:rotate(45deg);display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.diamond span{transform:rotate(-45deg);font-size:8px;font-weight:700;color:#1a1200;letter-spacing:.04em}
-.hdr-title{font-size:13px;font-weight:600;line-height:1.3}
-.hdr-sub{font-size:11px;color:var(--muted);font-weight:400}
-.prog-pill{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--border);border-radius:30px;padding:6px 14px}
-.prog-txt{font-size:12px;font-family:'DM Mono',monospace;color:var(--muted)}
-.prog-outer{width:90px;height:4px;background:rgba(255,255,255,0.08);border-radius:2px;overflow:hidden}
-.prog-inner{height:100%;background:var(--gold);border-radius:2px;transition:width .4s ease}
+  * { box-sizing: border-box; margin: 0; padding: 0; }
 
-/* MAIN */
-.main{max-width:660px;margin:0 auto;padding:90px 20px 80px}
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--ink);
+    color: var(--cream);
+    min-height: 100vh;
+    font-size: 15px;
+    line-height: 1.65;
+  }
 
-/* WELCOME */
-.eyebrow{font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin-bottom:18px}
-.welcome-h{font-family:'Fraunces',serif;font-size:clamp(30px,6vw,50px);font-weight:700;line-height:1.15;margin-bottom:18px}
-.welcome-h em{color:var(--gold-light);font-style:italic}
-.welcome-p{color:var(--muted);line-height:1.8;margin-bottom:28px;font-size:15px}
-.meta-row{display:flex;gap:10px;margin-bottom:32px;flex-wrap:wrap}
-.meta-cell{flex:1;min-width:90px;background:var(--card);border:1px solid var(--border);border-radius:var(--r-sm);padding:14px;text-align:center}
-.meta-v{font-size:26px;font-weight:700;color:var(--gold-light);line-height:1}
-.meta-l{font-size:11px;color:var(--muted);margin-top:4px}
+  /* Subtle grid pattern */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(201,168,76,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(201,168,76,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
 
-/* CANDIDATE FORM */
-.cand-form{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:22px;margin-bottom:24px}
-.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
-.fg label{display:block;font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:5px}
-.fg input{width:100%;background:var(--bg);border:1px solid var(--border-hi);border-radius:var(--r-sm);padding:10px 13px;color:var(--text);font-size:14px;font-family:'DM Sans',sans-serif;outline:none;transition:border-color .2s}
-.fg input:focus{border-color:var(--gold)}
-.fg input::placeholder{color:var(--faint)}
+  /* HEADER */
+  .header {
+    background: var(--ink2);
+    border-bottom: 1px solid var(--gold-border);
+    padding: 0 40px;
+    height: 62px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
 
-.btn-gold{width:100%;background:var(--gold);color:#1a1200;border:none;border-radius:var(--r-sm);padding:15px;font-size:16px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;transition:background .2s,transform .1s}
-.btn-gold:hover{background:var(--gold-light);transform:translateY(-1px)}
-.btn-gold:disabled{opacity:.4;cursor:not-allowed;transform:none}
-.btn-ghost{background:transparent;border:1px solid var(--border-hi);color:var(--muted);border-radius:var(--r-sm);padding:12px 20px;font-size:14px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s}
-.btn-ghost:hover{border-color:var(--text);color:var(--text)}
+  .logo-mark {
+    display: flex; align-items: center; gap: 8px;
+    flex-shrink: 0;
+  }
 
-/* SECTION HEADER */
-#screen-assessment,#screen-results{display:none}
-.sec-eye{font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin-bottom:6px}
-.sec-h{font-family:'Fraunces',serif;font-size:24px;font-weight:700;margin-bottom:3px}
-.sec-type-badge{display:inline-block;font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;padding:4px 12px;border-radius:20px;margin-bottom:20px}
-.badge-fact{background:rgba(59,111,232,0.2);color:#93B4F0}
-.badge-freq{background:rgba(46,125,79,0.2);color:#5AC888}
-.badge-know{background:rgba(201,168,76,0.2);color:var(--gold-light)}
-.badge-trade{background:rgba(192,57,43,0.15);color:#E85050}
-.badge-disc{background:rgba(92,33,182,0.2);color:#B07EF0}
+  .logo-diamond {
+    width: 28px; height: 28px;
+    background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 100%);
+    transform: rotate(45deg);
+    border-radius: 4px;
+    display: flex; align-items: center; justify-content: center;
+  }
 
-/* QUESTION CARD */
-.q-wrap{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:24px 26px;margin-bottom:12px;transition:border-color .2s}
-.q-wrap.answered{border-color:rgba(201,168,76,0.4)}
-.q-num{font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
-.q-label{display:inline-block;font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;padding:2px 8px;border-radius:10px;margin-bottom:10px}
-.q-text{font-size:16px;line-height:1.65;color:var(--text);margin-bottom:18px}
-.q-text em{color:var(--gold-light);font-style:normal;font-weight:600}
-.q-context{background:var(--blue-dim);border:1px solid rgba(59,111,232,0.2);border-radius:var(--r-sm);padding:12px 16px;font-size:13px;color:#93B4F0;line-height:1.65;margin-bottom:16px}
+  .logo-diamond span {
+    transform: rotate(-45deg);
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--ink);
+    letter-spacing: -0.5px;
+  }
 
-/* OPTIONS */
-.opts{display:flex;flex-direction:column;gap:7px}
-.opt-radio{display:none}
-.opt-label{display:flex;align-items:flex-start;gap:12px;padding:12px 15px;border:1px solid var(--border-hi);border-radius:var(--r-sm);cursor:pointer;transition:all .15s;font-size:14px;color:var(--muted);line-height:1.5}
-.opt-label:hover{border-color:var(--gold);color:var(--text);background:var(--gold-dim)}
-.opt-radio:checked+.opt-label{border-color:var(--gold);background:rgba(201,168,76,0.12);color:var(--text)}
-.opt-key{flex-shrink:0;width:22px;height:22px;border-radius:50%;border:1.5px solid currentColor;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;margin-top:1px}
+  .logo-text {
+    font-family: 'Fraunces', serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--cream);
+    letter-spacing: 0.01em;
+  }
 
-/* NAV */
-.q-nav{display:flex;justify-content:space-between;align-items:center;margin-top:28px}
-.nav-info{font-size:13px;color:var(--muted)}
-.nav-btns{display:flex;gap:10px}
+  .logo-text small {
+    display: block;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 10px;
+    font-weight: 400;
+    color: var(--muted);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    font-style: normal;
+  }
 
-/* RESULTS */
-.r-top{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:34px;text-align:center;margin-bottom:22px}
-.v-pill{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:6px 18px;border-radius:30px;margin-bottom:18px}
-.vp-hire{background:var(--green-bg);color:var(--green-light);border:1px solid rgba(46,125,79,0.4)}
-.vp-review{background:var(--amber-bg);color:#E8A840;border:1px solid rgba(180,123,40,0.4)}
-.vp-no{background:var(--red-bg);color:#E85050;border:1px solid var(--red-border)}
-.r-name{font-family:'Fraunces',serif;font-size:24px;font-weight:700;margin-bottom:4px}
-.r-meta{font-size:13px;color:var(--muted);margin-bottom:16px}
-.score-big{font-family:'Fraunces',serif;font-size:54px;font-weight:700;color:var(--gold-light);line-height:1}
-.score-denom{font-size:18px;color:var(--muted)}
+  .header-center { flex: 1; }
 
-/* CATEGORY BREAKDOWN */
-.cat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:20px 0}
-.cat-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r-sm);padding:15px}
-.cat-lbl{font-size:10px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
-.cat-score-row{display:flex;align-items:center;gap:8px}
-.cat-bar-bg{flex:1;height:4px;background:rgba(255,255,255,0.07);border-radius:2px;overflow:hidden}
-.cat-bar{height:100%;border-radius:2px;transition:width 1s ease}
-.cat-val{font-family:'DM Mono',monospace;font-size:13px;width:36px;text-align:right;flex-shrink:0}
+  .header-right { display: flex; align-items: center; gap: 14px; }
 
-/* FLAGS */
-.flags-box{background:var(--red-bg);border:1px solid var(--red-border);border-radius:var(--r);padding:22px;margin-bottom:18px}
-.flags-box h3{color:#E85050;font-size:15px;margin-bottom:12px}
-.flag-row{display:flex;gap:10px;margin-bottom:10px;font-size:13px;padding-bottom:10px;border-bottom:1px solid var(--red-border)}
-.flag-row:last-child{border:none;margin:0;padding:0}
-.flag-q{color:var(--muted);flex:1;line-height:1.5}
-.flag-a{color:#E85050;font-weight:600;font-family:'DM Mono',monospace;font-size:12px;white-space:nowrap}
-.flag-why{font-size:12px;color:#E85050;margin-top:4px;opacity:.8}
+  .prog-pill {
+    display: flex; align-items: center; gap: 10px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 99px;
+    padding: 5px 14px;
+  }
 
-/* SUMMARY */
-.sum-box{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:22px;margin-bottom:18px}
-.sum-box h3{font-size:15px;font-weight:600;margin-bottom:14px}
-.sum-row{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;padding:9px 0;border-bottom:1px solid var(--border);font-size:13px}
-.sum-row:last-child{border:none}
-.sum-lbl{color:var(--muted);flex-shrink:0;max-width:160px}
-.sum-val{color:var(--text);font-weight:500;text-align:right}
-.sum-note{font-size:11px;color:var(--muted);margin-top:3px}
+  .prog-label { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--muted); }
 
-/* WORKABLE */
-.wb-box{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:22px;margin-bottom:18px}
-.wb-box h3{font-size:15px;font-weight:600;margin-bottom:6px}
-.wb-box p{font-size:13px;color:var(--muted);margin-bottom:12px}
-.copy-area{background:var(--bg);border:1px solid var(--border);border-radius:var(--r-sm);padding:13px;font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);line-height:1.8;white-space:pre-wrap;max-height:180px;overflow-y:auto;margin-bottom:10px}
-.btn-copy{background:var(--blue);color:white;border:none;border-radius:var(--r-sm);padding:9px 18px;font-size:13px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif}
-.btn-copy:hover{background:#2D5FD8}
-.export-row{display:flex;gap:10px;margin-top:18px}
-.export-row .btn-gold{flex:1}
-.export-row .btn-ghost{flex:1}
+  .prog-outer { width: 100px; height: 3px; background: rgba(255,255,255,0.08); border-radius: 2px; overflow: hidden; }
+  .prog-inner { height: 100%; background: var(--gold); border-radius: 2px; transition: width 0.4s ease; width: 0%; }
 
-@media(max-width:520px){
-  .form-grid,.cat-grid{grid-template-columns:1fr}
-  .export-row{flex-direction:column}
-  .q-wrap{padding:16px}
-}
-@media print{
-  .hdr,.q-nav,.export-row,.btn-copy,.wb-box{display:none!important}
-  body{background:white;color:black}
-}
+  /* MAIN */
+  .main { max-width: 780px; margin: 0 auto; padding: 44px 24px 100px; position: relative; z-index: 1; }
+
+  /* WELCOME */
+  #screen-welcome { display: block; }
+
+  .eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 18px;
+    display: flex; align-items: center; gap: 8px;
+  }
+
+  .eyebrow::before {
+    content: '';
+    display: inline-block;
+    width: 24px; height: 1px;
+    background: var(--gold);
+  }
+
+  .welcome-title {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(32px, 5vw, 52px);
+    font-weight: 700;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    margin-bottom: 24px;
+    color: var(--cream);
+  }
+
+  .welcome-title em {
+    font-style: italic;
+    color: var(--gold-light);
+  }
+
+  .welcome-desc {
+    font-size: 15px;
+    color: var(--muted);
+    max-width: 520px;
+    line-height: 1.75;
+    margin-bottom: 36px;
+  }
+
+  .meta-row {
+    display: flex; gap: 1px;
+    margin-bottom: 44px;
+    max-width: 480px;
+  }
+
+  .meta-cell {
+    flex: 1;
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 14px 18px;
+  }
+
+  .meta-cell:first-child { border-radius: 8px 0 0 8px; }
+  .meta-cell:last-child { border-radius: 0 8px 8px 0; }
+
+  .meta-val {
+    font-family: 'Fraunces', serif;
+    font-size: 26px;
+    font-weight: 600;
+    color: var(--cream);
+    line-height: 1;
+    margin-bottom: 3px;
+  }
+
+  .meta-lbl {
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /* CANDIDATE FORM */
+  .cand-form { max-width: 480px; margin-bottom: 36px; }
+
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+
+  .form-group { display: flex; flex-direction: column; gap: 6px; }
+
+  .form-group label {
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-weight: 500;
+  }
+
+  .form-group input {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 9px 12px;
+    color: var(--cream);
+    font-size: 13px;
+    font-family: 'DM Sans', sans-serif;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .form-group input:focus { border-color: var(--gold-border); }
+  .form-group input::placeholder { color: rgba(255,255,255,0.15); }
+
+  /* BUTTONS */
+  .btn-primary {
+    background: var(--gold);
+    color: var(--ink);
+    border: none;
+    border-radius: 6px;
+    padding: 13px 28px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+
+  .btn-primary:hover { background: var(--gold-light); }
+  .btn-primary:active { transform: scale(0.98); }
+
+  .btn-ghost {
+    background: transparent;
+    color: var(--muted);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 11px 22px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .btn-ghost:hover { border-color: rgba(255,255,255,0.2); color: var(--cream); }
+
+  /* ASSESSMENT SCREEN */
+  #screen-assessment { display: none; }
+
+  .sec-eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 6px;
+  }
+
+  .sec-title {
+    font-family: 'Fraunces', serif;
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--cream);
+    margin-bottom: 4px;
+  }
+
+  .sec-sub { font-size: 12px; color: var(--muted); margin-bottom: 32px; }
+
+  /* QUESTION */
+  .q-block { margin-bottom: 0; animation: slideIn 0.25s ease both; }
+
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .q-divider { height: 1px; background: var(--border); margin: 24px 0; }
+
+  .q-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--gold);
+    letter-spacing: 0.1em;
+    margin-bottom: 7px;
+  }
+
+  .q-text {
+    font-size: 15px;
+    color: var(--cream);
+    line-height: 1.55;
+    margin-bottom: 14px;
+    font-weight: 400;
+  }
+
+  /* LIKERT */
+  .likert-wrap { display: flex; gap: 6px; flex-wrap: wrap; }
+
+  .l-opt {
+    flex: 1 1 0;
+    min-width: 90px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 9px 6px;
+    text-align: center;
+    cursor: pointer;
+    font-size: 11px;
+    color: var(--muted);
+    line-height: 1.3;
+    transition: all 0.15s;
+    user-select: none;
+  }
+
+  .l-opt:hover { background: rgba(201,168,76,0.06); color: var(--cream); }
+
+  .l-opt.selected {
+    background: var(--gold-pale);
+    border-color: var(--gold-border);
+    color: var(--cream);
+  }
+
+  .likert-ends {
+    display: flex; justify-content: space-between;
+    font-size: 10px; color: var(--muted);
+    margin-top: 5px; padding: 0 2px;
+    letter-spacing: 0.04em;
+  }
+
+  /* SCENARIO */
+  .scenario-opts { display: flex; flex-direction: column; gap: 7px; }
+
+  .s-opt {
+    display: flex; align-items: flex-start; gap: 12px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 13px 15px;
+    cursor: pointer;
+    transition: all 0.15s;
+    user-select: none;
+  }
+
+  .s-opt:hover { background: rgba(201,168,76,0.04); }
+
+  .s-opt.selected {
+    background: var(--gold-pale);
+    border-color: var(--gold-border);
+  }
+
+  .s-letter {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    border: 1.5px solid var(--muted);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px; font-weight: 700;
+    flex-shrink: 0; margin-top: 1px;
+    transition: all 0.15s;
+    font-family: 'DM Mono', monospace;
+  }
+
+  .s-opt.selected .s-letter {
+    background: var(--gold);
+    border-color: var(--gold);
+    color: var(--ink);
+  }
+
+  .s-text { font-size: 13px; color: var(--cream2); line-height: 1.5; }
+
+  /* NAV */
+  .q-nav {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-top: 36px; padding-top: 24px;
+    border-top: 1px solid var(--border);
+    gap: 12px;
+  }
+
+  .nav-info { font-size: 11px; color: var(--muted); font-family: 'DM Mono', monospace; }
+  .nav-btns { display: flex; gap: 10px; }
+
+  /* RESULTS */
+  #screen-results { display: none; }
+
+  .results-top {
+    text-align: center;
+    padding: 36px 0 28px;
+  }
+
+  .verdict-pill {
+    display: inline-block;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 6px 18px;
+    border-radius: 99px;
+    margin-bottom: 16px;
+  }
+
+  .vp-hire   { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-border); }
+  .vp-review { background: var(--amber-bg); color: var(--amber); border: 1px solid var(--amber-border); }
+  .vp-no     { background: var(--red-bg);   color: var(--red);   border: 1px solid var(--red-border); }
+
+  .r-name {
+    font-family: 'Fraunces', serif;
+    font-size: 32px; font-weight: 700;
+    color: var(--cream); margin-bottom: 6px;
+  }
+
+  .r-meta { font-size: 12px; color: var(--muted); }
+
+  .r-composite {
+    display: inline-flex; align-items: baseline; gap: 4px;
+    margin-top: 16px;
+  }
+
+  .r-composite .big {
+    font-family: 'Fraunces', serif;
+    font-size: 48px; font-weight: 700;
+    color: var(--gold-light); line-height: 1;
+  }
+
+  .r-composite .denom { font-size: 18px; color: var(--muted); }
+
+  /* SCORE CARDS */
+  .score-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin: 28px 0;
+  }
+
+  .sc-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+  }
+
+  .sc-label { font-size: 10px; letter-spacing: 0.07em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
+
+  .sc-bar-wrap { display: flex; align-items: center; gap: 8px; }
+  .sc-bar-bg { flex: 1; height: 4px; background: rgba(255,255,255,0.07); border-radius: 2px; overflow: hidden; }
+  .sc-bar-fill { height: 100%; border-radius: 2px; transition: width 1s ease; }
+  .sc-val { font-family: 'DM Mono', monospace; font-size: 14px; font-weight: 500; width: 30px; text-align: right; flex-shrink: 0; }
+
+  /* RED FLAGS */
+  .flags-box {
+    background: var(--red-bg);
+    border: 1px solid var(--red-border);
+    border-radius: 10px;
+    padding: 18px 20px;
+    margin-bottom: 16px;
+  }
+
+  .flags-box h3 {
+    font-size: 13px; font-weight: 600; color: var(--red);
+    margin-bottom: 10px;
+    display: flex; align-items: center; gap: 6px;
+  }
+
+  .flag-item { font-size: 12px; color: var(--muted); padding: 4px 0; border-bottom: 1px solid rgba(255,255,255,0.04); }
+  .flag-item:last-child { border-bottom: none; }
+
+  /* SUMMARY */
+  .summary-box {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 18px 20px;
+    margin-bottom: 20px;
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.7;
+  }
+
+  /* WORKABLE PASTE */
+  .workable-box {
+    background: var(--ink2);
+    border: 1px solid var(--gold-border);
+    border-radius: 10px;
+    padding: 20px;
+    margin-top: 24px;
+  }
+
+  .workable-box h3 {
+    font-family: 'Fraunces', serif;
+    font-size: 15px; font-weight: 600;
+    color: var(--cream); margin-bottom: 6px;
+  }
+
+  .workable-box p { font-size: 12px; color: var(--muted); margin-bottom: 12px; }
+
+  .copy-area {
+    background: rgba(0,0,0,0.3);
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    padding: 14px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    white-space: pre-wrap;
+    line-height: 1.7;
+    margin-bottom: 10px;
+  }
+
+  .btn-copy {
+    font-size: 12px; color: var(--muted);
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border);
+    border-radius: 6px; padding: 7px 14px;
+    cursor: pointer; transition: all 0.15s;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  .btn-copy:hover { background: rgba(255,255,255,0.08); color: var(--cream); }
+
+  .export-row { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 28px; }
+
+  /* RESPONSIVE */
+  @media (max-width: 580px) {
+    .header { padding: 0 16px; }
+    .main { padding: 24px 14px 80px; }
+    .form-grid { grid-template-columns: 1fr; }
+    .meta-row { flex-wrap: wrap; }
+    .score-grid { grid-template-columns: 1fr 1fr; }
+    .likert-wrap { gap: 4px; }
+    .l-opt { min-width: 60px; padding: 7px 4px; font-size: 10px; }
+    .prog-pill { display: none; }
+  }
+
+  @media print {
+    body::before { display: none; }
+    .header { position: static; background: #1a1a2e; }
+    .btn-primary, .btn-ghost, .btn-copy, .export-row { display: none !important; }
+    body { background: white; color: #111; }
+    .r-name, .sec-title, .workable-box h3 { color: #111; }
+    .sc-card, .flags-box, .summary-box, .workable-box { background: #f9f9f9; border-color: #ddd; }
+  }
 </style>
 </head>
 <body>
 
-<header class="hdr">
-  <div class="hdr-left">
-    <div class="diamond"><span>EMS</span></div>
-    <div>
-      <div class="hdr-title">Leadership Profile Assessment</div>
-      <div class="hdr-sub">Director of Operations Level · No-Interpretation Format</div>
+<header class="header">
+  <div class="logo-mark">
+    <div class="logo-diamond"><span>EMS</span></div>
+    <div class="logo-text">
+      Leadership Assessment
+      <small>Talent Acquisition</small>
     </div>
   </div>
-  <div id="hdr-right" style="display:none">
+  <div class="header-center"></div>
+  <div class="header-right" id="headerRight" style="display:none">
     <div class="prog-pill">
-      <span class="prog-txt" id="prog-txt">0 / 40</span>
+      <span class="prog-label" id="prog-label">0 / 70</span>
       <div class="prog-outer"><div class="prog-inner" id="prog-bar"></div></div>
     </div>
   </div>
@@ -174,675 +586,665 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
 
 <main class="main">
 
-<!-- WELCOME -->
-<div id="screen-welcome">
-  <div class="eyebrow">Leadership Selection · EMS Operations</div>
-  <h1 class="welcome-h">Leadership Profile<br><em>Assessment</em></h1>
-  <p class="welcome-p">
-    This assessment uses factual, behavioral, and operational questions — not attitude statements.
-    Every question has a specific answer based on what you have actually done, how often you have done it,
-    or what the correct decision is in a defined situation.<br><br>
-    There are no statements to agree or disagree with. There is no interpretation of what your answer means.
-    Answer based on your actual experience and actual decisions.
-  </p>
-  <div class="meta-row">
-    <div class="meta-cell"><div class="meta-v">40</div><div class="meta-l">Questions</div></div>
-    <div class="meta-cell"><div class="meta-v">5</div><div class="meta-l">Categories</div></div>
-    <div class="meta-cell"><div class="meta-v">15–20</div><div class="meta-l">Minutes</div></div>
-    <div class="meta-cell"><div class="meta-v">DO</div><div class="meta-l">Level</div></div>
-  </div>
-  <div class="cand-form">
-    <div class="form-grid">
-      <div class="fg"><label>First Name *</label><input type="text" id="i-fn" placeholder="First"></div>
-      <div class="fg"><label>Last Name *</label><input type="text" id="i-ln" placeholder="Last"></div>
-    </div>
-    <div class="form-grid">
-      <div class="fg"><label>Email *</label><input type="email" id="i-em" placeholder="email@domain.com"></div>
-      <div class="fg"><label>Phone</label><input type="tel" id="i-ph" placeholder="(555) 000-0000"></div>
-    </div>
-    <div class="fg" style="margin-bottom:14px">
-      <label>Position Applied For</label>
-      <input type="text" id="i-pos" placeholder="Director of Operations">
-    </div>
-    <button class="btn-gold" onclick="start()">Begin Assessment →</button>
-  </div>
-</div>
+  <!-- ============ WELCOME ============ -->
+  <div id="screen-welcome">
+    <div class="eyebrow">Leadership Selection · EMS</div>
+    <h2 class="welcome-title">EMS Leadership<br><em>Character &amp; Conduct</em><br>Assessment</h2>
+    <p class="welcome-desc">
+      This assessment evaluates leadership readiness for supervisory and command roles within EMS.
+      Answer honestly — we are looking for self-awareness and consistency, not perfection.
+    </p>
 
-<!-- ASSESSMENT -->
-<div id="screen-assessment">
-  <div class="sec-eye" id="sec-eye">Section 1 of 5</div>
-  <div class="sec-h" id="sec-h">Leadership Track Record</div>
-  <div class="sec-type-badge badge-fact" id="sec-badge">Disclosed Facts</div>
-  <div id="q-container"></div>
-  <div class="q-nav">
-    <span class="nav-info" id="nav-info"></span>
-    <div class="nav-btns">
-      <button class="btn-ghost" id="btn-prev" onclick="prev()" style="display:none">← Back</button>
-      <button class="btn-gold" id="btn-next" onclick="next()" style="max-width:200px">Next Section →</button>
+    <div class="meta-row">
+      <div class="meta-cell"><div class="meta-val">70</div><div class="meta-lbl">Questions</div></div>
+      <div class="meta-cell"><div class="meta-val">15–20</div><div class="meta-lbl">Minutes</div></div>
+      <div class="meta-cell"><div class="meta-val">7</div><div class="meta-lbl">Categories</div></div>
+    </div>
+
+    <div class="cand-form">
+      <div class="form-grid">
+        <div class="form-group"><label>First Name *</label><input type="text" id="i-fname" placeholder="Jane"></div>
+        <div class="form-group"><label>Last Name *</label><input type="text" id="i-lname" placeholder="Smith"></div>
+      </div>
+      <div class="form-grid">
+        <div class="form-group"><label>Email *</label><input type="email" id="i-email" placeholder="jane@email.com"></div>
+        <div class="form-group"><label>Phone</label><input type="tel" id="i-phone" placeholder="(555) 000-0000"></div>
+      </div>
+      <div class="form-group" style="margin-top:4px">
+        <label>Position Applied For</label>
+        <input type="text" id="i-position" placeholder="EMS Supervisor / Field Training Officer / Captain">
+      </div>
+    </div>
+
+    <button class="btn-primary" onclick="startAssessment()">Begin Assessment →</button>
+  </div>
+
+  <!-- ============ ASSESSMENT ============ -->
+  <div id="screen-assessment">
+    <div class="sec-eyebrow" id="sec-tag">Section 1 of 7</div>
+    <div class="sec-title" id="sec-title">Leadership Integrity &amp; Accountability</div>
+    <div class="sec-sub" id="sec-sub">Questions 1–12</div>
+
+    <div id="q-container"></div>
+
+    <div class="q-nav">
+      <span class="nav-info" id="nav-info"></span>
+      <div class="nav-btns">
+        <button class="btn-ghost" id="btn-prev" onclick="prevSec()" style="display:none">← Back</button>
+        <button class="btn-primary" id="btn-next" onclick="nextSec()">Next Section →</button>
+      </div>
     </div>
   </div>
-</div>
 
-<!-- RESULTS -->
-<div id="screen-results">
-  <div class="r-top">
-    <div class="v-pill" id="v-pill"></div>
-    <div class="r-name" id="r-name"></div>
-    <div class="r-meta" id="r-meta"></div>
-    <div><span class="score-big" id="r-score">—</span><span class="score-denom"> / 100</span></div>
+  <!-- ============ RESULTS ============ -->
+  <div id="screen-results">
+    <div class="results-top">
+      <div class="verdict-pill" id="v-pill"></div>
+      <div class="r-name" id="r-name"></div>
+      <div class="r-meta" id="r-meta"></div>
+      <div class="r-composite">
+        <span class="big" id="r-score">—</span>
+        <span class="denom">/ 5.00</span>
+      </div>
+    </div>
+
+    <div class="score-grid" id="score-grid"></div>
+
+    <div class="flags-box" id="flags-box" style="display:none">
+      <h3>⚠ Red Flag Responses</h3>
+      <div id="flags-list"></div>
+    </div>
+
+    <div class="summary-box" id="summary-box"></div>
+
+    <div class="workable-box">
+      <h3>Workable Notes — Copy &amp; Paste</h3>
+      <p>Paste the text below into the candidate's Notes tab in Workable.</p>
+      <div class="copy-area" id="copy-area"></div>
+      <button class="btn-copy" onclick="copyReport()">Copy to Clipboard</button>
+    </div>
+
+    <div class="export-row">
+      <button class="btn-primary" onclick="window.print()">Print / Save PDF</button>
+      <button class="btn-ghost" onclick="location.reload()">New Assessment</button>
+    </div>
   </div>
-  <div class="cat-grid" id="cat-grid"></div>
-  <div class="flags-box" id="flags-box" style="display:none">
-    <h3>⚠ Flagged Responses</h3>
-    <div id="flags-list"></div>
-  </div>
-  <div class="sum-box" id="sum-box"></div>
-  <div class="wb-box">
-    <h3>Workable Notes</h3>
-    <p>Copy and paste into the candidate's Notes tab in Workable.</p>
-    <div class="copy-area" id="copy-area"></div>
-    <button class="btn-copy" onclick="copyIt()">Copy to Clipboard</button>
-  </div>
-  <div class="export-row">
-    <button class="btn-gold" onclick="window.print()">Print / Save PDF</button>
-    <button class="btn-ghost" onclick="location.reload()">New Candidate</button>
-  </div>
-</div>
 
 </main>
 
 <script>
 const FLOW_URL = 'https://defaultb9fe31c2de0742529875da1c500446.c8.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/7b0c2902b6a34df88a3879469437fed0/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=LAbOa6U8xvED2R3HDjai7nhtgI7-u8z5zjhj8Ma-q0E';
+// =====================================================================
+// QUESTION DATA — 70 questions across 7 leadership categories
+// =====================================================================
+const LIKERT = ["Strongly Disagree","Disagree","Neutral","Agree","Strongly Agree"];
 
-// ═══════════════════════════════════════════
-// QUESTION DATA
-// 5 categories, 8 questions each = 40 total
-// Types: FACT, FREQ, KNOW, TRADE, DISC
-// ═══════════════════════════════════════════
+const QUESTIONS = [
+
+  // ── SECTION 1: Leadership Integrity & Accountability (Q1–12) ──────
+  // Weight: 25% — mirrors Integrity in base test
+  { id:1,  s:"Leadership Integrity & Accountability", g:"Integrity", type:"likert", rev:false,
+    text:"I hold myself to the same standards I expect from my team." },
+  { id:2,  s:"Leadership Integrity & Accountability", g:"Integrity", type:"likert", rev:true,
+    text:"A leader occasionally bending the rules is acceptable if the outcome is positive.",
+    rf:["Agree","Strongly Agree"] },
+  { id:3,  s:"Leadership Integrity & Accountability", g:"Integrity", type:"likert", rev:false,
+    text:"When I make a mistake, I acknowledge it openly rather than deflecting." },
+  { id:4,  s:"Leadership Integrity & Accountability", g:"Integrity", type:"likert", rev:true,
+    text:"Leaders sometimes need to withhold information from their team to maintain control.",
+    rf:["Agree","Strongly Agree"] },
+  { id:5,  s:"Leadership Integrity & Accountability", g:"Integrity", type:"likert", rev:false,
+    text:"I ensure decisions I make are transparent and can withstand scrutiny." },
+  { id:6,  s:"Leadership Integrity & Accountability", g:"Integrity", type:"likert", rev:false,
+    text:"Accountability in leadership means owning outcomes whether positive or negative." },
+  { id:7,  s:"Leadership Integrity & Accountability", g:"Integrity", type:"likert", rev:true,
+    text:"A minor misrepresentation in a report is acceptable if it avoids conflict.",
+    rf:["Agree","Strongly Agree"] },
+  { id:8,  s:"Leadership Integrity & Accountability", g:"Integrity", type:"likert", rev:false,
+    text:"I document decisions accurately even when the outcome reflects poorly on me." },
+  { id:9,  s:"Leadership Integrity & Accountability", g:"Integrity", type:"likert", rev:false,
+    text:"I would report a policy violation even if the person involved was a colleague I liked." },
+  { id:10, s:"Leadership Integrity & Accountability", g:"Integrity", type:"likert", rev:true,
+    text:"Leaders should protect their team from consequences when they cut corners.",
+    rf:["Agree","Strongly Agree"] },
+  { id:11, s:"Leadership Integrity & Accountability", g:"Integrity", type:"likert", rev:false,
+    text:"My personal conduct on duty reflects my leadership values." },
+  { id:12, s:"Leadership Integrity & Accountability", g:"Integrity", type:"likert", rev:false,
+    text:"Ethical leadership is more important than popular leadership." },
+
+  // ── SECTION 2: Safety Leadership (Q13–22) ─────────────────────────
+  // Weight: 25% — mirrors Safety Orientation
+  { id:13, s:"Safety Leadership", g:"Safety Leadership", type:"likert", rev:false,
+    text:"I actively reinforce safety protocols even when my team finds them burdensome." },
+  { id:14, s:"Safety Leadership", g:"Safety Leadership", type:"likert", rev:true,
+    text:"Experienced crews can reasonably skip certain safety checks without risk.",
+    rf:["Agree","Strongly Agree"] },
+  { id:15, s:"Safety Leadership", g:"Safety Leadership", type:"likert", rev:false,
+    text:"I intervene immediately when I observe an unsafe practice, regardless of seniority." },
+  { id:16, s:"Safety Leadership", g:"Safety Leadership", type:"likert", rev:false,
+    text:"Near-miss incidents should always be reported and reviewed." },
+  { id:17, s:"Safety Leadership", g:"Safety Leadership", type:"likert", rev:false,
+    text:"A culture of safety starts with how leaders behave, not just what they say." },
+  { id:18, s:"Safety Leadership", g:"Safety Leadership", type:"likert", rev:true,
+    text:"When call volume is high, some safety steps can be deprioritized.",
+    rf:["Agree","Strongly Agree"] },
+  { id:19, s:"Safety Leadership", g:"Safety Leadership", type:"likert", rev:false,
+    text:"I encourage team members to raise safety concerns without fear of criticism." },
+  { id:20, s:"Safety Leadership", g:"Safety Leadership", type:"likert", rev:false,
+    text:"Equipment readiness checks are a leadership responsibility, not just a crew task." },
+  { id:21, s:"Safety Leadership", g:"Safety Leadership", type:"likert", rev:false,
+    text:"I would rather slow down an operation than allow a safety compromise." },
+  { id:22, s:"Safety Leadership", g:"Safety Leadership", type:"likert", rev:false,
+    text:"Modeling safe behavior is more effective than enforcing it through discipline alone." },
+
+  // ── SECTION 3: Team Development & Communication (Q23–32) ──────────
+  // Weight: 20% — mirrors Professionalism
+  { id:23, s:"Team Development & Communication", g:"Team Development", type:"likert", rev:false,
+    text:"I give regular constructive feedback to team members, not just during reviews." },
+  { id:24, s:"Team Development & Communication", g:"Team Development", type:"likert", rev:false,
+    text:"I adapt my communication style to suit different team members." },
+  { id:25, s:"Team Development & Communication", g:"Team Development", type:"likert", rev:true,
+    text:"High performers don't need as much attention from a supervisor as struggling ones.",
+    rf:["Agree","Strongly Agree"] },
+  { id:26, s:"Team Development & Communication", g:"Team Development", type:"likert", rev:false,
+    text:"I create opportunities for junior staff to develop their skills and take on more responsibility." },
+  { id:27, s:"Team Development & Communication", g:"Team Development", type:"likert", rev:false,
+    text:"When delivering difficult feedback, I focus on behavior and outcome rather than personality." },
+  { id:28, s:"Team Development & Communication", g:"Team Development", type:"likert", rev:true,
+    text:"It is not a supervisor's job to manage how team members feel about feedback.",
+    rf:["Agree","Strongly Agree"] },
+  { id:29, s:"Team Development & Communication", g:"Team Development", type:"likert", rev:false,
+    text:"I actively listen to team concerns before making decisions that affect them." },
+  { id:30, s:"Team Development & Communication", g:"Team Development", type:"likert", rev:false,
+    text:"Clear briefings and debriefs improve team performance over time." },
+  { id:31, s:"Team Development & Communication", g:"Team Development", type:"likert", rev:false,
+    text:"I recognize and acknowledge good performance in a timely and specific way." },
+  { id:32, s:"Team Development & Communication", g:"Team Development", type:"likert", rev:false,
+    text:"Developing my team's capability is as important as meeting operational targets." },
+
+  // ── SECTION 4: Decision-Making Under Pressure (Q33–42) ────────────
+  // Weight: 20% — mirrors Situational Judgment; scored as category
+  { id:33, s:"Decision-Making Under Pressure", g:"Decision-Making", type:"likert", rev:false,
+    text:"I can make clear decisions when information is incomplete." },
+  { id:34, s:"Decision-Making Under Pressure", g:"Decision-Making", type:"likert", rev:false,
+    text:"I reassess my decisions when new information changes the situation." },
+  { id:35, s:"Decision-Making Under Pressure", g:"Decision-Making", type:"likert", rev:true,
+    text:"Once I have made a call on scene, reversing it shows weakness.",
+    rf:["Agree","Strongly Agree"] },
+  { id:36, s:"Decision-Making Under Pressure", g:"Decision-Making", type:"likert", rev:false,
+    text:"I involve relevant team members in decisions when time allows." },
+  { id:37, s:"Decision-Making Under Pressure", g:"Decision-Making", type:"likert", rev:false,
+    text:"I remain calm and methodical even when situations escalate unexpectedly." },
+  { id:38, s:"Decision-Making Under Pressure", g:"Decision-Making", type:"likert", rev:false,
+    text:"I can prioritize multiple competing demands simultaneously." },
+  { id:39, s:"Decision-Making Under Pressure", g:"Decision-Making", type:"likert", rev:true,
+    text:"During a crisis, I prefer to act first and ask questions later.",
+    rf:["Strongly Agree"] },
+  { id:40, s:"Decision-Making Under Pressure", g:"Decision-Making", type:"likert", rev:false,
+    text:"I debrief critical incidents to improve future decision-making." },
+  { id:41, s:"Decision-Making Under Pressure", g:"Decision-Making", type:"likert", rev:false,
+    text:"I distinguish between decisions that need immediate action and those that can wait." },
+  { id:42, s:"Decision-Making Under Pressure", g:"Decision-Making", type:"likert", rev:false,
+    text:"My decisions under pressure are consistent with my values when not under pressure." },
+
+  // ── SECTION 5: Conflict & Personnel Management (Q43–50) ───────────
+  // Weight: 15% — mirrors Team Reliability
+  { id:43, s:"Conflict & Personnel Management", g:"Conflict Management", type:"likert", rev:false,
+    text:"I address interpersonal conflict within my team promptly rather than hoping it resolves." },
+  { id:44, s:"Conflict & Personnel Management", g:"Conflict Management", type:"likert", rev:false,
+    text:"I apply disciplinary standards consistently regardless of personal relationships." },
+  { id:45, s:"Conflict & Personnel Management", g:"Conflict Management", type:"likert", rev:true,
+    text:"It is better to avoid confronting a high performer about misconduct to preserve morale.",
+    rf:["Agree","Strongly Agree"] },
+  { id:46, s:"Conflict & Personnel Management", g:"Conflict Management", type:"likert", rev:false,
+    text:"I can mediate disputes between team members fairly and without taking sides." },
+  { id:47, s:"Conflict & Personnel Management", g:"Conflict Management", type:"likert", rev:false,
+    text:"Personnel issues that affect patient safety are always escalated, not managed quietly." },
+  { id:48, s:"Conflict & Personnel Management", g:"Conflict Management", type:"likert", rev:true,
+    text:"A supervisor who is well-liked should avoid issuing formal corrective action.",
+    rf:["Agree","Strongly Agree"] },
+  { id:49, s:"Conflict & Personnel Management", g:"Conflict Management", type:"likert", rev:false,
+    text:"I document personnel conversations accurately and in a timely manner." },
+  { id:50, s:"Conflict & Personnel Management", g:"Conflict Management", type:"likert", rev:false,
+    text:"Difficult conversations are a necessary part of leadership, not a sign of failure." },
+
+  // ── SECTION 6: Leadership Scenarios (Q51–56) ──────────────────────
+  // Scored with fixed values like base test scenarios
+  { id:51, s:"Leadership Scenarios", g:"Situational Judgment", type:"scenario",
+    text:"A senior crew member on your shift routinely skips the post-shift vehicle check. Others have noticed.",
+    opts:["Ignore it — they are experienced and it has not caused issues","Mention it informally and let it go","Address it directly with the crew member and document","Wait to see if it becomes a formal complaint"],
+    sc:{A:1,B:3,C:5,D:2} },
+
+  { id:52, s:"Leadership Scenarios", g:"Situational Judgment", type:"scenario",
+    text:"Two crew members have ongoing personal friction that is visibly affecting shift dynamics.",
+    opts:["Leave it — adults should sort their own issues","Speak to each person separately, then together if needed","Reassign them without addressing the conflict","Report it to HR immediately without speaking to either party"],
+    sc:{A:1,B:5,C:3,D:2} },
+
+  { id:53, s:"Leadership Scenarios", g:"Situational Judgment", type:"scenario",
+    text:"During a high-pressure call, a crew member takes a clinical shortcut that technically works but violates protocol.",
+    opts:["Say nothing — the outcome was fine","Acknowledge the outcome but debrief the protocol deviation privately","Formally report it as a protocol violation immediately on scene","Praise their initiative to the team"],
+    sc:{A:1,B:5,C:3,D:1} },
+
+  { id:54, s:"Leadership Scenarios", g:"Situational Judgment", type:"scenario",
+    text:"A new hire approaches you privately to report that a veteran crew member made a discriminatory remark.",
+    opts:["Advise them to report it through the formal channel themselves","Thank them, document it, and escalate per policy","Speak to the veteran informally and consider it handled","Tell them to develop thicker skin — the culture is tough"],
+    sc:{A:2,B:5,C:3,D:1} },
+
+  { id:55, s:"Leadership Scenarios", g:"Situational Judgment", type:"scenario",
+    text:"You discover a documentation error in a call report submitted by one of your crew. The call is from last week.",
+    opts:["Leave it — the call is closed","Contact the crew member, correct it, and document the amendment","Correct it yourself without notifying the crew member","Flag it to QA without telling the crew member first"],
+    sc:{A:1,B:5,C:2,D:3} },
+
+  { id:56, s:"Leadership Scenarios", g:"Situational Judgment", type:"scenario",
+    text:"Your supervisor asks you to approve overtime for a crew member who, in your view, does not deserve it based on recent performance.",
+    opts:["Approve it to avoid conflict with your supervisor","Decline and document your rationale clearly","Approve it but note your concerns informally","Ask a peer to make the decision instead"],
+    sc:{A:2,B:5,C:3,D:1} },
+
+  // ── SECTION 7: Leadership Attitudes & Validity (Q57–70) ───────────
+  { id:57, s:"Leadership Attitudes & Validity", g:"Misconduct Risk", type:"likert", rev:true,
+    text:"A leader who is liked by the team is more effective than one who is respected.",
+    rf:["Agree","Strongly Agree"] },
+  { id:58, s:"Leadership Attitudes & Validity", g:"Misconduct Risk", type:"likert", rev:false,
+    text:"Favoritism undermines team cohesion and organizational trust." },
+  { id:59, s:"Leadership Attitudes & Validity", g:"Misconduct Risk", type:"likert", rev:true,
+    text:"Supervisors should protect their team from consequences even if it means bending policy.",
+    rf:["Agree","Strongly Agree"] },
+  { id:60, s:"Leadership Attitudes & Validity", g:"Misconduct Risk", type:"likert", rev:false,
+    text:"A leader who takes credit for their team's work damages morale over time." },
+  { id:61, s:"Leadership Attitudes & Validity", g:"Misconduct Risk", type:"likert", rev:true,
+    text:"Scheduling preferences for friends and allies is a minor, harmless perk of seniority.",
+    rf:["Agree","Strongly Agree"] },
+  { id:62, s:"Leadership Attitudes & Validity", g:"Misconduct Risk", type:"likert", rev:false,
+    text:"Supervisors are responsible for the conduct of their team, not just their own." },
+  { id:63, s:"Leadership Attitudes & Validity", g:"Misconduct Risk", type:"likert", rev:true,
+    text:"Formal performance documentation is a last resort and should be avoided if possible.",
+    rf:["Agree","Strongly Agree"] },
+  { id:64, s:"Leadership Attitudes & Validity", g:"Misconduct Risk", type:"likert", rev:false,
+    text:"Transparency in decision-making builds trust across a team." },
+  { id:65, s:"Leadership Attitudes & Validity", g:"Misconduct Risk", type:"likert", rev:true,
+    text:"A supervisor occasionally using organizational resources for personal use is inconsequential.",
+    rf:["Agree","Strongly Agree"] },
+  { id:66, s:"Leadership Attitudes & Validity", g:"Misconduct Risk", type:"likert", rev:false,
+    text:"A leader's private conduct matters as much as their professional behavior." },
+
+  // Validity items (Q67–70)
+  { id:67, s:"Leadership Attitudes & Validity", g:"Validity", type:"likert", rev:false,
+    text:"I have never made a poor leadership decision.",
+    rf:["Agree","Strongly Agree"] },
+  { id:68, s:"Leadership Attitudes & Validity", g:"Validity", type:"likert", rev:false,
+    text:"Every team member I have ever supervised has respected me completely.",
+    rf:["Agree","Strongly Agree"] },
+  { id:69, s:"Leadership Attitudes & Validity", g:"Validity", type:"likert", rev:false,
+    text:"I have never struggled to give critical feedback to a team member.",
+    rf:["Agree","Strongly Agree"] },
+  { id:70, s:"Leadership Attitudes & Validity", g:"Validity", type:"likert", rev:false,
+    text:"I have always handled every conflict situation perfectly.",
+    rf:["Agree","Strongly Agree"] },
+];
 
 const SECTIONS = [
-{
-  name:"Leadership Track Record",
-  eye:"Section 1 of 5",
-  badge:"badge-fact",
-  badgeTxt:"Disclosed Facts",
-  desc:"What you have actually done in a leadership role — verifiable through reference checks.",
-  qs:[
-    { id:1, type:"FACT",
-      text:"How many people have you formally terminated in a supervisory or senior leadership role?",
-      opts:["A. None — I have not had to terminate anyone","B. 1 to 3 people","C. 4 to 10 people","D. More than 10 people"],
-      flag:"A", flagWhy:"A DO-level candidate with no terminations in their career either has not been tested or has avoided necessary personnel decisions. Both raise questions for a role requiring final discipline authority.",
-      score:{A:0,B:3,C:4,D:4} },
-
-    { id:2, type:"FACT",
-      text:"How many people have you directly promoted or recommended for promotion in your career?",
-      opts:["A. None","B. 1 to 5","C. 6 to 15","D. More than 15"],
-      flag:"A", flagWhy:"Developing and advancing people is a core senior leadership function. Zero promotions suggests either no development investment or a very limited tenure.",
-      score:{A:0,B:2,C:4,D:4} },
-
-    { id:3, type:"FACT",
-      text:"How many supervisors or managers have reported directly to you in your most recent senior leadership role?",
-      opts:["A. None — I supervised frontline staff directly","B. 1 to 3 supervisors","C. 4 to 8 supervisors","D. More than 8 supervisors"],
-      flag:"A", flagWhy:"A DO candidate who has only supervised frontline staff has not managed a supervisory layer — which is the entire structure they will be accountable for in this role.",
-      score:{A:0,B:2,C:4,D:4} },
-
-    { id:4, type:"FACT",
-      text:"Have you ever designed or rebuilt a supervisory structure — org chart, role definitions, authority levels — from scratch or near-scratch?",
-      opts:["A. No — I have worked within existing structures","B. I made modifications to an existing structure","C. Yes — I designed a supervisory structure in one organization","D. Yes — I have done this in more than one organization"],
-      flag:"A", flagWhy:"This role requires building a supervisory structure. A candidate with no experience designing one will face a steeper learning curve at the moment the structure is most critical.",
-      score:{A:0,B:2,C:4,D:5} },
-
-    { id:5, type:"FACT",
-      text:"Have you ever delivered formal written corrective action — written warning, performance improvement plan, or equivalent — to a supervisor or manager who reported to you?",
-      opts:["A. No — I handled performance issues informally","B. Once","C. Between 2 and 5 times","D. More than 5 times"],
-      flag:"A", flagWhy:"Formal written corrective action to a supervisory-level direct report is a core accountability function. A leader who has only handled performance informally has not tested their willingness to formalize accountability upward.",
-      score:{A:0,B:2,C:4,D:4} },
-
-    { id:6, type:"FACT",
-      text:"Have you ever directly challenged or formally pushed back on a decision made by someone above you in the org chart — an owner, board member, or executive — with documented evidence of your position?",
-      opts:["A. No — I implement decisions made above me without formal challenge","B. I have raised concerns verbally but not in writing","C. Yes — I have formally documented and submitted a challenge once","D. Yes — I have done this more than once"],
-      flag:"A", flagWhy:"A DO who will not push back on ownership when the decision is operationally wrong is not an effective organizational check. Formal pushback with evidence is a required senior leadership behavior.",
-      score:{A:0,B:1,C:4,D:5} },
-
-    { id:7, type:"FACT",
-      text:"In your career, how many times have you personally conducted a formal structured performance evaluation of a supervisor or manager who reported to you?",
-      opts:["A. Never","B. 1 to 5 times","C. 6 to 20 times","D. More than 20 times"],
-      flag:"A", flagWhy:"Formal evaluation of supervisory-level direct reports is a core DO function. A candidate who has never done this formally will be learning on the job at the most critical point.",
-      score:{A:0,B:2,C:4,D:5} },
-
-    { id:8, type:"FACT",
-      text:"Have you ever inherited a leadership team or organizational structure with existing performance problems — and been responsible for resolving them?",
-      opts:["A. No — I have built teams from scratch or taken over functioning teams","B. Yes — I inherited one significant performance problem","C. Yes — I inherited multiple performance problems across the team","D. Yes — I inherited a team that was broadly underperforming and restructured it"],
-      flag:"A", flagWhy:"Inheriting dysfunction is different from building clean. A DO who has only worked with functioning teams or built from scratch may underestimate the complexity of the situation they are stepping into.",
-      score:{A:1,B:3,C:4,D:5} },
-  ]
-},
-
-{
-  name:"Accountability Frequency",
-  eye:"Section 2 of 5",
-  badge:"badge-freq",
-  badgeTxt:"Behavioral Frequency",
-  desc:"How often you have performed specific leadership actions — not whether you would, but how often you did.",
-  qs:[
-    { id:9, type:"FREQ",
-      text:"In your most recent leadership role, how often did you conduct formal field observations of supervisors — physically observing them in the field and providing documented feedback?",
-      opts:["A. Never — I relied on reports and metrics","B. Occasionally — a few times per year","C. Regularly — monthly or more frequently","D. This was a structured program with a defined schedule"],
-      flag:"A", flagWhy:"Field observation of supervisors is the primary development and accountability tool for a DO. A candidate who has never done this formally does not have the practice.",
-      score:{A:0,B:2,C:4,D:5} },
-
-    { id:10, type:"FREQ",
-      text:"How frequently did you review your organization's KPI data — response times, utilization, documentation compliance — in your most recent role?",
-      opts:["A. Monthly or less frequently","B. Weekly","C. Daily","D. I had real-time access and monitored it multiple times per day"],
-      flag:"A", flagWhy:"Monthly KPI review at the senior operational level is insufficient. By the time a monthly report surfaces a problem, the problem has been running for weeks.",
-      score:{A:0,B:3,C:4,D:4} },
-
-    { id:11, type:"FREQ",
-      text:"In the last 5 years, approximately how many times have you had a direct, unambiguous performance conversation with a leader who reported to you — where you named the specific gap, the specific expectation, and the specific consequence for non-improvement?",
-      opts:["A. Never — I give feedback but do not attach consequences","B. Once or twice","C. Between 3 and 10 times","D. More than 10 times"],
-      flag:"A", flagWhy:"Feedback without named consequences is not accountability — it is coaching. A senior leader who has never attached a specific consequence to a performance gap has not tested their actual accountability follow-through.",
-      score:{A:0,B:2,C:4,D:5} },
-
-    { id:12, type:"FREQ",
-      text:"How often in your most recent role did you personally verify that supervisors were completing required documentation — shift reports, incident reports, performance logs — rather than relying solely on their confirmation that it was done?",
-      opts:["A. Rarely or never — I trusted my supervisors to complete it","B. Occasionally — spot-checked a few times a year","C. Regularly — monthly audits or more frequent","D. It was part of a systematic review process I built and ran"],
-      flag:"A", flagWhy:"Trust without verification is not accountability systems management — it is hope. A DO who has never personally audited documentation compliance does not have the habit of closing the accountability loop.",
-      score:{A:0,B:2,C:4,D:5} },
-
-    { id:13, type:"FREQ",
-      text:"In your career, how many times have you reversed a personnel decision — a promotion, assignment, or disciplinary action — after discovering it was made incorrectly by someone in your chain?",
-      opts:["A. Never — I have not had to reverse a decision below me","B. Once","C. Between 2 and 5 times","D. More than 5 times"],
-      flag:"A", flagWhy:"A DO who has never had to reverse a lower-level decision either has a perfect chain or has not been checking the chain's work. Both deserve scrutiny in the oral board.",
-      score:{A:1,B:3,C:4,D:4} },
-
-    { id:14, type:"FREQ",
-      text:"How often in your most recent senior role did you personally communicate directly with frontline crew members — not through supervisors, but directly — to assess organizational health?",
-      opts:["A. Never — I worked through my supervisory chain only","B. Occasionally — a few times a year in formal settings","C. Regularly — I made it a point to have direct contact frequently","D. It was a structured practice — I had regular skip-level conversations"],
-      flag:"A", flagWhy:"A DO who never has direct contact with frontline staff knows only what their supervisors choose to tell them. Direct contact is a critical signal-gathering function.",
-      score:{A:0,B:2,C:4,D:5} },
-
-    { id:15, type:"FREQ",
-      text:"In your career as a senior leader, how many times have you personally ended a shift or workday significantly later than your scheduled time because of an active operational situation that required your direct involvement?",
-      opts:["A. Rarely or never — operational situations are managed by my supervisory team","B. A few times total","C. Several times per year","D. Regularly — it was part of the reality of the role"],
-      flag:"A", flagWhy:"A DO who is never operationally stretched suggests either an exceptionally well-run system or a leader who is not genuinely available when situations escalate. This role will require both.",
-      score:{A:0,B:2,C:3,D:4} },
-
-    { id:16, type:"FREQ",
-      text:"How often have you rebuilt or redesigned a process — scheduling, documentation, escalation, or accountability — because the existing process was not producing the results the organization needed?",
-      opts:["A. Never — I implement the processes I inherit","B. Once in my career","C. Several times across different roles","D. It has been a consistent part of every senior role I have held"],
-      flag:"A", flagWhy:"A DO who has never redesigned a failing process has only managed organizations that were already working. This role requires building and fixing from the ground up.",
-      score:{A:0,B:2,C:4,D:5} },
-  ]
-},
-
-{
-  name:"Operational Knowledge",
-  eye:"Section 3 of 5",
-  badge:"badge-know",
-  badgeTxt:"Correct Answer Exists",
-  desc:"These questions have one correct answer based on EMS operational policy, employment law, or organizational best practice.",
-  qs:[
-    { id:17, type:"KNOW",
-      text:"A Field Supervisor calls you at 2am. A crew member arrived for their shift and the FS believes — based on observation and smell — that the crew member may be impaired. No unsafe behavior has occurred yet. What is the correct action?",
-      opts:["A. Wait for an observable unsafe behavior before taking action — suspicion alone is insufficient","B. Remove the crew member from duty immediately pending a fitness-for-duty evaluation","C. Have the FS speak with the crew member privately and make a judgment call","D. Send the crew member home and address it formally at the next scheduled shift"],
-      correct:"B", correctWhy:"Reasonable suspicion of impairment is sufficient and legally defensible grounds for removal from duty. Waiting for unsafe behavior exposes patients and the organization. C and D delay a safety decision that belongs in the present.",
-      score:{A:0,B:5,C:1,D:1} },
-
-    { id:18, type:"KNOW",
-      text:"An Operations Supervisor presents you with a documented case recommending a written warning for a Field Supervisor. The FS has one prior verbal counseling on the same issue from 90 days ago. The FS has 8 years of tenure. What is the correct action?",
-      opts:["A. Issue the written warning — the documentation and prior counseling support it","B. Issue another verbal counseling first — 90 days is not enough time to escalate","C. Start over with a verbal counseling — tenure resets the progressive discipline clock","D. Place the FS on a performance improvement plan instead of a written warning"],
-      correct:"A", correctWhy:"Tenure does not reset progressive discipline. 90 days is more than sufficient. The prior verbal counseling and documented recurrence are exactly what written warning escalation requires. B and C are incorrect as a matter of policy.",
-      score:{A:5,B:0,C:0,D:2} },
-
-    { id:19, type:"KNOW",
-      text:"A Field Supervisor in Zone B responds to support a crew from Zone A that broke down with a patient on board. The Zone A supervisor cannot be reached. Who formally owns the documentation and follow-up for this incident?",
-      opts:["A. The Zone B FS who responded — they were on scene","B. The Zone A FS — the crew's primary supervisor","C. The Operations Supervisor on duty at the time","D. Whoever completes the incident report first"],
-      correct:"B", correctWhy:"Formal accountability follows the crew, not the zone. The Zone B FS owns the immediate Phase 1 response. The Zone A FS owns formal follow-up, documentation, and any personnel action — because the crew is theirs.",
-      score:{A:1,B:5,C:2,D:0} },
-
-    { id:20, type:"KNOW",
-      text:"You discover that response time data in the weekly summary sent to ownership has been consistently compiled in a way that presents results more favorably than the raw operational data shows. The reporting was done by someone in your chain. What is the correct first action?",
-      opts:["A. Raise it with the person responsible and give them an opportunity to correct it before involving ownership","B. Report it directly to ownership with accurate data immediately","C. Verify the discrepancy thoroughly yourself before taking any action","D. Revise future reporting going forward without addressing the historical record"],
-      correct:"B", correctWhy:"Accurate reporting to ownership is a DO obligation that cannot be managed through the internal chain when the chain is the source of the problem. Delayed reporting or internal resolution before ownership notification creates liability. C delays a required notification. D is active concealment.",
-      score:{A:2,B:5,C:2,D:0} },
-
-    { id:21, type:"KNOW",
-      text:"A crew member files a complaint against a Field Supervisor alleging a hostile work environment. The FS denies it. You have no witnesses. What is the correct action?",
-      opts:["A. Close the complaint — without witnesses or evidence it cannot be substantiated","B. Document the complaint, conduct a fact-finding inquiry, and preserve all documentation regardless of outcome","C. Issue a verbal counseling to the FS as a precaution while the situation is monitored","D. Mediate between the crew member and FS and close it if they reach an agreement"],
-      correct:"B", correctWhy:"Hostile work environment complaints have legal handling requirements. Closing without inquiry, mediating without documentation, or taking disciplinary action without findings all create liability. B is the only option that satisfies the legal and organizational obligation.",
-      score:{A:0,B:5,C:1,D:1} },
-
-    { id:22, type:"KNOW",
-      text:"An Operations Supervisor calls you and recommends removing a Field Supervisor from duty mid-shift due to conduct that occurred during the shift. You agree with the recommendation. Who makes the final decision and what happens to zone coverage?",
-      opts:["A. The OS makes the call — they have the authority","B. You make the final decision — removal from duty is a DO-level action requiring your authorization","C. HR must be consulted before any removal from duty occurs","D. The FS should be asked to complete the shift and the conversation happens after"],
-      correct:"B", flagNote:"A is incorrect — FS removal from duty requires DO authorization. C creates a delay in a safety decision. D continues the exact conduct you agreed warranted removal.",
-      score:{A:1,B:5,C:1,D:0} },
-
-    { id:23, type:"KNOW",
-      text:"You are reviewing annual performance evaluations that your Operations Supervisors have written for their Field Supervisors. One evaluation rates a Field Supervisor as 'Meets Expectations' across all categories. You have direct knowledge that this FS's zone had the worst response time compliance in the system for the past 12 months. What do you do?",
-      opts:["A. Sign off on it — the OS is closer to the situation and their rating is their professional judgment","B. Return it to the OS for revision with specific documented grounds for your disagreement","C. Adjust the rating yourself and return it with your signature","D. Accept it but add a note to the FS's file separately"],
-      correct:"B", correctWhy:"A DO's review authority exists specifically to catch evaluations that do not reflect reality. Signing off on a demonstrably inaccurate evaluation creates an organizational record that is false and limits future accountability actions. B is the only answer that maintains the integrity of the evaluation system.",
-      score:{A:0,B:5,C:2,D:1} },
-
-    { id:24, type:"KNOW",
-      text:"Your system's 911 response time average meets the contractual standard. However, you identify that one specific shift consistently underperforms while others are well above standard. The average masks the problem. What does this tell you and what is the correct response?",
-      opts:["A. The system is meeting standard — shift-level variance is normal in EMS operations","B. The average is valid but the shift variance warrants a conversation with the relevant supervisor","C. The shift-level underperformance is the real performance problem — the average is misleading and the shift must be investigated","D. The contractual standard is the only metric that matters — internal variance is an operational detail"],
-      correct:"C", correctWhy:"An average that masks consistent shift-level failure is not a passing result — it is a hidden compliance problem. A, B, and D all accept the average as adequate when the underlying data tells a different story. Senior leadership must read the data correctly.",
-      score:{A:0,B:2,C:5,D:0} },
-  ]
-},
-
-{
-  name:"Forced Trade-offs",
-  eye:"Section 4 of 5",
-  badge:"badge-trade",
-  badgeTxt:"One Wrong Answer",
-  desc:"Each scenario has one answer that is factually incorrect for this role. The other answers may reflect different leadership styles — but one is wrong.",
-  qs:[
-    { id:25, type:"TRADE",
-      text:"You have an open Operations Supervisor position. The strongest internal candidate is well-liked, experienced in the field, and has expressed interest. You also have an external candidate who is more qualified by every metric but unknown to the team. The internal candidate will be disappointed if not selected.",
-      context:"What is the correct basis for your decision?",
-      opts:["A. Select the internal candidate — team morale and continuity outweigh qualifications on paper","B. Select based on qualifications — the role requires the best person regardless of internal dynamics","C. Run both through the same structured process and let the process determine the outcome","D. Select the external candidate and invest in managing the internal candidate's disappointment professionally"],
-      wrong:"A", wrongWhy:"Making a hiring decision based on avoiding a team member's disappointment is the only answer here that is factually wrong. Morale considerations belong in transition management — not in the selection decision itself. B, C, and D are all defensible depending on process.",
-      score:{A:0,B:4,C:5,D:3} },
-
-    { id:26, type:"TRADE",
-      text:"An Operations Supervisor comes to you with a request to handle a Field Supervisor's performance issue informally — no documentation, just a conversation — because the FS is going through a difficult personal situation.",
-      context:"What is the wrong answer?",
-      opts:["A. Agree to handle it informally given the personal circumstances","B. Require documentation of the conversation and its outcome regardless of the personal situation","C. Address the performance issue with documentation while also connecting the FS with EAP resources","D. Defer action temporarily while the personal situation stabilizes, with a defined timeline"],
-      wrong:"A", wrongWhy:"Agreeing to handle a performance issue with no documentation — regardless of the reason — removes the organizational record needed for any future accountability action. Personal circumstances affect tone and support resources, not the documentation requirement.",
-      score:{A:0,B:4,C:5,D:2} },
-
-    { id:27, type:"TRADE",
-      text:"You are new to the DO role and inherit a culture where senior supervisors have significant informal authority — they make scheduling and assignment decisions without documentation, and the previous DO allowed it. The team is experienced and generally respected.",
-      context:"Which approach is factually wrong?",
-      opts:["A. Establish new documentation and accountability standards clearly in the first 30 days","B. Allow the informal authority to continue while you build relationships — introduce standards gradually over 12 months","C. Identify the two or three most influential informal decision-makers and work with them to build the new standard","D. Implement the new standard while acknowledging openly that this represents a change from how things have been done"],
-      wrong:"B", wrongWhy:"Allowing undocumented informal authority to continue for 12 months while you build relationships means the organization operates outside its own policy for a year under your watch. The relationship-building rationale is real — the 12-month delay is not acceptable.",
-      score:{A:4,B:0,C:3,D:4} },
-
-    { id:28, type:"TRADE",
-      text:"Ownership directs you to implement a schedule change that you believe will reduce supervisory coverage below a safe operational threshold. You have presented your concerns in writing and been overruled.",
-      context:"What is the wrong answer?",
-      opts:["A. Implement it and document that you objected in writing before doing so","B. Implement it — the decision has been made and your role is execution","C. Request a formal meeting to present the operational risk data one more time before implementation","D. Comply while simultaneously escalating your concern to HR or legal if you believe it creates a safety liability"],
-      wrong:"B", wrongWhy:"Implementing a decision you believe creates a safety risk without any further documentation, escalation, or recorded objection means you have absorbed personal liability for the outcome. B is the only answer that leaves you without a record and without a final escalation attempt.",
-      score:{A:4,B:0,C:4,D:3} },
-
-    { id:29, type:"TRADE",
-      text:"A high-performing Field Supervisor makes a significant documentation error that results in an incomplete incident report. No patient harm occurred. This is their first documentation failure. The OS recommends a verbal counseling.",
-      context:"What is the wrong answer?",
-      opts:["A. Issue the verbal counseling — the documentation standard applies regardless of performance level","B. Give them a pass given their track record — reserve formal counseling for patterns","C. Issue the verbal counseling and note their strong overall performance as context in the documentation","D. Use it as a coaching moment with documentation and set a clear expectation for recurrence"],
-      wrong:"B", wrongWhy:"Exempting a high performer from a documentation standard that applies to everyone else creates selective enforcement — which undermines the standard for everyone and creates legal exposure if the same situation is handled differently for a lower performer.",
-      score:{A:4,B:0,C:4,D:4} },
-
-    { id:30, type:"TRADE",
-      text:"You have a long-tenured Operations Supervisor who is liked by their FS team and effective at crew-level relationships. Their FS documentation rates, on-time KPIs, and performance evaluation quality are consistently below the standard you have set. You have had two documented conversations with them.",
-      context:"What is the wrong answer?",
-      opts:["A. Initiate formal progressive discipline — two documented conversations without improvement triggers escalation","B. Transfer them to a different zone where their relational strengths may be better matched","C. Give them additional time — their relational value to the FS team has real organizational value","D. Escalate with a specific written performance standard, timeline, and named consequence"],
-      wrong:"C", wrongWhy:"Continuing to give time after two documented conversations and no improvement is not patience — it is avoidance. The relational value is real and belongs in the decision about what role this person should be in, not in the decision about whether to hold the standard.",
-      score:{A:4,B:2,C:0,D:5} },
-
-    { id:31, type:"TRADE",
-      text:"Your zone's overnight Field Supervisor contacts you at 3am with a complex situation involving a crew conduct issue, a patient complaint, and a vehicle mechanical failure — all occurring simultaneously. They are asking for guidance on all three.",
-      context:"What is the wrong answer?",
-      opts:["A. Guide them through the priority order — safety and coverage first, then conduct, then the complaint — and remain available","B. Tell them to handle what they can and document the rest for the morning shift","C. Respond to the location if the situation warrants your physical presence","D. Notify the OS on duty and ensure they are aware and supporting the FS"],
-      wrong:"B", wrongWhy:"Telling a supervisor to handle what they can and document the rest for morning is not operational support — it is abdication. The DO's on-call function exists precisely for this scenario. B leaves the FS and the system without the senior-level guidance the situation requires.",
-      score:{A:4,B:0,C:4,D:4} },
-
-    { id:32, type:"TRADE",
-      text:"You identify that the same operational problem — a specific zone's chronic slow chute times — has been addressed with crew-level conversations, scheduling adjustments, and additional training over 18 months with no sustained improvement.",
-      context:"What is the wrong answer?",
-      opts:["A. Escalate to a formal performance process for the zone's FS — the individual interventions have not worked","B. Conduct a systemic analysis — if 18 months of individual interventions have failed, the system may be the problem","C. Accept that some variance is irreducible and set a revised, more achievable benchmark for that zone","D. Bring in external observation or audit to identify what the internal team cannot see"],
-      wrong:"C", wrongWhy:"Revising the benchmark down to match chronic underperformance is not operational management — it is lowering the standard to avoid solving the problem. A, B, and D are all legitimate next steps. C is not.",
-      score:{A:3,B:5,C:0,D:4} },
-  ]
-},
-
-{
-  name:"Self-Disclosure",
-  eye:"Section 5 of 5",
-  badge:"badge-disc",
-  badgeTxt:"Verifiable Disclosures",
-  desc:"Questions about specific past situations. These answers can be explored in the oral board and verified through reference checks.",
-  qs:[
-    { id:33, type:"DISC",
-      text:"In your most recent leadership role, what best describes your organization's response time performance under your tenure?",
-      opts:["A. We did not track response time performance formally","B. We tracked it but performance was inconsistent — some periods met standard, others did not","C. We consistently met the contractual or internal standard during my tenure","D. We exceeded the standard and I can identify the specific changes that drove the improvement"],
-      flag:"A", flagWhy:"A senior operational leader who did not track response time performance either was not in an EMS operational role or was not managing at the level this role requires.",
-      score:{A:0,B:2,C:4,D:5} },
-
-    { id:34, type:"DISC",
-      text:"In your career, have you ever directly managed a situation where an employee claimed hostile work environment or discrimination against a supervisor in your chain?",
-      opts:["A. No — I have not had a situation like this","B. Yes — it was resolved informally between the parties","C. Yes — I managed a formal complaint process with HR involvement","D. Yes — I managed multiple situations of this type"],
-      flag:"B", flagWhy:"Resolving a hostile work environment claim informally is almost always the wrong answer from a legal and HR standpoint. This answer is a flag not because the situation occurred, but because of how it was handled.",
-      score:{A:1,B:0,C:5,D:4} },
-
-    { id:35, type:"DISC",
-      text:"Have you ever had to make a decision that you believed was correct but that resulted in significant pushback from your own team — and you held the position despite that pushback?",
-      opts:["A. No — my decisions have generally had team support","B. Yes — once, and the team came around eventually","C. Yes — multiple times, and some of those teams never fully came around","D. Yes — regularly — holding unpopular positions is part of the role at this level"],
-      flag:"A", flagWhy:"A senior leader who has never held an unpopular position under team pressure has either never led through meaningful change or has consistently modified decisions based on team reaction. Both raise questions.",
-      score:{A:0,B:3,C:4,D:5} },
-
-    { id:36, type:"DISC",
-      text:"In your most recent senior role, what was the longest a performance issue went unaddressed on your watch before formal action was initiated?",
-      opts:["A. I addressed performance issues formally within 30 days of identifying them","B. Between 1 and 3 months","C. Between 3 and 6 months","D. Longer than 6 months"],
-      flag:"D", flagWhy:"A performance issue unaddressed for more than 6 months under a senior leader's watch suggests either avoidance of difficult conversations or a failure to identify the problem in a timely way. Both are worth probing in the oral board.",
-      score:{A:5,B:4,C:2,D:0} },
-
-    { id:37, type:"DISC",
-      text:"In your career as a senior leader, have you ever identified and removed someone from a leadership role — demotion, reassignment, or termination — who was technically competent but was damaging the organizational culture?",
-      opts:["A. No — I address culture through coaching and development, not removal","B. Yes — once, and it was one of the harder decisions I have made","C. Yes — more than once","D. Yes — I have a clear threshold for when cultural damage outweighs technical competence"],
-      flag:"A", flagWhy:"A leader who has never removed a technically competent but culturally damaging person has not been tested on one of the hardest DO-level decisions. Culture damage from a tenured high-performer is one of the most common senior leadership avoidance patterns.",
-      score:{A:0,B:3,C:4,D:5} },
-
-    { id:38, type:"DISC",
-      text:"What best describes the state of the organization — supervisory structure, accountability systems, documentation culture — when you left your most recent senior leadership role?",
-      opts:["A. The organization was in roughly the same state as when I arrived","B. There were improvements in some areas and gaps remained in others","C. The organization was measurably stronger in most dimensions than when I arrived","D. I built systems and structures that continued to function effectively after I left"],
-      flag:"A", flagWhy:"A senior leader who left an organization in the same state as they found it either inherited a perfect system or did not make meaningful structural improvements during their tenure.",
-      score:{A:0,B:2,C:4,D:5} },
-
-    { id:39, type:"DISC",
-      text:"Describe how you typically handle a situation where you made a significant leadership decision that turned out to be wrong.",
-      opts:["A. I reassess and correct quickly — I do not dwell on it","B. I own it directly to whoever was affected, name what went wrong, correct it, and use it to adjust my process","C. I analyze it thoroughly before acknowledging it publicly to ensure I understand the full cause","D. I address it internally with my team first before any broader acknowledgment"],
-      flag:null,
-      score:{A:3,B:5,C:2,D:2} },
-
-    { id:40, type:"DISC",
-      text:"What best describes the feedback you have received from direct reports in formal or informal 360-degree feedback processes about your leadership?",
-      opts:["A. I have not participated in formal 360 feedback processes","B. The feedback has been generally positive with minor development areas noted","C. The feedback has surfaced real and specific development areas that I have actively worked on","D. I have received significant critical feedback that required meaningful changes to my approach"],
-      flag:"A", flagWhy:"A senior leader who has not participated in 360 feedback has either avoided it or been in organizations that do not practice it. Neither is a strength for a role requiring self-awareness at the highest level.",
-      score:{A:1,B:3,C:5,D:4} },
-  ]
-},
+  { name:"Leadership Integrity & Accountability", tag:"Section 1 of 7", range:[1,12] },
+  { name:"Safety Leadership",                     tag:"Section 2 of 7", range:[13,22] },
+  { name:"Team Development & Communication",      tag:"Section 3 of 7", range:[23,32] },
+  { name:"Decision-Making Under Pressure",        tag:"Section 4 of 7", range:[33,42] },
+  { name:"Conflict & Personnel Management",       tag:"Section 5 of 7", range:[43,50] },
+  { name:"Leadership Scenarios",                  tag:"Section 6 of 7", range:[51,56] },
+  { name:"Leadership Attitudes & Validity",       tag:"Section 7 of 7", range:[57,70] },
 ];
 
-// ═══════════════════════════════════════════
+// Category weights (match base test architecture)
+// Integrity 25%, Safety 25%, Team Dev 20%, Decision-Making 20%, Conflict 15%, Situational Judgment separate
+// Misconduct Risk shown separately, Validity as check only
+
+const DISPLAY_CATS = [
+  { key:"Integrity",          label:"Leadership Integrity",    weight:0.25 },
+  { key:"Safety Leadership",  label:"Safety Leadership",       weight:0.25 },
+  { key:"Team Development",   label:"Team Development",        weight:0.20 },
+  { key:"Decision-Making",    label:"Decision-Making",         weight:0.20 },
+  { key:"Conflict Management",label:"Conflict Management",     weight:0.15 },
+  { key:"Situational Judgment",label:"Situational Judgment",   weight:0.20 },
+];
+
+// =====================================================================
 // STATE
-// ═══════════════════════════════════════════
-let ans = {};
-let sec = 0;
-let cand = {};
+// =====================================================================
+let candidate = {};
+let answers = {};
+let curSec = 0;
 
-const CATS = [
-  {key:"Track Record",   label:"Track Record",   color:"#3B6FE8", max:40},
-  {key:"Frequency",      label:"Accountability Frequency", color:"#2E7D4F", max:40},
-  {key:"Knowledge",      label:"Operational Knowledge",    color:"#C9A84C", max:40},
-  {key:"Trade-offs",     label:"Forced Trade-offs",        color:"#C0392B", max:40},
-  {key:"Disclosure",     label:"Self-Disclosure",          color:"#7C3AED", max:40},
-];
-
-function start(){
-  const fn=document.getElementById('i-fn').value.trim();
-  const ln=document.getElementById('i-ln').value.trim();
-  const em=document.getElementById('i-em').value.trim();
-  if(!fn||!ln||!em){alert('Please enter your first name, last name, and email.');return;}
-  cand={firstName:fn,lastName:ln,name:fn+' '+ln,email:em,phone:document.getElementById('i-ph').value.trim(),
-    pos:document.getElementById('i-pos').value.trim()||'Director of Operations',
-    date:new Date().toISOString().split('T')[0]};
-  document.getElementById('screen-welcome').style.display='none';
-  document.getElementById('screen-assessment').style.display='block';
-  document.getElementById('hdr-right').style.display='block';
-  sec=0; render();
+// =====================================================================
+// START
+// =====================================================================
+function startAssessment() {
+  const fn = document.getElementById('i-fname').value.trim();
+  const ln = document.getElementById('i-lname').value.trim();
+  const em = document.getElementById('i-email').value.trim();
+  if (!fn || !ln || !em) { alert('Please enter your first name, last name, and email.'); return; }
+  candidate = {
+    firstName: fn,
+    lastName: ln,
+    name: fn + ' ' + ln,
+    email: em,
+    phone: document.getElementById('i-phone').value.trim(),
+    position: document.getElementById('i-position').value.trim() || 'EMS Leadership Role',
+    displayDate: new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'}),
+    completionDate: new Date().toISOString().split('T')[0]
+  };
+  candidate.date = candidate.displayDate;
+  document.getElementById('screen-welcome').style.display = 'none';
+  document.getElementById('screen-assessment').style.display = 'block';
+  document.getElementById('headerRight').style.display = 'flex';
+  curSec = 0;
+  renderSec();
 }
 
-function render(){
-  const s=SECTIONS[sec];
-  document.getElementById('sec-eye').textContent=s.eye;
-  document.getElementById('sec-h').textContent=s.name;
-  const badge=document.getElementById('sec-badge');
-  badge.className='sec-type-badge '+s.badge;
-  badge.textContent=s.badgeTxt;
-  const c=document.getElementById('q-container');
-  c.innerHTML='';
-  s.qs.forEach(q=>{
-    const d=document.createElement('div');
-    d.className='q-wrap'+(ans[q.id]?' answered':'');
-    d.id='qw'+q.id;
-    let html=`<div class="q-num">Question ${q.id} of 40</div>`;
-    if(q.context) html+=`<div class="q-context">${q.context}</div>`;
-    html+=`<div class="q-text">${q.text}</div><div class="opts">`;
-    ['A','B','C','D'].forEach((l,i)=>{
-      html+=`<input class="opt-radio" type="radio" name="q${q.id}" id="q${q.id}${l}" value="${l}" ${ans[q.id]===l?'checked':''} onchange="pick(${q.id},'${l}')">
-      <label class="opt-label" for="q${q.id}${l}">
-        <span class="opt-key">${l}</span>${q.opts[i]}
-      </label>`;
-    });
-    html+='</div>';
-    d.innerHTML=html;
-    c.appendChild(d);
+// =====================================================================
+// RENDER SECTION
+// =====================================================================
+function renderSec() {
+  const sec = SECTIONS[curSec];
+  const [s, e] = sec.range;
+  document.getElementById('sec-tag').textContent = sec.tag;
+  document.getElementById('sec-title').textContent = sec.name;
+  document.getElementById('sec-sub').textContent = `Questions ${s}–${e} of ${QUESTIONS.length}`;
+
+  const qs = QUESTIONS.filter(q => q.id >= s && q.id <= e);
+  const cont = document.getElementById('q-container');
+  cont.innerHTML = '';
+
+  qs.forEach((q, i) => {
+    if (i > 0) {
+      const div = document.createElement('div');
+      div.className = 'q-divider';
+      cont.appendChild(div);
+    }
+    const block = document.createElement('div');
+    block.className = 'q-block';
+    block.style.animationDelay = (i * 40) + 'ms';
+    block.innerHTML = `<div class="q-num">Q${q.id}</div><div class="q-text">${q.text}</div>`;
+    block.appendChild(q.type === 'likert' ? buildLikert(q) : buildScenario(q));
+    cont.appendChild(block);
   });
-  document.getElementById('btn-prev').style.display=sec>0?'inline-block':'none';
-  document.getElementById('btn-next').textContent=sec===SECTIONS.length-1?'Submit Assessment →':'Next Section →';
-  upProg(); window.scrollTo({top:0,behavior:'smooth'});
+
+  document.getElementById('btn-prev').style.display = curSec > 0 ? '' : 'none';
+  document.getElementById('btn-next').textContent =
+    curSec < SECTIONS.length - 1 ? 'Next Section →' : 'Submit Assessment';
+  updateProg();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-function pick(id,val){
-  ans[id]=val;
-  document.getElementById('qw'+id).classList.add('answered');
-  upProg();
+function buildLikert(q) {
+  const wrap = document.createElement('div');
+  const lw = document.createElement('div');
+  lw.className = 'likert-wrap';
+  lw.id = 'lw' + q.id;
+  LIKERT.forEach(lbl => {
+    const opt = document.createElement('div');
+    opt.className = 'l-opt' + (answers[q.id] === lbl ? ' selected' : '');
+    opt.textContent = lbl;
+    opt.onclick = () => {
+      lw.querySelectorAll('.l-opt').forEach(o => o.classList.remove('selected'));
+      opt.classList.add('selected');
+      answers[q.id] = lbl;
+      updateProg();
+    };
+    lw.appendChild(opt);
+  });
+  const ends = document.createElement('div');
+  ends.className = 'likert-ends';
+  ends.innerHTML = '<span>Strongly Disagree</span><span>Strongly Agree</span>';
+  wrap.appendChild(lw);
+  wrap.appendChild(ends);
+  return wrap;
 }
-function upProg(){
-  const done=Object.keys(ans).length;
-  document.getElementById('prog-txt').textContent=done+' / 40';
-  document.getElementById('prog-bar').style.width=(done/40*100)+'%';
-  document.getElementById('nav-info').textContent=done+' of 40 answered';
+
+function buildScenario(q) {
+  const letters = ['A','B','C','D'];
+  const wrap = document.createElement('div');
+  wrap.className = 'scenario-opts';
+  wrap.id = 'sw' + q.id;
+  q.opts.forEach((txt, i) => {
+    const l = letters[i];
+    const el = document.createElement('div');
+    el.className = 'scenario-opts';
+    el.innerHTML = '';
+    const opt = document.createElement('div');
+    opt.className = 's-opt' + (answers[q.id] === l ? ' selected' : '');
+    opt.innerHTML = `<div class="s-letter">${l}</div><div class="s-text">${txt}</div>`;
+    opt.onclick = () => {
+      wrap.querySelectorAll('.s-opt').forEach(o => o.classList.remove('selected'));
+      opt.classList.add('selected');
+      answers[q.id] = l;
+      updateProg();
+    };
+    wrap.appendChild(opt);
+  });
+  return wrap;
 }
-function prev(){if(sec>0){sec--;render();}}
-function next(){
-  const missing=SECTIONS[sec].qs.filter(q=>!ans[q.id]);
-  if(missing.length){
-    alert('Please answer all questions before continuing.\n'+missing.length+' remaining.');
-    document.getElementById('qw'+missing[0].id).scrollIntoView({behavior:'smooth',block:'center'});
-    return;
-  }
-  if(sec<SECTIONS.length-1){sec++;render();}
+
+function updateProg() {
+  const ans = Object.keys(answers).length;
+  const total = QUESTIONS.length;
+  document.getElementById('prog-label').textContent = ans + ' / ' + total;
+  document.getElementById('prog-bar').style.width = Math.round((ans / total) * 100) + '%';
+  const sec = SECTIONS[curSec];
+  const qs = QUESTIONS.filter(q => q.id >= sec.range[0] && q.id <= sec.range[1]);
+  const done = qs.filter(q => answers[q.id] !== undefined).length;
+  document.getElementById('nav-info').textContent = done + ' of ' + qs.length + ' answered';
+}
+
+function nextSec() {
+  const sec = SECTIONS[curSec];
+  const missing = QUESTIONS.filter(q => q.id >= sec.range[0] && q.id <= sec.range[1] && answers[q.id] === undefined);
+  if (missing.length) { alert('Please answer all questions before continuing. (' + missing.length + ' remaining)'); return; }
+  if (curSec < SECTIONS.length - 1) { curSec++; renderSec(); }
   else showResults();
 }
 
-// ═══════════════════════════════════════════
+function prevSec() { if (curSec > 0) { curSec--; renderSec(); } }
+
+// =====================================================================
 // SCORING
-// ═══════════════════════════════════════════
-function score(){
-  const catScores={};
-  const maxPerCat={};
-  SECTIONS.forEach((s,si)=>{
-    const catKey=CATS[si].key;
-    let total=0, max=0;
-    s.qs.forEach(q=>{
-      const maxScore=Math.max(...Object.values(q.score));
-      max+=maxScore;
-      total+=(q.score[ans[q.id]]||0);
-    });
-    catScores[catKey]={raw:total,max,pct:Math.round(total/max*100)};
+// =====================================================================
+function scoreQ(q, ans) {
+  if (q.type === 'likert') {
+    const raw = LIKERT.indexOf(ans) + 1;
+    return q.rev ? (6 - raw) : raw;
+  }
+  return q.sc[ans] || 0;
+}
+
+function computeScores() {
+  const groups = {};
+  QUESTIONS.forEach(q => {
+    if (q.g === 'Validity') return;
+    const v = scoreQ(q, answers[q.id]);
+    if (!groups[q.g]) groups[q.g] = [];
+    groups[q.g].push(v);
   });
-  const totalRaw=Object.values(catScores).reduce((a,b)=>a+b.raw,0);
-  const totalMax=Object.values(catScores).reduce((a,b)=>a+b.max,0);
-  const composite=Math.round(totalRaw/totalMax*100);
-  return {catScores,composite};
-}
-
-function getFlags(){
-  const flags=[];
-  SECTIONS.forEach(s=>{
-    s.qs.forEach(q=>{
-      if(q.flag && ans[q.id]===q.flag){
-        flags.push({q:q.text.replace(/<[^>]+>/g,''),a:q.opts[['A','B','C','D'].indexOf(q.flag)],why:q.flagWhy||q.wrongWhy||q.correctWhy||''});
-      }
-      if(q.wrong && ans[q.id]===q.wrong){
-        flags.push({q:q.text.replace(/<[^>]+>/g,''),a:q.opts[['A','B','C','D'].indexOf(q.wrong)],why:q.wrongWhy||''});
-      }
-      if(q.correct && ans[q.id]!==q.correct){
-        flags.push({q:q.text.replace(/<[^>]+>/g,''),a:'Incorrect: '+q.opts[['A','B','C','D'].indexOf(ans[q.id])],why:q.correctWhy||''});
-      }
-    });
-  });
-  return flags;
-}
-
-function verdict(composite,flags){
-  if(flags.length>=5||composite<50) return{label:'Do Not Advance',cls:'vp-no'};
-  if(composite>=80&&flags.length===0) return{label:'Hire',cls:'vp-hire'};
-  if(composite>=70&&flags.length<=2) return{label:'Hire with Review',cls:'vp-review'};
-  if(composite>=60&&flags.length<=3) return{label:'Review Further',cls:'vp-review'};
-  return{label:'Do Not Advance',cls:'vp-no'};
-}
-
-function buildSummaryText(composite, flags, v){
-  if(v.label === 'Hire'){
-    return `This candidate demonstrates strong leadership readiness based on disclosed experience, accountability frequency, operational knowledge, decision quality, and self-disclosure patterns. Composite score: ${composite} / 100. Verdict: ${v.label}.`;
-  }
-  if(v.label === 'Hire with Review'){
-    return `This candidate shows a generally positive leadership profile with some areas warranting closer interview review. Probe any flagged responses and validate leadership track record during the oral board. Composite score: ${composite} / 100. Verdict: ${v.label}.`;
-  }
-  if(v.label === 'Review Further'){
-    return `This candidate has mixed results and should be reviewed further before advancing. Focus the oral board on flagged responses, role-specific judgment, and verifiable leadership examples. Composite score: ${composite} / 100. Verdict: ${v.label}.`;
-  }
-  return `This candidate's responses indicate significant concerns for leadership placement. Review hard-stop criteria and probe carefully before advancing. Composite score: ${composite} / 100. Verdict: ${v.label}.`;
-}
-
-function buildRedFlagResponses(flags){
-  if(!flags.length){
-    return [
-      '=== Red Flag Responses ===',
-      '',
-      'None'
-    ].join('\n');
-  }
-
-  const lines = [
-    '=== Red Flag Responses ===',
-    ''
-  ];
-
-  flags.forEach((f, i) => {
-    lines.push(`Flag ${i + 1}`);
-    lines.push('');
-    lines.push('Question:');
-    lines.push(f.q || 'N/A');
-    lines.push('');
-    lines.push('Candidate Response:');
-    lines.push(f.a || 'N/A');
-    lines.push('');
-    lines.push('Reason Flagged:');
-    lines.push(f.why || 'N/A');
-
-    if(i < flags.length - 1){
-      lines.push('');
-      lines.push('--------------------------------------------------');
-      lines.push('');
-    }
+  const avg = {};
+  Object.entries(groups).forEach(([g, vals]) => {
+    avg[g] = vals.reduce((a,b)=>a+b,0) / vals.length;
   });
 
-  return lines.join('\n');
+  // Weighted composite using same weights as base test
+  const composite =
+    (avg['Integrity']           || 0) * 0.25 +
+    (avg['Safety Leadership']   || 0) * 0.25 +
+    (avg['Team Development']    || 0) * 0.20 +
+    (avg['Decision-Making']     || 0) * 0.20 +
+    (avg['Conflict Management'] || 0) * 0.15 +
+    (avg['Situational Judgment']|| 0) * 0.20;
+
+  // Normalize (weights sum to 1.25, so divide)
+  const compositeNorm = composite / 1.25;
+
+  return { avg, composite: compositeNorm };
 }
 
-function buildCleanReport(catScores, composite, flags, v){
-  const summary = buildSummaryText(composite, flags, v);
-  return [
-    '=== Leadership Profile Assessment Results ===',
-    '',
-    `Candidate: ${cand.name}`,
-    `Email:     ${cand.email}`,
-    `Phone:     ${cand.phone || 'N/A'}`,
-    `Position:  ${cand.pos}`,
-    `Date:      ${cand.date}`,
-    '',
-    `RECOMMENDATION: ${v.label}`,
-    `Composite Score: ${composite} / 100`,
-    '',
-    '--- CATEGORY SCORES ---',
-    ...CATS.map(c=>`${c.label}: ${catScores[c.key].pct}%`),
-    '',
-    `Red Flag Count: ${flags.length}`,
-    '',
-    '--- SUMMARY ---',
-    summary,
-    '',
-    'Assessment: Leadership Profile Assessment v2.0 — No-Interpretation Format'
-  ].join('\n');
+function getRedFlags() {
+  return QUESTIONS.filter(q => q.rf && q.rf.includes(answers[q.id]))
+    .map(q => ({ id: q.id, text: q.text, ans: answers[q.id] }));
 }
 
-async function showResults(){
-  document.getElementById('screen-assessment').style.display='none';
-  document.getElementById('screen-results').style.display='block';
-  document.getElementById('hdr-right').style.display='none';
-  window.scrollTo({top:0,behavior:'smooth'});
+function getValidityConcerns() {
+  return [67,68,69,70].filter(id => ['Agree','Strongly Agree'].includes(answers[id])).length;
+}
 
-  const results=document.getElementById('screen-results');
-  results.innerHTML=`
-    <div class="r-top">
-      <div class="v-pill vp-review">Submitting</div>
+function getVerdict(composite, redFlagCount, integrity, safety) {
+  if (redFlagCount >= 3 || integrity < 3.4 || safety < 3.6)
+    return { label:'Do Not Advance', cls:'vp-no' };
+  if (composite >= 4.2 && redFlagCount === 0)
+    return { label:'Hire', cls:'vp-hire' };
+  if (composite >= 3.8 && redFlagCount <= 1)
+    return { label:'Hire with Review', cls:'vp-review' };
+  if (composite >= 3.4)
+    return { label:'Review Further', cls:'vp-review' };
+  return { label:'Do Not Advance', cls:'vp-no' };
+}
+
+// =====================================================================
+// RESULTS
+// =====================================================================
+async function showResults() {
+  document.getElementById('screen-assessment').style.display = 'none';
+  document.getElementById('screen-results').style.display = 'block';
+  document.getElementById('headerRight').style.display = 'none';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  const results = document.getElementById('screen-results');
+  results.innerHTML = `
+    <div class="results-top">
+      <div class="verdict-pill vp-review">Submitting</div>
       <div class="r-name">Submitting your assessment...</div>
       <div class="r-meta">Please do not close this page yet.</div>
     </div>
   `;
 
-  const {catScores,composite}=score();
-  const flags=getFlags();
-  const v=verdict(composite,flags);
-  const redFlagResponses=buildRedFlagResponses(flags);
-  const report=buildCleanReport(catScores,composite,flags,v);
+  const { avg, composite } = computeScores();
+  const redFlags = getRedFlags();
+  const validity = getValidityConcerns();
+  const verdict = getVerdict(composite, redFlags.length, avg['Integrity']||0, avg['Safety Leadership']||0);
+  const completionDate = candidate.completionDate || new Date().toISOString().split('T')[0];
+
+  let summary = '';
+  if (verdict.cls === 'vp-hire') {
+    summary = 'This candidate demonstrates strong alignment with EMS leadership standards across all measured dimensions. Scores indicate integrity, sound judgment under pressure, and a healthy approach to team development and accountability.';
+  } else if (verdict.cls === 'vp-review') {
+    summary = 'This candidate shows generally positive leadership attributes with some areas warranting discussion in the interview. Pay close attention to any red flags and probe decision-making and conflict management scenarios directly.';
+  } else {
+    summary = "This candidate's responses indicate significant concerns in key leadership areas. A thorough review is recommended before advancing. Hard stops in integrity or safety leadership should be discussed with the hiring manager before proceeding.";
+  }
+  if ((avg['Integrity']||0) < 3.8) summary += ` Leadership Integrity score (${(avg['Integrity']||0).toFixed(1)}) is below target — probe accountability and transparency in interview.`;
+  if ((avg['Safety Leadership']||0) < 3.8) summary += ` Safety Leadership score (${(avg['Safety Leadership']||0).toFixed(1)}) warrants close attention.`;
+  if ((avg['Conflict Management']||0) < 3.5) summary += ` Conflict Management score (${(avg['Conflict Management']||0).toFixed(1)}) is low — explore personnel management situations directly.`;
+  if (validity >= 2) summary += ' Validity check flags suggest possible impression-management responding — interpret all scores with additional caution.';
+
+  const mr = avg['Misconduct Risk'] || 0;
+  const report = [
+    '=== EMS Leadership Assessment Results ===',
+    '',
+    `Candidate: ${candidate.name}`,
+    `Email:     ${candidate.email}`,
+    `Phone:     ${candidate.phone || 'N/A'}`,
+    `Position:  ${candidate.position}`,
+    `Date:      ${completionDate}`,
+    '',
+    `RECOMMENDATION: ${verdict.label}`,
+    `Weighted Composite Score: ${composite.toFixed(2)} / 5.00`,
+    '',
+    '--- CATEGORY SCORES ---',
+    `Leadership Integrity:     ${(avg['Integrity']||0).toFixed(2)}`,
+    `Safety Leadership:        ${(avg['Safety Leadership']||0).toFixed(2)}`,
+    `Team Development:         ${(avg['Team Development']||0).toFixed(2)}`,
+    `Decision-Making:          ${(avg['Decision-Making']||0).toFixed(2)}`,
+    `Conflict Management:      ${(avg['Conflict Management']||0).toFixed(2)}`,
+    `Situational Judgment:     ${(avg['Situational Judgment']||0).toFixed(2)}`,
+    `Misconduct Risk:          ${mr.toFixed(2)} (lower = better)`,
+    '',
+    `Red Flag Count:    ${redFlags.length}`,
+    `Validity Concerns: ${validity}`,
+    '',
+    '--- SUMMARY ---',
+    summary,
+    '',
+    'Assessment: EMS Leadership Assessment'
+  ].join('\n');
+
+  const redFlagResponses = redFlags.length ? [
+    '=== Red Flag Responses ===',
+    '',
+    ...redFlags.flatMap((f, i) => [
+      `Flag ${i + 1}`,
+      `Question: ${f.text.replace(/<[^>]+>/g, '')}`,
+      `Candidate Response: ${f.ans}`,
+      'Reason Flagged: Response matched a configured red-flag answer for this assessment.',
+      '',
+      '--------------------------------------------------',
+      ''
+    ])
+  ].join('\n') : 'None';
 
   const submitted = await sendToFlow({
-    firstName: cand.firstName,
-    lastName: cand.lastName,
-    email: cand.email,
-    position: cand.pos,
+    firstName: candidate.firstName,
+    lastName: candidate.lastName,
+    email: candidate.email,
+    position: candidate.position,
     assessmentType: 'Leadership',
-    score: String(composite),
-    recommendation: v.label,
-    redFlags: String(flags.length),
+    score: composite.toFixed(2),
+    recommendation: verdict.label,
+    redFlags: redFlags.length.toString(),
     redFlagResponses: redFlagResponses,
-    completionDate: cand.date,
+    completionDate: completionDate,
     report: report
   });
 
-  if(submitted){
-    results.innerHTML=`
-      <div class="r-top">
-        <div class="v-pill vp-hire">Submitted</div>
+  if (submitted) {
+    results.innerHTML = `
+      <div class="results-top">
+        <div class="verdict-pill vp-hire">Submitted</div>
         <div class="r-name">Thank you for submitting your assessment.</div>
         <div class="r-meta">Please monitor your email for next steps from our hiring team.</div>
       </div>
-      <div class="sum-box" style="text-align:center;">
+      <div class="summary-box" style="text-align:center;">
         Your assessment has been received. You may now close this page.
       </div>
     `;
   } else {
-    results.innerHTML=`
-      <div class="r-top">
-        <div class="v-pill vp-review">Submission Issue</div>
+    results.innerHTML = `
+      <div class="results-top">
+        <div class="verdict-pill vp-review">Submission Issue</div>
         <div class="r-name">We could not confirm your submission.</div>
         <div class="r-meta">Please notify the hiring team that your assessment did not submit successfully.</div>
       </div>
-      <div class="sum-box" style="text-align:center;">
+      <div class="summary-box" style="text-align:center;">
         You may keep this page open and contact the hiring team for next steps.
       </div>
     `;
   }
 }
 
-async function sendToFlow(data){
-  try{
+async function sendToFlow(data) {
+  try {
     console.log('Assessment payload sent to Power Automate:', data);
     const response = await fetch(FLOW_URL, {
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify(data)
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
     });
     return response.ok;
-  }catch(e){
+  } catch (e) {
     console.error('Flow submission failed', e);
     return false;
   }
 }
 
-function copyIt(){
-  navigator.clipboard.writeText(document.getElementById('copy-area').textContent)
-    .then(()=>{
-      const b=document.querySelector('.btn-copy');
-      b.textContent='✓ Copied';
-      setTimeout(()=>{b.textContent='Copy to Clipboard';},2000);
-    });
+function copyReport() {
+  navigator.clipboard.writeText(document.getElementById('copy-area').textContent).then(() => {
+    const btn = document.querySelector('.btn-copy');
+    btn.textContent = '✓ Copied!';
+    setTimeout(() => btn.textContent = 'Copy to Clipboard', 2000);
+  });
 }
 </script>
 </body>
