@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Administrative Staff Assessment</title>
-<!-- NWA_ADMIN_REDFLAG_DATE_ISO_BUILD_2026_05_06_V8 -->
+<!-- NWA_ADMIN_FORMATTED_REDFLAGS_BUILD_2026_05_07_V9 -->
 <!-- NWA_ADMIN_REDFLAG_DATE_BUILD_2026_05_05_V6 -->
 <!-- NWA_ADMIN_HIDDEN_RESULTS_BUILD_2026_04_30_V3 -->
 <link href="https://fonts.googleapis.com/css2?family=Cabinet+Grotesk:wght@400;500;700;800&family=Instrument+Serif:ital@0;1&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -802,7 +802,18 @@ async function showResults(){
   const verdict=getVerdict(composite,flags.length,avg['Integrity']||0,avg['Confidentiality']||0);
   const completionDate = new Date().toISOString().split('T')[0];
   const redFlagResponses = flags.length
-    ? flags.map(f => `Q${f.id}: ${f.text} — Answered: ${f.a}`).join('\n')
+    ? [
+        '=== Red Flag Responses ===',
+        '',
+        ...flags.flatMap((f, i) => [
+          `Flag ${i + 1}`,
+          `Question: Q${f.id} — ${f.text}`,
+          `Candidate Response: ${f.a}`,
+          '',
+          '--------------------------------------------------',
+          ''
+        ])
+      ].join('\n')
     : 'None';
 
   let sum='';
