@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Leadership Profile Assessment</title>
-<!-- NWA_LEADERSHIP_PROFILE_V2_POWER_AUTOMATE_BUILD_2026_05_07_V1 -->
+<!-- NWA_LEADERSHIP_PROFILE_V2_FORMATTED_REDFLAGS_BUILD_2026_05_07_V2 -->
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,700;1,400&family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@500&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -700,9 +700,39 @@ function buildSummaryText(composite, flags, v){
 }
 
 function buildRedFlagResponses(flags){
-  return flags.length
-    ? flags.map((f,i)=>`Flag ${i+1}: ${f.q} — Answered: ${f.a}${f.why ? ` — Why flagged: ${f.why}` : ''}`).join('\n')
-    : 'None';
+  if(!flags.length){
+    return [
+      '=== Red Flag Responses ===',
+      '',
+      'None'
+    ].join('\n');
+  }
+
+  const lines = [
+    '=== Red Flag Responses ===',
+    ''
+  ];
+
+  flags.forEach((f, i) => {
+    lines.push(`Flag ${i + 1}`);
+    lines.push('');
+    lines.push('Question:');
+    lines.push(f.q || 'N/A');
+    lines.push('');
+    lines.push('Candidate Response:');
+    lines.push(f.a || 'N/A');
+    lines.push('');
+    lines.push('Reason Flagged:');
+    lines.push(f.why || 'N/A');
+
+    if(i < flags.length - 1){
+      lines.push('');
+      lines.push('--------------------------------------------------');
+      lines.push('');
+    }
+  });
+
+  return lines.join('\n');
 }
 
 function buildCleanReport(catScores, composite, flags, v){
