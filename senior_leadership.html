@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Leadership Profile Assessment — EMS Operations</title>
-<!-- NWA_SENIOR_LEADERSHIP_CLEAN_RECOMMENDATION_BUILD_2026_05_06_V2 -->
+<!-- NWA_SENIOR_LEADERSHIP_FORMATTED_REDFLAGS_BUILD_2026_05_07_V3 -->
 <!-- NWA_SENIOR_LEADERSHIP_REDFLAG_DATE_ISO_CLEAN_REPORT_BUILD_2026_05_06_V1 -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@500&display=swap" rel="stylesheet">
@@ -846,7 +846,18 @@ async function showResults(){
   const completionDate = new Date().toISOString().split('T')[0];
 
   const redFlagResponses = redFlags.length
-    ? redFlags.map(f => `Q${f.id}: ${f.text} — Answered: ${f.ans}`).join('\\n')
+    ? [
+        '=== Red Flag Responses ===',
+        '',
+        ...redFlags.flatMap((f, i) => [
+          `Flag ${i + 1}`,
+          `Question: Q${f.id} — ${f.text}`,
+          `Candidate Response: ${f.ans}`,
+          '',
+          '--------------------------------------------------',
+          ''
+        ])
+      ].join('\n')
     : 'None';
 
   const summary = buildSummaryText(avg, redFlags, validity, composite, verdict);
@@ -880,7 +891,7 @@ async function showResults(){
     summary,
     '',
     'Assessment: Senior Leadership DO-Level Assessment v1.0'
-  ].join('\\n');
+  ].join('\n');
 
   const submitted = await sendToFlow({
     firstName: candidate.firstName,
