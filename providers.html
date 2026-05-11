@@ -1141,7 +1141,18 @@ async function showResults() {
   const verdict = getVerdict(weightedSum, redFlags.length, integrityScore, safetyScore);
   const completionDate = new Date().toISOString().split('T')[0];
   const redFlagResponses = redFlags.length
-    ? redFlags.map(f => `Q${f.id}: ${f.text} — Answered: ${f.answer}`).join('\n')
+    ? [
+        '=== Red Flag Responses ===',
+        '',
+        ...redFlags.flatMap((f, i) => [
+          `Flag ${i + 1}`,
+          `Question: Q${f.id} — ${f.text}`,
+          `Candidate Response: ${f.answer}`,
+          '',
+          '--------------------------------------------------',
+          ''
+        ])
+      ].join('\n')
     : 'None';
 
   const summaryLines = [];
