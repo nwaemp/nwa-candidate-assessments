@@ -350,8 +350,31 @@ body::before{
   </div>
 </div>
 
-<!-- ══ SUBMISSION / THANK YOU SCREEN ══ -->
-<div id="screen-results"></div>
+<!-- ══ RESULTS ══ -->
+<div id="screen-results">
+  <div class="r-top">
+    <div class="v-pill" id="v-pill"></div>
+    <div class="r-name" id="r-name"></div>
+    <div class="r-meta" id="r-meta"></div>
+    <div><span class="score-big" id="r-score">—</span><span class="score-denom"> / 5.00</span></div>
+  </div>
+  <div class="cat-grid" id="cat-grid"></div>
+  <div class="flags-box" id="flags-box" style="display:none">
+    <h3>⚠ Red Flag Responses</h3>
+    <div id="flags-list"></div>
+  </div>
+  <div class="sum-box" id="sum-box"></div>
+  <div class="wb-box">
+    <h3>Workable Notes — Copy &amp; Paste</h3>
+    <p>Paste the block below into the candidate's Notes tab in Workable.</p>
+    <div class="copy-area" id="copy-area"></div>
+    <button class="btn-copy" onclick="copyIt()">Copy to Clipboard</button>
+  </div>
+  <div class="export-row">
+    <button class="btn-primary" onclick="window.print()">Print / Save PDF</button>
+    <button class="btn-ghost"   onclick="location.reload()">New Assessment</button>
+  </div>
+</div>
 
 </main>
 
@@ -1015,7 +1038,7 @@ async function showResults() {
     lastName: cand.lastName,
     email: cand.email,
     position: cand.position || cand.pos || 'Dispatcher',
-    assessmentType: 'Dispatcher',
+    assessmentType: 'Dispatch',
     score: composite.toFixed(2),
     recommendation: verdict.label,
     redFlags: flags.length.toString(),
@@ -1065,6 +1088,14 @@ async function sendToFlow(data) {
   }
 }
 
+function copyIt() {
+  navigator.clipboard.writeText(document.getElementById('copy-area').textContent)
+    .then(()=>{
+      const b = document.querySelector('.btn-copy');
+      b.textContent = '✓ Copied';
+      setTimeout(()=>{ b.textContent='Copy to Clipboard'; }, 2000);
+    });
+}
 </script>
 </body>
 </html>
