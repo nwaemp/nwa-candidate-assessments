@@ -3,299 +3,194 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NW Ambulance — Dispatcher Assessment</title>
-<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<title>Controller — Character, Conduct &amp; Knowledge Assessment</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,500&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg:       #F4F1EC;
-  --surface:  #FFFFFF;
-  --ink:      #1A1714;
-  --ink2:     #2D2926;
-  --muted:    #7A746C;
-  --border:   rgba(26,23,20,0.10);
-  --border-hi:rgba(26,23,20,0.18);
-  --red:      #8C1F1F;
-  --red-bg:   rgba(140,31,31,0.07);
-  --red-bdr:  rgba(140,31,31,0.22);
-  --gold:     #9A6B00;
-  --gold-bg:  rgba(154,107,0,0.08);
-  --gold-bdr: rgba(154,107,0,0.22);
-  --green:    #1E5C35;
-  --green-bg: rgba(30,92,53,0.08);
-  --green-bdr:rgba(30,92,53,0.25);
-  --amber:    #8C4A00;
-  --amber-bg: rgba(140,74,0,0.09);
-  --amber-bdr:rgba(140,74,0,0.25);
-  --slate:    #1A2B45;
+  --bg: #f7f5f0;
+  --surface: #ffffff;
+  --ink: #1c1a17;
+  --ink2: #3a3733;
+  --muted: #7a7872;
+  --border: rgba(28,26,23,0.1);
+  --border-hi: rgba(28,26,23,0.2);
+  --navy: #1b2d4a;
+  --navy-light: #243d62;
+  --gold: #b8860b;
+  --gold-light: #d4a017;
+  --gold-bg: rgba(184,134,11,0.08);
+  --gold-border: rgba(184,134,11,0.25);
+  --green: #2d6a3f;
+  --green-bg: rgba(45,106,63,0.1);
+  --green-border: rgba(45,106,63,0.3);
+  --amber: #9a5a00;
+  --amber-bg: rgba(154,90,0,0.1);
+  --amber-border: rgba(154,90,0,0.3);
+  --red: #8b1a1a;
+  --red-bg: rgba(139,26,26,0.08);
+  --red-border: rgba(139,26,26,0.25);
+  --r: 6px;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
-body{
-  font-family:'DM Sans',sans-serif;
-  background:var(--bg);
-  color:var(--ink);
-  min-height:100vh;
-  font-size:15px;
-  line-height:1.65;
-}
-body::before{
-  content:'';
-  position:fixed;inset:0;
-  background-image:
-    radial-gradient(circle at 15% 20%, rgba(26,43,69,0.04) 0%, transparent 55%),
-    radial-gradient(circle at 85% 75%, rgba(140,31,31,0.04) 0%, transparent 50%);
-  pointer-events:none;z-index:0;
-}
+body{font-family:'IBM Plex Sans',sans-serif;background:var(--bg);color:var(--ink);min-height:100vh;font-size:15px;line-height:1.65}
+body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(28,26,23,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(28,26,23,0.025) 1px,transparent 1px);background-size:48px 48px;pointer-events:none;z-index:0}
 
-/* ── HEADER ── */
-.hdr{
-  background:var(--slate);
-  border-bottom:3px solid var(--gold);
-  padding:0 36px;height:58px;
-  display:flex;align-items:center;gap:14px;
-  position:sticky;top:0;z-index:100;
-}
-.hdr-badge{
-  background:var(--gold);
-  color:#fff;
-  font-family:'DM Mono',monospace;
-  font-size:9px;font-weight:500;
-  letter-spacing:0.12em;
-  text-transform:uppercase;
-  padding:4px 10px;border-radius:2px;
-  flex-shrink:0;
-}
-.hdr-title{font-size:13px;font-weight:600;color:#E8E4DC;letter-spacing:0.01em}
-.hdr-title small{display:block;font-size:10px;font-weight:400;color:rgba(232,228,220,0.5);letter-spacing:0.06em;text-transform:uppercase;margin-top:1px}
-.hdr-right{margin-left:auto;display:flex;align-items:center;gap:10px}
-.prog-pill{
-  display:flex;align-items:center;gap:9px;
-  background:rgba(255,255,255,0.06);
-  border:1px solid rgba(255,255,255,0.12);
-  border-radius:99px;padding:5px 13px;
-}
-.prog-txt{font-family:'DM Mono',monospace;font-size:11px;color:rgba(232,228,220,0.55)}
-.prog-outer{width:80px;height:3px;background:rgba(255,255,255,0.12);border-radius:2px;overflow:hidden}
-.prog-inner{height:100%;background:var(--gold);border-radius:2px;transition:width .35s ease;width:0%}
+/* HEADER */
+.hdr{background:var(--navy);border-bottom:2px solid var(--gold);padding:0 40px;height:60px;display:flex;align-items:center;gap:16px;position:sticky;top:0;z-index:100}
+.hdr-logo{width:32px;height:32px;background:var(--gold);border-radius:4px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.hdr-logo span{font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:500;color:var(--navy);letter-spacing:0.02em}
+.hdr-title{font-size:13px;font-weight:500;color:#e8e4da;letter-spacing:0.01em}
+.hdr-title small{display:block;font-size:10px;font-weight:400;color:rgba(232,228,218,0.5);letter-spacing:0.06em;text-transform:uppercase;margin-top:1px}
+.hdr-right{margin-left:auto;display:flex;align-items:center;gap:12px}
+.prog-pill{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:99px;padding:5px 14px}
+.prog-txt{font-family:'IBM Plex Mono',monospace;font-size:11px;color:rgba(232,228,218,0.6)}
+.prog-outer{width:90px;height:3px;background:rgba(255,255,255,0.12);border-radius:2px;overflow:hidden}
+.prog-inner{height:100%;background:var(--gold-light);border-radius:2px;transition:width .4s ease;width:0%}
 
-/* ── MAIN ── */
-.main{max-width:740px;margin:0 auto;padding:44px 22px 100px;position:relative;z-index:1}
+/* MAIN */
+.main{max-width:760px;margin:0 auto;padding:44px 24px 100px;position:relative;z-index:1}
 
-/* ── WELCOME ── */
-.overline{
-  font-family:'DM Mono',monospace;
-  font-size:10px;letter-spacing:0.18em;text-transform:uppercase;
-  color:var(--gold);margin-bottom:16px;
-  display:flex;align-items:center;gap:8px;
-}
-.overline::before{content:'';display:inline-block;width:18px;height:1px;background:var(--gold)}
-.welcome-h{
-  font-family:'Libre Baskerville',serif;
-  font-size:clamp(28px,5vw,46px);
-  font-weight:700;line-height:1.08;
-  letter-spacing:-0.02em;
-  color:var(--ink);margin-bottom:18px;
-}
-.welcome-h em{font-style:italic;color:var(--slate)}
-.welcome-p{font-size:14px;color:var(--muted);max-width:520px;line-height:1.8;margin-bottom:30px}
-.meta-strip{
-  display:flex;gap:1px;max-width:460px;margin-bottom:36px;
-}
-.meta-cell{
-  flex:1;background:var(--surface);border:1px solid var(--border);
-  padding:13px 15px;
-}
-.meta-cell:first-child{border-radius:5px 0 0 5px}
-.meta-cell:last-child{border-radius:0 5px 5px 0}
-.meta-v{font-family:'Libre Baskerville',serif;font-size:24px;font-weight:700;color:var(--slate);line-height:1;margin-bottom:3px}
+/* WELCOME */
+.eyebrow{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--gold);margin-bottom:18px;display:flex;align-items:center;gap:8px}
+.eyebrow::before{content:'';display:inline-block;width:20px;height:1px;background:var(--gold)}
+.welcome-h{font-family:'Playfair Display',serif;font-size:clamp(30px,5vw,50px);font-weight:700;line-height:1.08;letter-spacing:-0.02em;color:var(--ink);margin-bottom:20px}
+.welcome-h em{font-style:italic;color:var(--navy)}
+.welcome-p{font-size:14px;color:var(--muted);max-width:520px;line-height:1.8;margin-bottom:32px}
+.meta-row{display:flex;gap:1px;margin-bottom:36px;max-width:440px}
+.meta-cell{flex:1;background:var(--surface);border:1px solid var(--border);padding:14px 16px}
+.meta-cell:first-child{border-radius:var(--r) 0 0 var(--r)}
+.meta-cell:last-child{border-radius:0 var(--r) var(--r) 0}
+.meta-v{font-family:'Playfair Display',serif;font-size:26px;font-weight:600;color:var(--navy);line-height:1;margin-bottom:3px}
 .meta-l{font-size:10px;letter-spacing:0.06em;text-transform:uppercase;color:var(--muted)}
 
-/* ── FORM ── */
-.cand-form{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:22px;margin-bottom:22px;max-width:480px}
-.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-bottom:11px}
+/* FORM */
+.cand-form{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:22px;margin-bottom:24px;max-width:500px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
 .fg{display:flex;flex-direction:column;gap:5px}
-.fg label{font-size:10px;font-weight:600;letter-spacing:0.09em;text-transform:uppercase;color:var(--muted)}
-.fg input,.fg select{
-  background:var(--bg);border:1px solid var(--border-hi);
-  border-radius:5px;padding:9px 11px;
-  color:var(--ink);font-family:'DM Sans',sans-serif;font-size:13px;
-  outline:none;transition:border-color .2s;
-}
-.fg input:focus,.fg select:focus{border-color:var(--slate)}
-.fg input::placeholder{color:rgba(122,116,108,0.4)}
+.fg label{font-size:10px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted)}
+.fg input{background:var(--bg);border:1px solid var(--border-hi);border-radius:var(--r);padding:9px 12px;color:var(--ink);font-family:'IBM Plex Sans',sans-serif;font-size:13px;outline:none;transition:border-color .2s}
+.fg input:focus{border-color:var(--navy)}
+.fg input::placeholder{color:rgba(122,120,114,0.4)}
 
-/* ── BUTTONS ── */
-.btn-primary{
-  background:var(--slate);color:#E8E4DC;
-  border:none;border-radius:5px;
-  padding:13px 28px;
-  font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;
-  letter-spacing:0.04em;cursor:pointer;
-  transition:background .18s,transform .1s;
-  display:inline-flex;align-items:center;gap:8px;
-}
-.btn-primary:hover{background:#243856}
+/* BUTTONS */
+.btn-primary{background:var(--navy);color:#e8e4da;border:none;border-radius:var(--r);padding:13px 28px;font-family:'IBM Plex Sans',sans-serif;font-size:13px;font-weight:600;letter-spacing:0.04em;cursor:pointer;transition:background .2s,transform .1s;display:inline-flex;align-items:center;gap:8px}
+.btn-primary:hover{background:var(--navy-light)}
 .btn-primary:active{transform:scale(0.98)}
-.btn-ghost{
-  background:transparent;color:var(--muted);
-  border:1px solid var(--border-hi);border-radius:5px;
-  padding:11px 20px;font-family:'DM Sans',sans-serif;font-size:13px;
-  cursor:pointer;transition:all .15s;
-}
+.btn-ghost{background:transparent;color:var(--muted);border:1px solid var(--border-hi);border-radius:var(--r);padding:11px 22px;font-family:'IBM Plex Sans',sans-serif;font-size:13px;cursor:pointer;transition:all .15s}
 .btn-ghost:hover{border-color:var(--ink2);color:var(--ink)}
 
-/* ── ASSESSMENT ── */
+/* ASSESSMENT */
 #screen-assessment{display:none}
-.sec-eye{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:var(--gold);margin-bottom:5px}
-.sec-h{font-family:'Libre Baskerville',serif;font-size:21px;font-weight:700;color:var(--ink);margin-bottom:3px}
-.sec-desc{font-size:13px;color:var(--muted);line-height:1.65;margin-bottom:6px}
-.sec-badge{display:inline-block;font-size:10px;font-weight:600;letter-spacing:0.07em;text-transform:uppercase;padding:3px 11px;border-radius:99px;margin-bottom:22px;border:1px solid}
-.badge-likert{background:var(--gold-bg);color:var(--gold);border-color:var(--gold-bdr)}
-.badge-scenario{background:rgba(26,43,69,0.07);color:var(--slate);border-color:rgba(26,43,69,0.2)}
-.badge-risk{background:var(--red-bg);color:var(--red);border-color:var(--red-bdr)}
+.sec-eye{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:var(--gold);margin-bottom:6px}
+.sec-h{font-family:'Playfair Display',serif;font-size:22px;font-weight:600;color:var(--ink);margin-bottom:3px}
+.sec-badge{display:inline-block;font-size:10px;font-weight:600;letter-spacing:0.07em;text-transform:uppercase;padding:3px 11px;border-radius:99px;margin-bottom:22px}
+.badge-likert{background:var(--gold-bg);color:var(--gold);border:1px solid var(--gold-border)}
+.badge-know{background:rgba(27,45,74,0.08);color:var(--navy);border:1px solid rgba(27,45,74,0.2)}
+.badge-disc{background:rgba(45,106,63,0.1);color:var(--green);border:1px solid rgba(45,106,63,0.3)}
+.badge-trade{background:var(--red-bg);color:var(--red);border:1px solid var(--red-border)}
 
-/* ── QUESTION CARD ── */
-.q-card{
-  background:var(--surface);
-  border:1px solid var(--border);
-  border-radius:6px;padding:20px 22px;
-  margin-bottom:10px;
-  transition:border-color .18s;
-}
-.q-card.answered{border-color:var(--gold-bdr)}
-.q-num{font-family:'DM Mono',monospace;font-size:10px;font-weight:500;letter-spacing:0.09em;text-transform:uppercase;color:var(--muted);margin-bottom:7px}
-.q-text{font-size:15px;line-height:1.58;color:var(--ink);margin-bottom:14px;font-weight:400}
-.q-context{
-  background:rgba(26,43,69,0.05);
-  border-left:3px solid var(--slate);
-  padding:10px 13px;font-size:13px;
-  color:var(--slate);line-height:1.65;
-  margin-bottom:13px;border-radius:0 4px 4px 0;
-  font-style:italic;
-}
+/* QUESTION CARD */
+.q-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:22px 24px;margin-bottom:10px;transition:border-color .2s}
+.q-card.answered{border-color:var(--gold-border)}
+.q-num{font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-bottom:7px}
+.q-text{font-size:15px;line-height:1.6;color:var(--ink);margin-bottom:16px}
+.q-context{background:rgba(27,45,74,0.05);border-left:3px solid var(--navy);padding:10px 14px;font-size:13px;color:var(--navy-light);line-height:1.65;margin-bottom:14px;border-radius:0 var(--r) var(--r) 0}
 
-/* ── LIKERT ── */
+/* LIKERT */
 .likert-wrap{display:flex;gap:5px;flex-wrap:wrap}
-.l-opt{
-  flex:1 1 0;min-width:76px;
-  background:var(--bg);border:1px solid var(--border);
-  border-radius:5px;padding:9px 5px;
-  text-align:center;cursor:pointer;
-  font-size:11px;color:var(--muted);line-height:1.3;
-  transition:all .14s;user-select:none;
-}
-.l-opt:hover{background:var(--gold-bg);border-color:var(--gold-bdr);color:var(--ink)}
-.l-opt.sel{background:var(--gold-bg);border-color:var(--gold-bdr);color:var(--ink);font-weight:500}
-.likert-ends{display:flex;justify-content:space-between;font-size:10px;color:var(--muted);margin-top:5px;padding:0 1px}
+.l-opt{flex:1 1 0;min-width:80px;background:var(--bg);border:1px solid var(--border);border-radius:var(--r);padding:9px 6px;text-align:center;cursor:pointer;font-size:11px;color:var(--muted);line-height:1.3;transition:all .15s;user-select:none}
+.l-opt:hover{background:var(--gold-bg);border-color:var(--gold-border);color:var(--ink)}
+.l-opt.selected{background:var(--gold-bg);border-color:var(--gold-border);color:var(--ink);font-weight:500}
+.likert-ends{display:flex;justify-content:space-between;font-size:10px;color:var(--muted);margin-top:5px;padding:0 2px}
 
-/* ── MCQ ── */
+/* MCQ / SCENARIO */
 .opts{display:flex;flex-direction:column;gap:6px}
-.opt-r{display:none}
-.opt-l{
-  display:flex;align-items:flex-start;gap:11px;
-  padding:11px 13px;
-  border:1px solid var(--border-hi);border-radius:5px;
-  cursor:pointer;transition:all .14s;
-  font-size:13px;color:var(--muted);line-height:1.5;
-  user-select:none;
-}
-.opt-l:hover{background:var(--gold-bg);border-color:var(--gold-bdr);color:var(--ink)}
-.opt-r:checked+.opt-l{background:var(--gold-bg);border-color:var(--gold-bdr);color:var(--ink);font-weight:500}
-.opt-key{
-  flex-shrink:0;width:21px;height:21px;border-radius:50%;
-  border:1.5px solid currentColor;
-  display:flex;align-items:center;justify-content:center;
-  font-family:'DM Mono',monospace;font-size:10px;font-weight:500;
-  margin-top:1px;
-}
+.opt-radio{display:none}
+.opt-label{display:flex;align-items:flex-start;gap:12px;padding:11px 14px;border:1px solid var(--border);border-radius:var(--r);cursor:pointer;transition:all .15s;font-size:13px;color:var(--muted);line-height:1.5;user-select:none}
+.opt-label:hover{background:var(--gold-bg);border-color:var(--gold-border);color:var(--ink)}
+.opt-radio:checked+.opt-label{background:var(--gold-bg);border-color:var(--gold-border);color:var(--ink);font-weight:500}
+.opt-key{flex-shrink:0;width:22px;height:22px;border-radius:50%;border:1.5px solid currentColor;display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:500;margin-top:1px}
 
-/* ── NAV ── */
-.q-nav{
-  display:flex;justify-content:space-between;align-items:center;
-  margin-top:26px;padding-top:20px;
-  border-top:1px solid var(--border);gap:12px;
-}
-.nav-info{font-family:'DM Mono',monospace;font-size:11px;color:var(--muted)}
-.nav-btns{display:flex;gap:9px}
+/* NAV */
+.q-nav{display:flex;justify-content:space-between;align-items:center;margin-top:28px;padding-top:22px;border-top:1px solid var(--border)}
+.nav-info{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--muted)}
+.nav-btns{display:flex;gap:10px}
 
-/* ── RESULTS ── */
+
+/* THANK YOU */
+#screen-thankyou{display:none}
+.thank-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:38px 34px;text-align:center;max-width:560px;margin:40px auto}
+.thank-kicker{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:var(--gold);margin-bottom:12px}
+.thank-h{font-family:'Playfair Display',serif;font-size:34px;font-weight:700;color:var(--ink);line-height:1.15;margin-bottom:14px}
+.thank-p{font-size:14px;color:var(--muted);line-height:1.8;margin:0 auto;max-width:420px}
+.submit-error{background:var(--red-bg);border:1px solid var(--red-border);color:var(--red);border-radius:var(--r);padding:14px 16px;margin-top:18px;font-size:13px;line-height:1.6;text-align:left;display:none}
+
+/* RESULTS */
 #screen-results{display:none}
-.r-top{
-  background:var(--surface);border:1px solid var(--border);
-  border-radius:8px;padding:32px;text-align:center;margin-bottom:18px;
-}
-.v-pill{
-  display:inline-block;
-  font-family:'DM Mono',monospace;font-size:11px;font-weight:500;
-  letter-spacing:0.1em;text-transform:uppercase;
-  padding:6px 18px;border-radius:99px;margin-bottom:14px;border:1px solid;
-}
-.vp-hire  {background:var(--green-bg);color:var(--green);border-color:var(--green-bdr)}
-.vp-review{background:var(--amber-bg);color:var(--amber);border-color:var(--amber-bdr)}
-.vp-no    {background:var(--red-bg);  color:var(--red);  border-color:var(--red-bdr)}
-.r-name{font-family:'Libre Baskerville',serif;font-size:26px;font-weight:700;color:var(--ink);margin-bottom:4px}
-.r-meta{font-size:12px;color:var(--muted);margin-bottom:14px}
-.score-big{font-family:'Libre Baskerville',serif;font-size:52px;font-weight:700;color:var(--slate);line-height:1}
-.score-denom{font-size:17px;color:var(--muted)}
+.r-top{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:34px;text-align:center;margin-bottom:20px}
+.v-pill{display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;padding:6px 18px;border-radius:99px;margin-bottom:16px}
+.vp-hire{background:var(--green-bg);color:var(--green);border:1px solid var(--green-border)}
+.vp-review{background:var(--amber-bg);color:var(--amber);border:1px solid var(--amber-border)}
+.vp-no{background:var(--red-bg);color:var(--red);border:1px solid var(--red-border)}
+.r-name{font-family:'Playfair Display',serif;font-size:28px;font-weight:700;color:var(--ink);margin-bottom:5px}
+.r-meta{font-size:12px;color:var(--muted);margin-bottom:18px}
+.score-big{font-family:'Playfair Display',serif;font-size:56px;font-weight:700;color:var(--navy);line-height:1}
+.score-denom{font-size:18px;color:var(--muted)}
 
-.cat-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:16px 0}
-.cat-card{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:13px 15px}
-.cat-lbl{font-size:10px;letter-spacing:0.07em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+.cat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:18px 0}
+.cat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:14px 16px}
+.cat-lbl{font-size:10px;letter-spacing:0.07em;text-transform:uppercase;color:var(--muted);margin-bottom:9px}
 .cat-row{display:flex;align-items:center;gap:8px}
-.cat-bar-bg{flex:1;height:4px;background:rgba(26,23,20,0.08);border-radius:2px;overflow:hidden}
+.cat-bar-bg{flex:1;height:4px;background:rgba(28,26,23,0.08);border-radius:2px;overflow:hidden}
 .cat-bar{height:100%;border-radius:2px;transition:width 1s ease}
-.cat-val{font-family:'DM Mono',monospace;font-size:13px;width:34px;text-align:right;flex-shrink:0}
+.cat-val{font-family:'IBM Plex Mono',monospace;font-size:13px;width:38px;text-align:right;flex-shrink:0}
 
-.flags-box{background:var(--red-bg);border:1px solid var(--red-bdr);border-radius:7px;padding:20px;margin-bottom:14px}
-.flags-box h3{font-size:13px;font-weight:600;color:var(--red);margin-bottom:11px;display:flex;align-items:center;gap:6px}
-.flag-row{margin-bottom:9px;padding-bottom:9px;border-bottom:1px solid var(--red-bdr)}
+.flags-box{background:var(--red-bg);border:1px solid var(--red-border);border-radius:var(--r);padding:20px 22px;margin-bottom:16px}
+.flags-box h3{font-size:13px;font-weight:600;color:var(--red);margin-bottom:12px;display:flex;align-items:center;gap:6px}
+.flag-row{margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid var(--red-border)}
 .flag-row:last-child{border:none;margin:0;padding:0}
 .flag-q{font-size:12px;color:var(--muted);line-height:1.55;margin-bottom:3px}
-.flag-a{font-size:11px;color:var(--red);font-family:'DM Mono',monospace;font-weight:500}
+.flag-a{font-size:11px;color:var(--red);font-family:'IBM Plex Mono',monospace;font-weight:500}
 .flag-why{font-size:11px;color:var(--red);opacity:.75;margin-top:3px;line-height:1.5}
 
-.sum-box{background:var(--surface);border:1px solid var(--border);border-radius:7px;padding:20px;margin-bottom:14px}
-.sum-box h3{font-size:14px;font-weight:600;margin-bottom:13px;color:var(--ink)}
+.sum-box{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:20px 22px;margin-bottom:16px}
+.sum-box h3{font-size:14px;font-weight:600;color:var(--ink);margin-bottom:14px}
 .sum-row{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px}
 .sum-row:last-child{border:none}
-.sum-lbl{color:var(--muted);max-width:190px;flex-shrink:0}
+.sum-lbl{color:var(--muted);max-width:200px;flex-shrink:0}
 .sum-val{color:var(--ink);font-weight:500;text-align:right}
 .sum-note{font-size:11px;color:var(--muted);margin-top:2px}
 
-.wb-box{background:var(--slate);border-radius:7px;padding:20px;margin-bottom:14px}
-.wb-box h3{font-size:14px;font-weight:600;color:#E8E4DC;margin-bottom:5px}
-.wb-box p{font-size:12px;color:rgba(232,228,220,0.5);margin-bottom:11px}
-.copy-area{background:rgba(0,0,0,0.25);border:1px solid rgba(255,255,255,0.08);border-radius:5px;padding:12px;font-family:'DM Mono',monospace;font-size:11px;color:rgba(232,228,220,0.55);white-space:pre-wrap;line-height:1.75;margin-bottom:9px;max-height:180px;overflow-y:auto}
-.btn-copy{font-size:12px;color:rgba(232,228,220,0.65);background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);border-radius:5px;padding:7px 14px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .14s}
-.btn-copy:hover{background:rgba(255,255,255,0.12);color:#E8E4DC}
-.export-row{display:flex;gap:9px;justify-content:center;flex-wrap:wrap;margin-top:22px}
+.wb-box{background:var(--navy);border-radius:var(--r);padding:22px;margin-bottom:16px}
+.wb-box h3{font-size:14px;font-weight:600;color:#e8e4da;margin-bottom:6px}
+.wb-box p{font-size:12px;color:rgba(232,228,218,0.55);margin-bottom:12px}
+.copy-area{background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.08);border-radius:var(--r);padding:13px;font-family:'IBM Plex Mono',monospace;font-size:11px;color:rgba(232,228,218,0.6);white-space:pre-wrap;line-height:1.7;margin-bottom:10px;max-height:200px;overflow-y:auto}
+.btn-copy{font-size:12px;color:rgba(232,228,218,0.7);background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:var(--r);padding:7px 14px;cursor:pointer;font-family:'IBM Plex Sans',sans-serif;transition:all .15s}
+.btn-copy:hover{background:rgba(255,255,255,0.12);color:#e8e4da}
+.export-row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:24px}
 
 @media(max-width:540px){
   .hdr{padding:0 14px}
-  .main{padding:22px 13px 80px}
+  .main{padding:24px 14px 80px}
   .form-grid,.cat-grid{grid-template-columns:1fr}
-  .meta-strip{flex-wrap:wrap}
+  .meta-row{flex-wrap:wrap}
   .prog-pill{display:none}
-  .l-opt{min-width:58px;padding:7px 3px;font-size:10px}
 }
 @media print{
   body::before{display:none}
-  .hdr{background:var(--slate)}
-  .btn-primary,.btn-ghost,.btn-copy,.export-row{display:none!important}
+  .hdr{background:#1b2d4a}
+  .btn-primary,.btn-ghost,.btn-copy,.export-row,.wb-box .btn-copy{display:none!important}
 }
 </style>
 </head>
 <body>
 
 <header class="hdr">
-  <div class="hdr-badge">NWA</div>
-  <div class="hdr-title">
-    Dispatcher Assessment
-    <small>Professional Conduct &amp; Work Style · Confidential</small>
-  </div>
+  <div class="hdr-logo"><span>NWA</span></div>
+  <div class="hdr-title">Controller Assessment<small>Finance, Character &amp; Conduct</small></div>
   <div class="hdr-right" id="hdr-right" style="display:none">
     <div class="prog-pill">
-      <span class="prog-txt" id="prog-txt">0 / 65</span>
+      <span class="prog-txt" id="prog-txt">0 / 35</span>
       <div class="prog-outer"><div class="prog-inner" id="prog-bar"></div></div>
     </div>
   </div>
@@ -303,18 +198,18 @@ body::before{
 
 <main class="main">
 
-<!-- ══ WELCOME ══ -->
+<!-- WELCOME -->
 <div id="screen-welcome">
-  <div class="overline">Northwest Ambulance · Talent Acquisition</div>
-  <h1 class="welcome-h">Dispatcher<br><em>Character &amp; Conduct</em><br>Assessment</h1>
+  <div class="eyebrow">Talent Acquisition · NW Ambulance</div>
+  <h1 class="welcome-h">Controller<br><em>Character, Conduct</em><br>&amp; Knowledge Assessment</h1>
   <p class="welcome-p">
-    This assessment is part of our hiring process for the Dispatcher role. Answer honestly —
-    there are no trick questions. Your responses help us understand how you approach
-    workplace conduct, safety, communication, and decision-making under pressure.
+    This assessment evaluates financial integrity, professional conduct, and technical knowledge for the Controller role.
+    Answer based on what you have actually done and how you would actually respond — not what sounds ideal.
+    There are no trick questions. Honest answers produce the most useful results for everyone.
   </p>
-  <div class="meta-strip">
-    <div class="meta-cell"><div class="meta-v">65</div><div class="meta-l">Questions</div></div>
-    <div class="meta-cell"><div class="meta-v">7</div><div class="meta-l">Sections</div></div>
+  <div class="meta-row">
+    <div class="meta-cell"><div class="meta-v">35</div><div class="meta-l">Questions</div></div>
+    <div class="meta-cell"><div class="meta-v">5</div><div class="meta-l">Sections</div></div>
     <div class="meta-cell"><div class="meta-v">15–20</div><div class="meta-l">Minutes</div></div>
   </div>
   <div class="cand-form">
@@ -326,19 +221,18 @@ body::before{
       <div class="fg"><label>Email *</label><input type="email" id="i-em" placeholder="email@domain.com"></div>
       <div class="fg"><label>Phone</label><input type="tel" id="i-ph" placeholder="(555) 000-0000"></div>
     </div>
-    <div class="fg" style="margin-bottom:13px">
+    <div class="fg" style="margin-bottom:14px">
       <label>Position Applied For</label>
-      <input type="text" id="i-pos" placeholder="Dispatcher">
+      <input type="text" id="i-pos" placeholder="Controller">
     </div>
     <button class="btn-primary" onclick="start()">Begin Assessment →</button>
   </div>
 </div>
 
-<!-- ══ ASSESSMENT ══ -->
+<!-- ASSESSMENT -->
 <div id="screen-assessment">
-  <div class="sec-eye"  id="sec-eye">Section 1 of 7</div>
-  <div class="sec-h"    id="sec-h">Work Standards &amp; Integrity</div>
-  <div class="sec-desc" id="sec-desc"></div>
+  <div class="sec-eye" id="sec-eye">Section 1 of 5</div>
+  <div class="sec-h" id="sec-h">Financial Integrity &amp; Ethics</div>
   <div class="sec-badge badge-likert" id="sec-badge">Attitude &amp; Values</div>
   <div id="q-container"></div>
   <div class="q-nav">
@@ -350,17 +244,27 @@ body::before{
   </div>
 </div>
 
-<!-- ══ RESULTS ══ -->
+<!-- THANK YOU -->
+<div id="screen-thankyou">
+  <div class="thank-card">
+    <div class="thank-kicker">Assessment Submitted</div>
+    <h2 class="thank-h">Thank you for completing the assessment.</h2>
+    <p class="thank-p">Your responses have been received. The hiring team will review your assessment as part of the candidate review process.</p>
+    <div class="submit-error" id="submit-error"></div>
+  </div>
+</div>
+
+<!-- RESULTS -->
 <div id="screen-results">
   <div class="r-top">
     <div class="v-pill" id="v-pill"></div>
     <div class="r-name" id="r-name"></div>
     <div class="r-meta" id="r-meta"></div>
-    <div><span class="score-big" id="r-score">—</span><span class="score-denom"> / 5.00</span></div>
+    <div><span class="score-big" id="r-score">—</span><span class="score-denom"> / 100</span></div>
   </div>
   <div class="cat-grid" id="cat-grid"></div>
   <div class="flags-box" id="flags-box" style="display:none">
-    <h3>⚠ Red Flag Responses</h3>
+    <h3>⚠ Flagged Responses</h3>
     <div id="flags-list"></div>
   </div>
   <div class="sum-box" id="sum-box"></div>
@@ -372,394 +276,571 @@ body::before{
   </div>
   <div class="export-row">
     <button class="btn-primary" onclick="window.print()">Print / Save PDF</button>
-    <button class="btn-ghost"   onclick="location.reload()">New Assessment</button>
+    <button class="btn-ghost" onclick="location.reload()">New Candidate</button>
   </div>
 </div>
 
 </main>
 
 <script>
-const FLOW_URL = 'https://defaultb9fe31c2de0742529875da1c500446.c8.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/443e14789e624ef190a2ff64dc0cabf5/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=iAjkhXQMPIMonRJng05qWDhkfPliI-7jM4CvQzjlhl0';
-// NWA_DISPATCH_POWER_AUTOMATE_HIDDEN_RESULTS_BUILD_2026_06_01_V1
-// ================================================================
-// SCORING RULES
+// ============================================================
+// SCORING LEGEND (used throughout question data)
 //
 // LIKERT STANDARD: SD=1  D=2  N=3  A=4  SA=5
 // LIKERT REVERSE:  SD=5  D=4  N=3  A=2  SA=1
+// RED FLAG: named answer triggers a flag (separate from score)
 //
-// RED FLAG (Likert): specific answer(s) trigger a concern flag.
-//   Score and flag are independent — flagged answer may score > 0.
+// SCENARIO/MCQ: each option has an explicit numeric score.
+// CORRECT-ANSWER items: one correct answer (score 5);
+//   wrong answers score 0–2 based on severity of error.
+// TRADE-OFF items: one clearly WRONG answer scores 0;
+//   other answers may score 3–5 depending on approach.
+// DISCLOSURE items: factual past-experience questions;
+//   answers that reveal gaps or avoidance are flagged.
 //
-// SCENARIO (MCQ): explicit sc:{A,B,C,D} map.
-//   flag: letter that triggers a flag (usually the worst answer).
-//   Flag fires ONLY on that letter — no other mechanism.
-//
-// No question has more than one flag mechanism.
-// All sc maps use A/B/C/D keys exclusively.
-// ================================================================
+// All score maps are written EXPLICITLY next to each question.
+// No score is inferred. Every option has a number.
+// ============================================================
 
 const LIKERT = ['Strongly Disagree','Disagree','Neutral','Agree','Strongly Agree'];
 
+// ============================================================
+// POWER AUTOMATE CONFIGURATION
+// Replace this URL with the HTTP POST URL from your Power Automate flow.
+// The payload uses the same candidate-hidden-results behavior as leadership.html.
+// ============================================================
+const POWER_AUTOMATE_URL = 'https://defaultb9fe31c2de0742529875da1c500446.c8.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/7b0c2902b6a34df88a3879469437fed0/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=LAbOa6U8xvED2R3HDjai7nhtgI7-u8z5zjhj8Ma-q0E';
+const ASSESSMENT_TYPE = 'Controller';
+const ASSESSMENT_VERSION = 'Controller Character, Conduct & Knowledge Assessment v1.0';
+
+// ============================================================
+// QUESTION DATA
+// 5 sections · 35 questions total
+// ============================================================
 const SECTIONS = [
 
-// ── S1: Work Standards & Integrity (Q1–12) ───────────────────────
-// Weight 25% | group: Integrity
+// ────────────────────────────────────────────────────────────
+// SECTION 1 — Financial Integrity & Ethics (Q1–10)
+// Likert attitude questions. Weight: 25%.
+// Group: "Integrity"
+// ────────────────────────────────────────────────────────────
 {
-  name:'Work Standards & Integrity', eye:'Section 1 of 7',
-  badge:'badge-likert', badgeTxt:'Attitude & Values',
-  desc:'How you approach accuracy, accountability, and honesty in your work.',
-  qs:[
-    { id:1,  type:'likert', group:'Integrity', rev:false,
-      text:'I follow established procedures even when no one is watching me.' },
-    { id:2,  type:'likert', group:'Integrity', rev:true,
-      text:'Small rule violations are usually harmless in a fast-paced work environment.',
-      rf:['Agree','Strongly Agree'],
-      rfWhy:'Any agreement normalizes rule-bending. In dispatch, minor protocol deviations can delay response or compromise patient safety.' },
-    { id:3,  type:'likert', group:'Integrity', rev:false,
-      text:'When I make a mistake, I acknowledge it and correct it promptly.' },
-    { id:4,  type:'likert', group:'Integrity', rev:true,
-      text:'It is acceptable to adjust documentation slightly if it makes things look better.',
-      rf:['Agree','Strongly Agree'],
-      rfWhy:'Any agreement with misrepresenting documentation is a hard integrity flag. Dispatch records are legal and operational documents.' },
-    { id:5,  type:'likert', group:'Integrity', rev:false,
-      text:'I take responsibility for errors in my work without blaming others.' },
-    { id:6,  type:'likert', group:'Integrity', rev:false,
-      text:'Accurate record-keeping is one of the most important parts of my job.' },
-    { id:7,  type:'likert', group:'Integrity', rev:true,
-      text:'Policies that slow me down are not always worth following strictly.',
-      rf:['Agree','Strongly Agree'],
-      rfWhy:'Dispatch protocols exist for patient safety reasons. A tendency to bypass inconvenient policies is a meaningful risk indicator in this role.' },
-    { id:8,  type:'likert', group:'Integrity', rev:false,
-      text:'I report errors or problems even when doing so is uncomfortable.' },
-    { id:9,  type:'likert', group:'Integrity', rev:false,
-      text:'I hold myself to the same standards regardless of whether I am being supervised.' },
-    { id:10, type:'likert', group:'Integrity', rev:true,
-      text:'Using work resources — computers, phones, systems — for minor personal tasks is a harmless perk.',
-      rf:['Agree','Strongly Agree'],
-      rfWhy:'Dispatchers have access to sensitive CAD systems and patient information. Casual use of work systems for personal purposes indicates boundary risk.' },
-    { id:11, type:'likert', group:'Integrity', rev:false,
-      text:'Professional integrity matters even during routine or low-visibility tasks.' },
-    { id:12, type:'likert', group:'Integrity', rev:false,
-      text:'I complete assigned work accurately even when I feel rushed.' },
+  name: 'Financial Integrity & Ethics',
+  eye: 'Section 1 of 5',
+  badge: 'badge-likert',
+  badgeTxt: 'Attitude & Values',
+  qs: [
+    {
+      id: 1, type: 'likert', group: 'Integrity', rev: false,
+      text: 'I hold myself to the same documentation and accuracy standards whether or not anyone reviews my work.',
+      // STANDARD: SD=1 D=2 N=3 A=4 SA=5
+      // Note: Strong agree expected. Neutral or below is an integrity concern for a Controller role.
+    },
+    {
+      id: 2, type: 'likert', group: 'Integrity', rev: true,
+      text: 'Minor rounding or adjustments in financial reports are acceptable if they do not materially affect the outcome.',
+      rf: ['Agree','Strongly Agree'],
+      rfWhy: 'Any agreement with this statement is a hard flag. Materiality is a defined threshold — it is not a Controller\'s judgment call to make unilateral rounding decisions without disclosure.',
+      // REVERSE: SD=5 D=4 N=3 A=2 SA=1
+    },
+    {
+      id: 3, type: 'likert', group: 'Integrity', rev: false,
+      text: 'When I discover an error in a report I have already submitted, I correct it and disclose it promptly, even if no one has noticed.',
+      // STANDARD: SD=1 D=2 N=3 A=4 SA=5
+    },
+    {
+      id: 4, type: 'likert', group: 'Integrity', rev: true,
+      text: 'If ownership prefers a particular financial presentation, it is appropriate to adjust how numbers are reported to match that preference.',
+      rf: ['Agree','Strongly Agree'],
+      rfWhy: 'Adjusting financial presentation to match what ownership wants to see — without disclosure — is a compliance and integrity failure. A strong Controller pushes back on this.',
+      // REVERSE: SD=5 D=4 N=3 A=2 SA=1
+    },
+    {
+      id: 5, type: 'likert', group: 'Integrity', rev: false,
+      text: 'Accurate record-keeping is a professional obligation regardless of the size or perceived importance of the transaction.',
+      // STANDARD: SD=1 D=2 N=3 A=4 SA=5
+    },
+    {
+      id: 6, type: 'likert', group: 'Integrity', rev: true,
+      text: 'Using company accounts or systems for minor personal convenience is an acceptable informal perk for a senior finance role.',
+      rf: ['Agree','Strongly Agree'],
+      rfWhy: 'Normalizing personal use of company resources — even minor — is a misappropriation risk and a conduct standard failure for someone in a fiduciary role.',
+      // REVERSE: SD=5 D=4 N=3 A=2 SA=1
+    },
+    {
+      id: 7, type: 'likert', group: 'Integrity', rev: false,
+      text: 'I would report a billing discrepancy or financial irregularity even if it reflected poorly on someone in my team.',
+      // STANDARD: SD=1 D=2 N=3 A=4 SA=5
+    },
+    {
+      id: 8, type: 'likert', group: 'Integrity', rev: true,
+      text: 'If a billing company\'s reports look reasonable, reconciling them back to actual cash receipts is unnecessary extra work.',
+      rf: ['Agree','Strongly Agree'],
+      rfWhy: 'Hard red flag. Trusting a third-party billing report without reconciliation to cash is exactly how billing revenue leaks go undetected for years. This is a core Controller accountability.',
+      // REVERSE: SD=5 D=4 N=3 A=2 SA=1
+    },
+    {
+      id: 9, type: 'likert', group: 'Integrity', rev: false,
+      text: 'Transparency with ownership — including when results are unfavorable — is more important than managing their perception.',
+      // STANDARD: SD=1 D=2 N=3 A=4 SA=5
+    },
+    {
+      id: 10, type: 'likert', group: 'Integrity', rev: true,
+      text: 'A Controller who keeps financial information tightly controlled builds more organizational authority than one who shares broadly.',
+      rf: ['Agree','Strongly Agree'],
+      rfWhy: 'Hoarding financial information as a power tactic is a conduct red flag. A Controller in a partner role should be building financial literacy and access, not limiting it.',
+      // REVERSE: SD=5 D=4 N=3 A=2 SA=1
+    },
   ]
 },
 
-// ── S2: Information Handling & Confidentiality (Q13–22) ──────────
-// Weight 20% | group: Confidentiality
+// ────────────────────────────────────────────────────────────
+// SECTION 2 — Accountability & Professional Conduct (Q11–18)
+// Likert attitude questions. Weight: 20%.
+// Group: "Conduct"
+// ────────────────────────────────────────────────────────────
 {
-  name:'Information Handling & Confidentiality', eye:'Section 2 of 7',
-  badge:'badge-likert', badgeTxt:'Attitude & Values',
-  desc:'How you handle sensitive information, patient data, and system access.',
-  qs:[
-    { id:13, type:'likert', group:'Confidentiality', rev:false,
-      text:'I treat patient and caller information as strictly confidential.' },
-    { id:14, type:'likert', group:'Confidentiality', rev:true,
-      text:'Sharing call details with coworkers outside the dispatch center is generally harmless if nothing sensitive is involved.',
-      rf:['Agree','Strongly Agree'],
-      rfWhy:'Dispatchers handle protected health information (PHI). Any casual sharing outside proper channels is a HIPAA compliance risk.' },
-    { id:15, type:'likert', group:'Confidentiality', rev:false,
-      text:'I would never access records or systems beyond what my role requires.' },
-    { id:16, type:'likert', group:'Confidentiality', rev:true,
-      text:'If I know the system well enough, accessing information I am not authorized to see is unlikely to cause harm.',
-      rf:['Agree','Strongly Agree'],
-      rfWhy:'Hard flag. Any rationalization of unauthorized system access — regardless of intent — is disqualifying for a role with CAD and patient record access.' },
-    { id:17, type:'likert', group:'Confidentiality', rev:false,
-      text:'I verify I am sending information to the correct person before transmitting it.' },
-    { id:18, type:'likert', group:'Confidentiality', rev:false,
-      text:'Privacy obligations apply equally whether I am in the office or working remotely.' },
-    { id:19, type:'likert', group:'Confidentiality', rev:true,
-      text:'Looking up the status of a call involving someone I know personally is acceptable curiosity.',
-      rf:['Agree','Strongly Agree'],
-      rfWhy:'Accessing records involving personal acquaintances for curiosity is a clear confidentiality violation and a pattern associated with data misuse.' },
-    { id:20, type:'likert', group:'Confidentiality', rev:false,
-      text:'I would report a data or privacy concern even if I was not directly involved in the incident.' },
-    { id:21, type:'likert', group:'Confidentiality', rev:false,
-      text:'Protecting the privacy of the people we serve is a core responsibility of this role.' },
-    { id:22, type:'likert', group:'Confidentiality', rev:true,
-      text:'Sharing login credentials with a coworker temporarily is fine if it helps get the work done.',
-      rf:['Agree','Strongly Agree'],
-      rfWhy:'Sharing credentials eliminates individual accountability for system actions. In a dispatch environment this compromises audit trails and security.' },
+  name: 'Accountability & Professional Conduct',
+  eye: 'Section 2 of 5',
+  badge: 'badge-likert',
+  badgeTxt: 'Attitude & Values',
+  qs: [
+    {
+      id: 11, type: 'likert', group: 'Conduct', rev: false,
+      text: 'When I identify a process that is not working, I take ownership of fixing it rather than working around it.',
+      // STANDARD: SD=1 D=2 N=3 A=4 SA=5
+    },
+    {
+      id: 12, type: 'likert', group: 'Conduct', rev: true,
+      text: 'Delivering difficult financial news to ownership is best softened by adjusting how the data is framed.',
+      rf: ['Agree','Strongly Agree'],
+      rfWhy: 'Framing data to soften difficult news crosses into misrepresentation. A Controller\'s job is accurate reporting — not managing ownership\'s emotional reaction through selective presentation.',
+      // REVERSE: SD=5 D=4 N=3 A=2 SA=1
+    },
+    {
+      id: 13, type: 'likert', group: 'Conduct', rev: false,
+      text: 'I hold members of my accounting team to the same standards I hold myself.',
+      // STANDARD: SD=1 D=2 N=3 A=4 SA=5
+    },
+    {
+      id: 14, type: 'likert', group: 'Conduct', rev: true,
+      text: 'A Controller who is well-liked by the operations team is more effective than one who is technically rigorous but harder to work with.',
+      rf: ['Agree','Strongly Agree'],
+      rfWhy: 'Prioritizing likability over rigor is a conduct risk. The Controller role requires technical credibility — relationships matter, but not at the expense of accuracy standards.',
+      // REVERSE: SD=5 D=4 N=3 A=2 SA=1
+    },
+    {
+      id: 15, type: 'likert', group: 'Conduct', rev: false,
+      text: 'I meet commitments — deadlines, close timelines, reporting windows — consistently and without needing reminders.',
+      // STANDARD: SD=1 D=2 N=3 A=4 SA=5
+    },
+    {
+      id: 16, type: 'likert', group: 'Conduct', rev: false,
+      text: 'Developing my accounting team\'s capabilities is as important as managing the technical accuracy of our output.',
+      // STANDARD: SD=1 D=2 N=3 A=4 SA=5
+    },
+    {
+      id: 17, type: 'likert', group: 'Conduct', rev: true,
+      text: 'If a vendor or billing partner relationship is generally positive, it is not worth risking it by pushing back on their reporting.',
+      rf: ['Agree','Strongly Agree'],
+      rfWhy: 'Avoiding pushback on a billing partner to preserve the relationship is a conflict of interest risk. The Controller is an organizational check on third-party vendors — not an ambassador for them.',
+      // REVERSE: SD=5 D=4 N=3 A=2 SA=1
+    },
+    {
+      id: 18, type: 'likert', group: 'Conduct', rev: false,
+      text: 'When I disagree with an operational or strategic decision made above me, I document my position before complying.',
+      // STANDARD: SD=1 D=2 N=3 A=4 SA=5
+    },
   ]
 },
 
-// ── S3: Safety & Protocol Compliance (Q23–32) ────────────────────
-// Weight 20% | group: Safety
+// ────────────────────────────────────────────────────────────
+// SECTION 3 — Technical Knowledge (Q19–26)
+// Correct-answer MCQ. Weight: 30%.
+// Group: "Knowledge"
+// One answer is correct (score 5). Wrong answers score 0–2.
+// Score map is explicit for every option.
+// ────────────────────────────────────────────────────────────
 {
-  name:'Safety & Protocol Compliance', eye:'Section 3 of 7',
-  badge:'badge-likert', badgeTxt:'Attitude & Values',
-  desc:'How you approach safety protocols, checklists, and compliance requirements.',
-  qs:[
-    { id:23, type:'likert', group:'Safety', rev:false,
-      text:'I follow communication protocols even when a situation feels routine.' },
-    { id:24, type:'likert', group:'Safety', rev:true,
-      text:'Experienced dispatchers can reasonably skip certain steps when call volume is high.',
-      rf:['Agree','Strongly Agree'],
-      rfWhy:'High call volume is exactly when protocol adherence matters most. Experience does not justify shortcuts in a life-safety communications role.' },
-    { id:25, type:'likert', group:'Safety', rev:false,
-      text:'I escalate unusual or uncertain situations to a supervisor rather than handling them on my own.' },
-    { id:26, type:'likert', group:'Safety', rev:false,
-      text:'Safety procedures exist for important reasons, even when they feel inconvenient.' },
-    { id:27, type:'likert', group:'Safety', rev:true,
-      text:'If a call does not seem urgent, some documentation steps can be completed later or skipped.',
-      rf:['Agree','Strongly Agree'],
-      rfWhy:'Deferred or skipped documentation creates gaps in the operational and legal record. Non-urgent calls can still involve liability-sensitive information.' },
-    { id:28, type:'likert', group:'Safety', rev:false,
-      text:'I double-check critical information — addresses, unit status, crew assignments — before acting on it.' },
-    { id:29, type:'likert', group:'Safety', rev:false,
-      text:'I would rather take an extra moment to confirm information than act on something uncertain.' },
-    { id:30, type:'likert', group:'Safety', rev:true,
-      text:'Getting a crew moving quickly is more important than completing all the required pre-dispatch steps.',
-      rf:['Agree','Strongly Agree'],
-      rfWhy:'Pre-dispatch steps exist to prevent sending the wrong crew, wrong level of care, or wrong address. Speed without accuracy is a patient safety failure.' },
-    { id:31, type:'likert', group:'Safety', rev:false,
-      text:'I pay attention to detail even during repetitive tasks.' },
-    { id:32, type:'likert', group:'Safety', rev:false,
-      text:'Reporting a near-miss or procedural concern is the right thing to do, even if it draws attention to a mistake.' },
+  name: 'Technical Knowledge',
+  eye: 'Section 3 of 5',
+  badge: 'badge-know',
+  badgeTxt: 'Correct Answer Exists',
+  qs: [
+    {
+      id: 19, type: 'mcq', group: 'Knowledge',
+      text: 'Your third-party billing company sends you a monthly revenue report showing $480,000 in collections. Your bank account received $412,000 that month. What is the correct first action?',
+      opts: [
+        'A. Accept the $480K as reported revenue — timing differences between billing and cash are normal.',
+        'B. Reconcile the $68,000 variance by requesting a detailed aging report and matching it to actual deposits before recording revenue.',
+        'C. Record $412,000 received and adjust the $68,000 to accounts receivable without investigating.',
+        'D. Flag it verbally to ownership and wait for next month to see if it resolves.'
+      ],
+      // CORRECT: B (5). A ignores a $68K unverified gap — classic billing oversight failure (score 0).
+      // C is partially correct in mechanics but skips investigation — may mask billing errors (score 2).
+      // D delays a required reconciliation and provides no documentation (score 1).
+      sc: { A: 0, B: 5, C: 2, D: 1 },
+      correct: 'B',
+      correctWhy: 'Reconciling billing company reports to actual bank deposits is the Controller\'s primary check on third-party revenue. The $68K gap must be investigated and documented before revenue is recorded — not assumed to be timing.'
+    },
+    {
+      id: 20, type: 'mcq', group: 'Knowledge',
+      text: 'During month-end close, you identify that an AP invoice was coded to the wrong expense category — affecting both the P&L and the department\'s budget variance report. The period is not yet closed. What do you do?',
+      opts: [
+        'A. Leave it — the total expense is correct even if the category is wrong, and reclassification slows close.',
+        'B. Reclassify the invoice to the correct account before close, document the correction, and note it in the month-end workpapers.',
+        'C. Reclassify it but make no note — corrections are routine and do not need documentation.',
+        'D. Flag it to the department manager and wait for their approval before making any change.'
+      ],
+      // CORRECT: B (5). A accepts a known miscoding that affects both P&L accuracy and management reporting (score 0).
+      // C makes the right mechanical move but skips documentation — audit trail failure (score 2).
+      // D is overcautious — reclassification within open period is Controller authority, no mgr approval needed (score 1).
+      sc: { A: 0, B: 5, C: 2, D: 1 },
+      correct: 'B',
+      correctWhy: 'Reclassification before period close is correct and within Controller authority. Documentation in workpapers is mandatory — not optional. Leaving a known miscoding uncorrected is not acceptable.'
+    },
+    {
+      id: 21, type: 'mcq', group: 'Knowledge',
+      text: 'Washington State requires employers to track and remit WA Cares Fund (long-term care insurance) premiums. Which of the following is the correct handling?',
+      opts: [
+        'A. WA Cares is an employee-only premium — the employer has no contribution obligation, but must withhold and remit on the employee\'s behalf.',
+        'B. WA Cares is a joint employer-employee premium split 50/50 and remitted quarterly.',
+        'C. WA Cares applies only to employees earning above $60,000 annually.',
+        'D. WA Cares withholding is optional for employers with fewer than 50 employees.'
+      ],
+      // CORRECT: A (5). WA Cares is 100% employee-funded; employer withholds and remits but does not contribute.
+      // B is wrong — no employer contribution exists (score 0).
+      // C is wrong — applies to all W-2 wages regardless of income level (score 0).
+      // D is wrong — no small employer exemption exists (score 0).
+      sc: { A: 5, B: 0, C: 0, D: 0 },
+      correct: 'A',
+      correctWhy: 'WA Cares Fund is 100% employee-funded. The employer\'s obligation is accurate withholding and remittance — there is no employer contribution, no income threshold, and no small employer exemption.'
+    },
+    {
+      id: 22, type: 'mcq', group: 'Knowledge',
+      text: 'An ambulance purchased for $185,000 has an estimated useful life of 7 years and a salvage value of $20,000. Using straight-line depreciation, what is the correct annual depreciation expense?',
+      opts: [
+        'A. $26,429 per year (dividing total cost by useful life)',
+        'B. $23,571 per year (dividing depreciable base by useful life)',
+        'C. $27,500 per year (dividing original cost minus a standard 10% salvage by useful life)',
+        'D. $18,500 per year (10% of original cost per year)'
+      ],
+      // CORRECT: B (5). ($185,000 - $20,000) / 7 = $165,000 / 7 = $23,571.43
+      // A uses full cost without subtracting salvage — technically incorrect (score 1).
+      // C uses an arbitrary 10% standard rather than the stated salvage value (score 0).
+      // D is a flat 10% with no reference to useful life or salvage — incorrect method (score 0).
+      sc: { A: 1, B: 5, C: 0, D: 0 },
+      correct: 'B',
+      correctWhy: 'Straight-line depreciation = (Cost − Salvage Value) / Useful Life. ($185,000 − $20,000) / 7 = $23,571 per year. Option A ignores salvage value; C and D use incorrect methods.'
+    },
+    {
+      id: 23, type: 'mcq', group: 'Knowledge',
+      text: 'Your organization\'s month-end close has been taking 25–30 days. Ownership wants it reduced to 15 days. Which approach is most effective as a first step?',
+      opts: [
+        'A. Extend the deadline for department budget submissions so close is not blocked waiting for their input.',
+        'B. Map the current close process end-to-end, identify the three longest-duration bottlenecks, and address those specifically.',
+        'C. Move to a soft close — produce preliminary financials on day 15 and finalize adjustments later.',
+        'D. Reduce the number of accounts being reconciled each month to speed up the process.'
+      ],
+      // CORRECT: B (5). Process mapping before intervention is the correct diagnostic approach.
+      // A delays input from departments — likely to create accuracy problems downstream (score 1).
+      // C sidesteps the problem without solving it — soft close may work tactically but doesn't fix root cause (score 2).
+      // D reduces reconciliation scope — potentially creating accuracy and audit problems (score 0).
+      sc: { A: 1, B: 5, C: 2, D: 0 },
+      correct: 'B',
+      correctWhy: 'Mapping the process to find the longest bottlenecks is the only way to reduce close time sustainably. Arbitrary shortcuts — fewer reconciliations, soft closes — solve the symptom without fixing the process.'
+    },
+    {
+      id: 24, type: 'mcq', group: 'Knowledge',
+      text: 'You notice that overtime as a percentage of payroll has increased from 9% to 16% over three months. Ownership asks you what is driving it. What is the correct first analytical step?',
+      opts: [
+        'A. Report the percentage increase and recommend that operations reduce overtime approvals.',
+        'B. Break down overtime by shift, zone, and job classification to identify whether the increase is concentrated or system-wide.',
+        'C. Compare this quarter to the same quarter last year to determine if this is a seasonal pattern.',
+        'D. Calculate the total dollar cost of overtime and present that figure to ownership.'
+      ],
+      // CORRECT: B (5). Segmentation is the correct diagnostic — you need to know WHERE before you can explain WHY.
+      // A jumps to a recommendation before diagnosing cause — premature (score 1).
+      // C year-over-year comparison is useful context but not the first diagnostic step (score 2).
+      // D dollar cost is relevant but not diagnostic — doesn't answer "what is driving it" (score 1).
+      sc: { A: 1, B: 5, C: 2, D: 1 },
+      correct: 'B',
+      correctWhy: 'Before explaining a trend, the Controller must identify where it is concentrated. Segmenting by shift, zone, and classification reveals whether this is a staffing model problem, a specific zone issue, or a system-wide change.'
+    },
+    {
+      id: 25, type: 'mcq', group: 'Knowledge',
+      text: 'Your organization has accounts receivable from EMS transport billing. Which of the following correctly describes how net accounts receivable should be presented on the balance sheet?',
+      opts: [
+        'A. Gross billed charges, representing the full amount charged to payers before any adjustments.',
+        'B. Net expected collections after contractual adjustments, expected write-offs, and the allowance for doubtful accounts.',
+        'C. Cash collected to date from all outstanding invoices.',
+        'D. Total billed charges minus only the payments already received.'
+      ],
+      // CORRECT: B (5). GAAP requires net AR = gross charges minus contractual adjustments, write-offs, allowance for doubtful accounts.
+      // A presents gross charges — not GAAP-compliant for healthcare receivables (score 0).
+      // C presents only collected cash — ignores outstanding receivables entirely (score 0).
+      // D is partially right mechanically but omits contractual adjustments and allowances (score 1).
+      sc: { A: 0, B: 5, C: 0, D: 1 },
+      correct: 'B',
+      correctWhy: 'Healthcare AR must be presented net of contractual adjustments (Medicare/Medicaid rate differences), expected write-offs, and allowance for doubtful accounts. Gross billed charges overstate the balance sheet significantly.'
+    },
+    {
+      id: 26, type: 'mcq', group: 'Knowledge',
+      text: 'You are reviewing ADP Workforce Now payroll records and notice that three employees have received duplicate direct deposit payments for the same pay period. The payroll run was submitted yesterday. What is the correct sequence of actions?',
+      opts: [
+        'A. Reverse the duplicate payments in ADP, notify the affected employees, document the correction, and determine the root cause to prevent recurrence.',
+        'B. Wait until the employees report the overpayment — initiating a reversal without notification creates legal risk.',
+        'C. Offset the overpayment by reducing the employees\' next payroll check automatically.',
+        'D. Notify HR and let them handle the employee communication while you process the reversal.'
+      ],
+      // CORRECT: A (5). Complete sequence: reverse, notify, document, root cause.
+      // B waiting for employees to report it is an abrogation of the Controller's responsibility (score 0).
+      // C automatic offset without employee notification may violate state wage laws (score 1).
+      // D is better than B or C but splits responsibility in a way that may delay resolution and miss root cause (score 2).
+      sc: { A: 5, B: 0, C: 1, D: 2 },
+      correct: 'A',
+      correctWhy: 'Payroll errors must be caught and corrected proactively — not waited on. The Controller owns: initiating the reversal, ensuring employees are notified properly, documenting the correction, and closing the root cause.'
+    },
   ]
 },
 
-// ── S4: Stress Tolerance & Emotional Stability (Q33–42) ──────────
-// Weight 15% | group: StressTolerance
+// ────────────────────────────────────────────────────────────
+// SECTION 4 — Forced Trade-offs & Conduct Scenarios (Q27–31)
+// One answer is clearly wrong. Score 0 for wrong; 3–5 for others.
+// Group: "Scenarios"
+// ────────────────────────────────────────────────────────────
 {
-  name:'Stress Tolerance & Emotional Stability', eye:'Section 4 of 7',
-  badge:'badge-likert', badgeTxt:'Attitude & Values',
-  desc:'How you respond to pressure, high workload, and emotionally demanding situations.',
-  qs:[
-    { id:33, type:'likert', group:'StressTolerance', rev:false,
-      text:'I remain calm and focused during chaotic or high-volume work periods.' },
-    { id:34, type:'likert', group:'StressTolerance', rev:false,
-      text:'I can manage multiple tasks simultaneously without losing track of important details.' },
-    { id:35, type:'likert', group:'StressTolerance', rev:false,
-      text:'When a situation escalates unexpectedly, I stay composed and work through it methodically.' },
-    { id:36, type:'likert', group:'StressTolerance', rev:true,
-      text:'When I am under a great deal of stress, I sometimes say things I later regret to coworkers.',
-      rf:['Agree','Strongly Agree'],
-      rfWhy:'Stress-driven interpersonal outbursts in dispatch affect team function and crew confidence during active incidents. A pattern of this is a meaningful stability concern.' },
-    { id:37, type:'likert', group:'StressTolerance', rev:false,
-      text:'I recover quickly after a difficult call or stressful shift and can continue working effectively.' },
-    { id:38, type:'likert', group:'StressTolerance', rev:false,
-      text:'I can stay professional and respectful with callers even when they are angry or difficult.' },
-    { id:39, type:'likert', group:'StressTolerance', rev:true,
-      text:'After a very difficult incident, I find it hard to concentrate for the rest of my shift.',
-      rf:['Agree','Strongly Agree'],
-      rfWhy:'Dispatcher roles require continuous performance across an entire shift. Significant loss of concentration after one difficult call is a functional concern in this environment.' },
-    { id:40, type:'likert', group:'StressTolerance', rev:false,
-      text:'I can prioritize effectively when multiple urgent demands arise at the same time.' },
-    { id:41, type:'likert', group:'StressTolerance', rev:false,
-      text:'I maintain a professional demeanor even when I disagree with a decision made above me.' },
-    { id:42, type:'likert', group:'StressTolerance', rev:false,
-      text:'Pressure generally helps me stay focused rather than overwhelm me.' },
+  name: 'Conduct Scenarios',
+  eye: 'Section 4 of 5',
+  badge: 'badge-trade',
+  badgeTxt: 'One Wrong Answer',
+  qs: [
+    {
+      id: 27, type: 'trade', group: 'Scenarios',
+      text: 'Ownership asks you to restate last quarter\'s financial results to exclude a one-time expense category, saying they want to show investors a "cleaner" number without explaining the exclusion.',
+      context: 'What is the wrong answer?',
+      opts: [
+        'A. Prepare the restated figures as requested — ownership has authority over how financials are presented internally.',
+        'B. Decline to restate without proper disclosure and offer to prepare a clearly labeled adjusted EBITDA figure instead.',
+        'C. Request a meeting to explain the disclosure requirements and the liability risk before proceeding.',
+        'D. Prepare the standard figures and provide a supplementary memo explaining what the "clean" number excludes.'
+      ],
+      // WRONG: A (0). Restating figures without disclosure at ownership's direction is a financial integrity failure — potentially fraudulent misrepresentation.
+      // B is correct and assertive (score 5).
+      // C is correct — explains risk before complying (score 4).
+      // D is a workable alternative that maintains transparency (score 4).
+      wrong: 'A',
+      wrongWhy: 'Restating financial results to omit an expense without disclosure — at ownership\'s request — is not the Controller\'s role to execute. This creates misrepresentation risk. The correct response is to offer a properly disclosed alternative.',
+      sc: { A: 0, B: 5, C: 4, D: 4 }
+    },
+    {
+      id: 28, type: 'trade', group: 'Scenarios',
+      text: 'You discover that a long-tenured accounts payable clerk has been approving small vendor invoices for personal services — under $200 each, totaling about $3,800 over 8 months — that appear to be for a side business.',
+      context: 'What is the wrong answer?',
+      opts: [
+        'A. Confront the employee privately and give them the opportunity to repay before involving anyone else.',
+        'B. Document your findings, secure the records, and report immediately to ownership or HR per policy.',
+        'C. Conduct a controlled internal review of all AP approvals for the past 12 months before taking action.',
+        'D. Remove the employee\'s AP approval authority immediately while the matter is investigated.'
+      ],
+      // WRONG: A (0). Handling a suspected fraud case informally and privately before engaging ownership or HR destroys the chain of evidence, creates liability, and gives the employee time to cover tracks.
+      // B is correct — document, secure, report (score 5).
+      // C controlled review first is reasonable but D or B should accompany it (score 3).
+      // D immediate authority removal while investigating is appropriate protective action (score 4).
+      wrong: 'A',
+      wrongWhy: 'Private confrontation before securing documentation and involving ownership or HR is never the correct response to suspected employee fraud. It compromises the investigation and creates legal exposure for the organization and the Controller.',
+      sc: { A: 0, B: 5, C: 3, D: 4 }
+    },
+    {
+      id: 29, type: 'trade', group: 'Scenarios',
+      text: 'The operations director tells you informally that response time numbers for a specific zone have been manually adjusted in the weekly summary report sent to ownership to "smooth out" an outlier week.',
+      context: 'What is the wrong answer?',
+      opts: [
+        'A. Do nothing — this is an operational reporting issue outside the Controller\'s scope.',
+        'B. Document the conversation and escalate to ownership directly with accurate data.',
+        'C. Raise it with the operations director first and give them an opportunity to correct it before escalating.',
+        'D. Confirm that it has not affected any financial or billing data and flag it to ownership regardless.'
+      ],
+      // WRONG: A (0). Staying silent on known data manipulation in reports to ownership — even operational KPIs — is a conduct failure for a senior finance officer. The Controller has an obligation to accurate reporting to ownership regardless of source.
+      // B is most direct and correct (score 5).
+      // C is reasonable as a first step (score 3).
+      // D is correct — verifies financial exposure first, then escalates (score 4).
+      wrong: 'A',
+      wrongWhy: 'The Controller has an organizational obligation to accurate reporting to ownership. Staying silent on known manipulation in ownership-facing reports — operational or financial — is not a neutral choice. It is an active failure of the role.',
+      sc: { A: 0, B: 5, C: 3, D: 4 }
+    },
+    {
+      id: 30, type: 'trade', group: 'Scenarios',
+      text: 'You are 10 days into month-end close and realize the close will not be complete in 15 days as expected. The delay is caused by a reconciliation issue your team identified that requires investigation.',
+      context: 'What is the wrong answer?',
+      opts: [
+        'A. Notify ownership proactively — explain the cause, estimate the revised timeline, and confirm the reconciliation issue is being resolved.',
+        'B. Skip the investigation and complete the close on time with a note that the reconciliation is pending review.',
+        'C. Prioritize resolving the reconciliation issue — deliver on day 18 with a clean close rather than day 15 with a known open item.',
+        'D. Notify ownership and offer two options: a clean close on day 18, or a preliminary close on day 15 with the reconciliation flagged clearly.'
+      ],
+      // WRONG: B (0). Completing close on time while leaving a known reconciliation issue unresolved and buried in a note is not an acceptable outcome — it produces inaccurate financials.
+      // A is correct communication behavior (score 4).
+      // C prioritizes accuracy over arbitrary deadline — acceptable (score 4).
+      // D is the strongest answer — offers options, maintains transparency (score 5).
+      wrong: 'B',
+      wrongWhy: 'Closing on time while skipping the investigation of a known reconciliation issue is never acceptable. It produces financials the Controller cannot stand behind. A late but accurate close — communicated proactively — is always preferable.',
+      sc: { A: 4, B: 0, C: 4, D: 5 }
+    },
+    {
+      id: 31, type: 'trade', group: 'Scenarios',
+      text: 'A key member of your accounting team makes a significant documentation error that results in a vendor being overpaid by $14,000. It is their first major error. The vendor has confirmed they will return the funds.',
+      context: 'What is the wrong answer?',
+      opts: [
+        'A. Recover the funds, document the incident, and use it as a coaching moment — no formal action given it is a first occurrence.',
+        'B. Give them a pass since the funds are being recovered — document it in your personal notes only.',
+        'C. Recover the funds, document the incident formally, identify the process gap that allowed it, and implement a control to prevent recurrence.',
+        'D. Recover the funds, formally document the error, and have a direct conversation about expectations and consequences for recurrence.'
+      ],
+      // WRONG: B (0). Personal notes only — no formal documentation — is the only wrong answer. It leaves no organizational record, prevents progressive accountability, and hides a process failure.
+      // A is a reasonable response for a first occurrence (score 3).
+      // C is the most complete response — recovers funds, documents, fixes process (score 5).
+      // D adds clear expectations for recurrence — also strong (score 4).
+      wrong: 'B',
+      wrongWhy: 'Documenting a $14,000 error in personal notes only — with no formal record — removes the ability to hold the employee accountable for recurrence and conceals a process gap that must be addressed. A first occurrence warrants coaching, not concealment.',
+      sc: { A: 3, B: 0, C: 5, D: 4 }
+    },
   ]
 },
 
-// ── S5: Teamwork & Communication (Q43–50) ────────────────────────
-// Weight 10% | group: Teamwork
+// ────────────────────────────────────────────────────────────
+// SECTION 5 — Self-Disclosure & Validity (Q32–35)
+// Disclosed facts + validity checks.
+// Group: "Disclosure" (Q32–34) and "Validity" (Q35)
+// ────────────────────────────────────────────────────────────
 {
-  name:'Teamwork & Communication', eye:'Section 5 of 7',
-  badge:'badge-likert', badgeTxt:'Attitude & Values',
-  desc:'How you work with crews, supervisors, and fellow dispatchers.',
-  qs:[
-    { id:43, type:'likert', group:'Teamwork', rev:false,
-      text:'I communicate clearly and concisely under time pressure.' },
-    { id:44, type:'likert', group:'Teamwork', rev:false,
-      text:'I support coworkers during high-volume periods even when it is not strictly my responsibility.' },
-    { id:45, type:'likert', group:'Teamwork', rev:true,
-      text:'Keeping information to myself sometimes gives me an advantage in the workplace.',
-      rf:['Agree','Strongly Agree'],
-      rfWhy:'Information hoarding in a dispatch environment endangers operational continuity. Any agreement suggests a pattern incompatible with team-critical communications work.' },
-    { id:46, type:'likert', group:'Teamwork', rev:false,
-      text:'I respond to requests from supervisors and coworkers promptly and professionally.' },
-    { id:47, type:'likert', group:'Teamwork', rev:false,
-      text:'I accept feedback and constructive criticism without becoming defensive.' },
-    { id:48, type:'likert', group:'Teamwork', rev:false,
-      text:'I treat field crews with the same respect I expect in return.' },
-    { id:49, type:'likert', group:'Teamwork', rev:true,
-      text:'If a coworker is not pulling their weight, the best approach is to say nothing and work around them.',
-      rf:['Agree','Strongly Agree'],
-      rfWhy:'Passive avoidance of team performance issues allows problems to compound. In dispatch, one person not performing affects system-wide response capability.' },
-    { id:50, type:'likert', group:'Teamwork', rev:false,
-      text:'I keep my supervisor informed of issues that could affect system performance.' },
-  ]
-},
-
-// ── S6: Dispatch Scenarios (Q51–58) ──────────────────────────────
-// Weight 20% | group: SituationalJudgment
-// MCQ — explicit sc map, flag on worst answer
-{
-  name:'Dispatch Scenarios', eye:'Section 6 of 7',
-  badge:'badge-scenario', badgeTxt:'Situational Judgment',
-  desc:'Each scenario describes a realistic dispatch situation. Select the response that best reflects how you would handle it.',
-  qs:[
-    { id:51, type:'mcq', group:'SituationalJudgment',
-      text:'You receive an emergency call but the address the caller gives does not match anything in Logis. The caller sounds distressed. What do you do?',
-      opts:['A. Dispatch the nearest unit to the approximate area and wait for them to locate it','B. Put the caller on hold and attempt to look up the address manually before dispatching','C. Ask the caller clarifying questions to confirm the address while simultaneously dispatching the closest unit to the best available location','D. Tell the caller you cannot send anyone until you have a verified address'],
-      // C=best (5): gathers info AND moves unit simultaneously — correct parallel action
-      // A=acceptable but not best (3): moves unit but no address clarification
-      // B=dangerous (1): hold + manual lookup delays dispatch
-      // D=worst (0): withholding response pending verification = patient safety failure
-      sc:{A:3,B:1,C:5,D:0}, flag:'D',
-      flagWhy:'Refusing to dispatch until an address is verified leaves a distressed caller without help. Address clarification and unit movement must happen in parallel, not sequence.' },
-
-    { id:52, type:'mcq', group:'SituationalJudgment',
-      text:'A field crew calls in to tell you they are going to be significantly delayed at the hospital. You have two pending IFT calls waiting for units and your supervisor is on break. What do you do?',
-      opts:['A. Wait for your supervisor to return before making any deployment decisions','B. Attempt to redeploy available units and document your actions, then notify the supervisor when they return','C. Tell the waiting callers there will be a delay and take no further action','D. Dispatch the delayed crew anyway and hope they clear the hospital in time'],
-      // B=best (5): takes appropriate action within dispatcher authority and documents
-      // A=wrong (0): inaction when supervisor is momentarily unavailable is not acceptable
-      // C=insufficient (2): communicates delay but makes no attempt to solve it
-      // D=risky (1): dispatching a crew still at hospital creates a unit status error
-      sc:{A:0,B:5,C:2,D:1}, flag:'A',
-      flagWhy:'Waiting for supervisor return before making any deployment decisions — when calls are pending — is operational inaction. Dispatchers are expected to act within their authority and document.' },
-
-    { id:53, type:'mcq', group:'SituationalJudgment',
-      text:'During a busy shift you notice a coworker dispatcher handling calls in a way that seems to skip the standard triage protocol. No harm has occurred yet. What do you do?',
-      opts:['A. Say nothing — it is not your place to correct a coworker','B. Wait until the end of shift and mention it to your supervisor','C. Raise it with the coworker directly and professionally during a pause, and notify your supervisor','D. Immediately call out the coworker over the radio so everyone is aware'],
-      // C=best (5): direct professional feedback + supervisor notification
-      // B=acceptable (3): escalates but delays — better than nothing
-      // A=worst (0): silence on a protocol issue is a patient safety risk
-      // D=wrong (1): public radio callout is unprofessional and creates conflict
-      sc:{A:0,B:3,C:5,D:1}, flag:'A',
-      flagWhy:'Staying silent when a coworker is skipping triage protocol — even if no harm has occurred yet — is a patient safety failure. Protocol gaps must be raised.' },
-
-    { id:54, type:'mcq', group:'SituationalJudgment',
-      text:'A caller becomes verbally abusive toward you during a non-emergency call. They are using profane language and threatening language. What is the correct response?',
-      opts:['A. Respond with equal firmness — let them know their behavior is unacceptable in strong terms','B. Hang up immediately to protect yourself from the abuse','C. Remain calm and professional, attempt to de-escalate, and document the incident afterward','D. Transfer the call to a coworker without explaining the situation'],
-      // C=best (5): calm, professional, de-escalate, document
-      // A=wrong (0): matching aggression escalates and is unprofessional
-      // B=risky (1): hanging up on a caller — even abusive — may abandon someone who needs help
-      // D=poor (2): offloading without context puts coworker at disadvantage
-      sc:{A:0,B:1,C:5,D:2}, flag:'A',
-      flagWhy:'Responding to an abusive caller with matching firmness or escalating language is unprofessional and risks escalating the situation. De-escalation is always the correct initial response.' },
-
-    { id:55, type:'mcq', group:'SituationalJudgment',
-      text:'You realize mid-shift that you entered the wrong unit number in a completed call record from two hours ago. The call is closed. What do you do?',
-      opts:['A. Leave it — the call is closed and no one will notice','B. Correct it yourself with no notation about what changed','C. Flag it to your supervisor, correct the record with a dated notation about the amendment','D. Wait and see if anyone brings it up before deciding whether to fix it'],
-      // C=best (5): correct + document the correction + notify supervisor
-      // A=worst (0): leaving a known error in records
-      // B=partial (2): corrects but leaves no audit trail
-      // D=avoidance (1): delay tactics on a documentation error is misconduct risk
-      sc:{A:0,B:2,C:5,D:1}, flag:'A',
-      flagWhy:'Leaving a known documentation error because the call is closed is an integrity failure. Dispatch records are legal and operational documents — errors must be corrected and noted.' },
-
-    { id:56, type:'mcq', group:'SituationalJudgment',
-      text:'A hospital coordinator you speak with regularly asks you to tell them the status of a specific patient transport that is outside your assigned zone, because they are in a hurry.',
-      opts:['A. Pull up the information and share it — you know this person and they have a legitimate reason','B. Tell them you cannot access that information from your position and direct them to the appropriate contact','C. Look it up but only share the most basic status, not the full record','D. Tell them you will get back to them and then share it after your shift'],
-      // B=best (5): correct boundary — redirect appropriately
-      // A=worst (0): accessing and sharing out-of-scope information regardless of relationship = data breach risk
-      // C=wrong (1): partial access/sharing is still unauthorized
-      // D=wrong (1): delaying doesn't change the nature of the access
-      sc:{A:0,B:5,C:1,D:1}, flag:'A',
-      flagWhy:'Sharing patient transport information outside your authorized zone — regardless of your relationship with the requestor — is an unauthorized disclosure. Relationship does not grant access.' },
-
-    { id:57, type:'mcq', group:'SituationalJudgment',
-      text:'You are extremely busy and a new dispatcher colleague makes several errors on back-to-back calls. Your supervisor is aware but has not intervened yet. The errors are creating additional work for you.',
-      opts:['A. Snap at the colleague — you are under pressure and they need to do better','B. Say nothing and absorb the extra work without comment','C. Briefly and professionally point out the errors to the colleague, offer to help, and flag the pattern to your supervisor at an appropriate moment','D. Loudly complain to other dispatchers about the colleague\'s performance'],
-      // C=best (5): professional, constructive, escalates appropriately
-      // A=wrong (0): stress-driven aggression at a colleague
-      // B=poor (2): silent suffering creates resentment and doesn't solve the problem
-      // D=wrong (1): gossip/public complaint is unprofessional and creates team conflict
-      sc:{A:0,B:2,C:5,D:1}, flag:'A',
-      flagWhy:'Snapping at a struggling colleague under pressure is an emotional stability and professionalism red flag. The correct response is professional, brief correction followed by appropriate escalation.' },
-
-    { id:58, type:'mcq', group:'SituationalJudgment',
-      text:'You receive a call from someone claiming to be a family member of a patient currently in transport, asking for the crew\'s current location and ETA.',
-      opts:['A. Provide the information — they are worried about their family member and it seems harmless','B. Verify their identity through your standard process and provide only the information your protocol authorizes','C. Refuse all information and hang up','D. Transfer to the crew directly so they can decide what to share'],
-      // B=best (5): protocol-driven — verify identity, provide only authorized info
-      // A=worst (0): unverified third-party disclosure of crew location/PHI
-      // C=poor (2): refusal without a redirect is unhelpful and may escalate a distressed caller
-      // D=risky (1): bypasses the dispatch protocol, distracts crew in transport
-      sc:{A:0,B:5,C:2,D:1}, flag:'A',
-      flagWhy:'Providing crew location and patient ETA to an unverified caller is a privacy and security violation. Family members have legitimate needs but identity verification and protocol must come first.' },
-  ]
-},
-
-// ── S7: Misconduct Risk & Validity (Q59–65) ──────────────────────
-// Weight 10% | groups: MisconductRisk, Validity
-{
-  name:'Work Attitudes & Final Section', eye:'Section 7 of 7',
-  badge:'badge-risk', badgeTxt:'Conduct & Validity',
-  desc:'A final set of attitude questions. Answer based on your genuine views.',
-  qs:[
-    { id:59, type:'likert', group:'MisconductRisk', rev:true,
-      text:'Workplace rules are often excessive and can reasonably be ignored when they slow things down.',
-      rf:['Agree','Strongly Agree'],
-      rfWhy:'Any agreement with selectively ignoring workplace rules is a misconduct risk indicator, particularly for a role where protocol compliance is non-negotiable.' },
-    { id:60, type:'likert', group:'MisconductRisk', rev:false,
-      text:'Taking small amounts of paid time that I have not actually worked would constitute theft.' },
-    { id:61, type:'likert', group:'MisconductRisk', rev:true,
-      text:'If a coworker bends a rule without getting caught, it is reasonable to assume that rule does not really matter.',
-      rf:['Agree','Strongly Agree'],
-      rfWhy:'Inferring that a rule is unimportant because it went unenforced is a rationalization pattern commonly found in policy violators.' },
-    { id:62, type:'likert', group:'MisconductRisk', rev:false,
-      text:'Consistently reliable performance on ordinary, everyday tasks is just as important as performing well in high-pressure moments.' },
-    { id:63, type:'likert', group:'MisconductRisk', rev:true,
-      text:'Being a few minutes late on a regular basis is not a serious issue as long as the work gets done.',
-      rf:['Agree','Strongly Agree'],
-      rfWhy:'Dispatch operates on shift handoffs where every minute of coverage matters. Normalizing habitual lateness signals unreliability in a role where on-time presence is operational.' },
-    // Validity items (Q64–65)
-    { id:64, type:'likert', group:'Validity', rev:false,
-      text:'I have never made a mistake at work.',
-      rf:['Agree','Strongly Agree'],
-      rfWhy:'Validity check. No one with real work experience has a perfect record. Agreement signals either extremely limited experience or socially desirable responding.' },
-    { id:65, type:'likert', group:'Validity', rev:false,
-      text:'I have always followed every workplace rule perfectly and without exception.',
-      rf:['Agree','Strongly Agree'],
-      rfWhy:'Validity check. Perfect rule compliance is implausible. Agreement suggests the candidate is presenting an idealized rather than accurate self-image — interpret all scores with additional caution.' },
+  name: 'Self-Disclosure & Validity',
+  eye: 'Section 5 of 5',
+  badge: 'badge-disc',
+  badgeTxt: 'Verifiable Disclosures',
+  qs: [
+    {
+      id: 32, type: 'disc', group: 'Disclosure',
+      text: 'In your most recent Controller or senior finance role, how would you describe your month-end close timeline?',
+      opts: [
+        'A. Close was typically completed in 10–15 days with a structured process.',
+        'B. Close was completed in 15–25 days depending on the complexity of the month.',
+        'C. Close timeline was not formally tracked — we closed when it was complete.',
+        'D. Close regularly took 30 or more days due to the complexity of our operations.'
+      ],
+      // A: Strong (score 5). Meets the 15-day target.
+      // B: Acceptable — longer but shows process awareness (score 3).
+      // C: Flag — no formal close tracking is a process maturity concern (score 1, flag).
+      // D: Flag — 30+ days is below standard for this role (score 0, flag).
+      sc: { A: 5, B: 3, C: 1, D: 0 },
+      flag: ['C','D'],
+      flagWhy: 'C and D both indicate close timelines that fall significantly below the 15-day target. Probe in oral board: what specifically caused the extended timeline and what improvements did they make?'
+    },
+    {
+      id: 33, type: 'disc', group: 'Disclosure',
+      text: 'Have you ever personally identified a material billing or revenue discrepancy that others had missed?',
+      opts: [
+        'A. Yes — I discovered it through reconciliation and can describe the specific situation, dollar amount, and how I resolved it.',
+        'B. Yes — I noticed something seemed off and flagged it, but the investigation was handled by others.',
+        'C. I have not had a situation where a significant discrepancy came to my attention through my own review.',
+        'D. Our billing was handled entirely by a third party — I was not in a position to identify discrepancies.'
+      ],
+      // A: Strong — concrete, specific, personally led (score 5).
+      // B: Moderate — identified but did not lead resolution (score 3).
+      // C: Flag — no proactive identification of billing errors suggests limited oversight habit (score 1, flag).
+      // D: Hard flag — outsourcing without oversight is exactly the failure mode this role prevents (score 0, flag).
+      sc: { A: 5, B: 3, C: 1, D: 0 },
+      flag: ['C','D'],
+      flagWhy: 'C and D both indicate a lack of active billing oversight — the most critical function for this role. A Controller who has never personally caught a billing discrepancy either was not looking or was not empowered to. Probe in oral board.'
+    },
+    {
+      id: 34, type: 'disc', group: 'Disclosure',
+      text: 'Have you ever pushed back on a decision by ownership or a senior leader regarding financial reporting or a fiscal practice you believed was incorrect or risky?',
+      opts: [
+        'A. Yes — I documented my position, presented the risk clearly, and held the position despite pressure.',
+        'B. Yes — I raised it verbally but backed down when they disagreed.',
+        'C. I have raised concerns but typically deferred to leadership once they made their position clear.',
+        'D. I have not encountered a situation where I needed to push back on ownership or leadership on a financial matter.'
+      ],
+      // A: Strong — documented, held position (score 5).
+      // B: Moderate — raised but did not hold under pressure (score 2, soft flag).
+      // C: Flag — pattern of deference on financial matters is a compliance risk (score 1, flag).
+      // D: Flag — no history of pushback may indicate limited scope or avoidance (score 1, flag).
+      sc: { A: 5, B: 2, C: 1, D: 1 },
+      flag: ['B','C','D'],
+      flagWhy: 'A Controller who consistently defers to leadership on financial matters — or has never needed to push back — is not functioning as an organizational check. Probe for specific examples of holding or caving under pressure.'
+    },
+    {
+      id: 35, type: 'validity', group: 'Validity',
+      text: 'Which of the following best describes your experience with financial close and reporting?',
+      opts: [
+        'A. I have always completed every close on time with zero errors.',
+        'B. I have generally met close timelines with occasional minor adjustments needed after initial submission.',
+        'C. I have had periods where close took longer than expected and have learned from those experiences.',
+        'D. I have always caught every financial error before it reached ownership or external parties.'
+      ],
+      // A: Validity flag — "always" and "zero errors" is implausible (flag, score 1).
+      // B: Realistic and professional (score 5).
+      // C: Realistic — shows self-awareness and growth (score 4).
+      // D: Validity flag — "always caught every error" is implausible (flag, score 1).
+      sc: { A: 1, B: 5, C: 4, D: 1 },
+      flag: ['A','D'],
+      flagWhy: 'Answers A and D both represent implausible claims of perfection. A Controller claiming a flawless record without qualification is either misrepresenting their experience or lacks the self-awareness this role requires.'
+    },
   ]
 },
 
 ]; // end SECTIONS
 
-// ── CATEGORY DISPLAY CONFIG ───────────────────────────────────────
+// ============================================================
+// CATEGORY DISPLAY CONFIG
+// ============================================================
 const CATS = [
-  { key:'Integrity',          label:'Work Integrity',           color:'#1A2B45' },
-  { key:'Confidentiality',    label:'Info. Handling',           color:'#6B2D00' },
-  { key:'Safety',             label:'Safety & Protocol',        color:'#1E5C35' },
-  { key:'StressTolerance',    label:'Stress Tolerance',         color:'#4A1D6E' },
-  { key:'Teamwork',           label:'Teamwork & Comms',         color:'#00525C' },
-  { key:'SituationalJudgment',label:'Situational Judgment',     color:'#5C3A00' },
-  { key:'MisconductRisk',     label:'Conduct Risk',             color:'#8C1F1F' },
+  { key: 'Integrity',  label: 'Financial Integrity',     color: '#1b2d4a', max: null },
+  { key: 'Conduct',    label: 'Professional Conduct',    color: '#4a7c1b', max: null },
+  { key: 'Knowledge',  label: 'Technical Knowledge',     color: '#7c4a1b', max: null },
+  { key: 'Scenarios',  label: 'Conduct Scenarios',       color: '#7c1b1b', max: null },
+  { key: 'Disclosure', label: 'Self-Disclosure',         color: '#1b5c7c', max: null },
 ];
 
-// Weighted composite (Validity excluded from score)
-const WEIGHTS = {
-  Integrity: 0.25, Confidentiality: 0.20, Safety: 0.20,
-  StressTolerance: 0.15, Teamwork: 0.10, SituationalJudgment: 0.20
-};
-
-// ── STATE ─────────────────────────────────────────────────────────
+// ============================================================
+// STATE
+// ============================================================
 let cand = {};
-let ans  = {};   // id → answer string (Likert label or 'A'/'B'/'C'/'D')
-let sec  = 0;
+let ans = {};
+let sec = 0;
 
-// ── START ─────────────────────────────────────────────────────────
+// ============================================================
+// START
+// ============================================================
 function start() {
   const fn = document.getElementById('i-fn').value.trim();
   const ln = document.getElementById('i-ln').value.trim();
   const em = document.getElementById('i-em').value.trim();
-  if (!fn||!ln||!em) { alert('Please enter your first name, last name, and email to begin.'); return; }
+  if (!fn || !ln || !em) { alert('Please enter your first name, last name, and email to begin.'); return; }
   cand = {
     firstName: fn,
     lastName: ln,
-    name: fn+' '+ln,
-    email: em,
+    name: fn + ' ' + ln, email: em,
     phone: document.getElementById('i-ph').value.trim(),
-    pos: document.getElementById('i-pos').value.trim() || 'Dispatcher',
-    position: document.getElementById('i-pos').value.trim() || 'Dispatcher',
-    date: new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'}),
+    pos: document.getElementById('i-pos').value.trim() || 'Controller',
+    date: new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }),
     completionDate: new Date().toISOString().split('T')[0]
   };
   document.getElementById('screen-welcome').style.display = 'none';
   document.getElementById('screen-assessment').style.display = 'block';
   document.getElementById('hdr-right').style.display = 'flex';
-  sec = 0; render();
+  sec = 0;
+  render();
 }
 
-// ── RENDER SECTION ────────────────────────────────────────────────
+// ============================================================
+// RENDER
+// ============================================================
 function render() {
   const s = SECTIONS[sec];
-  document.getElementById('sec-eye').textContent  = s.eye;
-  document.getElementById('sec-h').textContent    = s.name;
-  document.getElementById('sec-desc').textContent = s.desc;
+  document.getElementById('sec-eye').textContent = s.eye;
+  document.getElementById('sec-h').textContent = s.name;
   const badge = document.getElementById('sec-badge');
   badge.className = 'sec-badge ' + s.badge;
   badge.textContent = s.badgeTxt;
@@ -767,334 +848,505 @@ function render() {
   const c = document.getElementById('q-container');
   c.innerHTML = '';
 
-  s.qs.forEach(q => {
+  s.qs.forEach((q, i) => {
     const card = document.createElement('div');
     card.className = 'q-card' + (ans[q.id] !== undefined ? ' answered' : '');
     card.id = 'qc' + q.id;
-    card.innerHTML = '<div class="q-num">Question ' + q.id + ' of 65</div>' +
-                     '<div class="q-text">' + q.text + '</div>';
-    card.appendChild(q.type === 'likert' ? buildLikert(q) : buildMCQ(q));
+
+    let html = '<div class="q-num">Question ' + q.id + ' of 35</div>';
+    if (q.context) html += '<div class="q-context">' + q.context + '</div>';
+    html += '<div class="q-text">' + q.text + '</div>';
+    card.innerHTML = html;
+
+    if (q.type === 'likert') {
+      card.appendChild(buildLikert(q));
+    } else {
+      card.appendChild(buildMCQ(q));
+    }
+
     c.appendChild(card);
   });
 
   document.getElementById('btn-prev').style.display = sec > 0 ? 'inline-flex' : 'none';
-  document.getElementById('btn-next').textContent = sec === SECTIONS.length-1 ? 'Submit Assessment' : 'Next Section →';
+  document.getElementById('btn-next').textContent = sec === SECTIONS.length - 1 ? 'Submit Assessment' : 'Next Section →';
   upProg();
-  window.scrollTo({top:0,behavior:'smooth'});
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 function buildLikert(q) {
   const wrap = document.createElement('div');
   const lw = document.createElement('div');
-  lw.className = 'likert-wrap'; lw.id = 'lw'+q.id;
+  lw.className = 'likert-wrap';
+  lw.id = 'lw' + q.id;
   LIKERT.forEach(lbl => {
-    const o = document.createElement('div');
-    o.className = 'l-opt' + (ans[q.id]===lbl ? ' sel' : '');
-    o.textContent = lbl;
-    o.onclick = () => {
-      lw.querySelectorAll('.l-opt').forEach(x=>x.classList.remove('sel'));
-      o.classList.add('sel');
+    const opt = document.createElement('div');
+    opt.className = 'l-opt' + (ans[q.id] === lbl ? ' selected' : '');
+    opt.textContent = lbl;
+    opt.onclick = () => {
+      lw.querySelectorAll('.l-opt').forEach(o => o.classList.remove('selected'));
+      opt.classList.add('selected');
       ans[q.id] = lbl;
-      document.getElementById('qc'+q.id).classList.add('answered');
+      document.getElementById('qc' + q.id).classList.add('answered');
       upProg();
     };
-    lw.appendChild(o);
+    lw.appendChild(opt);
   });
   const ends = document.createElement('div');
   ends.className = 'likert-ends';
   ends.innerHTML = '<span>Strongly Disagree</span><span>Strongly Agree</span>';
-  wrap.appendChild(lw); wrap.appendChild(ends);
+  wrap.appendChild(lw);
+  wrap.appendChild(ends);
   return wrap;
 }
 
 function buildMCQ(q) {
   const letters = ['A','B','C','D'];
   const wrap = document.createElement('div');
-  wrap.className = 'opts'; wrap.id = 'mw'+q.id;
-  q.opts.forEach((txt,i) => {
-    const l = letters[i];
-    const rid = 'r'+q.id+l;
+  wrap.className = 'opts';
+  wrap.id = 'mw' + q.id;
+  q.opts.forEach((txt, i) => {
+    const letter = letters[i];
+    const rid = 'r' + q.id + letter;
     const radio = document.createElement('input');
-    radio.type='radio'; radio.name='q'+q.id; radio.id=rid;
-    radio.value=l; radio.className='opt-r';
-    if (ans[q.id]===l) radio.checked = true;
+    radio.type = 'radio';
+    radio.name = 'q' + q.id;
+    radio.id = rid;
+    radio.value = letter;
+    radio.className = 'opt-radio';
+    if (ans[q.id] === letter) radio.checked = true;
     radio.onchange = () => {
-      ans[q.id] = l;
-      document.getElementById('qc'+q.id).classList.add('answered');
+      ans[q.id] = letter;
+      document.getElementById('qc' + q.id).classList.add('answered');
       upProg();
     };
     const label = document.createElement('label');
-    label.htmlFor=rid; label.className='opt-l';
-    label.innerHTML = '<span class="opt-key">'+l+'</span>'+txt;
-    wrap.appendChild(radio); wrap.appendChild(label);
+    label.htmlFor = rid;
+    label.className = 'opt-label';
+    label.innerHTML = '<span class="opt-key">' + letter + '</span>' + txt;
+    wrap.appendChild(radio);
+    wrap.appendChild(label);
   });
   return wrap;
 }
 
 function upProg() {
-  const total = 65;
+  const total = 35;
   const done = Object.keys(ans).length;
-  document.getElementById('prog-txt').textContent = done+' / '+total;
-  document.getElementById('prog-bar').style.width = Math.round(done/total*100)+'%';
+  document.getElementById('prog-txt').textContent = done + ' / ' + total;
+  document.getElementById('prog-bar').style.width = Math.round(done / total * 100) + '%';
   const s = SECTIONS[sec];
   const secDone = s.qs.filter(q => ans[q.id] !== undefined).length;
-  document.getElementById('nav-info').textContent = secDone+' of '+s.qs.length+' answered this section';
+  document.getElementById('nav-info').textContent = secDone + ' of ' + s.qs.length + ' answered';
 }
 
-function prev() { if (sec>0) { sec--; render(); } }
+function prev() { if (sec > 0) { sec--; render(); } }
 
 function next() {
-  const missing = SECTIONS[sec].qs.filter(q => ans[q.id]===undefined);
+  const s = SECTIONS[sec];
+  const missing = s.qs.filter(q => ans[q.id] === undefined);
   if (missing.length) {
-    alert('Please answer all questions before continuing. ('+missing.length+' remaining)');
-    document.getElementById('qc'+missing[0].id).scrollIntoView({behavior:'smooth',block:'center'});
+    alert('Please answer all questions before continuing. (' + missing.length + ' remaining)');
+    document.getElementById('qc' + missing[0].id).scrollIntoView({ behavior: 'smooth', block: 'center' });
     return;
   }
-  if (sec < SECTIONS.length-1) { sec++; render(); }
-  else showResults();
+  if (sec < SECTIONS.length - 1) { sec++; render(); }
+  else submitAssessment();
 }
 
-// ── SCORING ENGINE ────────────────────────────────────────────────
-// Likert: STANDARD SD=1..SA=5 | REVERSE SD=5..SA=1
-function scoreLikert(q, a) {
-  const raw = LIKERT.indexOf(a) + 1; // 1–5
+// ============================================================
+// SCORING ENGINE
+// ============================================================
+
+// Score a single likert response
+// STANDARD: SD=1 D=2 N=3 A=4 SA=5
+// REVERSE:  SD=5 D=4 N=3 A=2 SA=1
+function scoreLikert(q, response) {
+  const raw = LIKERT.indexOf(response) + 1; // 1–5
   return q.rev ? (6 - raw) : raw;
 }
 
-// MCQ: use explicit sc map
-function scoreQ(q, a) {
-  if (a === undefined) return 0;
-  if (q.type === 'likert') return scoreLikert(q, a);
-  return (q.sc[a] !== undefined) ? q.sc[a] : 0;
+// Score any question type — returns 0–5
+function scoreQ(q, response) {
+  if (response === undefined) return 0;
+  if (q.type === 'likert') return scoreLikert(q, response);
+  // mcq, trade, disc, validity — explicit score map
+  return q.sc[response] !== undefined ? q.sc[response] : 0;
 }
 
-function computeScores() {
+function computeAll() {
+  // Collect scores per group
   const groups = {};
-  const maxG   = {};
+  const maxGroups = {};
 
   SECTIONS.forEach(s => {
     s.qs.forEach(q => {
-      if (q.group === 'Validity') return;
-      const v   = scoreQ(q, ans[q.id]);
-      const max = q.type === 'likert' ? 5 : Math.max(...Object.values(q.sc));
-      if (!groups[q.group]) { groups[q.group]=[]; maxG[q.group]=[]; }
+      if (q.group === 'Validity') return; // validity excluded from score
+      const v = scoreQ(q, ans[q.id]);
+      if (!groups[q.group]) { groups[q.group] = []; maxGroups[q.group] = []; }
       groups[q.group].push(v);
-      maxG[q.group].push(max);
+      // Max possible score for this question
+      if (q.type === 'likert') {
+        maxGroups[q.group].push(5);
+      } else {
+        maxGroups[q.group].push(Math.max(...Object.values(q.sc)));
+      }
     });
   });
 
-  // Average per group (1–5 scale)
-  const avg = {};
+  // Average per group as percentage of max possible
+  const groupPct = {};
   Object.keys(groups).forEach(g => {
-    const raw  = groups[g].reduce((a,b)=>a+b,0);
-    const mraw = maxG[g].reduce((a,b)=>a+b,0);
-    avg[g] = (raw / mraw) * 5; // normalise to 1–5
+    const totalRaw = groups[g].reduce((a, b) => a + b, 0);
+    const totalMax = maxGroups[g].reduce((a, b) => a + b, 0);
+    groupPct[g] = totalMax > 0 ? Math.round(totalRaw / totalMax * 100) : 0;
   });
 
-  // Weighted composite
+  // Weighted composite (out of 100)
+  // Integrity 25%, Conduct 20%, Knowledge 30%, Scenarios 15%, Disclosure 10%
+  const weights = { Integrity: 0.25, Conduct: 0.20, Knowledge: 0.30, Scenarios: 0.15, Disclosure: 0.10 };
   let composite = 0;
-  let wSum = 0;
-  Object.entries(WEIGHTS).forEach(([g,w]) => {
-    composite += (avg[g]||0) * w;
-    wSum += w;
+  Object.entries(weights).forEach(([g, w]) => {
+    composite += (groupPct[g] || 0) * w;
   });
-  composite = composite / wSum; // normalise (weights already sum to 1.1 → correct)
 
-  return { avg, composite };
+  return { groupPct, composite: Math.round(composite) };
 }
 
-// ── FLAG ENGINE ───────────────────────────────────────────────────
-// Likert: fires on q.rf answer(s) — independent of score
-// MCQ:    fires on q.flag letter — independent of score
 function getFlags() {
   const flags = [];
   SECTIONS.forEach(s => {
     s.qs.forEach(q => {
       const a = ans[q.id];
       if (a === undefined) return;
-
-      if (q.type === 'likert') {
-        if (q.rf && q.rf.includes(a)) {
-          flags.push({
-            q: q.text.substring(0,115)+(q.text.length>115?'…':''),
-            a: a,
-            why: q.rfWhy || ''
-          });
-        }
+      // Likert red flags (specific named answers)
+      if (q.type === 'likert' && q.rf && q.rf.includes(a)) {
+        flags.push({
+          q: q.text.substring(0, 110) + (q.text.length > 110 ? '…' : ''),
+          a: a,
+          why: q.rfWhy || ''
+        });
       }
-
-      if (q.type === 'mcq') {
-        if (q.flag && a === q.flag) {
-          flags.push({
-            q: q.text.substring(0,115)+(q.text.length>115?'…':''),
-            a: q.opts[['A','B','C','D'].indexOf(a)].substring(0,65),
-            why: q.flagWhy || ''
-          });
-        }
+      // MCQ wrong answer / trade flag
+      if (q.wrong && a === q.wrong) {
+        flags.push({
+          q: q.text.substring(0, 110) + (q.text.length > 110 ? '…' : ''),
+          a: q.opts[['A','B','C','D'].indexOf(a)].substring(0, 60),
+          why: q.wrongWhy || ''
+        });
+      }
+      // MCQ incorrect answer (knowledge questions)
+      if (q.correct && a !== q.correct) {
+        flags.push({
+          q: q.text.substring(0, 110) + (q.text.length > 110 ? '…' : ''),
+          a: 'Incorrect — chose ' + a + ': ' + q.opts[['A','B','C','D'].indexOf(a)].substring(0, 50),
+          why: q.correctWhy || ''
+        });
+      }
+      // Disclosure / validity flags
+      if (q.flag && q.flag.includes(a)) {
+        flags.push({
+          q: q.text.substring(0, 110) + (q.text.length > 110 ? '…' : ''),
+          a: q.opts[['A','B','C','D'].indexOf(a)].substring(0, 70),
+          why: q.flagWhy || ''
+        });
       }
     });
   });
   return flags;
 }
 
-function getValidityConcerns() {
-  return [64,65].filter(id => ['Agree','Strongly Agree'].includes(ans[id])).length;
+function getValidityFlags() {
+  const q35 = SECTIONS[4].qs.find(q => q.id === 35);
+  const a35 = ans[35];
+  if (!a35) return 0;
+  return (q35.flag && q35.flag.includes(a35)) ? 1 : 0;
 }
 
-function getVerdict(composite, redFlagCount, integrity, confidentiality) {
-  if (redFlagCount >= 4 || integrity < 3.0 || confidentiality < 3.0)
-    return { label:'Do Not Advance', cls:'vp-no' };
-  if (composite >= 4.2 && redFlagCount === 0)
-    return { label:'Recommended: Hire', cls:'vp-hire' };
-  if (composite >= 3.8 && redFlagCount <= 1)
-    return { label:'Hire with Review', cls:'vp-review' };
-  if (composite >= 3.4 && redFlagCount <= 2)
-    return { label:'Review Further', cls:'vp-review' };
-  return { label:'Do Not Advance', cls:'vp-no' };
-}
-
-// ── SHOW RESULTS ──────────────────────────────────────────────────
-async function showResults() {
-  document.getElementById('screen-assessment').style.display = 'none';
-  document.getElementById('screen-results').style.display = 'block';
-  document.getElementById('hdr-right').style.display = 'none';
-  window.scrollTo({top:0,behavior:'smooth'});
-
-  const results = document.getElementById('screen-results');
-  results.innerHTML = `
-    <div class="r-top">
-      <div class="v-pill vp-review">Submitting</div>
-      <div class="r-name">Submitting your assessment...</div>
-      <div class="r-meta">Please do not close this page yet.</div>
-    </div>
-  `;
-
-  const { avg, composite } = computeScores();
-  const flags    = getFlags();
-  const validity = getValidityConcerns();
-  const verdict  = getVerdict(composite, flags.length, avg['Integrity']||0, avg['Confidentiality']||0);
-  const completionDate = cand.completionDate || new Date().toISOString().split('T')[0];
-
-  let summary = '';
-  if (verdict.cls==='vp-hire') {
-    summary = 'This candidate demonstrates strong alignment with NWA dispatch standards across all measured dimensions. Scores indicate integrity, sound judgment, and a healthy approach to protocol compliance and information handling.';
-  } else if (verdict.cls==='vp-review') {
-    summary = 'This candidate shows generally positive work attitudes with some areas warranting discussion in the interview. Pay close attention to any red flags and probe confidentiality and protocol compliance directly.';
-  } else {
-    summary = 'This candidate\\'s responses indicate significant concerns in one or more critical areas. A thorough review is recommended before advancing. Hard stops in integrity or information handling should be discussed with the hiring manager before any next step.';
+function getVerdict(composite, flagCount, integrityPct, knowledgePct) {
+  if (flagCount >= 4 || integrityPct < 50 || knowledgePct < 45) {
+    return { label: 'Do Not Advance', cls: 'vp-no' };
   }
-  if ((avg['Integrity']||0)      < 3.8) summary += ' Work Integrity score ('+((avg['Integrity']||0).toFixed(1))+') is below target — probe documentation habits and rule compliance directly in interview.';
-  if ((avg['Confidentiality']||0)< 3.8) summary += ' Information Handling score ('+((avg['Confidentiality']||0).toFixed(1))+') warrants close attention — explore data access attitudes and privacy understanding.';
-  if ((avg['Safety']||0)         < 3.8) summary += ' Safety & Protocol score ('+((avg['Safety']||0).toFixed(1))+') is below target — probe protocol adherence under pressure.';
-  if ((avg['StressTolerance']||0)< 3.5) summary += ' Stress Tolerance score ('+((avg['StressTolerance']||0).toFixed(1))+') suggests potential concerns under high-volume operational conditions.';
-  if (validity >= 1) summary += ' Validity check flags suggest possible socially desirable responding — weight interview and reference checks more heavily than assessment scores.';
+  if (composite >= 82 && flagCount === 0) {
+    return { label: 'Recommended: Hire', cls: 'vp-hire' };
+  }
+  if (composite >= 72 && flagCount <= 2) {
+    return { label: 'Hire with Review', cls: 'vp-review' };
+  }
+  if (composite >= 60 && flagCount <= 3) {
+    return { label: 'Review Further', cls: 'vp-review' };
+  }
+  return { label: 'Do Not Advance', cls: 'vp-no' };
+}
 
-  const report = [
-    '=== Dispatcher Assessment Results ===',
-    '',
-    `Candidate: ${cand.name}`,
-    `Email:     ${cand.email}`,
-    `Phone:     ${cand.phone || 'N/A'}`,
-    `Position:  ${cand.position || cand.pos || 'Dispatcher'}`,
-    `Date:      ${completionDate}`,
-    '',
-    `RECOMMENDATION: ${verdict.label}`,
-    `Weighted Composite Score: ${composite.toFixed(2)} / 5.00`,
-    '',
-    '--- CATEGORY SCORES ---',
-    `Work Integrity:              ${(avg['Integrity']||0).toFixed(2)}`,
-    `Information Handling:        ${(avg['Confidentiality']||0).toFixed(2)}`,
-    `Safety & Protocol:           ${(avg['Safety']||0).toFixed(2)}`,
-    `Stress Tolerance:            ${(avg['StressTolerance']||0).toFixed(2)}`,
-    `Teamwork & Communication:    ${(avg['Teamwork']||0).toFixed(2)}`,
-    `Situational Judgment:        ${(avg['SituationalJudgment']||0).toFixed(2)}`,
-    `Conduct Risk:                ${(avg['MisconductRisk']||0).toFixed(2)}`,
-    '',
-    `Red Flag Count:    ${flags.length}`,
-    `Validity Concerns: ${validity}`,
-    '',
-    '--- SUMMARY ---',
-    summary,
-    '',
-    'Assessment: Dispatch'
-  ].join('\n');
+// ============================================================
+// SUBMISSION / HIDDEN RESULTS BEHAVIOR
+// ============================================================
+function buildAssessmentSummary(verdict, groupPct, validityFlag) {
+  let summaryText = '';
+  if (verdict.cls === 'vp-hire') {
+    summaryText = 'This candidate demonstrates strong financial integrity, solid technical knowledge, and professional conduct consistent with the Controller role at NW Ambulance. Scores are above threshold across all measured dimensions.';
+  } else if (verdict.cls === 'vp-review') {
+    summaryText = 'This candidate shows generally positive attributes with specific areas that warrant focused probing in the oral board. Pay close attention to any flagged responses — each is verifiable through reference checks.';
+  } else {
+    summaryText = 'This candidate\'s responses indicate significant concerns in one or more critical areas. A thorough review is required before advancing. Hard stops in integrity or knowledge should be discussed with the hiring manager before any next step.';
+  }
+  if ((groupPct['Integrity'] || 0) < 65) summaryText += ' Financial Integrity score (' + (groupPct['Integrity'] || 0) + '%) is below threshold — probe reporting practices and billing oversight directly.';
+  if ((groupPct['Knowledge'] || 0) < 60) summaryText += ' Technical Knowledge score (' + (groupPct['Knowledge'] || 0) + '%) indicates gaps — verify hands-on experience in close, reconciliation, and Washington State compliance.';
+  if ((groupPct['Scenarios'] || 0) < 60) summaryText += ' Conduct Scenarios score (' + (groupPct['Scenarios'] || 0) + '%) warrants close review — explore how the candidate handles reporting pressure and personnel issues.';
+  if (validityFlag) summaryText += ' Validity flag raised — one or more answers claimed implausible perfection. Weight oral board and reference checks more heavily.';
+  return summaryText;
+}
 
-  const redFlagResponses = flags.length ? [
-    '=== Red Flag Responses ===',
+function buildWorkableReport(data) {
+  const { groupPct, composite, flags, verdict, summaryText } = data;
+  const lines = [
+    'CONTROLLER ASSESSMENT — ' + cand.name.toUpperCase(),
+    'Position: ' + cand.pos + '   |   Date: ' + cand.date,
+    'Email: ' + cand.email + (cand.phone ? '   |   Phone: ' + cand.phone : ''),
     '',
-    ...flags.flatMap((f, i) => [
-      `Flag ${i + 1}`,
-      `Question: ${f.q}`,
-      `Candidate Response: ${f.a}`,
-      `Reason Flagged: ${f.why || 'Response matched a configured red-flag answer for this assessment.'}`,
-      '',
-      '--------------------------------------------------',
-      ''
-    ])
-  ].join('\n') : 'None';
+    'RECOMMENDATION: ' + verdict.label,
+    'Composite Score: ' + composite + ' / 100',
+    '',
+    'CATEGORY SCORES:',
+    '  Financial Integrity:     ' + (groupPct['Integrity'] || 0) + '%',
+    '  Professional Conduct:    ' + (groupPct['Conduct'] || 0) + '%',
+    '  Technical Knowledge:     ' + (groupPct['Knowledge'] || 0) + '%',
+    '  Conduct Scenarios:       ' + (groupPct['Scenarios'] || 0) + '%',
+    '  Self-Disclosure:         ' + (groupPct['Disclosure'] || 0) + '%',
+    '',
+    'FLAGS: ' + (flags.length > 0 ? flags.length + ' identified' : 'None'),
+    ...flags.map(f => '  • ' + f.q.substring(0, 80) + ' → ' + f.a.substring(0, 50)),
+    '',
+    'SUMMARY:',
+    summaryText,
+    '',
+    'Assessment: ' + ASSESSMENT_VERSION,
+    'NW Ambulance — Talent Acquisition · Confidential',
+  ];
+  return lines.join('\n');
+}
 
-  const submitted = await sendToFlow({
+function buildRedFlagResponses(flags) {
+  if (!flags.length) return '';
+  return flags.map((f, idx) =>
+    (idx + 1) + '. ' + f.q + ' | Response: ' + f.a + (f.why ? ' | Why flagged: ' + f.why : '')
+  ).join('\n');
+}
+
+function buildSubmissionPayload() {
+  const { groupPct, composite } = computeAll();
+  const flags = getFlags();
+  const validityFlag = getValidityFlags();
+  const verdict = getVerdict(
+    composite,
+    flags.length,
+    groupPct['Integrity'] || 0,
+    groupPct['Knowledge'] || 0
+  );
+  const summaryText = buildAssessmentSummary(verdict, groupPct, validityFlag);
+  const fullReport = buildWorkableReport({ groupPct, composite, flags, verdict, summaryText });
+  const redFlagResponses = buildRedFlagResponses(flags);
+
+  return {
+    // Same field names used by the production Leadership assessment flow.
     firstName: cand.firstName,
     lastName: cand.lastName,
     email: cand.email,
-    position: cand.position || cand.pos || 'Dispatcher',
-    assessmentType: 'Dispatch',
-    score: composite.toFixed(2),
+    position: cand.pos,
+    assessmentType: ASSESSMENT_TYPE,
+    score: composite.toString(),
     recommendation: verdict.label,
     redFlags: flags.length.toString(),
-    redFlagResponses: redFlagResponses,
-    completionDate: completionDate,
-    report: report
-  });
+    redFlagResponses: redFlagResponses || 'None',
+    completionDate: cand.completionDate,
+    report: fullReport,
 
-  if (submitted) {
-    results.innerHTML = `
-      <div class="r-top">
-        <div class="v-pill vp-hire">Submitted</div>
-        <div class="r-name">Thank you for submitting your assessment.</div>
-        <div class="r-meta">Please monitor your email for next steps from our hiring team.</div>
-      </div>
-      <div class="sum-box" style="text-align:center;">
-        Your assessment has been received. You may now close this page.
-      </div>
-    `;
-  } else {
-    results.innerHTML = `
-      <div class="r-top">
-        <div class="v-pill vp-review">Submission Issue</div>
-        <div class="r-name">We could not confirm your submission.</div>
-        <div class="r-meta">Please notify the hiring team that your assessment did not submit successfully.</div>
-      </div>
-      <div class="sum-box" style="text-align:center;">
-        You may keep this page open and contact the hiring team for next steps.
-      </div>
-    `;
+    // Extra fields are included for future troubleshooting/reporting.
+    phone: cand.phone,
+    compositeScore: composite,
+    redFlagCount: flags.length,
+    fullReport: fullReport,
+    categoryScores: {
+      financialIntegrity: groupPct['Integrity'] || 0,
+      professionalConduct: groupPct['Conduct'] || 0,
+      technicalKnowledge: groupPct['Knowledge'] || 0,
+      conductScenarios: groupPct['Scenarios'] || 0,
+      selfDisclosure: groupPct['Disclosure'] || 0
+    },
+    rawAnswers: ans,
+    assessmentVersion: ASSESSMENT_VERSION
+  };
+}
+
+async function submitAssessment() {
+  const btn = document.getElementById('btn-next');
+  btn.disabled = true;
+  btn.textContent = 'Submitting…';
+
+  const payload = buildSubmissionPayload();
+
+  if (!POWER_AUTOMATE_URL || POWER_AUTOMATE_URL.includes('PASTE_POWER_AUTOMATE')) {
+    console.error('Power Automate URL is not configured. Payload:', payload);
+    showThankYou('Power Automate URL is not configured yet. For testing, open the browser console to copy the payload.');
+    return;
+  }
+
+  try {
+    // Use text/plain to avoid browser CORS preflight issues from GitHub Pages.
+    // In Power Automate, parse the body with json(triggerBody()) if your trigger receives it as text.
+    await fetch(POWER_AUTOMATE_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify(payload)
+    });
+    showThankYou();
+  } catch (err) {
+    console.error('Submission failed:', err, payload);
+    showThankYou('Your assessment was completed, but the automatic submission could not be confirmed. Please notify the hiring team.');
   }
 }
 
-async function sendToFlow(data) {
-  try {
-    console.log('Dispatch assessment payload sent to Power Automate:', data);
-    const response = await fetch(FLOW_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data)
-    });
-    console.log('Power Automate response status:', response.status);
-    return response.ok;
-  } catch (e) {
-    console.error('Dispatch assessment submission failed', e);
-    return false;
+function showThankYou(message) {
+  document.getElementById('screen-assessment').style.display = 'none';
+  document.getElementById('screen-results').style.display = 'none';
+  document.getElementById('screen-thankyou').style.display = 'block';
+  document.getElementById('hdr-right').style.display = 'none';
+  if (message) {
+    const e = document.getElementById('submit-error');
+    e.style.display = 'block';
+    e.textContent = message;
   }
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ============================================================
+// SHOW RESULTS
+// ============================================================
+function showResults() {
+  document.getElementById('screen-assessment').style.display = 'none';
+  document.getElementById('screen-results').style.display = 'block';
+  document.getElementById('hdr-right').style.display = 'none';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  const { groupPct, composite } = computeAll();
+  const flags = getFlags();
+  const validityFlag = getValidityFlags();
+  const verdict = getVerdict(
+    composite,
+    flags.length,
+    groupPct['Integrity'] || 0,
+    groupPct['Knowledge'] || 0
+  );
+
+  // Header
+  const vp = document.getElementById('v-pill');
+  vp.textContent = verdict.label;
+  vp.className = 'v-pill ' + verdict.cls;
+  document.getElementById('r-name').textContent = cand.name;
+  document.getElementById('r-meta').textContent = cand.pos + '  ·  ' + cand.date;
+  document.getElementById('r-score').textContent = composite;
+
+  // Category grid
+  const cg = document.getElementById('cat-grid');
+  cg.innerHTML = '';
+  CATS.forEach(cat => {
+    const pct = groupPct[cat.key] || 0;
+    const color = pct >= 80 ? '#2d6a3f' : pct >= 60 ? '#7c5a00' : '#8b1a1a';
+    const card = document.createElement('div');
+    card.className = 'cat-card';
+    card.innerHTML =
+      '<div class="cat-lbl">' + cat.label + '</div>' +
+      '<div class="cat-row">' +
+      '<div class="cat-bar-bg"><div class="cat-bar" style="width:0%;background:' + color + '" data-pct="' + pct + '"></div></div>' +
+      '<div class="cat-val" style="color:' + color + '">' + pct + '%</div>' +
+      '</div>';
+    cg.appendChild(card);
+  });
+  setTimeout(() => {
+    document.querySelectorAll('.cat-bar').forEach(b => { b.style.width = b.dataset.pct + '%'; });
+  }, 100);
+
+  // Flags
+  const fb = document.getElementById('flags-box');
+  const fl = document.getElementById('flags-list');
+  if (flags.length > 0) {
+    fb.style.display = 'block';
+    fl.innerHTML = flags.map(f =>
+      '<div class="flag-row">' +
+      '<div class="flag-q">' + f.q + '</div>' +
+      '<div class="flag-a">→ ' + f.a + '</div>' +
+      (f.why ? '<div class="flag-why">' + f.why + '</div>' : '') +
+      '</div>'
+    ).join('');
+  }
+
+  // Summary
+  const sb = document.getElementById('sum-box');
+  let summaryText = '';
+  if (verdict.cls === 'vp-hire') {
+    summaryText = 'This candidate demonstrates strong financial integrity, solid technical knowledge, and professional conduct consistent with the Controller role at NW Ambulance. Scores are above threshold across all measured dimensions.';
+  } else if (verdict.cls === 'vp-review') {
+    summaryText = 'This candidate shows generally positive attributes with specific areas that warrant focused probing in the oral board. Pay close attention to any flagged responses — each is verifiable through reference checks.';
+  } else {
+    summaryText = 'This candidate\'s responses indicate significant concerns in one or more critical areas. A thorough review is required before advancing. Hard stops in integrity or knowledge should be discussed with the hiring manager before any next step.';
+  }
+  if ((groupPct['Integrity'] || 0) < 65) summaryText += ' Financial Integrity score (' + (groupPct['Integrity'] || 0) + '%) is below threshold — probe reporting practices and billing oversight directly.';
+  if ((groupPct['Knowledge'] || 0) < 60) summaryText += ' Technical Knowledge score (' + (groupPct['Knowledge'] || 0) + '%) indicates gaps — verify hands-on experience in close, reconciliation, and Washington State compliance.';
+  if ((groupPct['Scenarios'] || 0) < 60) summaryText += ' Conduct Scenarios score (' + (groupPct['Scenarios'] || 0) + '%) warrants close review — explore how the candidate handles reporting pressure and personnel issues.';
+  if (validityFlag) summaryText += ' Validity flag raised — one or more answers claimed implausible perfection. Weight oral board and reference checks more heavily.';
+
+  const rows = [
+    { l: 'Composite Score', v: composite + ' / 100', n: verdict.label },
+    { l: 'Flags Identified', v: flags.length === 0 ? 'None' : flags.length + ' flagged', n: flags.length > 0 ? 'See detail above — all verifiable in oral board or reference check' : '' },
+    { l: 'Financial Integrity', v: (groupPct['Integrity'] || 0) + '%', n: 'Likert attitude questions — reporting accuracy, ethics, transparency' },
+    { l: 'Professional Conduct', v: (groupPct['Conduct'] || 0) + '%', n: 'Likert attitude questions — accountability, communication, follow-through' },
+    { l: 'Technical Knowledge', v: (groupPct['Knowledge'] || 0) + '%', n: 'Correct-answer MCQ — close, billing, WA compliance, AP, depreciation' },
+    { l: 'Conduct Scenarios', v: (groupPct['Scenarios'] || 0) + '%', n: 'Forced trade-off scenarios — one wrong answer per question' },
+    { l: 'Self-Disclosure', v: (groupPct['Disclosure'] || 0) + '%', n: 'Verifiable disclosures about past experience and approach' },
+  ];
+
+  sb.innerHTML = '<h3>Assessment Summary</h3>' +
+    '<div style="font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid var(--border)">' + summaryText + '</div>' +
+    rows.map(r =>
+      '<div class="sum-row"><div class="sum-lbl">' + r.l + '</div>' +
+      '<div><div class="sum-val">' + r.v + '</div>' + (r.n ? '<div class="sum-note">' + r.n + '</div>' : '') + '</div></div>'
+    ).join('');
+
+  // Workable text
+  const lines = [
+    'CONTROLLER ASSESSMENT — ' + cand.name.toUpperCase(),
+    'Position: ' + cand.pos + '   |   Date: ' + cand.date,
+    'Email: ' + cand.email + (cand.phone ? '   |   Phone: ' + cand.phone : ''),
+    '',
+    'RECOMMENDATION: ' + verdict.label,
+    'Composite Score: ' + composite + ' / 100',
+    '',
+    'CATEGORY SCORES:',
+    '  Financial Integrity:     ' + (groupPct['Integrity'] || 0) + '%',
+    '  Professional Conduct:    ' + (groupPct['Conduct'] || 0) + '%',
+    '  Technical Knowledge:     ' + (groupPct['Knowledge'] || 0) + '%',
+    '  Conduct Scenarios:       ' + (groupPct['Scenarios'] || 0) + '%',
+    '  Self-Disclosure:         ' + (groupPct['Disclosure'] || 0) + '%',
+    '',
+    'FLAGS: ' + (flags.length > 0 ? flags.length + ' identified' : 'None'),
+    ...flags.map(f => '  • ' + f.q.substring(0, 80) + ' → ' + f.a.substring(0, 50)),
+    '',
+    'SUMMARY:',
+    summaryText,
+    '',
+    'Assessment: Controller Character, Conduct & Knowledge Assessment v1.0',
+    'NW Ambulance — Talent Acquisition · Confidential',
+  ];
+  document.getElementById('copy-area').textContent = lines.join('\n');
 }
 
 function copyIt() {
-  navigator.clipboard.writeText(document.getElementById('copy-area').textContent)
-    .then(()=>{
-      const b = document.querySelector('.btn-copy');
-      b.textContent = '✓ Copied';
-      setTimeout(()=>{ b.textContent='Copy to Clipboard'; }, 2000);
-    });
+  navigator.clipboard.writeText(document.getElementById('copy-area').textContent).then(() => {
+    const b = document.querySelector('.btn-copy');
+    b.textContent = '✓ Copied';
+    setTimeout(() => { b.textContent = 'Copy to Clipboard'; }, 2000);
+  });
 }
 </script>
 </body>
