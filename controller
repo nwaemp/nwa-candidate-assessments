@@ -309,7 +309,7 @@ const LIKERT = ['Strongly Disagree','Disagree','Neutral','Agree','Strongly Agree
 // Replace this URL with the HTTP POST URL from your Power Automate flow.
 // The payload uses the same candidate-hidden-results behavior as leadership.html.
 // ============================================================
-const POWER_AUTOMATE_URL = 'PASTE_POWER_AUTOMATE_HTTP_POST_URL_HERE';
+const POWER_AUTOMATE_URL = 'https://defaultb9fe31c2de0742529875da1c500446.c8.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/7b0c2902b6a34df88a3879469437fed0/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=LAbOa6U8xvED2R3HDjai7nhtgI7-u8z5zjhj8Ma-q0E';
 const ASSESSMENT_TYPE = 'Controller';
 const ASSESSMENT_VERSION = 'Controller Character, Conduct & Knowledge Assessment v1.0';
 
@@ -1148,16 +1148,22 @@ function buildSubmissionPayload() {
   const redFlagResponses = buildRedFlagResponses(flags);
 
   return {
-    completionDate: cand.completionDate,
-    email: cand.email,
+    // Same field names used by the production Leadership assessment flow.
     firstName: cand.firstName,
     lastName: cand.lastName,
-    phone: cand.phone,
+    email: cand.email,
     position: cand.pos,
     assessmentType: ASSESSMENT_TYPE,
-    compositeScore: composite,
+    score: composite.toString(),
     recommendation: verdict.label,
-    redFlagResponses: redFlagResponses,
+    redFlags: flags.length.toString(),
+    redFlagResponses: redFlagResponses || 'None',
+    completionDate: cand.completionDate,
+    report: fullReport,
+
+    // Extra fields are included for future troubleshooting/reporting.
+    phone: cand.phone,
+    compositeScore: composite,
     redFlagCount: flags.length,
     fullReport: fullReport,
     categoryScores: {
