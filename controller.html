@@ -1192,15 +1192,23 @@ async function submitAssessment() {
   }
 
   try {
-    // Use text/plain to avoid browser CORS preflight issues from GitHub Pages.
-    // In Power Automate, parse the body with json(triggerBody()) if your trigger receives it as text.
-    await fetch(POWER_AUTOMATE_URL, {
+    console.log('Controller assessment payload sent to Power Automate:', payload);
+
+    const response = await fetch(POWER_AUTOMATE_URL, {
       method: 'POST',
-      mode: 'no-cors',
-      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
     });
-    showThankYou();
+
+    console.log('Power Automate response status:', response.status);
+
+    if (response.ok || response.status === 202) {
+      showThankYou();
+    } else {
+      const responseText = await response.text().catch(() => '');
+      console.error('Power Automate returned an error:', response.status, responseText, payload);
+      showThankYou('Your assessment was completed, but the automatic submission could not be confirmed. Please notify the hiring team.');
+    }
   } catch (err) {
     console.error('Submission failed:', err, payload);
     showThankYou('Your assessment was completed, but the automatic submission could not be confirmed. Please notify the hiring team.');
