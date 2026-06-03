@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Controller — Character, Conduct &amp; Knowledge Assessment</title>
+<title>Controller — Character, Conduct &amp; Knowledge Assessment v2.0</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,500&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -85,6 +85,7 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 .sec-h{font-family:'Playfair Display',serif;font-size:22px;font-weight:600;color:var(--ink);margin-bottom:3px}
 .sec-badge{display:inline-block;font-size:10px;font-weight:600;letter-spacing:0.07em;text-transform:uppercase;padding:3px 11px;border-radius:99px;margin-bottom:22px}
 .badge-likert{background:var(--gold-bg);color:var(--gold);border:1px solid var(--gold-border)}
+.badge-ems{background:rgba(139,26,26,0.12);color:#8B1A1A;border:1px solid rgba(139,26,26,0.3)}
 .badge-know{background:rgba(27,45,74,0.08);color:var(--navy);border:1px solid rgba(27,45,74,0.2)}
 .badge-disc{background:rgba(45,106,63,0.1);color:var(--green);border:1px solid rgba(45,106,63,0.3)}
 .badge-trade{background:var(--red-bg);color:var(--red);border:1px solid var(--red-border)}
@@ -115,15 +116,6 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 .q-nav{display:flex;justify-content:space-between;align-items:center;margin-top:28px;padding-top:22px;border-top:1px solid var(--border)}
 .nav-info{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--muted)}
 .nav-btns{display:flex;gap:10px}
-
-
-/* THANK YOU */
-#screen-thankyou{display:none}
-.thank-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:38px 34px;text-align:center;max-width:560px;margin:40px auto}
-.thank-kicker{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:var(--gold);margin-bottom:12px}
-.thank-h{font-family:'Playfair Display',serif;font-size:34px;font-weight:700;color:var(--ink);line-height:1.15;margin-bottom:14px}
-.thank-p{font-size:14px;color:var(--muted);line-height:1.8;margin:0 auto;max-width:420px}
-.submit-error{background:var(--red-bg);border:1px solid var(--red-border);color:var(--red);border-radius:var(--r);padding:14px 16px;margin-top:18px;font-size:13px;line-height:1.6;text-align:left;display:none}
 
 /* RESULTS */
 #screen-results{display:none}
@@ -190,7 +182,7 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
   <div class="hdr-title">Controller Assessment<small>Finance, Character &amp; Conduct</small></div>
   <div class="hdr-right" id="hdr-right" style="display:none">
     <div class="prog-pill">
-      <span class="prog-txt" id="prog-txt">0 / 35</span>
+      <span class="prog-txt" id="prog-txt">0 / 39</span>
       <div class="prog-outer"><div class="prog-inner" id="prog-bar"></div></div>
     </div>
   </div>
@@ -208,8 +200,8 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
     There are no trick questions. Honest answers produce the most useful results for everyone.
   </p>
   <div class="meta-row">
-    <div class="meta-cell"><div class="meta-v">35</div><div class="meta-l">Questions</div></div>
-    <div class="meta-cell"><div class="meta-v">5</div><div class="meta-l">Sections</div></div>
+    <div class="meta-cell"><div class="meta-v">39</div><div class="meta-l">Questions</div></div>
+    <div class="meta-cell"><div class="meta-v">6</div><div class="meta-l">Sections</div></div>
     <div class="meta-cell"><div class="meta-v">15–20</div><div class="meta-l">Minutes</div></div>
   </div>
   <div class="cand-form">
@@ -231,7 +223,7 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 
 <!-- ASSESSMENT -->
 <div id="screen-assessment">
-  <div class="sec-eye" id="sec-eye">Section 1 of 5</div>
+  <div class="sec-eye" id="sec-eye">Section 1 of 6</div>
   <div class="sec-h" id="sec-h">Financial Integrity &amp; Ethics</div>
   <div class="sec-badge badge-likert" id="sec-badge">Attitude &amp; Values</div>
   <div id="q-container"></div>
@@ -241,16 +233,6 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
       <button class="btn-ghost" id="btn-prev" onclick="prev()" style="display:none">← Back</button>
       <button class="btn-primary" id="btn-next" onclick="next()">Next Section →</button>
     </div>
-  </div>
-</div>
-
-<!-- THANK YOU -->
-<div id="screen-thankyou">
-  <div class="thank-card">
-    <div class="thank-kicker">Assessment Submitted</div>
-    <h2 class="thank-h">Thank you for completing the assessment.</h2>
-    <p class="thank-p">Your responses have been received. The hiring team will review your assessment as part of the candidate review process.</p>
-    <div class="submit-error" id="submit-error"></div>
   </div>
 </div>
 
@@ -283,6 +265,8 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 </main>
 
 <script>
+const FLOW_URL = 'https://defaultb9fe31c2de0742529875da1c500446.c8.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/950f1493b4764544b0ef72d0cf4561f7/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=qK1GkzaDcj3HlTMY1qBLr43bYGxlnW93rjCY0kQgBQc';
+
 // ============================================================
 // SCORING LEGEND (used throughout question data)
 //
@@ -305,165 +289,138 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 const LIKERT = ['Strongly Disagree','Disagree','Neutral','Agree','Strongly Agree'];
 
 // ============================================================
-// POWER AUTOMATE CONFIGURATION
-// Replace this URL with the HTTP POST URL from your Power Automate flow.
-// The payload uses the same candidate-hidden-results behavior as leadership.html.
-// ============================================================
-const POWER_AUTOMATE_URL = 'https://defaultb9fe31c2de0742529875da1c500446.c8.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/7b0c2902b6a34df88a3879469437fed0/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=LAbOa6U8xvED2R3HDjai7nhtgI7-u8z5zjhj8Ma-q0E';
-const ASSESSMENT_TYPE = 'Controller';
-const ASSESSMENT_VERSION = 'Controller Character, Conduct & Knowledge Assessment v1.0';
-
-// ============================================================
 // QUESTION DATA
 // 5 sections · 35 questions total
 // ============================================================
 const SECTIONS = [
 
-// ────────────────────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────────────
 // SECTION 1 — Financial Integrity & Ethics (Q1–10)
-// Likert attitude questions. Weight: 25%.
-// Group: "Integrity"
-// ────────────────────────────────────────────────────────────
+// Likert attitude questions. Weight: 25%. Group: Integrity
+// UNCHANGED from v1.0
+// ─────────────────────────────────────────────────────────────────────
 {
   name: 'Financial Integrity & Ethics',
-  eye: 'Section 1 of 5',
+  eye: 'Section 1 of 6',
   badge: 'badge-likert',
   badgeTxt: 'Attitude & Values',
   qs: [
     {
       id: 1, type: 'likert', group: 'Integrity', rev: false,
       text: 'I hold myself to the same documentation and accuracy standards whether or not anyone reviews my work.',
-      // STANDARD: SD=1 D=2 N=3 A=4 SA=5
-      // Note: Strong agree expected. Neutral or below is an integrity concern for a Controller role.
     },
     {
       id: 2, type: 'likert', group: 'Integrity', rev: true,
       text: 'Minor rounding or adjustments in financial reports are acceptable if they do not materially affect the outcome.',
       rf: ['Agree','Strongly Agree'],
-      rfWhy: 'Any agreement with this statement is a hard flag. Materiality is a defined threshold — it is not a Controller\'s judgment call to make unilateral rounding decisions without disclosure.',
-      // REVERSE: SD=5 D=4 N=3 A=2 SA=1
+      rfWhy: 'Any agreement with this statement is a hard flag. Materiality is a defined threshold — it is not a Controller\'s judgment call to make unilateral rounding decisions without disclosure.'
     },
     {
       id: 3, type: 'likert', group: 'Integrity', rev: false,
       text: 'When I discover an error in a report I have already submitted, I correct it and disclose it promptly, even if no one has noticed.',
-      // STANDARD: SD=1 D=2 N=3 A=4 SA=5
     },
     {
       id: 4, type: 'likert', group: 'Integrity', rev: true,
       text: 'If ownership prefers a particular financial presentation, it is appropriate to adjust how numbers are reported to match that preference.',
       rf: ['Agree','Strongly Agree'],
-      rfWhy: 'Adjusting financial presentation to match what ownership wants to see — without disclosure — is a compliance and integrity failure. A strong Controller pushes back on this.',
-      // REVERSE: SD=5 D=4 N=3 A=2 SA=1
+      rfWhy: 'Adjusting financial presentation to match what ownership wants to see — without disclosure — is a compliance and integrity failure. A strong Controller pushes back on this.'
     },
     {
       id: 5, type: 'likert', group: 'Integrity', rev: false,
       text: 'Accurate record-keeping is a professional obligation regardless of the size or perceived importance of the transaction.',
-      // STANDARD: SD=1 D=2 N=3 A=4 SA=5
     },
     {
       id: 6, type: 'likert', group: 'Integrity', rev: true,
       text: 'Using company accounts or systems for minor personal convenience is an acceptable informal perk for a senior finance role.',
       rf: ['Agree','Strongly Agree'],
-      rfWhy: 'Normalizing personal use of company resources — even minor — is a misappropriation risk and a conduct standard failure for someone in a fiduciary role.',
-      // REVERSE: SD=5 D=4 N=3 A=2 SA=1
+      rfWhy: 'Normalizing personal use of company resources — even minor — is a misappropriation risk and a conduct standard failure for someone in a fiduciary role.'
     },
     {
       id: 7, type: 'likert', group: 'Integrity', rev: false,
       text: 'I would report a billing discrepancy or financial irregularity even if it reflected poorly on someone in my team.',
-      // STANDARD: SD=1 D=2 N=3 A=4 SA=5
     },
     {
       id: 8, type: 'likert', group: 'Integrity', rev: true,
       text: 'If a billing company\'s reports look reasonable, reconciling them back to actual cash receipts is unnecessary extra work.',
       rf: ['Agree','Strongly Agree'],
-      rfWhy: 'Hard red flag. Trusting a third-party billing report without reconciliation to cash is exactly how billing revenue leaks go undetected for years. This is a core Controller accountability.',
-      // REVERSE: SD=5 D=4 N=3 A=2 SA=1
+      rfWhy: 'Hard red flag. Trusting a third-party billing report without reconciliation to cash is exactly how billing revenue leaks go undetected for years. This is a core Controller accountability.'
     },
     {
       id: 9, type: 'likert', group: 'Integrity', rev: false,
       text: 'Transparency with ownership — including when results are unfavorable — is more important than managing their perception.',
-      // STANDARD: SD=1 D=2 N=3 A=4 SA=5
     },
     {
       id: 10, type: 'likert', group: 'Integrity', rev: true,
       text: 'A Controller who keeps financial information tightly controlled builds more organizational authority than one who shares broadly.',
       rf: ['Agree','Strongly Agree'],
-      rfWhy: 'Hoarding financial information as a power tactic is a conduct red flag. A Controller in a partner role should be building financial literacy and access, not limiting it.',
-      // REVERSE: SD=5 D=4 N=3 A=2 SA=1
+      rfWhy: 'Hoarding financial information as a power tactic is a conduct red flag. A Controller in a partner role should be building financial literacy and access, not limiting it.'
     },
   ]
 },
 
-// ────────────────────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────────────
 // SECTION 2 — Accountability & Professional Conduct (Q11–18)
-// Likert attitude questions. Weight: 20%.
-// Group: "Conduct"
-// ────────────────────────────────────────────────────────────
+// Likert attitude questions. Weight: 20%. Group: Conduct
+// UNCHANGED from v1.0
+// ─────────────────────────────────────────────────────────────────────
 {
   name: 'Accountability & Professional Conduct',
-  eye: 'Section 2 of 5',
+  eye: 'Section 2 of 6',
   badge: 'badge-likert',
   badgeTxt: 'Attitude & Values',
   qs: [
     {
       id: 11, type: 'likert', group: 'Conduct', rev: false,
       text: 'When I identify a process that is not working, I take ownership of fixing it rather than working around it.',
-      // STANDARD: SD=1 D=2 N=3 A=4 SA=5
     },
     {
       id: 12, type: 'likert', group: 'Conduct', rev: true,
       text: 'Delivering difficult financial news to ownership is best softened by adjusting how the data is framed.',
       rf: ['Agree','Strongly Agree'],
-      rfWhy: 'Framing data to soften difficult news crosses into misrepresentation. A Controller\'s job is accurate reporting — not managing ownership\'s emotional reaction through selective presentation.',
-      // REVERSE: SD=5 D=4 N=3 A=2 SA=1
+      rfWhy: 'Framing data to soften difficult news crosses into misrepresentation. A Controller\'s job is accurate reporting — not managing ownership\'s emotional reaction through selective presentation.'
     },
     {
       id: 13, type: 'likert', group: 'Conduct', rev: false,
       text: 'I hold members of my accounting team to the same standards I hold myself.',
-      // STANDARD: SD=1 D=2 N=3 A=4 SA=5
     },
     {
       id: 14, type: 'likert', group: 'Conduct', rev: true,
       text: 'A Controller who is well-liked by the operations team is more effective than one who is technically rigorous but harder to work with.',
       rf: ['Agree','Strongly Agree'],
-      rfWhy: 'Prioritizing likability over rigor is a conduct risk. The Controller role requires technical credibility — relationships matter, but not at the expense of accuracy standards.',
-      // REVERSE: SD=5 D=4 N=3 A=2 SA=1
+      rfWhy: 'Prioritizing likability over rigor is a conduct risk. The Controller role requires technical credibility — relationships matter, but not at the expense of accuracy standards.'
     },
     {
       id: 15, type: 'likert', group: 'Conduct', rev: false,
       text: 'I meet commitments — deadlines, close timelines, reporting windows — consistently and without needing reminders.',
-      // STANDARD: SD=1 D=2 N=3 A=4 SA=5
     },
     {
       id: 16, type: 'likert', group: 'Conduct', rev: false,
       text: 'Developing my accounting team\'s capabilities is as important as managing the technical accuracy of our output.',
-      // STANDARD: SD=1 D=2 N=3 A=4 SA=5
     },
     {
       id: 17, type: 'likert', group: 'Conduct', rev: true,
       text: 'If a vendor or billing partner relationship is generally positive, it is not worth risking it by pushing back on their reporting.',
       rf: ['Agree','Strongly Agree'],
-      rfWhy: 'Avoiding pushback on a billing partner to preserve the relationship is a conflict of interest risk. The Controller is an organizational check on third-party vendors — not an ambassador for them.',
-      // REVERSE: SD=5 D=4 N=3 A=2 SA=1
+      rfWhy: 'Avoiding pushback on a billing partner to preserve the relationship is a conflict of interest risk. The Controller is an organizational check on third-party vendors — not an ambassador for them.'
     },
     {
       id: 18, type: 'likert', group: 'Conduct', rev: false,
       text: 'When I disagree with an operational or strategic decision made above me, I document my position before complying.',
-      // STANDARD: SD=1 D=2 N=3 A=4 SA=5
     },
   ]
 },
 
-// ────────────────────────────────────────────────────────────
-// SECTION 3 — Technical Knowledge (Q19–26)
-// Correct-answer MCQ. Weight: 30%.
-// Group: "Knowledge"
-// One answer is correct (score 5). Wrong answers score 0–2.
-// Score map is explicit for every option.
-// ────────────────────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────────────
+// SECTION 3 — Technical Knowledge: General Finance (Q19–26)
+// Correct-answer MCQ. Weight: 20%. Group: Knowledge
+// Q19–24 unchanged. Q25 REPLACED (was weak EMS AR question).
+// Q26 unchanged (ADP payroll — renumbered, was Q26 in v1).
+//
+// SCORING: correct answer = max score (5). Only 0-score answers flag.
+// ─────────────────────────────────────────────────────────────────────
 {
-  name: 'Technical Knowledge',
-  eye: 'Section 3 of 5',
+  name: 'Technical Knowledge — General Finance',
+  eye: 'Section 3 of 6',
   badge: 'badge-know',
   badgeTxt: 'Correct Answer Exists',
   qs: [
@@ -476,9 +433,6 @@ const SECTIONS = [
         'C. Record $412,000 received and adjust the $68,000 to accounts receivable without investigating.',
         'D. Flag it verbally to ownership and wait for next month to see if it resolves.'
       ],
-      // CORRECT: B (5). A ignores a $68K unverified gap — classic billing oversight failure (score 0).
-      // C is partially correct in mechanics but skips investigation — may mask billing errors (score 2).
-      // D delays a required reconciliation and provides no documentation (score 1).
       sc: { A: 0, B: 5, C: 2, D: 1 },
       correct: 'B',
       correctWhy: 'Reconciling billing company reports to actual bank deposits is the Controller\'s primary check on third-party revenue. The $68K gap must be investigated and documented before revenue is recorded — not assumed to be timing.'
@@ -492,9 +446,6 @@ const SECTIONS = [
         'C. Reclassify it but make no note — corrections are routine and do not need documentation.',
         'D. Flag it to the department manager and wait for their approval before making any change.'
       ],
-      // CORRECT: B (5). A accepts a known miscoding that affects both P&L accuracy and management reporting (score 0).
-      // C makes the right mechanical move but skips documentation — audit trail failure (score 2).
-      // D is overcautious — reclassification within open period is Controller authority, no mgr approval needed (score 1).
       sc: { A: 0, B: 5, C: 2, D: 1 },
       correct: 'B',
       correctWhy: 'Reclassification before period close is correct and within Controller authority. Documentation in workpapers is mandatory — not optional. Leaving a known miscoding uncorrected is not acceptable.'
@@ -508,10 +459,6 @@ const SECTIONS = [
         'C. WA Cares applies only to employees earning above $60,000 annually.',
         'D. WA Cares withholding is optional for employers with fewer than 50 employees.'
       ],
-      // CORRECT: A (5). WA Cares is 100% employee-funded; employer withholds and remits but does not contribute.
-      // B is wrong — no employer contribution exists (score 0).
-      // C is wrong — applies to all W-2 wages regardless of income level (score 0).
-      // D is wrong — no small employer exemption exists (score 0).
       sc: { A: 5, B: 0, C: 0, D: 0 },
       correct: 'A',
       correctWhy: 'WA Cares Fund is 100% employee-funded. The employer\'s obligation is accurate withholding and remittance — there is no employer contribution, no income threshold, and no small employer exemption.'
@@ -525,10 +472,6 @@ const SECTIONS = [
         'C. $27,500 per year (dividing original cost minus a standard 10% salvage by useful life)',
         'D. $18,500 per year (10% of original cost per year)'
       ],
-      // CORRECT: B (5). ($185,000 - $20,000) / 7 = $165,000 / 7 = $23,571.43
-      // A uses full cost without subtracting salvage — technically incorrect (score 1).
-      // C uses an arbitrary 10% standard rather than the stated salvage value (score 0).
-      // D is a flat 10% with no reference to useful life or salvage — incorrect method (score 0).
       sc: { A: 1, B: 5, C: 0, D: 0 },
       correct: 'B',
       correctWhy: 'Straight-line depreciation = (Cost − Salvage Value) / Useful Life. ($185,000 − $20,000) / 7 = $23,571 per year. Option A ignores salvage value; C and D use incorrect methods.'
@@ -542,10 +485,6 @@ const SECTIONS = [
         'C. Move to a soft close — produce preliminary financials on day 15 and finalize adjustments later.',
         'D. Reduce the number of accounts being reconciled each month to speed up the process.'
       ],
-      // CORRECT: B (5). Process mapping before intervention is the correct diagnostic approach.
-      // A delays input from departments — likely to create accuracy problems downstream (score 1).
-      // C sidesteps the problem without solving it — soft close may work tactically but doesn't fix root cause (score 2).
-      // D reduces reconciliation scope — potentially creating accuracy and audit problems (score 0).
       sc: { A: 1, B: 5, C: 2, D: 0 },
       correct: 'B',
       correctWhy: 'Mapping the process to find the longest bottlenecks is the only way to reduce close time sustainably. Arbitrary shortcuts — fewer reconciliations, soft closes — solve the symptom without fixing the process.'
@@ -559,30 +498,31 @@ const SECTIONS = [
         'C. Compare this quarter to the same quarter last year to determine if this is a seasonal pattern.',
         'D. Calculate the total dollar cost of overtime and present that figure to ownership.'
       ],
-      // CORRECT: B (5). Segmentation is the correct diagnostic — you need to know WHERE before you can explain WHY.
-      // A jumps to a recommendation before diagnosing cause — premature (score 1).
-      // C year-over-year comparison is useful context but not the first diagnostic step (score 2).
-      // D dollar cost is relevant but not diagnostic — doesn't answer "what is driving it" (score 1).
       sc: { A: 1, B: 5, C: 2, D: 1 },
       correct: 'B',
       correctWhy: 'Before explaining a trend, the Controller must identify where it is concentrated. Segmenting by shift, zone, and classification reveals whether this is a staffing model problem, a specific zone issue, or a system-wide change.'
     },
     {
+      // Q25 REPLACED — old version tested generic GAAP AR with weak EMS framing.
+      // New version tests Medicare/Medicaid contractual adjustment accounting —
+      // the specific knowledge gap this role requires.
       id: 25, type: 'mcq', group: 'Knowledge',
-      text: 'Your organization has accounts receivable from EMS transport billing. Which of the following correctly describes how net accounts receivable should be presented on the balance sheet?',
+      text: 'Your billing company\'s monthly report shows $620,000 in gross charges billed to all payers. Medicare and Medicaid together represent 65% of transport volume. After applying contractual adjustments, the net collectible revenue is $310,000. How should the $310,000 difference between gross charges and net collectible revenue be classified on the books?',
       opts: [
-        'A. Gross billed charges, representing the full amount charged to payers before any adjustments.',
-        'B. Net expected collections after contractual adjustments, expected write-offs, and the allowance for doubtful accounts.',
-        'C. Cash collected to date from all outstanding invoices.',
-        'D. Total billed charges minus only the payments already received.'
+        'A. As bad debt expense — it represents revenue the organization failed to collect.',
+        'B. As a contractual adjustment — a known, expected revenue deduction recorded at the time of billing based on payer fee schedules.',
+        'C. As deferred revenue — it may be collectible in future periods if payers reconsider.',
+        'D. As an operating expense — it represents the cost of providing services to Medicare and Medicaid patients.'
       ],
-      // CORRECT: B (5). GAAP requires net AR = gross charges minus contractual adjustments, write-offs, allowance for doubtful accounts.
-      // A presents gross charges — not GAAP-compliant for healthcare receivables (score 0).
-      // C presents only collected cash — ignores outstanding receivables entirely (score 0).
-      // D is partially right mechanically but omits contractual adjustments and allowances (score 1).
-      sc: { A: 0, B: 5, C: 0, D: 1 },
+      // B=correct (5). The difference between billed and allowable is a contractual adjustment,
+      // not bad debt or an expense. Misclassifying it as bad debt overstates bad debt expense
+      // and distorts the organization's true collection performance.
+      // A=worst (0): misclassifying contractual adjustments as bad debt is a common EMS accounting error.
+      // C=wrong (0): deferred revenue doesn't apply — these are known, fixed write-offs.
+      // D=wrong (0): classifying as operating expense misrepresents both revenue and expense.
+      sc: { A: 0, B: 5, C: 0, D: 0 },
       correct: 'B',
-      correctWhy: 'Healthcare AR must be presented net of contractual adjustments (Medicare/Medicaid rate differences), expected write-offs, and allowance for doubtful accounts. Gross billed charges overstate the balance sheet significantly.'
+      correctWhy: 'Contractual adjustments are pre-determined, payer-specific write-offs tied to Medicare and Medicaid fee schedules — not failed collection attempts. Misclassifying them as bad debt inflates bad debt expense, understates the true collection rate, and misrepresents the organization\'s revenue cycle performance to ownership.'
     },
     {
       id: 26, type: 'mcq', group: 'Knowledge',
@@ -593,10 +533,6 @@ const SECTIONS = [
         'C. Offset the overpayment by reducing the employees\' next payroll check automatically.',
         'D. Notify HR and let them handle the employee communication while you process the reversal.'
       ],
-      // CORRECT: A (5). Complete sequence: reverse, notify, document, root cause.
-      // B waiting for employees to report it is an abrogation of the Controller's responsibility (score 0).
-      // C automatic offset without employee notification may violate state wage laws (score 1).
-      // D is better than B or C but splits responsibility in a way that may delay resolution and miss root cause (score 2).
       sc: { A: 5, B: 0, C: 1, D: 2 },
       correct: 'A',
       correctWhy: 'Payroll errors must be caught and corrected proactively — not waited on. The Controller owns: initiating the reversal, ensuring employees are notified properly, documenting the correction, and closing the root cause.'
@@ -604,19 +540,118 @@ const SECTIONS = [
   ]
 },
 
-// ────────────────────────────────────────────────────────────
-// SECTION 4 — Forced Trade-offs & Conduct Scenarios (Q27–31)
-// One answer is clearly wrong. Score 0 for wrong; 3–5 for others.
-// Group: "Scenarios"
-// ────────────────────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────────────
+// SECTION 4 — EMS Revenue Cycle Knowledge (Q27–30)
+// Correct-answer MCQ. Weight: 15%. Group: EMSKnowledge
+// ALL NEW — tests Medicare/Medicaid billing, payer mix, billing company oversight
+//
+// SCORING: correct answer = 5. Only 0-score answers flag.
+// ─────────────────────────────────────────────────────────────────────
+{
+  name: 'EMS Revenue Cycle Knowledge',
+  eye: 'Section 4 of 6',
+  badge: 'badge-ems',
+  badgeTxt: 'EMS Billing & Revenue',
+  qs: [
+    {
+      id: 27, type: 'mcq', group: 'EMSKnowledge',
+      text: 'A Medicare ground ambulance claim is submitted at the ALS1 level. Medicare denies it and downcodes it to BLS. What is the most likely reason for this denial, and what is the Controller\'s appropriate response?',
+      opts: [
+        'A. Medicare always downcodes ALS1 claims — this is expected and no action is required.',
+        'B. The PCR narrative likely failed to document that an ALS assessment was performed or that ALS-level interventions were provided. The Controller should flag the denial pattern to the billing company and operations for documentation review.',
+        'C. The claim was filed past the timely filing deadline — the Controller should write it off as a timely filing denial.',
+        'D. ALS1 and BLS pay the same rate under Medicare — the denial has no financial impact and can be ignored.'
+      ],
+      // B=correct (5): downcode from ALS1 to BLS is almost always a documentation failure —
+      // PCR didn't support the level billed. Controller's job is to connect denial patterns
+      // to documentation gaps and bring them to operations and billing company.
+      // A=worst (0): accepting systematic downcoding as normal without investigation
+      // represents a significant failure of billing oversight.
+      // C=wrong (1): timely filing denials look different; assuming TF without evidence is wrong.
+      // D=wrong (0): ALS1 and BLS pay materially different rates — ALS1 is significantly higher.
+      sc: { A: 0, B: 5, C: 1, D: 0 },
+      correct: 'B',
+      correctWhy: 'ALS1 vs BLS level of service is determined by whether an ALS crew performed an ALS assessment or provided ALS interventions. When Medicare downcodes, it almost always means the PCR narrative didn\'t support the level billed. The Controller must treat denial patterns as revenue cycle signals — not routine adjustments — and escalate to operations and the billing company for root cause review.'
+    },
+    {
+      id: 28, type: 'mcq', group: 'EMSKnowledge',
+      text: 'Your billing company reports a 94% gross collection rate this month. Your CFO is pleased. Why should a Controller be cautious about using gross collection rate as the primary measure of billing company performance?',
+      opts: [
+        'A. Gross collection rate is not a recognized metric — billing companies should only report total dollars collected.',
+        'B. Gross collection rate divides collections by gross billed charges, which includes large contractual adjustments for Medicare and Medicaid. It can appear high even when the billing company is leaving significant collectible revenue uncollected. Net collection rate — collections divided by net collectible revenue — is the accurate performance measure.',
+        'C. Collection rates above 90% are automatically suspicious and indicate overbilling.',
+        'D. Gross collection rate is the correct metric — if it is above 90%, billing performance is strong and no further analysis is needed.'
+      ],
+      // B=correct (5): gross collection rate is misleading in high-Medicare/Medicaid payer mixes
+      // because the denominator (gross charges) is inflated by contractual adjustments.
+      // A 94% gross rate could hide poor performance on the actually collectible portion.
+      // Net collection rate = collections / (gross charges - contractual adjustments).
+      // A=worst (0): dismissing gross collection rate entirely misses the point.
+      // C=wrong (0): there is no threshold above which a rate becomes suspicious.
+      // D=worst (0): accepting gross rate as sufficient oversight is exactly the oversight failure.
+      sc: { A: 1, B: 5, C: 0, D: 0 },
+      correct: 'B',
+      correctWhy: 'In an EMS operation with high Medicare and Medicaid volume, gross billed charges are heavily inflated by contractual adjustments the organization will never collect. A gross collection rate of 94% against inflated charges can mask poor performance on actually-collectible revenue. Net collection rate — collections divided by net collectible AR after contractual adjustments — is the metric that reveals true billing company performance.'
+    },
+    {
+      id: 29, type: 'mcq', group: 'EMSKnowledge',
+      text: 'Medicare requires specific documentation for a ground ambulance transport to be medically necessary and reimbursable. Which of the following best describes what the Controller should confirm is present in order to connect documentation practices to revenue outcomes?',
+      opts: [
+        'A. A completed PCR with patient demographics, origin, and destination — Medicare pays based on trip completion, not clinical content.',
+        'B. A signed patient consent form and proof of insurance verification before transport.',
+        'C. A PCR narrative that documents why the patient\'s condition required ambulance transport (could not be safely transported by other means), the level of care provided, and clinical findings that support the level of service billed.',
+        'D. A physician\'s written order authorizing the transport, signed before the crew departs.'
+      ],
+      // C=correct (5): Medicare medical necessity requires the PCR to document that the patient's
+      // condition required ambulance transport AND that the level of service billed is supported
+      // by clinical findings. "Could not be transported by other means" is the standard.
+      // A=worst (0): Medicare does not pay on trip completion — it pays on medical necessity.
+      // This is the single most common misconception that leads to mass denials.
+      // B=wrong (0): consent/insurance verification is not what determines Medicare payment.
+      // D=wrong (1): physician orders are required for non-emergency (scheduled) transports
+      // but not for emergency transports — and the PCR narrative is still required.
+      sc: { A: 0, B: 0, C: 5, D: 1 },
+      correct: 'C',
+      correctWhy: 'Medicare medical necessity for ground ambulance transport requires documentation that (1) the patient\'s condition required ambulance transport and could not be safely managed by other means, and (2) the clinical findings in the PCR support the level of service billed. A Controller who understands this can connect denial patterns, documentation training gaps, and revenue shortfalls — and can hold the billing company accountable for claim quality, not just submission volume.'
+    },
+    {
+      id: 30, type: 'mcq', group: 'EMSKnowledge',
+      text: 'Your billing company\'s AR aging report shows that 38% of outstanding balances are in the 90–120 day bucket, and another 22% are over 120 days. What does this tell you, and what should the Controller do?',
+      opts: [
+        'A. Aging over 90 days is normal for EMS billing — Medicare and Medicaid payment timelines are long. No action is needed.',
+        'B. The aging distribution indicates a significant collection delay problem. The Controller should require the billing company to provide a breakdown by payer, denial reason, and follow-up activity — and set a defined remediation timeline.',
+        'C. Write off everything over 120 days — accounts that old are uncollectible in EMS billing.',
+        'D. Transfer all accounts over 90 days to a collections agency immediately.'
+      ],
+      // B=correct (5): 60% of AR sitting at 90+ days is a serious revenue cycle signal.
+      // Medicare typically pays within 14–30 days if clean. High aging = denials not being worked,
+      // re-submissions delayed, or systemic billing errors. Controller must demand payer/reason
+      // breakdown and hold billing company to a remediation plan.
+      // A=worst (0): accepting high aging as normal without investigation is a oversight failure.
+      // Medicare clean claims pay in 14-30 days — 90+ days means something is wrong.
+      // C=wrong (0): writing off 90-120 day accounts without working them first is premature
+      // and represents a significant revenue loss.
+      // D=wrong (1): collections agencies are for patient-pay balances, not payer (Medicare/Medicaid) AR.
+      sc: { A: 0, B: 5, C: 0, D: 1 },
+      correct: 'B',
+      correctWhy: 'Medicare clean claims typically pay within 14–30 days. A high concentration of AR in the 90–120+ day buckets is not normal — it indicates denied claims not being reworked, timely filing risk, or systemic submission errors. The Controller\'s job is to require the billing company to explain what is sitting in those buckets by payer and denial reason, and to hold them to a defined plan for resolution. Accepting high aging as a feature of EMS billing is an oversight failure.'
+    },
+  ]
+},
+
+// ─────────────────────────────────────────────────────────────────────
+// SECTION 5 — Conduct Scenarios (Q31–35)
+// TYPE: trade | One wrong answer per question. Weight: 15%.
+// UNCHANGED from v1.0, renumbered Q27–31 → Q31–35.
+// ─────────────────────────────────────────────────────────────────────
 {
   name: 'Conduct Scenarios',
-  eye: 'Section 4 of 5',
+  eye: 'Section 5 of 6',
   badge: 'badge-trade',
   badgeTxt: 'One Wrong Answer',
   qs: [
     {
-      id: 27, type: 'trade', group: 'Scenarios',
+      id: 31, type: 'trade', group: 'Scenarios',
       text: 'Ownership asks you to restate last quarter\'s financial results to exclude a one-time expense category, saying they want to show investors a "cleaner" number without explaining the exclusion.',
       context: 'What is the wrong answer?',
       opts: [
@@ -625,16 +660,12 @@ const SECTIONS = [
         'C. Request a meeting to explain the disclosure requirements and the liability risk before proceeding.',
         'D. Prepare the standard figures and provide a supplementary memo explaining what the "clean" number excludes.'
       ],
-      // WRONG: A (0). Restating figures without disclosure at ownership's direction is a financial integrity failure — potentially fraudulent misrepresentation.
-      // B is correct and assertive (score 5).
-      // C is correct — explains risk before complying (score 4).
-      // D is a workable alternative that maintains transparency (score 4).
+      sc: { A: 0, B: 5, C: 4, D: 4 },
       wrong: 'A',
-      wrongWhy: 'Restating financial results to omit an expense without disclosure — at ownership\'s request — is not the Controller\'s role to execute. This creates misrepresentation risk. The correct response is to offer a properly disclosed alternative.',
-      sc: { A: 0, B: 5, C: 4, D: 4 }
+      wrongWhy: 'Restating financial results to omit an expense without disclosure — at ownership\'s request — is not the Controller\'s role to execute. This creates misrepresentation risk. The correct response is to offer a properly disclosed alternative.'
     },
     {
-      id: 28, type: 'trade', group: 'Scenarios',
+      id: 32, type: 'trade', group: 'Scenarios',
       text: 'You discover that a long-tenured accounts payable clerk has been approving small vendor invoices for personal services — under $200 each, totaling about $3,800 over 8 months — that appear to be for a side business.',
       context: 'What is the wrong answer?',
       opts: [
@@ -643,16 +674,12 @@ const SECTIONS = [
         'C. Conduct a controlled internal review of all AP approvals for the past 12 months before taking action.',
         'D. Remove the employee\'s AP approval authority immediately while the matter is investigated.'
       ],
-      // WRONG: A (0). Handling a suspected fraud case informally and privately before engaging ownership or HR destroys the chain of evidence, creates liability, and gives the employee time to cover tracks.
-      // B is correct — document, secure, report (score 5).
-      // C controlled review first is reasonable but D or B should accompany it (score 3).
-      // D immediate authority removal while investigating is appropriate protective action (score 4).
+      sc: { A: 0, B: 5, C: 3, D: 4 },
       wrong: 'A',
-      wrongWhy: 'Private confrontation before securing documentation and involving ownership or HR is never the correct response to suspected employee fraud. It compromises the investigation and creates legal exposure for the organization and the Controller.',
-      sc: { A: 0, B: 5, C: 3, D: 4 }
+      wrongWhy: 'Private confrontation before securing documentation and involving ownership or HR is never the correct response to suspected employee fraud. It compromises the investigation and creates legal exposure for the organization and the Controller.'
     },
     {
-      id: 29, type: 'trade', group: 'Scenarios',
+      id: 33, type: 'trade', group: 'Scenarios',
       text: 'The operations director tells you informally that response time numbers for a specific zone have been manually adjusted in the weekly summary report sent to ownership to "smooth out" an outlier week.',
       context: 'What is the wrong answer?',
       opts: [
@@ -661,16 +688,12 @@ const SECTIONS = [
         'C. Raise it with the operations director first and give them an opportunity to correct it before escalating.',
         'D. Confirm that it has not affected any financial or billing data and flag it to ownership regardless.'
       ],
-      // WRONG: A (0). Staying silent on known data manipulation in reports to ownership — even operational KPIs — is a conduct failure for a senior finance officer. The Controller has an obligation to accurate reporting to ownership regardless of source.
-      // B is most direct and correct (score 5).
-      // C is reasonable as a first step (score 3).
-      // D is correct — verifies financial exposure first, then escalates (score 4).
+      sc: { A: 0, B: 5, C: 3, D: 4 },
       wrong: 'A',
-      wrongWhy: 'The Controller has an organizational obligation to accurate reporting to ownership. Staying silent on known manipulation in ownership-facing reports — operational or financial — is not a neutral choice. It is an active failure of the role.',
-      sc: { A: 0, B: 5, C: 3, D: 4 }
+      wrongWhy: 'The Controller has an organizational obligation to accurate reporting to ownership. Staying silent on known manipulation in ownership-facing reports — operational or financial — is not a neutral choice. It is an active failure of the role.'
     },
     {
-      id: 30, type: 'trade', group: 'Scenarios',
+      id: 34, type: 'trade', group: 'Scenarios',
       text: 'You are 10 days into month-end close and realize the close will not be complete in 15 days as expected. The delay is caused by a reconciliation issue your team identified that requires investigation.',
       context: 'What is the wrong answer?',
       opts: [
@@ -679,16 +702,12 @@ const SECTIONS = [
         'C. Prioritize resolving the reconciliation issue — deliver on day 18 with a clean close rather than day 15 with a known open item.',
         'D. Notify ownership and offer two options: a clean close on day 18, or a preliminary close on day 15 with the reconciliation flagged clearly.'
       ],
-      // WRONG: B (0). Completing close on time while leaving a known reconciliation issue unresolved and buried in a note is not an acceptable outcome — it produces inaccurate financials.
-      // A is correct communication behavior (score 4).
-      // C prioritizes accuracy over arbitrary deadline — acceptable (score 4).
-      // D is the strongest answer — offers options, maintains transparency (score 5).
+      sc: { A: 4, B: 0, C: 4, D: 5 },
       wrong: 'B',
-      wrongWhy: 'Closing on time while skipping the investigation of a known reconciliation issue is never acceptable. It produces financials the Controller cannot stand behind. A late but accurate close — communicated proactively — is always preferable.',
-      sc: { A: 4, B: 0, C: 4, D: 5 }
+      wrongWhy: 'Closing on time while skipping the investigation of a known reconciliation issue is never acceptable. It produces financials the Controller cannot stand behind. A late but accurate close — communicated proactively — is always preferable.'
     },
     {
-      id: 31, type: 'trade', group: 'Scenarios',
+      id: 35, type: 'trade', group: 'Scenarios',
       text: 'A key member of your accounting team makes a significant documentation error that results in a vendor being overpaid by $14,000. It is their first major error. The vendor has confirmed they will return the funds.',
       context: 'What is the wrong answer?',
       opts: [
@@ -697,30 +716,25 @@ const SECTIONS = [
         'C. Recover the funds, document the incident formally, identify the process gap that allowed it, and implement a control to prevent recurrence.',
         'D. Recover the funds, formally document the error, and have a direct conversation about expectations and consequences for recurrence.'
       ],
-      // WRONG: B (0). Personal notes only — no formal documentation — is the only wrong answer. It leaves no organizational record, prevents progressive accountability, and hides a process failure.
-      // A is a reasonable response for a first occurrence (score 3).
-      // C is the most complete response — recovers funds, documents, fixes process (score 5).
-      // D adds clear expectations for recurrence — also strong (score 4).
+      sc: { A: 3, B: 0, C: 5, D: 4 },
       wrong: 'B',
-      wrongWhy: 'Documenting a $14,000 error in personal notes only — with no formal record — removes the ability to hold the employee accountable for recurrence and conceals a process gap that must be addressed. A first occurrence warrants coaching, not concealment.',
-      sc: { A: 3, B: 0, C: 5, D: 4 }
+      wrongWhy: 'Documenting a $14,000 error in personal notes only — with no formal record — removes the ability to hold the employee accountable for recurrence and conceals a process gap that must be addressed. A first occurrence warrants coaching, not concealment.'
     },
   ]
 },
 
-// ────────────────────────────────────────────────────────────
-// SECTION 5 — Self-Disclosure & Validity (Q32–35)
-// Disclosed facts + validity checks.
-// Group: "Disclosure" (Q32–34) and "Validity" (Q35)
-// ────────────────────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────────────
+// SECTION 6 — Self-Disclosure & Validity (Q36–39)
+// UNCHANGED from v1.0, renumbered Q32–35 → Q36–39.
+// ─────────────────────────────────────────────────────────────────────
 {
   name: 'Self-Disclosure & Validity',
-  eye: 'Section 5 of 5',
+  eye: 'Section 6 of 6',
   badge: 'badge-disc',
   badgeTxt: 'Verifiable Disclosures',
   qs: [
     {
-      id: 32, type: 'disc', group: 'Disclosure',
+      id: 36, type: 'disc', group: 'Disclosure',
       text: 'In your most recent Controller or senior finance role, how would you describe your month-end close timeline?',
       opts: [
         'A. Close was typically completed in 10–15 days with a structured process.',
@@ -728,16 +742,12 @@ const SECTIONS = [
         'C. Close timeline was not formally tracked — we closed when it was complete.',
         'D. Close regularly took 30 or more days due to the complexity of our operations.'
       ],
-      // A: Strong (score 5). Meets the 15-day target.
-      // B: Acceptable — longer but shows process awareness (score 3).
-      // C: Flag — no formal close tracking is a process maturity concern (score 1, flag).
-      // D: Flag — 30+ days is below standard for this role (score 0, flag).
       sc: { A: 5, B: 3, C: 1, D: 0 },
       flag: ['C','D'],
       flagWhy: 'C and D both indicate close timelines that fall significantly below the 15-day target. Probe in oral board: what specifically caused the extended timeline and what improvements did they make?'
     },
     {
-      id: 33, type: 'disc', group: 'Disclosure',
+      id: 37, type: 'disc', group: 'Disclosure',
       text: 'Have you ever personally identified a material billing or revenue discrepancy that others had missed?',
       opts: [
         'A. Yes — I discovered it through reconciliation and can describe the specific situation, dollar amount, and how I resolved it.',
@@ -745,16 +755,12 @@ const SECTIONS = [
         'C. I have not had a situation where a significant discrepancy came to my attention through my own review.',
         'D. Our billing was handled entirely by a third party — I was not in a position to identify discrepancies.'
       ],
-      // A: Strong — concrete, specific, personally led (score 5).
-      // B: Moderate — identified but did not lead resolution (score 3).
-      // C: Flag — no proactive identification of billing errors suggests limited oversight habit (score 1, flag).
-      // D: Hard flag — outsourcing without oversight is exactly the failure mode this role prevents (score 0, flag).
       sc: { A: 5, B: 3, C: 1, D: 0 },
       flag: ['C','D'],
       flagWhy: 'C and D both indicate a lack of active billing oversight — the most critical function for this role. A Controller who has never personally caught a billing discrepancy either was not looking or was not empowered to. Probe in oral board.'
     },
     {
-      id: 34, type: 'disc', group: 'Disclosure',
+      id: 38, type: 'disc', group: 'Disclosure',
       text: 'Have you ever pushed back on a decision by ownership or a senior leader regarding financial reporting or a fiscal practice you believed was incorrect or risky?',
       opts: [
         'A. Yes — I documented my position, presented the risk clearly, and held the position despite pressure.',
@@ -762,16 +768,12 @@ const SECTIONS = [
         'C. I have raised concerns but typically deferred to leadership once they made their position clear.',
         'D. I have not encountered a situation where I needed to push back on ownership or leadership on a financial matter.'
       ],
-      // A: Strong — documented, held position (score 5).
-      // B: Moderate — raised but did not hold under pressure (score 2, soft flag).
-      // C: Flag — pattern of deference on financial matters is a compliance risk (score 1, flag).
-      // D: Flag — no history of pushback may indicate limited scope or avoidance (score 1, flag).
       sc: { A: 5, B: 2, C: 1, D: 1 },
       flag: ['B','C','D'],
       flagWhy: 'A Controller who consistently defers to leadership on financial matters — or has never needed to push back — is not functioning as an organizational check. Probe for specific examples of holding or caving under pressure.'
     },
     {
-      id: 35, type: 'validity', group: 'Validity',
+      id: 39, type: 'validity', group: 'Validity',
       text: 'Which of the following best describes your experience with financial close and reporting?',
       opts: [
         'A. I have always completed every close on time with zero errors.',
@@ -779,10 +781,6 @@ const SECTIONS = [
         'C. I have had periods where close took longer than expected and have learned from those experiences.',
         'D. I have always caught every financial error before it reached ownership or external parties.'
       ],
-      // A: Validity flag — "always" and "zero errors" is implausible (flag, score 1).
-      // B: Realistic and professional (score 5).
-      // C: Realistic — shows self-awareness and growth (score 4).
-      // D: Validity flag — "always caught every error" is implausible (flag, score 1).
       sc: { A: 1, B: 5, C: 4, D: 1 },
       flag: ['A','D'],
       flagWhy: 'Answers A and D both represent implausible claims of perfection. A Controller claiming a flawless record without qualification is either misrepresenting their experience or lacks the self-awareness this role requires.'
@@ -790,17 +788,18 @@ const SECTIONS = [
   ]
 },
 
-]; // end SECTIONS
+]; // end SECTIONS; // end SECTIONS
 
 // ============================================================
 // CATEGORY DISPLAY CONFIG
 // ============================================================
 const CATS = [
-  { key: 'Integrity',  label: 'Financial Integrity',     color: '#1b2d4a', max: null },
-  { key: 'Conduct',    label: 'Professional Conduct',    color: '#4a7c1b', max: null },
-  { key: 'Knowledge',  label: 'Technical Knowledge',     color: '#7c4a1b', max: null },
-  { key: 'Scenarios',  label: 'Conduct Scenarios',       color: '#7c1b1b', max: null },
-  { key: 'Disclosure', label: 'Self-Disclosure',         color: '#1b5c7c', max: null },
+  { key: 'Integrity',     label: 'Financial Integrity',     color: '#1b2d4a', max: null },
+  { key: 'Conduct',       label: 'Professional Conduct',    color: '#4a7c1b', max: null },
+  { key: 'Knowledge',     label: 'Technical Knowledge',     color: '#7c4a1b', max: null },
+  { key: 'EMSKnowledge',  label: 'EMS Revenue Cycle',       color: '#8B1A1A', max: null },
+  { key: 'Scenarios',     label: 'Conduct Scenarios',       color: '#7c1b1b', max: null },
+  { key: 'Disclosure',    label: 'Self-Disclosure',         color: '#1b5c7c', max: null },
 ];
 
 // ============================================================
@@ -819,8 +818,7 @@ function start() {
   const em = document.getElementById('i-em').value.trim();
   if (!fn || !ln || !em) { alert('Please enter your first name, last name, and email to begin.'); return; }
   cand = {
-    firstName: fn,
-    lastName: ln,
+    firstName: fn, lastName: ln,
     name: fn + ' ' + ln, email: em,
     phone: document.getElementById('i-ph').value.trim(),
     pos: document.getElementById('i-pos').value.trim() || 'Controller',
@@ -930,7 +928,7 @@ function buildMCQ(q) {
 }
 
 function upProg() {
-  const total = 35;
+  const total = 39;
   const done = Object.keys(ans).length;
   document.getElementById('prog-txt').textContent = done + ' / ' + total;
   document.getElementById('prog-bar').style.width = Math.round(done / total * 100) + '%';
@@ -950,7 +948,7 @@ function next() {
     return;
   }
   if (sec < SECTIONS.length - 1) { sec++; render(); }
-  else submitAssessment();
+  else showResults();
 }
 
 // ============================================================
@@ -1002,12 +1000,16 @@ function computeAll() {
   });
 
   // Weighted composite (out of 100)
-  // Integrity 25%, Conduct 20%, Knowledge 30%, Scenarios 15%, Disclosure 10%
-  const weights = { Integrity: 0.25, Conduct: 0.20, Knowledge: 0.30, Scenarios: 0.15, Disclosure: 0.10 };
+  // Integrity 25%, Conduct 20%, Knowledge 20%, EMSKnowledge 15%, Scenarios 15%, Disclosure 10%
+  const weights = { Integrity: 0.25, Conduct: 0.20, Knowledge: 0.20, EMSKnowledge: 0.15, Scenarios: 0.15, Disclosure: 0.10 };
   let composite = 0;
+  let wSum = 0;
   Object.entries(weights).forEach(([g, w]) => {
     composite += (groupPct[g] || 0) * w;
+    wSum += w;
   });
+  composite = Math.round(composite / wSum * 100) / 100;
+  composite = Math.round(composite);
 
   return { groupPct, composite: Math.round(composite) };
 }
@@ -1062,8 +1064,8 @@ function getValidityFlags() {
   return (q35.flag && q35.flag.includes(a35)) ? 1 : 0;
 }
 
-function getVerdict(composite, flagCount, integrityPct, knowledgePct) {
-  if (flagCount >= 4 || integrityPct < 50 || knowledgePct < 45) {
+function getVerdict(composite, flagCount, integrityPct, knowledgePct, emsKnowledgePct) {
+  if (flagCount >= 4 || integrityPct < 50 || knowledgePct < 45 || emsKnowledgePct < 38) {
     return { label: 'Do Not Advance', cls: 'vp-no' };
   }
   if (composite >= 82 && flagCount === 0) {
@@ -1079,9 +1081,25 @@ function getVerdict(composite, flagCount, integrityPct, knowledgePct) {
 }
 
 // ============================================================
-// SUBMISSION / HIDDEN RESULTS BEHAVIOR
+// SHOW RESULTS
 // ============================================================
-function buildAssessmentSummary(verdict, groupPct, validityFlag) {
+async function showResults() {
+  document.getElementById('screen-assessment').style.display = 'none';
+  document.getElementById('hdr-right').style.display = 'none';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  // Compute everything (sent to Power Automate only — never shown to candidate)
+  const { groupPct, composite } = computeAll();
+  const flags = getFlags();
+  const validityFlag = getValidityFlags();
+  const verdict = getVerdict(
+    composite,
+    flags.length,
+    groupPct['Integrity'] || 0,
+    groupPct['Knowledge'] || 0,
+    groupPct['EMSKnowledge'] || 0
+  );
+
   let summaryText = '';
   if (verdict.cls === 'vp-hire') {
     summaryText = 'This candidate demonstrates strong financial integrity, solid technical knowledge, and professional conduct consistent with the Controller role at NW Ambulance. Scores are above threshold across all measured dimensions.';
@@ -1092,13 +1110,10 @@ function buildAssessmentSummary(verdict, groupPct, validityFlag) {
   }
   if ((groupPct['Integrity'] || 0) < 65) summaryText += ' Financial Integrity score (' + (groupPct['Integrity'] || 0) + '%) is below threshold — probe reporting practices and billing oversight directly.';
   if ((groupPct['Knowledge'] || 0) < 60) summaryText += ' Technical Knowledge score (' + (groupPct['Knowledge'] || 0) + '%) indicates gaps — verify hands-on experience in close, reconciliation, and Washington State compliance.';
+  if ((groupPct['EMSKnowledge'] || 0) < 50) summaryText += ' EMS Revenue Cycle score (' + (groupPct['EMSKnowledge'] || 0) + '%) is below threshold — candidate lacks the Medicare/Medicaid billing knowledge this role requires. Probe directly in oral board.';
   if ((groupPct['Scenarios'] || 0) < 60) summaryText += ' Conduct Scenarios score (' + (groupPct['Scenarios'] || 0) + '%) warrants close review — explore how the candidate handles reporting pressure and personnel issues.';
   if (validityFlag) summaryText += ' Validity flag raised — one or more answers claimed implausible perfection. Weight oral board and reference checks more heavily.';
-  return summaryText;
-}
 
-function buildWorkableReport(data) {
-  const { groupPct, composite, flags, verdict, summaryText } = data;
   const lines = [
     'CONTROLLER ASSESSMENT — ' + cand.name.toUpperCase(),
     'Position: ' + cand.pos + '   |   Date: ' + cand.date,
@@ -1111,6 +1126,7 @@ function buildWorkableReport(data) {
     '  Financial Integrity:     ' + (groupPct['Integrity'] || 0) + '%',
     '  Professional Conduct:    ' + (groupPct['Conduct'] || 0) + '%',
     '  Technical Knowledge:     ' + (groupPct['Knowledge'] || 0) + '%',
+    '  EMS Revenue Cycle:       ' + (groupPct['EMSKnowledge'] || 0) + '%',
     '  Conduct Scenarios:       ' + (groupPct['Scenarios'] || 0) + '%',
     '  Self-Disclosure:         ' + (groupPct['Disclosure'] || 0) + '%',
     '',
@@ -1120,225 +1136,67 @@ function buildWorkableReport(data) {
     'SUMMARY:',
     summaryText,
     '',
-    'Assessment: ' + ASSESSMENT_VERSION,
+    'Assessment: Controller Character, Conduct & Knowledge Assessment v2.0 (with EMS Revenue Cycle Knowledge)',
     'NW Ambulance — Talent Acquisition · Confidential',
   ];
-  return lines.join('\n');
-}
+  const reportText = lines.join('\n');
 
-function buildRedFlagResponses(flags) {
-  if (!flags.length) return '';
-  return flags.map((f, idx) =>
-    (idx + 1) + '. ' + f.q + ' | Response: ' + f.a + (f.why ? ' | Why flagged: ' + f.why : '')
-  ).join('\n');
-}
+  const redFlagResponses = flags.length ? [
+    '=== Red Flag Responses ===',
+    '',
+    ...flags.flatMap((f, i) => [
+      `Flag ${i + 1}`,
+      `Question: ${f.q.replace(/<[^>]+>/g, '')}`,
+      `Candidate Response: ${f.a}`,
+      'Reason Flagged: Response matched a configured red-flag answer for this assessment.',
+      '',
+      '--------------------------------------------------',
+      ''
+    ])
+  ].join('\n') : 'None';
 
-function buildSubmissionPayload() {
-  const { groupPct, composite } = computeAll();
-  const flags = getFlags();
-  const validityFlag = getValidityFlags();
-  const verdict = getVerdict(
-    composite,
-    flags.length,
-    groupPct['Integrity'] || 0,
-    groupPct['Knowledge'] || 0
-  );
-  const summaryText = buildAssessmentSummary(verdict, groupPct, validityFlag);
-  const fullReport = buildWorkableReport({ groupPct, composite, flags, verdict, summaryText });
-  const redFlagResponses = buildRedFlagResponses(flags);
-
-  return {
-    // Same field names used by the production Leadership assessment flow.
-    firstName: cand.firstName,
-    lastName: cand.lastName,
+  // Submit to Power Automate
+  await sendToFlow({
+    firstName: cand.firstName || cand.name.split(' ')[0],
+    lastName: cand.lastName || cand.name.split(' ').slice(1).join(' '),
     email: cand.email,
     position: cand.pos,
-    assessmentType: ASSESSMENT_TYPE,
+    assessmentType: 'Controller',
     score: composite.toString(),
     recommendation: verdict.label,
     redFlags: flags.length.toString(),
-    redFlagResponses: redFlagResponses || 'None',
-    completionDate: cand.completionDate,
-    report: fullReport,
-
-    // Extra fields are included for future troubleshooting/reporting.
-    phone: cand.phone,
-    compositeScore: composite,
-    redFlagCount: flags.length,
-    fullReport: fullReport,
-    categoryScores: {
-      financialIntegrity: groupPct['Integrity'] || 0,
-      professionalConduct: groupPct['Conduct'] || 0,
-      technicalKnowledge: groupPct['Knowledge'] || 0,
-      conductScenarios: groupPct['Scenarios'] || 0,
-      selfDisclosure: groupPct['Disclosure'] || 0
-    },
-    rawAnswers: ans,
-    assessmentVersion: ASSESSMENT_VERSION
-  };
-}
-
-async function submitAssessment() {
-  const btn = document.getElementById('btn-next');
-  btn.disabled = true;
-  btn.textContent = 'Submitting…';
-
-  const payload = buildSubmissionPayload();
-
-  if (!POWER_AUTOMATE_URL || POWER_AUTOMATE_URL.includes('PASTE_POWER_AUTOMATE')) {
-    console.error('Power Automate URL is not configured. Payload:', payload);
-    showThankYou('Power Automate URL is not configured yet. For testing, open the browser console to copy the payload.');
-    return;
-  }
-
-  try {
-    // Use text/plain to avoid browser CORS preflight issues from GitHub Pages.
-    // In Power Automate, parse the body with json(triggerBody()) if your trigger receives it as text.
-    await fetch(POWER_AUTOMATE_URL, {
-      method: 'POST',
-      mode: 'no-cors',
-      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-      body: JSON.stringify(payload)
-    });
-    showThankYou();
-  } catch (err) {
-    console.error('Submission failed:', err, payload);
-    showThankYou('Your assessment was completed, but the automatic submission could not be confirmed. Please notify the hiring team.');
-  }
-}
-
-function showThankYou(message) {
-  document.getElementById('screen-assessment').style.display = 'none';
-  document.getElementById('screen-results').style.display = 'none';
-  document.getElementById('screen-thankyou').style.display = 'block';
-  document.getElementById('hdr-right').style.display = 'none';
-  if (message) {
-    const e = document.getElementById('submit-error');
-    e.style.display = 'block';
-    e.textContent = message;
-  }
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-}
-
-// ============================================================
-// SHOW RESULTS
-// ============================================================
-function showResults() {
-  document.getElementById('screen-assessment').style.display = 'none';
-  document.getElementById('screen-results').style.display = 'block';
-  document.getElementById('hdr-right').style.display = 'none';
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-
-  const { groupPct, composite } = computeAll();
-  const flags = getFlags();
-  const validityFlag = getValidityFlags();
-  const verdict = getVerdict(
-    composite,
-    flags.length,
-    groupPct['Integrity'] || 0,
-    groupPct['Knowledge'] || 0
-  );
-
-  // Header
-  const vp = document.getElementById('v-pill');
-  vp.textContent = verdict.label;
-  vp.className = 'v-pill ' + verdict.cls;
-  document.getElementById('r-name').textContent = cand.name;
-  document.getElementById('r-meta').textContent = cand.pos + '  ·  ' + cand.date;
-  document.getElementById('r-score').textContent = composite;
-
-  // Category grid
-  const cg = document.getElementById('cat-grid');
-  cg.innerHTML = '';
-  CATS.forEach(cat => {
-    const pct = groupPct[cat.key] || 0;
-    const color = pct >= 80 ? '#2d6a3f' : pct >= 60 ? '#7c5a00' : '#8b1a1a';
-    const card = document.createElement('div');
-    card.className = 'cat-card';
-    card.innerHTML =
-      '<div class="cat-lbl">' + cat.label + '</div>' +
-      '<div class="cat-row">' +
-      '<div class="cat-bar-bg"><div class="cat-bar" style="width:0%;background:' + color + '" data-pct="' + pct + '"></div></div>' +
-      '<div class="cat-val" style="color:' + color + '">' + pct + '%</div>' +
-      '</div>';
-    cg.appendChild(card);
+    redFlagResponses: redFlagResponses,
+    completionDate: cand.completionDate || new Date().toISOString().split('T')[0],
+    report: reportText
   });
-  setTimeout(() => {
-    document.querySelectorAll('.cat-bar').forEach(b => { b.style.width = b.dataset.pct + '%'; });
-  }, 100);
 
-  // Flags
-  const fb = document.getElementById('flags-box');
-  const fl = document.getElementById('flags-list');
-  if (flags.length > 0) {
-    fb.style.display = 'block';
-    fl.innerHTML = flags.map(f =>
-      '<div class="flag-row">' +
-      '<div class="flag-q">' + f.q + '</div>' +
-      '<div class="flag-a">→ ' + f.a + '</div>' +
-      (f.why ? '<div class="flag-why">' + f.why + '</div>' : '') +
-      '</div>'
-    ).join('');
+  // Show thank-you — candidate never sees scores, flags, or recruiter notes
+  const resultsEl = document.getElementById('screen-results');
+  resultsEl.innerHTML = `
+    <div style="text-align:center; padding: 100px 24px 60px;">
+      <div style="font-family:'Playfair Display',serif; font-size:26px; font-weight:700; color:var(--ink); margin-bottom:16px;">
+        Thank you for submitting your assessment.
+      </div>
+      <div style="font-size:15px; color:var(--muted); line-height:1.75;">
+        Recruiting will reach out to discuss next steps.
+      </div>
+    </div>
+  `;
+  resultsEl.style.display = 'block';
+}
+
+async function sendToFlow(data) {
+  try {
+    const response = await fetch(FLOW_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+    return response.ok;
+  } catch (e) {
+    console.error('Flow submission failed', e);
+    return false;
   }
-
-  // Summary
-  const sb = document.getElementById('sum-box');
-  let summaryText = '';
-  if (verdict.cls === 'vp-hire') {
-    summaryText = 'This candidate demonstrates strong financial integrity, solid technical knowledge, and professional conduct consistent with the Controller role at NW Ambulance. Scores are above threshold across all measured dimensions.';
-  } else if (verdict.cls === 'vp-review') {
-    summaryText = 'This candidate shows generally positive attributes with specific areas that warrant focused probing in the oral board. Pay close attention to any flagged responses — each is verifiable through reference checks.';
-  } else {
-    summaryText = 'This candidate\'s responses indicate significant concerns in one or more critical areas. A thorough review is required before advancing. Hard stops in integrity or knowledge should be discussed with the hiring manager before any next step.';
-  }
-  if ((groupPct['Integrity'] || 0) < 65) summaryText += ' Financial Integrity score (' + (groupPct['Integrity'] || 0) + '%) is below threshold — probe reporting practices and billing oversight directly.';
-  if ((groupPct['Knowledge'] || 0) < 60) summaryText += ' Technical Knowledge score (' + (groupPct['Knowledge'] || 0) + '%) indicates gaps — verify hands-on experience in close, reconciliation, and Washington State compliance.';
-  if ((groupPct['Scenarios'] || 0) < 60) summaryText += ' Conduct Scenarios score (' + (groupPct['Scenarios'] || 0) + '%) warrants close review — explore how the candidate handles reporting pressure and personnel issues.';
-  if (validityFlag) summaryText += ' Validity flag raised — one or more answers claimed implausible perfection. Weight oral board and reference checks more heavily.';
-
-  const rows = [
-    { l: 'Composite Score', v: composite + ' / 100', n: verdict.label },
-    { l: 'Flags Identified', v: flags.length === 0 ? 'None' : flags.length + ' flagged', n: flags.length > 0 ? 'See detail above — all verifiable in oral board or reference check' : '' },
-    { l: 'Financial Integrity', v: (groupPct['Integrity'] || 0) + '%', n: 'Likert attitude questions — reporting accuracy, ethics, transparency' },
-    { l: 'Professional Conduct', v: (groupPct['Conduct'] || 0) + '%', n: 'Likert attitude questions — accountability, communication, follow-through' },
-    { l: 'Technical Knowledge', v: (groupPct['Knowledge'] || 0) + '%', n: 'Correct-answer MCQ — close, billing, WA compliance, AP, depreciation' },
-    { l: 'Conduct Scenarios', v: (groupPct['Scenarios'] || 0) + '%', n: 'Forced trade-off scenarios — one wrong answer per question' },
-    { l: 'Self-Disclosure', v: (groupPct['Disclosure'] || 0) + '%', n: 'Verifiable disclosures about past experience and approach' },
-  ];
-
-  sb.innerHTML = '<h3>Assessment Summary</h3>' +
-    '<div style="font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid var(--border)">' + summaryText + '</div>' +
-    rows.map(r =>
-      '<div class="sum-row"><div class="sum-lbl">' + r.l + '</div>' +
-      '<div><div class="sum-val">' + r.v + '</div>' + (r.n ? '<div class="sum-note">' + r.n + '</div>' : '') + '</div></div>'
-    ).join('');
-
-  // Workable text
-  const lines = [
-    'CONTROLLER ASSESSMENT — ' + cand.name.toUpperCase(),
-    'Position: ' + cand.pos + '   |   Date: ' + cand.date,
-    'Email: ' + cand.email + (cand.phone ? '   |   Phone: ' + cand.phone : ''),
-    '',
-    'RECOMMENDATION: ' + verdict.label,
-    'Composite Score: ' + composite + ' / 100',
-    '',
-    'CATEGORY SCORES:',
-    '  Financial Integrity:     ' + (groupPct['Integrity'] || 0) + '%',
-    '  Professional Conduct:    ' + (groupPct['Conduct'] || 0) + '%',
-    '  Technical Knowledge:     ' + (groupPct['Knowledge'] || 0) + '%',
-    '  Conduct Scenarios:       ' + (groupPct['Scenarios'] || 0) + '%',
-    '  Self-Disclosure:         ' + (groupPct['Disclosure'] || 0) + '%',
-    '',
-    'FLAGS: ' + (flags.length > 0 ? flags.length + ' identified' : 'None'),
-    ...flags.map(f => '  • ' + f.q.substring(0, 80) + ' → ' + f.a.substring(0, 50)),
-    '',
-    'SUMMARY:',
-    summaryText,
-    '',
-    'Assessment: Controller Character, Conduct & Knowledge Assessment v1.0',
-    'NW Ambulance — Talent Acquisition · Confidential',
-  ];
-  document.getElementById('copy-area').textContent = lines.join('\n');
 }
 
 function copyIt() {
