@@ -736,10 +736,11 @@
 
 // ════════════════════════════════════════════════════════════════
 // AUTOMATION CONFIGURATION
-// Replace this with the n8n production webhook URL before publishing.
-// Keep Workable and Power Automate credentials in n8n, never in this HTML file.
+// Power Automate HTTP trigger URL.
+// Mirrored to the known-working leadership.html submission pattern.
 // ════════════════════════════════════════════════════════════════
-const SUBMISSION_WEBHOOK_URL = "https://defaultb9fe31c2de0742529875da1c500446.c8.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/2060ee1512924bb39b9ae0e6385659c6/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=8fVaHVHX9KKYP_xuD35nc2zk-yXKkNgtvcujapIHRZ4"; // Example: https://n8n.nwamb.us/webhook/candidate-assessment
+const FLOW_URL = "https://defaultb9fe31c2de0742529875da1c500446.c8.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/2060ee1512924bb39b9ae0e6385659c6/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=8fVaHVHX9KKYP_xuD35nc2zk-yXKkNgtvcujapIHRZ4";
+const SUBMISSION_WEBHOOK_URL = FLOW_URL;
 const ASSESSMENT_TYPE = "Field Staff Assessment";
 const ASSESSMENT_VERSION = "2.1-standard";
 
@@ -1254,7 +1255,7 @@ function getVerdict(score100,flagCount,integrity,safety,abuse){
 // ══════════════════════════════════════════════════════════════════
 // RESULTS
 // ══════════════════════════════════════════════════════════════════
-function showResults(){
+async function showResults(){
   document.getElementById('screen-assessment').style.display='none';
   document.getElementById('hRight').style.display='none';
   window.scrollTo({top:0,behavior:'smooth'});
@@ -1392,12 +1393,12 @@ function showResults(){
     submittedAt: new Date().toISOString()
   };
 
-  submitAssessment(payload);
+  const submitted = await sendToFlow(buildSubmissionPayload(payload));
+  showCompletion(submitted);
 }
 
 function buildSubmissionPayload(payload){
-  // Build a flat payload that Power Automate can use directly.
-  // Keep field names compatible with the earlier Leadership / Excel pattern.
+  // Build a flat JSON payload that matches the working Leadership assessment pattern.
   return {
     completionDate: payload.submittedAt || payload.candidate.completedAt || '',
     email: payload.candidate.email || '',
@@ -1405,12 +1406,13 @@ function buildSubmissionPayload(payload){
     lastName: payload.candidate.lastName || '',
     phone: payload.candidate.phone || '',
     position: payload.candidate.position || '',
-    assessmentType: payload.assessmentType || '',
+    assessmentType: 'Field Staff',
     assessmentVersion: payload.assessmentVersion || '',
     score: String(payload.scores.compositeScore ?? ''),
     compositeScore: String(payload.scores.compositeScore ?? ''),
     recommendation: payload.scores.recommendation || '',
     riskProfile: payload.scores.riskProfile || '',
+    redFlags: String(payload.scores.riskIndicatorCount ?? ''),
     redFlagCount: String(payload.scores.riskIndicatorCount ?? ''),
     validityConcernCount: String(payload.scores.validityConcernCount ?? ''),
     redFlagResponses: JSON.stringify(payload.flags || []),
@@ -1437,33 +1439,31 @@ function buildSubmissionPayload(payload){
   };
 }
 
-async function submitAssessment(payload){
-  // Candidate-facing standard: never display score, recommendation, or risk flags.
-  // Power Automate HTTP endpoints often do not return CORS-readable responses to GitHub Pages.
-  // mode:'no-cors' allows the browser to send the POST without requiring a readable confirmation response.
-  const ref=document.getElementById('complete-ref');
-  const simplePayload=buildSubmissionPayload(payload);
-
-  document.getElementById('screen-complete').style.display='block';
-
-  if(!SUBMISSION_WEBHOOK_URL){
-    ref.style.display='block';
-    ref.textContent='Configuration notice: submission URL has not been set. Results were calculated locally but not submitted.';
-    return;
-  }
-
+async function sendToFlow(data){
   try{
-    await fetch(SUBMISSION_WEBHOOK_URL,{
-      method:'POST',
-      mode:'no-cors',
-      body:JSON.stringify(simplePayload)
+    console.log('Assessment payload sent to Power Automate:', data);
+    const response = await fetch(FLOW_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
     });
-
-    // no-cors returns an opaque response, so res.ok is intentionally not checked.
-    // If no exception is thrown, the browser accepted the outbound request.
+    return response.ok;
   }catch(e){
-    ref.style.display='block';
-    ref.textContent='Submission notice: the assessment was completed, but the submission could not be sent. Reference this message if recruiting requests follow-up.';
+    console.error('Flow submission failed', e);
+    return false;
+  }
+}
+
+function showCompletion(submitted){
+  const ref = document.getElementById('complete-ref');
+  document.getElementById('screen-complete').style.display = 'block';
+
+  if(submitted){
+    ref.style.display = 'none';
+    ref.textContent = '';
+  }else{
+    ref.style.display = 'block';
+    ref.textContent = 'Submission issue: Power Automate did not confirm receipt. Please notify recruiting that your assessment did not submit successfully.';
   }
 }
 
