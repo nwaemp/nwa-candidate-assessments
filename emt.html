@@ -1397,29 +1397,42 @@ function showResults(){
 
 async function submitAssessment(payload){
   // Candidate-facing standard: never display score, recommendation, or risk flags.
+  // GitHub Pages -> n8n can fail when using application/json because the browser sends a CORS preflight.
+  // Send as text/plain to avoid the preflight. In n8n, parse the body as JSON in the first Code node if needed.
   const ref=document.getElementById('complete-ref');
   let submitted=false;
+  let errorMessage='';
 
   if(SUBMISSION_WEBHOOK_URL){
     try{
       const res=await fetch(SUBMISSION_WEBHOOK_URL,{
         method:'POST',
-        headers:{'Content-Type':'application/json'},
-        body:JSON.stringify(payload)
+        headers:{'Content-Type':'text/plain;charset=UTF-8'},
+        body:JSON.stringify(payload),
+        keepalive:true
       });
+
+      // If n8n returns any 2xx response, treat it as submitted.
       submitted=res.ok;
+      if(!submitted) errorMessage='Webhook returned HTTP '+res.status;
     }catch(e){
       submitted=false;
+      errorMessage=e && e.message ? e.message : 'Browser blocked or failed the request';
     }
   }
 
   document.getElementById('screen-complete').style.display='block';
-  if(!submitted && !SUBMISSION_WEBHOOK_URL){
+
+  if(!SUBMISSION_WEBHOOK_URL){
     ref.style.display='block';
     ref.textContent='Configuration notice: webhook URL has not been set. Results were calculated locally but not submitted.';
   } else if(!submitted){
     ref.style.display='block';
-    ref.textContent='Submission notice: the assessment was completed, but the confirmation response was not received. Please contact recruiting if requested.';
+    ref.textContent='Submission notice: the assessment was completed, but the confirmation response was not received. Reference this message if recruiting requests follow-up.';
+    console.error('Assessment submission failed:', errorMessage);
+  } else {
+    ref.style.display='none';
+    console.log('Assessment submitted successfully to n8n.');
   }
 }
 
