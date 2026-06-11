@@ -1395,44 +1395,78 @@ function showResults(){
   submitAssessment(payload);
 }
 
+function buildN8nFormBody(payload){
+  // Send a simple form-style POST so n8n can parse $json.body fields without a Code node.
+  // This also avoids the browser CORS preflight commonly caused by application/json.
+  const form = new URLSearchParams();
+
+  form.append('completionDate', payload.submittedAt || payload.candidate.completedAt || '');
+  form.append('email', payload.candidate.email || '');
+  form.append('firstName', payload.candidate.firstName || '');
+  form.append('lastName', payload.candidate.lastName || '');
+  form.append('phone', payload.candidate.phone || '');
+  form.append('position', payload.candidate.position || '');
+  form.append('assessmentType', payload.assessmentType || '');
+  form.append('assessmentVersion', payload.assessmentVersion || '');
+  form.append('score', String(payload.scores.compositeScore ?? ''));
+  form.append('compositeScore', String(payload.scores.compositeScore ?? ''));
+  form.append('recommendation', payload.scores.recommendation || '');
+  form.append('riskProfile', payload.scores.riskProfile || '');
+  form.append('redFlagCount', String(payload.scores.riskIndicatorCount ?? ''));
+  form.append('validityConcernCount', String(payload.scores.validityConcernCount ?? ''));
+  form.append('redFlagResponses', JSON.stringify(payload.flags || []));
+  form.append('workableComment', payload.workableComment || '');
+  form.append('report', payload.report || '');
+  form.append('fullReport', payload.report || '');
+
+  // Workable/application context.
+  form.append('candidate_id', payload.applicationContext.candidate_id || '');
+  form.append('application_id', payload.applicationContext.application_id || '');
+  form.append('job_id', payload.applicationContext.job_id || '');
+  form.append('job_shortcode', payload.applicationContext.job_shortcode || '');
+  form.append('job_title', payload.applicationContext.job_title || '');
+  form.append('source', payload.applicationContext.source || 'workable_email');
+
+  // Category scores.
+  form.append('personalIntegrity', String(payload.scores.categories.personalIntegrity ?? ''));
+  form.append('resourceSystemRisk', String(payload.scores.categories.resourceSystemRisk ?? ''));
+  form.append('safetyAdherence', String(payload.scores.categories.safetyAdherence ?? ''));
+  form.append('professionalConduct', String(payload.scores.categories.professionalConduct ?? ''));
+  form.append('reliability', String(payload.scores.categories.reliability ?? ''));
+  form.append('situationalJudgment', String(payload.scores.categories.situationalJudgment ?? ''));
+  form.append('conductRisk', String(payload.scores.categories.conductRisk ?? ''));
+
+  // Keep the complete payload available as one field for archive/debugging.
+  form.append('payloadJson', JSON.stringify(payload));
+
+  return form;
+}
+
 async function submitAssessment(payload){
   // Candidate-facing standard: never display score, recommendation, or risk flags.
-  // GitHub Pages -> n8n can fail when using application/json because the browser sends a CORS preflight.
-  // Send as text/plain to avoid the preflight. In n8n, parse the body as JSON in the first Code node if needed.
   const ref=document.getElementById('complete-ref');
   let submitted=false;
-  let errorMessage='';
 
   if(SUBMISSION_WEBHOOK_URL){
     try{
       const res=await fetch(SUBMISSION_WEBHOOK_URL,{
         method:'POST',
-        headers:{'Content-Type':'text/plain;charset=UTF-8'},
-        body:JSON.stringify(payload),
-        keepalive:true
+        headers:{'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8'},
+        body:buildN8nFormBody(payload)
       });
-
-      // If n8n returns any 2xx response, treat it as submitted.
       submitted=res.ok;
-      if(!submitted) errorMessage='Webhook returned HTTP '+res.status;
     }catch(e){
       submitted=false;
-      errorMessage=e && e.message ? e.message : 'Browser blocked or failed the request';
     }
   }
 
   document.getElementById('screen-complete').style.display='block';
-
-  if(!SUBMISSION_WEBHOOK_URL){
+  if(!submitted && !SUBMISSION_WEBHOOK_URL){
     ref.style.display='block';
     ref.textContent='Configuration notice: webhook URL has not been set. Results were calculated locally but not submitted.';
   } else if(!submitted){
     ref.style.display='block';
     ref.textContent='Submission notice: the assessment was completed, but the confirmation response was not received. Reference this message if recruiting requests follow-up.';
-    console.error('Assessment submission failed:', errorMessage);
-  } else {
-    ref.style.display='none';
-    console.log('Assessment submitted successfully to n8n.');
   }
 }
 
