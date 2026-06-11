@@ -736,8 +736,8 @@
 
 // ════════════════════════════════════════════════════════════════
 // AUTOMATION CONFIGURATION
-// Power Automate HTTP trigger URL.
-// Mirrored to the known-working leadership.html submission pattern.
+// Replace this with the n8n production webhook URL before publishing.
+// Keep Workable and Power Automate credentials in n8n, never in this HTML file.
 // ════════════════════════════════════════════════════════════════
 const FLOW_URL = "https://defaultb9fe31c2de0742529875da1c500446.c8.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/2060ee1512924bb39b9ae0e6385659c6/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=8fVaHVHX9KKYP_xuD35nc2zk-yXKkNgtvcujapIHRZ4";
 const SUBMISSION_WEBHOOK_URL = FLOW_URL;
@@ -1255,7 +1255,7 @@ function getVerdict(score100,flagCount,integrity,safety,abuse){
 // ══════════════════════════════════════════════════════════════════
 // RESULTS
 // ══════════════════════════════════════════════════════════════════
-async function showResults(){
+function showResults(){
   document.getElementById('screen-assessment').style.display='none';
   document.getElementById('hRight').style.display='none';
   window.scrollTo({top:0,behavior:'smooth'});
@@ -1393,12 +1393,31 @@ async function showResults(){
     submittedAt: new Date().toISOString()
   };
 
-  const submitted = await sendToFlow(buildSubmissionPayload(payload));
-  showCompletion(submitted);
+  submitAssessment(payload);
+}
+
+function excelSafeText(value, maxLength = 30000){
+  // Excel cells support up to 32,767 characters. Graph can fail earlier when long
+  // multiline text contains smart punctuation, emoji, or control characters.
+  // This keeps the report readable while making it safe for Excel table rows.
+  return String(value || '')
+    .replace(/\r\n/g, '\n')
+    .replace(/\r/g, '\n')
+    .replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g, '')
+    .replace(/[⚠✓→—–]/g, '-')
+    .replace(/[“”]/g, '"')
+    .replace(/[‘’]/g, "'")
+    .replace(/[\t ]+/g, ' ')
+    .substring(0, maxLength);
 }
 
 function buildSubmissionPayload(payload){
-  // Build a flat JSON payload that matches the working Leadership assessment pattern.
+  // Flat JSON payload, mirrored to the known-working leadership.html pattern.
+  // Report/fullReport are sanitized and prefixed with an apostrophe so Excel treats
+  // the long narrative as plain text.
+  const safeReport = "'" + excelSafeText(payload.report || '', 30000);
+  const safeRedFlagResponses = excelSafeText(JSON.stringify(payload.flags || []), 12000);
+
   return {
     completionDate: payload.submittedAt || payload.candidate.completedAt || '',
     email: payload.candidate.email || '',
@@ -1415,10 +1434,10 @@ function buildSubmissionPayload(payload){
     redFlags: String(payload.scores.riskIndicatorCount ?? ''),
     redFlagCount: String(payload.scores.riskIndicatorCount ?? ''),
     validityConcernCount: String(payload.scores.validityConcernCount ?? ''),
-    redFlagResponses: JSON.stringify(payload.flags || []),
-    workableComment: payload.workableComment || '',
-    report: payload.report || '',
-    fullReport: payload.report || '',
+    redFlagResponses: safeRedFlagResponses,
+    workableComment: excelSafeText(payload.workableComment || '', 12000),
+    report: safeReport,
+    fullReport: safeReport,
 
     candidate_id: payload.applicationContext.candidate_id || '',
     application_id: payload.applicationContext.application_id || '',
@@ -1435,7 +1454,15 @@ function buildSubmissionPayload(payload){
     situationalJudgment: String(payload.scores.categories.situationalJudgment ?? ''),
     conductRisk: String(payload.scores.categories.conductRisk ?? ''),
 
-    payloadJson: JSON.stringify(payload)
+    payloadJson: excelSafeText(JSON.stringify({
+      assessmentType: payload.assessmentType,
+      assessmentVersion: payload.assessmentVersion,
+      candidate: payload.candidate,
+      applicationContext: payload.applicationContext,
+      scores: payload.scores,
+      flagCount: payload.flags ? payload.flags.length : 0,
+      submittedAt: payload.submittedAt
+    }), 30000)
   };
 }
 
@@ -1452,6 +1479,12 @@ async function sendToFlow(data){
     console.error('Flow submission failed', e);
     return false;
   }
+}
+
+async function submitAssessment(payload){
+  // Candidate-facing standard: never display score, recommendation, or risk flags.
+  const submitted = await sendToFlow(buildSubmissionPayload(payload));
+  showCompletion(submitted);
 }
 
 function showCompletion(submitted){
