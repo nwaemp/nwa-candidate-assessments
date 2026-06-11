@@ -218,15 +218,6 @@ body::before{
 .nav-info{font-family:'DM Mono',monospace;font-size:11px;color:var(--muted)}
 .nav-btns{display:flex;gap:9px}
 
-
-/* ── THANK YOU ── */
-#screen-thankyou{display:none}
-.thank-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:38px 34px;text-align:center;max-width:560px;margin:40px auto}
-.thank-kicker{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:var(--gold);margin-bottom:12px}
-.thank-h{font-family:'Libre Baskerville',serif;font-size:32px;font-weight:700;color:var(--ink);line-height:1.15;margin-bottom:14px}
-.thank-p{font-size:14px;color:var(--muted);line-height:1.8;margin:0 auto;max-width:420px}
-.submit-error{background:var(--red-bg);border:1px solid var(--red-bdr);color:var(--red);border-radius:6px;padding:14px 16px;margin-top:18px;font-size:13px;line-height:1.6;text-align:left;display:none}
-
 /* ── RESULTS ── */
 #screen-results{display:none}
 .r-top{
@@ -278,6 +269,46 @@ body::before{
 .btn-copy{font-size:12px;color:rgba(232,228,220,0.65);background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);border-radius:5px;padding:7px 14px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .14s}
 .btn-copy:hover{background:rgba(255,255,255,0.12);color:#E8E4DC}
 .export-row{display:flex;gap:9px;justify-content:center;flex-wrap:wrap;margin-top:22px}
+
+
+/* ── COMPLETION SCREEN ── */
+#screen-complete{display:none}
+.complete-card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:34px 32px;
+  max-width:620px;
+}
+.complete-icon{
+  width:46px;height:46px;border-radius:50%;
+  background:var(--green-bg);
+  border:1px solid var(--green-bdr);
+  color:var(--green);
+  display:flex;align-items:center;justify-content:center;
+  font-size:24px;margin-bottom:20px;
+}
+.complete-title{
+  font-family:'Libre Baskerville',serif;
+  font-size:28px;color:var(--ink);margin-bottom:11px;
+}
+.complete-text{
+  color:var(--muted);
+  font-size:15px;
+  line-height:1.8;
+  max-width:520px;
+}
+.complete-ref{
+  margin-top:22px;
+  padding:12px 14px;
+  border:1px solid var(--border);
+  background:rgba(26,23,20,0.04);
+  border-radius:5px;
+  color:var(--muted);
+  font-size:12px;
+  font-family:'DM Mono',monospace;
+  word-break:break-word;
+}
 
 @media(max-width:540px){
   .hdr{padding:0 14px}
@@ -359,17 +390,6 @@ body::before{
   </div>
 </div>
 
-
-<!-- ══ THANK YOU ══ -->
-<div id="screen-thankyou">
-  <div class="thank-card">
-    <div class="thank-kicker">Assessment Submitted</div>
-    <h2 class="thank-h">Thank you for completing the assessment.</h2>
-    <p class="thank-p">Your responses have been received. The hiring team will review your assessment as part of the candidate review process.</p>
-    <div class="submit-error" id="submit-error"></div>
-  </div>
-</div>
-
 <!-- ══ RESULTS ══ -->
 <div id="screen-results">
   <div class="r-top">
@@ -396,9 +416,51 @@ body::before{
   </div>
 </div>
 
+
+<!-- ══ COMPLETION ══ -->
+<div id="screen-complete">
+  <div class="complete-card">
+    <div class="complete-icon">✓</div>
+    <h2 class="complete-title">Assessment Submitted</h2>
+    <p class="complete-text">
+      Thank you. Your assessment has been submitted successfully. The hiring team will review your application and follow up through the normal recruiting process.
+    </p>
+    <div class="complete-ref" id="complete-ref" style="display:none"></div>
+  </div>
+</div>
+
 </main>
 
 <script>
+
+// ================================================================
+// AUTOMATION CONFIGURATION
+// Mirrored to the Field Staff assessment submission standard.
+// Candidate-facing results are hidden. Power Automate receives a flat JSON payload.
+// ================================================================
+const FLOW_URL = "https://defaultb9fe31c2de0742529875da1c500446.c8.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/443e14789e624ef190a2ff64dc0cabf5/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=iAjkhXQMPIMonRJng05qWDhkfPliI-7jM4CvQzjlhl0";
+const ASSESSMENT_TYPE = "Dispatcher";
+const ASSESSMENT_VERSION = "1.0-fieldstaff-standard";
+
+const urlParams = new URLSearchParams(window.location.search);
+const applicationContext = {
+  candidate_id: urlParams.get('candidate_id') || '',
+  application_id: urlParams.get('application_id') || '',
+  job_shortcode: urlParams.get('job_shortcode') || '',
+  job_title: urlParams.get('job_title') || '',
+  job_id: urlParams.get('job_id') || '',
+  source: urlParams.get('source') || 'workable_email'
+};
+
+function applyUrlContext(){
+  if(applicationContext.job_title){
+    const pos=document.getElementById('i-pos');
+    if(pos) pos.value=applicationContext.job_title;
+  }
+}
+
+document.addEventListener('DOMContentLoaded', applyUrlContext);
+
 // ================================================================
 // SCORING RULES
 //
@@ -417,11 +479,6 @@ body::before{
 // ================================================================
 
 const LIKERT = ['Strongly Disagree','Disagree','Neutral','Agree','Strongly Agree'];
-
-const POWER_AUTOMATE_URL = 'https://defaultb9fe31c2de0742529875da1c500446.c8.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/443e14789e624ef190a2ff64dc0cabf5/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=iAjkhXQMPIMonRJng05qWDhkfPliI-7jM4CvQzjlhl0';
-const ASSESSMENT_TYPE = 'Dispatcher';
-const ASSESSMENT_VERSION = 'NW Ambulance Dispatcher Character & Conduct Assessment v1.0';
-
 
 const SECTIONS = [
 
@@ -766,9 +823,10 @@ function start() {
     name: fn+' '+ln,
     email: em,
     phone: document.getElementById('i-ph').value.trim(),
-    pos: document.getElementById('i-pos').value.trim() || 'Dispatcher',
+    pos: document.getElementById('i-pos').value.trim() || applicationContext.job_title || 'Dispatcher',
     date: new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'}),
-    completionDate: new Date().toISOString().split('T')[0]
+    completedAt: new Date().toISOString(),
+    context: applicationContext
   };
   document.getElementById('screen-welcome').style.display = 'none';
   document.getElementById('screen-assessment').style.display = 'block';
@@ -873,7 +931,7 @@ function next() {
     return;
   }
   if (sec < SECTIONS.length-1) { sec++; render(); }
-  else submitAssessment();
+  else showResults();
 }
 
 // ── SCORING ENGINE ────────────────────────────────────────────────
@@ -975,10 +1033,9 @@ function getVerdict(composite, redFlagCount, integrity, confidentiality) {
   return { label:'Do Not Advance', cls:'vp-no' };
 }
 
-// ── SHOW RESULTS ──────────────────────────────────────────────────
-function showResults() {
+// ── SHOW RESULTS / SUBMISSION ─────────────────────────────────────
+async function showResults() {
   document.getElementById('screen-assessment').style.display = 'none';
-  document.getElementById('screen-results').style.display = 'block';
   document.getElementById('hdr-right').style.display = 'none';
   window.scrollTo({top:0,behavior:'smooth'});
 
@@ -987,147 +1044,60 @@ function showResults() {
   const validity = getValidityConcerns();
   const verdict  = getVerdict(composite, flags.length, avg['Integrity']||0, avg['Confidentiality']||0);
 
-  // ── Header
-  const vp = document.getElementById('v-pill');
-  vp.textContent = verdict.label;
-  vp.className = 'v-pill ' + verdict.cls;
-  document.getElementById('r-name').textContent  = cand.name;
-  document.getElementById('r-meta').textContent  = cand.pos + '  ·  ' + cand.date;
-  document.getElementById('r-score').textContent = composite.toFixed(2);
-
-  // ── Category bars
-  const cg = document.getElementById('cat-grid');
-  cg.innerHTML = '';
-  CATS.forEach(cat => {
-    const val = avg[cat.key] || 0;
-    const pct = ((val-1)/4)*100;
-    const color = val>=4.2 ? '#1E5C35' : val>=3.4 ? '#6B4A00' : '#8C1F1F';
-    const card = document.createElement('div');
-    card.className = 'cat-card';
-    card.innerHTML =
-      '<div class="cat-lbl">'+cat.label+'</div>' +
-      '<div class="cat-row">'+
-        '<div class="cat-bar-bg"><div class="cat-bar" style="width:0%;background:'+color+'" data-pct="'+pct.toFixed(0)+'"></div></div>'+
-        '<div class="cat-val" style="color:'+color+'">'+val.toFixed(1)+'</div>'+
-      '</div>';
-    cg.appendChild(card);
-  });
-  setTimeout(()=>{ document.querySelectorAll('.cat-bar').forEach(b=>{ b.style.width=b.dataset.pct+'%'; }); },100);
-
-  // ── Flags
-  const fb = document.getElementById('flags-box');
-  const fl = document.getElementById('flags-list');
-  if (flags.length > 0) {
-    fb.style.display = 'block';
-    fl.innerHTML = flags.map(f =>
-      '<div class="flag-row">'+
-        '<div class="flag-q">'+f.q+'</div>'+
-        '<div class="flag-a">→ '+f.a+'</div>'+
-        (f.why?'<div class="flag-why">'+f.why+'</div>':'')+
-      '</div>'
-    ).join('');
-  }
-
-  // ── Summary text
-  const sb = document.getElementById('sum-box');
   let summary = '';
   if (verdict.cls==='vp-hire') {
     summary = 'This candidate demonstrates strong alignment with NWA dispatch standards across all measured dimensions. Scores indicate integrity, sound judgment, and a healthy approach to protocol compliance and information handling.';
   } else if (verdict.cls==='vp-review') {
     summary = 'This candidate shows generally positive work attitudes with some areas warranting discussion in the interview. Pay close attention to any red flags and probe confidentiality and protocol compliance directly.';
   } else {
-    summary = 'This candidate\'s responses indicate significant concerns in one or more critical areas. A thorough review is recommended before advancing. Hard stops in integrity or information handling should be discussed with the hiring manager before any next step.';
-  }
-  if ((avg['Integrity']||0)      < 3.8) summary += ' Work Integrity score ('+((avg['Integrity']||0).toFixed(1))+') is below target — probe documentation habits and rule compliance directly in interview.';
-  if ((avg['Confidentiality']||0)< 3.8) summary += ' Information Handling score ('+((avg['Confidentiality']||0).toFixed(1))+') warrants close attention — explore data access attitudes and privacy understanding.';
-  if ((avg['Safety']||0)         < 3.8) summary += ' Safety & Protocol score ('+((avg['Safety']||0).toFixed(1))+') is below target — probe protocol adherence under pressure.';
-  if ((avg['StressTolerance']||0)< 3.5) summary += ' Stress Tolerance score ('+((avg['StressTolerance']||0).toFixed(1))+') suggests potential concerns under high-volume operational conditions.';
-  if (validity >= 1) summary += ' Validity check flags suggest possible socially desirable responding — weight interview and reference checks more heavily than assessment scores.';
-
-  const items = [
-    {l:'Composite Score',          v:composite.toFixed(2)+' / 5.00', n:verdict.label},
-    {l:'Red Flags',                v:flags.length===0?'None':flags.length+' identified', n:flags.length>0?'See detail above':''},
-    {l:'Work Integrity',           v:(avg['Integrity']||0).toFixed(2), n:'Honesty, accountability, documentation standards'},
-    {l:'Info. Handling & Privacy', v:(avg['Confidentiality']||0).toFixed(2), n:'Patient data, CAD access, confidentiality'},
-    {l:'Safety & Protocol',        v:(avg['Safety']||0).toFixed(2), n:'Protocol compliance, escalation, accuracy'},
-    {l:'Stress Tolerance',         v:(avg['StressTolerance']||0).toFixed(2), n:'Pressure response, emotional stability'},
-    {l:'Teamwork & Communication', v:(avg['Teamwork']||0).toFixed(2), n:'Collaboration, communication, receptiveness'},
-    {l:'Situational Judgment',     v:(avg['SituationalJudgment']||0).toFixed(2), n:'Dispatch scenario decision-making'},
-    {l:'Conduct Risk',             v:(avg['MisconductRisk']||0).toFixed(2), n:'Rule attitudes, resource use, reliability'},
-  ];
-  sb.innerHTML = '<h3>Assessment Summary</h3>' +
-    '<div style="font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--border)">'+summary+'</div>' +
-    items.map(it =>
-      '<div class="sum-row">'+
-        '<div class="sum-lbl">'+it.l+'</div>'+
-        '<div><div class="sum-val">'+it.v+'</div>'+(it.n?'<div class="sum-note">'+it.n+'</div>':'')+
-        '</div></div>'
-    ).join('');
-
-  // ── Workable report
-  const lines = [
-    'DISPATCHER ASSESSMENT — '+cand.name.toUpperCase(),
-    'Position: '+cand.pos+'   |   Date: '+cand.date,
-    'Email: '+cand.email+(cand.phone?'   |   Phone: '+cand.phone:''),
-    '',
-    'RECOMMENDATION: '+verdict.label,
-    'Composite Score: '+composite.toFixed(2)+' / 5.00',
-    '',
-    'CATEGORY SCORES:',
-    '  Work Integrity:           '+((avg['Integrity']||0).toFixed(2)),
-    '  Info. Handling & Privacy: '+((avg['Confidentiality']||0).toFixed(2)),
-    '  Safety & Protocol:        '+((avg['Safety']||0).toFixed(2)),
-    '  Stress Tolerance:         '+((avg['StressTolerance']||0).toFixed(2)),
-    '  Teamwork & Comms:         '+((avg['Teamwork']||0).toFixed(2)),
-    '  Situational Judgment:     '+((avg['SituationalJudgment']||0).toFixed(2)),
-    '  Conduct Risk:             '+((avg['MisconductRisk']||0).toFixed(2)),
-    '',
-    'RED FLAGS: '+(flags.length>0?flags.length+' identified':'None'),
-    ...flags.map(f=>'  • '+f.q.substring(0,90)+' → '+f.a.substring(0,50)),
-    '',
-    'SUMMARY:',
-    summary,
-    '',
-    'Assessment: NW Ambulance Dispatcher Character & Conduct Assessment v1.0',
-    'Northwest Ambulance — Talent Acquisition · Confidential',
-  ];
-  document.getElementById('copy-area').textContent = lines.join('\n');
-}
-
-
-// ── SUBMISSION / HIDDEN RESULTS ───────────────────────────────────
-function buildAssessmentSummary(verdict, avg, flags, validity) {
-  let summary = '';
-  if (verdict.cls === 'vp-hire') {
-    summary = 'This candidate demonstrates strong alignment with NWA dispatch standards across all measured dimensions. Scores indicate integrity, sound judgment, protocol compliance, and appropriate information handling.';
-  } else if (verdict.cls === 'vp-review') {
-    summary = 'This candidate shows generally positive work attitudes with some areas warranting discussion in the interview. Pay close attention to any red flags and probe confidentiality, protocol compliance, and stress tolerance directly.';
-  } else {
     summary = 'This candidate\\'s responses indicate significant concerns in one or more critical areas. A thorough review is recommended before advancing. Hard stops in integrity or information handling should be discussed with the hiring manager before any next step.';
   }
+  if ((avg['Integrity']||0) < 3.8) summary += ' Work Integrity score ('+((avg['Integrity']||0).toFixed(1))+') is below target - probe documentation habits and rule compliance directly in interview.';
+  if ((avg['Confidentiality']||0) < 3.8) summary += ' Information Handling score ('+((avg['Confidentiality']||0).toFixed(1))+') warrants close attention - explore data access attitudes and privacy understanding.';
+  if ((avg['Safety']||0) < 3.8) summary += ' Safety & Protocol score ('+((avg['Safety']||0).toFixed(1))+') is below target - probe protocol adherence under pressure.';
+  if ((avg['StressTolerance']||0) < 3.5) summary += ' Stress Tolerance score ('+((avg['StressTolerance']||0).toFixed(1))+') suggests potential concerns under high-volume operational conditions.';
+  if (validity >= 1) summary += ' Validity check flags suggest possible socially desirable responding - weight interview and reference checks more heavily than assessment scores.';
 
-  if ((avg['Integrity'] || 0) < 3.8) summary += ' Work Integrity score (' + ((avg['Integrity'] || 0).toFixed(1)) + ') is below target — probe documentation habits and rule compliance directly in interview.';
-  if ((avg['Confidentiality'] || 0) < 3.8) summary += ' Information Handling score (' + ((avg['Confidentiality'] || 0).toFixed(1)) + ') warrants close attention — explore data access attitudes and privacy understanding.';
-  if ((avg['Safety'] || 0) < 3.8) summary += ' Safety & Protocol score (' + ((avg['Safety'] || 0).toFixed(1)) + ') is below target — probe protocol adherence under pressure.';
-  if ((avg['StressTolerance'] || 0) < 3.5) summary += ' Stress Tolerance score (' + ((avg['StressTolerance'] || 0).toFixed(1)) + ') suggests potential concerns under high-volume operational conditions.';
-  if (validity >= 1) summary += ' Validity check flags suggest possible socially desirable responding — weight interview and reference checks more heavily than assessment scores.';
+  const report = buildReport(avg, composite, flags, validity, verdict, summary);
+  const redFlagResponses = buildRedFlagResponses(flags);
 
-  return summary;
-}
+  const payload = {
+    completionDate: cand.completedAt || new Date().toISOString(),
+    email: cand.email || '',
+    firstName: cand.firstName || '',
+    lastName: cand.lastName || '',
+    phone: cand.phone || '',
+    position: cand.pos || 'Dispatcher',
+    assessmentType: ASSESSMENT_TYPE,
+    assessmentVersion: ASSESSMENT_VERSION,
+    score: composite.toFixed(2),
+    compositeScore: composite.toFixed(2),
+    recommendation: verdict.label,
+    redFlags: String(flags.length),
+    redFlagCount: String(flags.length),
+    validityConcernCount: String(validity),
+    redFlagResponses: redFlagResponses,
+    report: report,
+    fullReport: report,
 
-function buildRedFlagResponses(flags) {
-  if (!flags.length) return 'None';
-  const lines = ['=== Red Flag Responses ===', ''];
-  flags.forEach((f, i) => {
-    lines.push('Flag ' + (i + 1));
-    lines.push('Question: ' + String(f.q || '').replace(/<[^>]+>/g, ''));
-    lines.push('Candidate Response: ' + String(f.a || ''));
-    lines.push('Reason Flagged: ' + String(f.why || 'Response matched a configured red-flag answer for this assessment.'));
-    lines.push('');
-    lines.push('--------------------------------------------------');
-    lines.push('');
-  });
-  return lines.join('\n');
+    candidate_id: applicationContext.candidate_id || '',
+    application_id: applicationContext.application_id || '',
+    job_id: applicationContext.job_id || '',
+    job_shortcode: applicationContext.job_shortcode || '',
+    job_title: applicationContext.job_title || cand.pos || '',
+    source: applicationContext.source || 'workable_email',
+
+    workIntegrity: (avg['Integrity']||0).toFixed(2),
+    confidentiality: (avg['Confidentiality']||0).toFixed(2),
+    safety: (avg['Safety']||0).toFixed(2),
+    stressTolerance: (avg['StressTolerance']||0).toFixed(2),
+    teamwork: (avg['Teamwork']||0).toFixed(2),
+    situationalJudgment: (avg['SituationalJudgment']||0).toFixed(2),
+    conductRisk: (avg['MisconductRisk']||0).toFixed(2)
+  };
+
+  const submitted = await sendToFlow(buildSubmissionPayload(payload));
+  showCompletion(submitted);
 }
 
 function buildReport(avg, composite, flags, validity, verdict, summary) {
@@ -1137,79 +1107,167 @@ function buildReport(avg, composite, flags, validity, verdict, summary) {
     'Candidate: ' + cand.name,
     'Email:     ' + cand.email,
     'Phone:     ' + (cand.phone || 'N/A'),
-    'Position:  ' + cand.pos,
-    'Date:      ' + cand.completionDate,
+    'Position:  ' + (cand.pos || 'Dispatcher'),
+    'Date:      ' + cand.date,
+    'Completed: ' + (cand.completedAt || new Date().toISOString()),
+    '',
+    '--- WORKABLE APPLICATION CONTEXT ---',
+    'Candidate ID:   ' + (applicationContext.candidate_id || 'Not provided'),
+    'Application ID: ' + (applicationContext.application_id || 'Not provided'),
+    'Job ID:         ' + (applicationContext.job_id || 'Not provided'),
+    'Job Shortcode:  ' + (applicationContext.job_shortcode || 'Not provided'),
+    'Job Title:      ' + (applicationContext.job_title || cand.pos || 'Not provided'),
     '',
     'RECOMMENDATION: ' + verdict.label,
-    'Weighted Composite Score: ' + composite.toFixed(2) + ' / 5.00',
+    'Composite Score: ' + composite.toFixed(2) + ' / 5.00',
     '',
     '--- CATEGORY SCORES ---',
-    'Work Integrity:           ' + ((avg['Integrity'] || 0).toFixed(2)),
-    'Info. Handling & Privacy: ' + ((avg['Confidentiality'] || 0).toFixed(2)),
-    'Safety & Protocol:        ' + ((avg['Safety'] || 0).toFixed(2)),
-    'Stress Tolerance:         ' + ((avg['StressTolerance'] || 0).toFixed(2)),
-    'Teamwork & Comms:         ' + ((avg['Teamwork'] || 0).toFixed(2)),
-    'Situational Judgment:     ' + ((avg['SituationalJudgment'] || 0).toFixed(2)),
-    'Conduct Risk:             ' + ((avg['MisconductRisk'] || 0).toFixed(2)),
+    'Work Integrity:           ' + ((avg['Integrity']||0).toFixed(2)),
+    'Info. Handling & Privacy: ' + ((avg['Confidentiality']||0).toFixed(2)),
+    'Safety & Protocol:        ' + ((avg['Safety']||0).toFixed(2)),
+    'Stress Tolerance:         ' + ((avg['StressTolerance']||0).toFixed(2)),
+    'Teamwork & Comms:         ' + ((avg['Teamwork']||0).toFixed(2)),
+    'Situational Judgment:     ' + ((avg['SituationalJudgment']||0).toFixed(2)),
+    'Conduct Risk:             ' + ((avg['MisconductRisk']||0).toFixed(2)),
     '',
     'Red Flag Count:    ' + flags.length,
     'Validity Concerns: ' + validity,
     '',
+    '--- RED FLAG RESPONSES ---',
+    ...(flags.length ? flags.map((f,i)=>'Flag '+(i+1)+': '+f.q+' -> '+f.a+(f.why?' | '+f.why:'')) : ['None identified']),
+    '',
     '--- SUMMARY ---',
     summary,
     '',
-    'Assessment: ' + ASSESSMENT_VERSION
+    'Assessment: NW Ambulance Dispatcher Character & Conduct Assessment v1.0',
+    'Northwest Ambulance - Talent Acquisition - Confidential'
   ].join('\n');
 }
 
-async function submitAssessment() {
-  const { avg, composite } = computeScores();
-  const flags = getFlags();
-  const validity = getValidityConcerns();
-  const verdict = getVerdict(composite, flags.length, avg['Integrity'] || 0, avg['Confidentiality'] || 0);
-  const summary = buildAssessmentSummary(verdict, avg, flags, validity);
-  const redFlagResponses = buildRedFlagResponses(flags);
-  const report = buildReport(avg, composite, flags, validity, verdict, summary);
+function buildRedFlagResponses(flags) {
+  if (!flags.length) return 'None';
 
-  const payload = {
-    firstName: cand.firstName,
-    lastName: cand.lastName,
-    email: cand.email,
-    position: cand.pos,
-    assessmentType: ASSESSMENT_TYPE,
-    score: composite.toFixed(2),
-    recommendation: verdict.label,
-    redFlags: String(flags.length),
-    redFlagResponses: redFlagResponses,
-    completionDate: cand.completionDate,
-    report: report
+  return [
+    '=== Red Flag Responses ===',
+    '',
+    ...flags.flatMap((f, i) => [
+      'Flag ' + (i + 1),
+      'Question: ' + f.q,
+      'Candidate Response: ' + f.a,
+      'Reason Flagged: ' + (f.why || 'Response matched a configured red-flag answer for this assessment.'),
+      '',
+      '--------------------------------------------------',
+      ''
+    ])
+  ].join('\n');
+}
+
+function excelSafeText(value, maxLength = 30000){
+  return String(value || '')
+    .replace(/\r\n/g, '\n')
+    .replace(/\r/g, '\n')
+    .replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g, '')
+    .replace(/[⚠✓→—–]/g, '-')
+    .replace(/[“”]/g, '"')
+    .replace(/[‘’]/g, "'")
+    .replace(/[\t ]+/g, ' ')
+    .substring(0, maxLength);
+}
+
+function buildSubmissionPayload(payload){
+  const safeReport = "'" + excelSafeText(payload.report || '', 30000);
+  const safeRedFlagResponses = excelSafeText(payload.redFlagResponses || '', 12000);
+
+  return {
+    completionDate: payload.completionDate || '',
+    email: payload.email || '',
+    firstName: payload.firstName || '',
+    lastName: payload.lastName || '',
+    phone: payload.phone || '',
+    position: payload.position || '',
+    assessmentType: payload.assessmentType || 'Dispatcher',
+    assessmentVersion: payload.assessmentVersion || '',
+    score: payload.score || '',
+    compositeScore: payload.compositeScore || '',
+    recommendation: payload.recommendation || '',
+    redFlags: payload.redFlags || '',
+    redFlagCount: payload.redFlagCount || '',
+    validityConcernCount: payload.validityConcernCount || '',
+    redFlagResponses: safeRedFlagResponses,
+    report: safeReport,
+    fullReport: safeReport,
+
+    candidate_id: payload.candidate_id || '',
+    application_id: payload.application_id || '',
+    job_id: payload.job_id || '',
+    job_shortcode: payload.job_shortcode || '',
+    job_title: payload.job_title || '',
+    source: payload.source || 'workable_email',
+
+    workIntegrity: payload.workIntegrity || '',
+    confidentiality: payload.confidentiality || '',
+    safety: payload.safety || '',
+    stressTolerance: payload.stressTolerance || '',
+    teamwork: payload.teamwork || '',
+    situationalJudgment: payload.situationalJudgment || '',
+    conductRisk: payload.conductRisk || '',
+
+    payloadJson: excelSafeText(JSON.stringify({
+      assessmentType: payload.assessmentType,
+      assessmentVersion: payload.assessmentVersion,
+      candidate: {
+        firstName: payload.firstName,
+        lastName: payload.lastName,
+        email: payload.email,
+        phone: payload.phone,
+        position: payload.position
+      },
+      applicationContext: {
+        candidate_id: payload.candidate_id,
+        application_id: payload.application_id,
+        job_id: payload.job_id,
+        job_shortcode: payload.job_shortcode,
+        job_title: payload.job_title,
+        source: payload.source
+      },
+      scores: {
+        compositeScore: payload.compositeScore,
+        recommendation: payload.recommendation,
+        redFlags: payload.redFlags,
+        validityConcernCount: payload.validityConcernCount
+      },
+      submittedAt: payload.completionDate
+    }), 30000)
   };
+}
 
-  document.getElementById('screen-assessment').style.display = 'none';
-  document.getElementById('screen-results').style.display = 'none';
-  document.getElementById('screen-thankyou').style.display = 'block';
-  document.getElementById('hdr-right').style.display = 'none';
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-
-  try {
-    console.log('Dispatcher assessment payload sent to Power Automate:', payload);
-    const response = await fetch(POWER_AUTOMATE_URL, {
+async function sendToFlow(data){
+  try{
+    console.log('Assessment payload sent to Power Automate:', data);
+    const response = await fetch(FLOW_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
+      body: JSON.stringify(data)
     });
-    console.log('Power Automate response status:', response.status);
-    if (!response.ok) {
-      throw new Error('Power Automate returned status ' + response.status);
-    }
-  } catch (error) {
-    console.error('Dispatcher assessment submission failed:', error);
-    const errBox = document.getElementById('submit-error');
-    errBox.style.display = 'block';
-    errBox.textContent = 'Your assessment was completed, but we could not confirm electronic submission. Please notify the hiring team that your Dispatcher assessment may not have submitted successfully.';
+    return response.ok;
+  }catch(e){
+    console.error('Flow submission failed', e);
+    return false;
   }
 }
 
+function showCompletion(submitted){
+  const ref = document.getElementById('complete-ref');
+  document.getElementById('screen-complete').style.display = 'block';
+
+  if(submitted){
+    ref.style.display = 'none';
+    ref.textContent = '';
+  }else{
+    ref.style.display = 'block';
+    ref.textContent = 'Submission issue: Power Automate did not confirm receipt. Please notify recruiting that your assessment did not submit successfully.';
+  }
+}
 
 function copyIt() {
   navigator.clipboard.writeText(document.getElementById('copy-area').textContent)
