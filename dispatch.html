@@ -1050,7 +1050,7 @@ async function showResults() {
   } else if (verdict.cls==='vp-review') {
     summary = 'This candidate shows generally positive work attitudes with some areas warranting discussion in the interview. Pay close attention to any red flags and probe confidentiality and protocol compliance directly.';
   } else {
-    summary = 'This candidate\\'s responses indicate significant concerns in one or more critical areas. A thorough review is recommended before advancing. Hard stops in integrity or information handling should be discussed with the hiring manager before any next step.';
+    summary = "This candidate's responses indicate significant concerns in one or more critical areas. A thorough review is recommended before advancing. Hard stops in integrity or information handling should be discussed with the hiring manager before any next step.";
   }
   if ((avg['Integrity']||0) < 3.8) summary += ' Work Integrity score ('+((avg['Integrity']||0).toFixed(1))+') is below target - probe documentation habits and rule compliance directly in interview.';
   if ((avg['Confidentiality']||0) < 3.8) summary += ' Information Handling score ('+((avg['Confidentiality']||0).toFixed(1))+') warrants close attention - explore data access attitudes and privacy understanding.';
