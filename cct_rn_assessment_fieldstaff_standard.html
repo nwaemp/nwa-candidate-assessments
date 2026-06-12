@@ -1,0 +1,991 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CCT RN Assessment — NW Ambulance</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,600;0,700;1,400&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0e1520;
+    --ink2: #131c2b;
+    --gold: #c9a84c;
+    --gold-light: #e8c97a;
+    --gold-pale: rgba(201,168,76,0.12);
+    --gold-border: rgba(201,168,76,0.25);
+    --cream: #f0eee8;
+    --cream2: #dbd7cf;
+    --muted: #7a8499;
+    --border: rgba(255,255,255,0.07);
+    --card: rgba(255,255,255,0.03);
+    --green: #5ab88a;
+    --green-bg: rgba(90,184,138,0.12);
+    --green-border: rgba(90,184,138,0.3);
+    --amber: #e8b84b;
+    --amber-bg: rgba(232,184,75,0.12);
+    --amber-border: rgba(232,184,75,0.3);
+    --red: #e05c6a;
+    --red-bg: rgba(224,92,106,0.12);
+    --red-border: rgba(224,92,106,0.3);
+    --teal: #4cb8c9;
+    --teal-bg: rgba(76,184,201,0.12);
+    --teal-border: rgba(76,184,201,0.3);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--ink); color: var(--cream); min-height: 100vh; font-size: 15px; line-height: 1.65; }
+  body::before { content: ''; position: fixed; inset: 0; background-image: linear-gradient(rgba(76,184,201,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(76,184,201,0.025) 1px, transparent 1px); background-size: 44px 44px; pointer-events: none; z-index: 0; }
+  .header { background: var(--ink2); border-bottom: 1px solid var(--gold-border); padding: 0 40px; height: 62px; display: flex; align-items: center; gap: 16px; position: sticky; top: 0; z-index: 100; }
+  .logo-mark { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+  .logo-cross { width: 30px; height: 30px; position: relative; flex-shrink: 0; }
+  .logo-cross::before, .logo-cross::after { content: ''; position: absolute; background: linear-gradient(135deg, var(--teal) 0%, var(--gold) 100%); border-radius: 3px; }
+  .logo-cross::before { width: 30px; height: 10px; top: 10px; left: 0; }
+  .logo-cross::after  { width: 10px; height: 30px; top: 0; left: 10px; }
+  .logo-text { font-family: 'Fraunces', serif; font-size: 14px; font-weight: 600; color: var(--cream); }
+  .logo-text small { display: block; font-family: 'DM Sans', sans-serif; font-size: 10px; font-weight: 400; color: var(--muted); letter-spacing: 0.07em; text-transform: uppercase; }
+  .header-center { flex: 1; }
+  .prog-pill { display: flex; align-items: center; gap: 10px; background: var(--card); border: 1px solid var(--border); border-radius: 99px; padding: 5px 14px; }
+  .prog-label { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--muted); }
+  .prog-outer { width: 100px; height: 3px; background: rgba(255,255,255,0.08); border-radius: 2px; overflow: hidden; }
+  .prog-inner { height: 100%; background: var(--teal); border-radius: 2px; transition: width 0.4s ease; width: 0%; }
+  .main { max-width: 780px; margin: 0 auto; padding: 44px 24px 100px; position: relative; z-index: 1; }
+  #screen-welcome { display: block; }
+  .eyebrow { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--teal); margin-bottom: 18px; display: flex; align-items: center; gap: 8px; }
+  .eyebrow::before { content: ''; display: inline-block; width: 24px; height: 1px; background: var(--teal); }
+  .welcome-title { font-family: 'Fraunces', serif; font-size: clamp(30px, 5vw, 50px); font-weight: 700; line-height: 1.05; letter-spacing: -0.02em; margin-bottom: 20px; color: var(--cream); }
+  .welcome-title em { font-style: italic; color: var(--gold-light); }
+  .welcome-desc { font-size: 15px; color: var(--muted); max-width: 520px; line-height: 1.75; margin-bottom: 32px; }
+  .meta-row { display: flex; gap: 1px; margin-bottom: 40px; max-width: 500px; }
+  .meta-cell { flex: 1; background: var(--card); border: 1px solid var(--border); padding: 14px 16px; }
+  .meta-cell:first-child { border-radius: 8px 0 0 8px; }
+  .meta-cell:last-child  { border-radius: 0 8px 8px 0; }
+  .meta-val { font-family: 'Fraunces', serif; font-size: 24px; font-weight: 600; color: var(--cream); line-height: 1; margin-bottom: 3px; }
+  .meta-lbl { font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+  .cand-form { max-width: 480px; margin-bottom: 36px; }
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+  .form-group { display: flex; flex-direction: column; gap: 6px; }
+  .form-group label { font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); font-weight: 500; }
+  .form-group input { background: rgba(255,255,255,0.04); border: 1px solid var(--border); border-radius: 6px; padding: 9px 12px; color: var(--cream); font-size: 13px; font-family: 'DM Sans', sans-serif; outline: none; transition: border-color 0.2s; }
+  .form-group input:focus { border-color: var(--teal-border); }
+  .form-group input::placeholder { color: rgba(255,255,255,0.15); }
+  .btn-primary { background: var(--teal); color: var(--ink); border: none; border-radius: 6px; padding: 13px 28px; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 600; letter-spacing: 0.04em; cursor: pointer; transition: background 0.2s, transform 0.1s; display: inline-flex; align-items: center; gap: 8px; }
+  .btn-primary:hover { background: #62ccd9; }
+  .btn-primary:active { transform: scale(0.98); }
+  .btn-ghost { background: transparent; color: var(--muted); border: 1px solid var(--border); border-radius: 6px; padding: 11px 22px; font-family: 'DM Sans', sans-serif; font-size: 13px; cursor: pointer; transition: all 0.15s; }
+  .btn-ghost:hover { border-color: rgba(255,255,255,0.2); color: var(--cream); }
+  #screen-assessment { display: none; }
+  .sec-eyebrow { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--teal); margin-bottom: 6px; }
+  .sec-title { font-family: 'Fraunces', serif; font-size: 24px; font-weight: 600; color: var(--cream); margin-bottom: 4px; }
+  .sec-sub { font-size: 12px; color: var(--muted); margin-bottom: 32px; }
+  .q-block { margin-bottom: 0; animation: slideIn 0.25s ease both; }
+  @keyframes slideIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
+  .q-divider { height: 1px; background: var(--border); margin: 24px 0; }
+  .q-num { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--teal); letter-spacing: 0.1em; margin-bottom: 7px; }
+  .q-text { font-size: 15px; color: var(--cream); line-height: 1.55; margin-bottom: 14px; font-weight: 400; }
+  .likert-wrap { display: flex; gap: 6px; flex-wrap: wrap; }
+  .l-opt { flex: 1 1 0; min-width: 90px; background: var(--card); border: 1px solid var(--border); border-radius: 6px; padding: 9px 6px; text-align: center; cursor: pointer; font-size: 11px; color: var(--muted); line-height: 1.3; transition: all 0.15s; user-select: none; }
+  .l-opt:hover { background: rgba(76,184,201,0.06); color: var(--cream); }
+  .l-opt.selected { background: var(--teal-bg); border-color: var(--teal-border); color: var(--cream); }
+  .likert-ends { display: flex; justify-content: space-between; font-size: 10px; color: var(--muted); margin-top: 5px; padding: 0 2px; letter-spacing: 0.04em; }
+  .scenario-opts { display: flex; flex-direction: column; gap: 7px; }
+  .s-opt { display: flex; align-items: flex-start; gap: 12px; background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 13px 15px; cursor: pointer; transition: all 0.15s; user-select: none; }
+  .s-opt:hover { background: rgba(76,184,201,0.04); }
+  .s-opt.selected { background: var(--teal-bg); border-color: var(--teal-border); }
+  .s-letter { width: 22px; height: 22px; border-radius: 50%; border: 1.5px solid var(--muted); display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; flex-shrink: 0; margin-top: 1px; transition: all 0.15s; font-family: 'DM Mono', monospace; }
+  .s-opt.selected .s-letter { background: var(--teal); border-color: var(--teal); color: var(--ink); }
+  .s-text { font-size: 13px; color: var(--cream2); line-height: 1.5; }
+  .q-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 36px; padding-top: 24px; border-top: 1px solid var(--border); gap: 12px; }
+  .nav-info { font-size: 11px; color: var(--muted); font-family: 'DM Mono', monospace; }
+  .nav-btns { display: flex; gap: 10px; }
+  #screen-results { display: none; }
+  .results-top { text-align: center; padding: 36px 0 28px; }
+  .verdict-pill { display: inline-block; font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; padding: 6px 18px; border-radius: 99px; margin-bottom: 16px; }
+  .vp-hire   { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-border); }
+  .vp-review { background: var(--amber-bg); color: var(--amber); border: 1px solid var(--amber-border); }
+  .vp-no     { background: var(--red-bg);   color: var(--red);   border: 1px solid var(--red-border); }
+  .r-name { font-family: 'Fraunces', serif; font-size: 30px; font-weight: 700; color: var(--cream); margin-bottom: 6px; }
+  .r-meta { font-size: 12px; color: var(--muted); }
+  .r-composite { display: inline-flex; align-items: baseline; gap: 4px; margin-top: 16px; }
+  .r-composite .big { font-family: 'Fraunces', serif; font-size: 48px; font-weight: 700; color: var(--gold-light); line-height: 1; }
+  .r-composite .denom { font-size: 18px; color: var(--muted); }
+  .score-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 28px 0; }
+  .sc-card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 16px; }
+  .sc-label { font-size: 10px; letter-spacing: 0.07em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
+  .sc-bar-wrap { display: flex; align-items: center; gap: 8px; }
+  .sc-bar-bg { flex: 1; height: 4px; background: rgba(255,255,255,0.07); border-radius: 2px; overflow: hidden; }
+  .sc-bar-fill { height: 100%; border-radius: 2px; transition: width 1s ease; }
+  .sc-val { font-family: 'DM Mono', monospace; font-size: 14px; font-weight: 500; width: 30px; text-align: right; flex-shrink: 0; }
+  .flags-box { background: var(--red-bg); border: 1px solid var(--red-border); border-radius: 10px; padding: 18px 20px; margin-bottom: 16px; }
+  .flags-box h3 { font-size: 13px; font-weight: 600; color: var(--red); margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
+  .flag-item { font-size: 12px; color: var(--muted); padding: 4px 0; border-bottom: 1px solid rgba(255,255,255,0.04); }
+  .flag-item:last-child { border-bottom: none; }
+  .summary-box { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 18px 20px; margin-bottom: 20px; font-size: 13px; color: var(--muted); line-height: 1.7; }
+  .workable-box { background: var(--ink2); border: 1px solid var(--gold-border); border-radius: 10px; padding: 20px; margin-top: 24px; }
+  .workable-box h3 { font-family: 'Fraunces', serif; font-size: 15px; font-weight: 600; color: var(--cream); margin-bottom: 6px; }
+  .workable-box p { font-size: 12px; color: var(--muted); margin-bottom: 12px; }
+  .copy-area { background: rgba(0,0,0,0.3); border: 1px solid var(--border); border-radius: 7px; padding: 14px; font-family: 'DM Mono', monospace; font-size: 11px; color: var(--muted); white-space: pre-wrap; line-height: 1.7; margin-bottom: 10px; }
+  .btn-copy { font-size: 12px; color: var(--muted); background: rgba(255,255,255,0.04); border: 1px solid var(--border); border-radius: 6px; padding: 7px 14px; cursor: pointer; transition: all 0.15s; font-family: 'DM Sans', sans-serif; }
+  .btn-copy:hover { background: rgba(255,255,255,0.08); color: var(--cream); }
+  .export-row { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 28px; }
+
+  /* COMPLETION SCREEN */
+  #screen-complete { display: none; }
+  .complete-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 38px 34px;
+    max-width: 620px;
+  }
+  .complete-icon {
+    width: 46px; height: 46px;
+    border-radius: 50%;
+    background: var(--green-bg);
+    border: 1px solid var(--green-border);
+    color: var(--green);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+  .complete-title {
+    font-family: 'Fraunces', serif;
+    font-size: 30px;
+    color: var(--cream);
+    margin-bottom: 12px;
+  }
+  .complete-text {
+    color: var(--muted);
+    font-size: 15px;
+    line-height: 1.8;
+    max-width: 520px;
+  }
+  .complete-ref {
+    margin-top: 22px;
+    padding: 12px 14px;
+    border: 1px solid var(--border);
+    background: rgba(0,0,0,0.18);
+    border-radius: 7px;
+    color: var(--muted);
+    font-size: 12px;
+    font-family: 'DM Mono', monospace;
+    word-break: break-word;
+  }
+
+  @media (max-width: 580px) {
+    .header { padding: 0 16px; }
+    .main { padding: 24px 14px 80px; }
+    .form-grid { grid-template-columns: 1fr; }
+    .score-grid { grid-template-columns: 1fr 1fr; }
+    .likert-wrap { gap: 4px; }
+    .l-opt { min-width: 60px; padding: 7px 4px; font-size: 10px; }
+    .prog-pill { display: none; }
+  }
+  @media print {
+    body::before { display: none; }
+    .header { position: static; }
+    .btn-primary, .btn-ghost, .btn-copy, .export-row { display: none !important; }
+    body { background: white; color: #111; }
+  }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="logo-mark">
+    <div class="logo-cross"></div>
+    <div class="logo-text">
+      CCT RN Assessment
+      <small>NW Ambulance · Talent Acquisition</small>
+    </div>
+  </div>
+  <div class="header-center"></div>
+  <div id="headerRight" style="display:none;align-items:center;gap:14px;">
+    <div class="prog-pill">
+      <span class="prog-label" id="prog-label">0 / 50</span>
+      <div class="prog-outer"><div class="prog-inner" id="prog-bar"></div></div>
+    </div>
+  </div>
+</header>
+
+<main class="main">
+
+<div id="screen-welcome">
+  <div class="eyebrow">Critical Care Transport · RN Candidate Assessment</div>
+  <h2 class="welcome-title">CCT Registered Nurse<br><em>Character &amp; Conduct</em><br>Assessment</h2>
+  <p class="welcome-desc">
+    This assessment is part of the hiring process for Critical Care Transport RN candidates at NW Ambulance.
+    Answer honestly based on how you actually think and behave — not how you think we want you to answer.
+    Self-awareness is a strength in this role.
+  </p>
+  <div class="meta-row">
+    <div class="meta-cell"><div class="meta-val">50</div><div class="meta-lbl">Questions</div></div>
+    <div class="meta-cell"><div class="meta-val">12–15</div><div class="meta-lbl">Minutes</div></div>
+    <div class="meta-cell"><div class="meta-val">7</div><div class="meta-lbl">Categories</div></div>
+    <div class="meta-cell"><div class="meta-val">CCT</div><div class="meta-lbl">Level</div></div>
+  </div>
+  <div class="cand-form">
+    <div class="form-grid">
+      <div class="form-group"><label>First Name *</label><input type="text" id="i-fname" placeholder="Jane"></div>
+      <div class="form-group"><label>Last Name *</label><input type="text" id="i-lname" placeholder="Smith"></div>
+    </div>
+    <div class="form-grid">
+      <div class="form-group"><label>Email *</label><input type="email" id="i-email" placeholder="jane@email.com"></div>
+      <div class="form-group"><label>Phone</label><input type="tel" id="i-phone" placeholder="(555) 000-0000"></div>
+    </div>
+    <div class="form-group" style="margin-top:4px">
+      <label>Position Applied For</label>
+      <input type="text" id="i-position" placeholder="CCT RN — Critical Care Transport">
+    </div>
+  </div>
+  <button class="btn-primary" onclick="startAssessment()">Begin Assessment →</button>
+</div>
+
+<div id="screen-assessment">
+  <div class="sec-eyebrow" id="sec-tag">Section 1 of 7</div>
+  <div class="sec-title" id="sec-title">Professional Integrity &amp; Documentation</div>
+  <div class="sec-sub" id="sec-sub">Questions 1–7</div>
+  <div id="q-container"></div>
+  <div class="q-nav">
+    <span class="nav-info" id="nav-info"></span>
+    <div class="nav-btns">
+      <button class="btn-ghost" id="btn-prev" onclick="prevSec()" style="display:none">← Back</button>
+      <button class="btn-primary" id="btn-next" onclick="nextSec()">Next Section →</button>
+    </div>
+  </div>
+</div>
+
+<div id="screen-results">
+  <div class="results-top">
+    <div class="verdict-pill" id="v-pill"></div>
+    <div class="r-name" id="r-name"></div>
+    <div class="r-meta" id="r-meta"></div>
+    <div class="r-composite">
+      <span class="big" id="r-score">—</span>
+      <span class="denom">/ 5.00</span>
+    </div>
+  </div>
+  <div class="score-grid" id="score-grid"></div>
+  <div class="flags-box" id="flags-box" style="display:none">
+    <h3>⚠ Red Flag Responses</h3>
+    <div id="flags-list"></div>
+  </div>
+  <div class="summary-box" id="summary-box"></div>
+  <div class="workable-box">
+    <h3>Workable Notes — Copy &amp; Paste</h3>
+    <p>Paste the text below into the candidate's Notes tab in Workable.</p>
+    <div class="copy-area" id="copy-area"></div>
+    <button class="btn-copy" onclick="copyReport()">Copy to Clipboard</button>
+  </div>
+  <div class="export-row">
+    <button class="btn-primary" onclick="window.print()">Print / Save PDF</button>
+    <button class="btn-ghost" onclick="location.reload()">New Assessment</button>
+  </div>
+</div>
+
+
+<div id="screen-complete">
+  <div class="complete-card">
+    <div class="complete-icon">✓</div>
+    <h2 class="complete-title">Assessment Submitted</h2>
+    <p class="complete-text">
+      Thank you. Your assessment has been submitted successfully. The hiring team will review your application and follow up through the normal recruiting process.
+    </p>
+    <div class="complete-ref" id="complete-ref" style="display:none"></div>
+  </div>
+</div>
+
+</main>
+
+<script>
+
+// ================================================================
+// AUTOMATION CONFIGURATION
+// Mirrored to the Dispatcher / Field Staff assessment submission standard.
+// Candidate-facing results are hidden. Power Automate receives a flat JSON payload.
+// ================================================================
+const FLOW_URL = "https://defaultb9fe31c2de0742529875da1c500446.c8.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/0be584438e7d4eaf9cbbe105a7d128fb/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=TCCsVCwEDKzMByUJIUHIE1LjZrPoCKZDacXY9CfRGTA";
+const ASSESSMENT_TYPE = "CCT RN";
+const ASSESSMENT_VERSION = "1.0-fieldstaff-standard";
+
+const urlParams = new URLSearchParams(window.location.search);
+const applicationContext = {
+  candidate_id: urlParams.get('candidate_id') || '',
+  application_id: urlParams.get('application_id') || '',
+  job_shortcode: urlParams.get('job_shortcode') || '',
+  job_title: urlParams.get('job_title') || '',
+  job_id: urlParams.get('job_id') || '',
+  source: urlParams.get('source') || 'workable_email'
+};
+
+function applyUrlContext(){
+  if(applicationContext.job_title){
+    const pos = document.getElementById('i-position');
+    if(pos) pos.value = applicationContext.job_title;
+  }
+}
+
+document.addEventListener('DOMContentLoaded', applyUrlContext);
+
+const LIKERT = ["Strongly Disagree","Disagree","Neutral","Agree","Strongly Agree"];
+
+const QUESTIONS = [
+
+  // ── SECTION 1: Professional Integrity & Documentation (Q1–7) ──────
+  { id:1,  s:"Professional Integrity & Documentation", g:"Integrity", type:"likert", rev:false,
+    text:"I document patient care accurately and completely, even when it takes additional time at the end of a long shift." },
+  { id:2,  s:"Professional Integrity & Documentation", g:"Integrity", type:"likert", rev:false,
+    text:"If I make a clinical error, I report it accurately regardless of the consequence to myself." },
+  { id:3,  s:"Professional Integrity & Documentation", g:"Integrity", type:"likert", rev:true,
+    text:"Bending documentation slightly to match the expected clinical picture is a normal part of charting.",
+    rf:["Agree","Strongly Agree"] },
+  { id:4,  s:"Professional Integrity & Documentation", g:"Integrity", type:"likert", rev:false,
+    text:"I follow protocols and orders precisely, not approximately." },
+  { id:5,  s:"Professional Integrity & Documentation", g:"Integrity", type:"likert", rev:false,
+    text:"I would report a coworker's documentation error even if it created friction between us." },
+  { id:6,  s:"Professional Integrity & Documentation", g:"Integrity", type:"likert", rev:false,
+    text:"My documentation is as accurate at hour 22 of a shift as it is at hour 2." },
+  { id:7,  s:"Professional Integrity & Documentation", g:"Integrity", type:"likert", rev:false,
+    text:"I take personal responsibility for the quality of my patient care reports." },
+
+  // ── SECTION 2: Safety Culture & Clinical Judgment (Q8–16) ─────────
+  { id:8,  s:"Safety Culture & Clinical Judgment", g:"Safety", type:"likert", rev:false,
+    text:"I communicate patient deterioration to the receiving facility promptly, even if the conversation will be uncomfortable." },
+  { id:9,  s:"Safety Culture & Clinical Judgment", g:"Safety", type:"likert", rev:false,
+    text:"I perform a thorough patient assessment at the beginning of every transport, not only on complex cases." },
+  { id:10, s:"Safety Culture & Clinical Judgment", g:"Safety", type:"likert", rev:false,
+    text:"When I am uncertain about a clinical decision, I say so and seek guidance rather than acting without input." },
+  { id:11, s:"Safety Culture & Clinical Judgment", g:"Safety", type:"likert", rev:true,
+    text:"If a transport is going smoothly, reassessment mid-transport is often unnecessary.",
+    rf:["Agree","Strongly Agree"] },
+  { id:12, s:"Safety Culture & Clinical Judgment", g:"Safety", type:"likert", rev:false,
+    text:"I check equipment and medication at the start of every shift regardless of who used it before me." },
+  { id:13, s:"Safety Culture & Clinical Judgment", g:"Safety", type:"likert", rev:false,
+    text:"When I see a potential safety issue with a patient setup, I raise it even if the sending team seems confident." },
+  { id:14, s:"Safety Culture & Clinical Judgment", g:"Safety", type:"scenario",
+    text:"How many times in your career have you worked a shift of 16 hours or longer?",
+    opts:[
+      "Never — my shifts have been 12 hours or under",
+      "Once or twice — it has not been a regular part of my work",
+      "Occasionally — several times across different roles",
+      "Regularly — extended shifts have been a consistent part of my clinical work"
+    ],
+    sc:{A:1,B:2,C:3,D:5} },
+  { id:15, s:"Safety Culture & Clinical Judgment", g:"Safety", type:"scenario",
+    text:"Think of the most fatigued you have ever been during a clinical shift. What did you do?",
+    opts:[
+      "Pushed through it and said nothing — showing fatigue is unprofessional",
+      "Told my partner I was tired but kept going without escalating",
+      "Informed my supervisor, took any available break, and monitored my own performance closely",
+      "I have never been significantly fatigued during a clinical shift"
+    ],
+    sc:{A:1,B:2,C:5,D:1} },
+  { id:16, s:"Safety Culture & Clinical Judgment", g:"Safety", type:"scenario",
+    text:"What best describes how fatigue affects your clinical performance on extended shifts?",
+    opts:[
+      "I perform at the same level regardless of how long I have been working",
+      "I notice minor effects but they do not impact patient care",
+      "I recognize specific ways fatigue affects me and have concrete strategies to manage them",
+      "I have not worked shifts long enough to know how fatigue affects my clinical performance"
+    ],
+    sc:{A:2,B:3,C:5,D:1} },
+
+  // ── SECTION 3: Team Conduct & Interprofessional Behavior (Q17–23) ─
+  { id:17, s:"Team Conduct & Interprofessional Behavior", g:"Team Conduct", type:"likert", rev:true,
+    text:"As the nurse on the unit, I do not need to explain my clinical decisions to my EMT partner.",
+    rf:["Agree","Strongly Agree"] },
+  { id:18, s:"Team Conduct & Interprofessional Behavior", g:"Team Conduct", type:"likert", rev:false,
+    text:"When a supervisor gives me an operational direction — posting, routing, scheduling — I follow it, even if I would have made a different choice." },
+  { id:19, s:"Team Conduct & Interprofessional Behavior", g:"Team Conduct", type:"likert", rev:true,
+    text:"The clinical habits and workflows I developed in a hospital setting are generally more rigorous than what EMS transport requires.",
+    rf:["Agree","Strongly Agree"] },
+  { id:20, s:"Team Conduct & Interprofessional Behavior", g:"Team Conduct", type:"likert", rev:true,
+    text:"If I disagree with an operational decision made by a supervisor, I have the right to handle things my own way.",
+    rf:["Agree","Strongly Agree"] },
+  { id:21, s:"Team Conduct & Interprofessional Behavior", g:"Team Conduct", type:"likert", rev:true,
+    text:"As the clinical lead on the unit, certain operational tasks are below my role and can be left to the partner.",
+    rf:["Agree","Strongly Agree"] },
+  { id:22, s:"Team Conduct & Interprofessional Behavior", g:"Team Conduct", type:"likert", rev:false,
+    text:"I resolve interpersonal friction with a partner directly and professionally, not by complaining to others." },
+  { id:23, s:"Team Conduct & Interprofessional Behavior", g:"Team Conduct", type:"likert", rev:false,
+    text:"Working in EMS transport requires adjusting hospital-based habits and expectations — I am willing to do that." },
+
+  // ── SECTION 4: 24-Hour Shift Readiness (Q24–29) ───────────────────
+  { id:24, s:"24-Hour Shift Readiness", g:"Endurance", type:"likert", rev:false,
+    text:"I have worked extended shifts (12 hours or longer) and maintained clinical performance throughout." },
+  { id:25, s:"24-Hour Shift Readiness", g:"Endurance", type:"likert", rev:false,
+    text:"I understand that a 24-hour shift means I may be called to a critical transport at hour 22." },
+  { id:26, s:"24-Hour Shift Readiness", g:"Endurance", type:"likert", rev:false,
+    text:"I take responsibility for preparing myself physically before long shifts — sleep, nutrition, hydration." },
+  { id:27, s:"24-Hour Shift Readiness", g:"Endurance", type:"likert", rev:false,
+    text:"I have realistic expectations about what rest is available during a 24-hour transport shift." },
+  { id:28, s:"24-Hour Shift Readiness", g:"Endurance", type:"likert", rev:true,
+    text:"A nurse who finds 24-hour shifts too demanding should be accommodated with shorter assignments.",
+    rf:["Agree","Strongly Agree"] },
+  { id:29, s:"24-Hour Shift Readiness", g:"Endurance", type:"likert", rev:false,
+    text:"I inform my supervisor when my fatigue level is affecting my ability to perform safely." },
+
+  // ── SECTION 5: Conduct & Professionalism (Q30–34) ─────────────────
+  { id:30, s:"Conduct & Professionalism", g:"Professionalism", type:"likert", rev:false,
+    text:"I maintain professional conduct with patients and families regardless of how they treat me." },
+  { id:31, s:"Conduct & Professionalism", g:"Professionalism", type:"likert", rev:false,
+    text:"I treat confidential patient information with the same care in the field as I do in a facility." },
+  { id:32, s:"Conduct & Professionalism", g:"Professionalism", type:"likert", rev:true,
+    text:"Informal communication between crew members about patients during downtime is not a HIPAA concern.",
+    rf:["Agree","Strongly Agree"] },
+  { id:33, s:"Conduct & Professionalism", g:"Professionalism", type:"likert", rev:false,
+    text:"I arrive to shifts on time and prepared, treating tardiness as a patient safety issue, not just a scheduling one." },
+  { id:34, s:"Conduct & Professionalism", g:"Professionalism", type:"likert", rev:true,
+    text:"Regularly complaining to coworkers about management, policies, or specific colleagues is a reasonable way to cope with workplace stress.",
+    rf:["Agree","Strongly Agree"] },
+
+  // ── SECTION 6: Clinical & Workplace Scenarios (Q35–42) ────────────
+  { id:35, s:"Clinical & Workplace Scenarios", g:"Situational Judgment", type:"scenario",
+    text:"You arrive to pick up a ventilated patient. The sending ICU nurse gives you a rapid handoff and seems rushed. You have questions about the vent settings and sedation.",
+    opts:[
+      "Accept the patient and clarify the details en route",
+      "Complete your own assessment and get your questions answered before accepting the patient",
+      "Accept the patient to avoid holding up the ICU — you can figure it out",
+      "Ask your partner to review the paperwork while you assess the patient"
+    ],
+    sc:{A:2,B:5,C:1,D:3} },
+
+  { id:36, s:"Clinical & Workplace Scenarios", g:"Situational Judgment", type:"scenario",
+    text:"It is hour 22 of your 24-hour shift. You have been awake since the morning before the shift started. You have had no sleep during the shift. Your eyes are burning, your reaction time feels noticeably slower than normal, and you caught yourself re-reading the same line of a PCR three times. Dispatch calls with a critical interfacility transport — vented patient, 90-minute round trip.",
+    opts:[
+      "Accept the call without comment — this is what the job requires and you can push through it",
+      "Notify your supervisor immediately of your specific condition, complete the call if they direct you to, and document your notification",
+      "Refuse the call and tell dispatch you are not safe to transport",
+      "Accept the call, ask your partner to monitor you en route, and document your fatigue in the PCR"
+    ],
+    sc:{A:1,B:5,C:2,D:2} },
+
+  { id:37, s:"Clinical & Workplace Scenarios", g:"Situational Judgment", type:"scenario",
+    text:"Your partner makes a comment about a patient's lifestyle that you consider unprofessional — within earshot of the patient.",
+    opts:[
+      "Ignore it — the comment was not malicious and the partner is good at their job",
+      "Address it privately with the partner after the call",
+      "Report it to the supervisor immediately after the call and document it",
+      "Tell the partner in the moment that the comment is inappropriate, professionally and calmly"
+    ],
+    sc:{A:1,B:4,C:3,D:5} },
+
+  { id:38, s:"Clinical & Workplace Scenarios", g:"Situational Judgment", type:"scenario",
+    text:"You realize mid-transport that you did not perform a full medication reconciliation on departure. The patient appears stable.",
+    opts:[
+      "Note it but do not escalate — the patient is stable and you will document it",
+      "Perform the reconciliation now, document the gap, and notify the receiving facility",
+      "Do the reconciliation quietly and do not draw attention to the oversight",
+      "Wait until arrival and let the receiving team catch anything you may have missed"
+    ],
+    sc:{A:2,B:5,C:1,D:1} },
+
+  { id:39, s:"Clinical & Workplace Scenarios", g:"Situational Judgment", type:"scenario",
+    text:"You are at the sending facility preparing to transport a sedated, intubated patient. The chart has a signed DNR order. The patient cannot communicate. As you are loading, the patient's adult daughter — who is not listed as the healthcare proxy — stops you and says 'My mother is a full code. That DNR is wrong. Do not leave until this is fixed.' The sending nurse is present but says nothing.",
+    opts:[
+      "Proceed with transport — the signed DNR on the chart is the legal document and the daughter is not the proxy",
+      "Hold the transport, involve the sending physician and facility to resolve the discrepancy before you leave with the patient",
+      "Transport the patient and document the daughter's statement in the PCR — the receiving facility can sort it out",
+      "Ask your partner to stay with the patient while you find a supervisor to make the call"
+    ],
+    sc:{A:1,B:5,C:1,D:2} },
+
+  { id:40, s:"Clinical & Workplace Scenarios", g:"Situational Judgment", type:"scenario",
+    text:"The Field Supervisor on duty asks you to do something operationally — covering a post, adjusting your route — that you believe is not the most clinically efficient choice.",
+    opts:[
+      "Comply with the operational direction without comment",
+      "Comply and express your clinical concern to the supervisor respectfully",
+      "Override the operational direction because your clinical judgment takes priority",
+      "Do what the supervisor says and document that the decision was theirs"
+    ],
+    sc:{A:3,B:5,C:1,D:2} },
+
+  { id:41, s:"Clinical & Workplace Scenarios", g:"Situational Judgment", type:"scenario",
+    text:"You are at hour 23 of a 24-hour shift. Your relief has not yet arrived and there is an active transport request. What is your responsibility?",
+    opts:[
+      "Notify dispatch that your shift is ending and wait for relief before accepting anything",
+      "Remain on duty, accept the transport if directed, and complete a full handoff to the incoming nurse before going off duty",
+      "Contact your supervisor to request relief coverage before the transport departs",
+      "Accept the transport only if the estimated return puts you back before your relief is expected"
+    ],
+    sc:{A:1,B:5,C:3,D:2} },
+
+  { id:42, s:"Clinical & Workplace Scenarios", g:"Situational Judgment", type:"scenario",
+    text:"You notice the controlled substance log does not reconcile — there is a one-unit discrepancy on a narcotic. The end of your shift is in 30 minutes.",
+    opts:[
+      "Leave it for the next crew — you did not cause the discrepancy",
+      "Document the discrepancy immediately, notify your supervisor, and do not leave until it is resolved",
+      "Recount and if the discrepancy persists, note it in the handoff and leave on time",
+      "Ask your partner if they know what happened before doing anything official"
+    ],
+    sc:{A:1,B:5,C:2,D:2} },
+
+  // ── SECTION 7: Self-Assessment & Validity (Q43–50) ────────────────
+  { id:43, s:"Self-Assessment & Validity", g:"Self-Awareness", type:"likert", rev:true,
+    text:"Nurses transitioning from hospital to transport settings typically adapt quickly without needing significant adjustment.",
+    rf:["Agree","Strongly Agree"] },
+  { id:44, s:"Self-Assessment & Validity", g:"Self-Awareness", type:"likert", rev:false,
+    text:"I have blind spots in my clinical practice that feedback has helped me identify." },
+  { id:45, s:"Self-Assessment & Validity", g:"Self-Awareness", type:"likert", rev:true,
+    text:"After several years of clinical experience, most professionals have reached their ceiling of significant learning.",
+    rf:["Agree","Strongly Agree"] },
+  { id:46, s:"Self-Assessment & Validity", g:"Self-Awareness", type:"likert", rev:false,
+    text:"I have received critical feedback from a supervisor that I initially disagreed with but later accepted as valid." },
+  { id:47, s:"Self-Assessment & Validity", g:"Self-Awareness", type:"likert", rev:false,
+    text:"I can distinguish between feedback that is unfair and feedback that is simply uncomfortable." },
+
+  // Validity items (Q48–50)
+  { id:48, s:"Self-Assessment & Validity", g:"Validity", type:"likert", rev:false,
+    text:"I have never made a clinical error or a documentation mistake in my career.",
+    rf:["Agree","Strongly Agree"] },
+  { id:49, s:"Self-Assessment & Validity", g:"Validity", type:"likert", rev:false,
+    text:"Every colleague I have worked with has described me as easy to work with.",
+    rf:["Strongly Agree"] },
+  { id:50, s:"Self-Assessment & Validity", g:"Validity", type:"likert", rev:false,
+    text:"I have never felt frustrated with an organizational policy or decision I was required to follow.",
+    rf:["Agree","Strongly Agree"] },
+];
+
+const SECTIONS = [
+  { name:"Professional Integrity & Documentation",    tag:"Section 1 of 7", range:[1,7]   },
+  { name:"Safety Culture & Clinical Judgment",        tag:"Section 2 of 7", range:[8,16]  },
+  { name:"Team Conduct & Interprofessional Behavior", tag:"Section 3 of 7", range:[17,23] },
+  { name:"24-Hour Shift Readiness",                   tag:"Section 4 of 7", range:[24,29] },
+  { name:"Conduct & Professionalism",                 tag:"Section 5 of 7", range:[30,34] },
+  { name:"Clinical & Workplace Scenarios",            tag:"Section 6 of 7", range:[35,42] },
+  { name:"Self-Assessment & Validity",                tag:"Section 7 of 7", range:[43,50] },
+];
+
+const DISPLAY_CATS = [
+  { key:"Integrity",           label:"Documentation Integrity",   weight:0.25 },
+  { key:"Safety",              label:"Safety & Clinical Judgment", weight:0.25 },
+  { key:"Team Conduct",        label:"Team Conduct",              weight:0.20 },
+  { key:"Endurance",           label:"24-Hr Shift Readiness",     weight:0.15 },
+  { key:"Professionalism",     label:"Professionalism",           weight:0.15 },
+  { key:"Situational Judgment",label:"Situational Judgment",      weight:0.20 },
+];
+
+let candidate = {};
+let answers = {};
+let curSec = 0;
+
+function startAssessment() {
+  const fn = document.getElementById('i-fname').value.trim();
+  const ln = document.getElementById('i-lname').value.trim();
+  const em = document.getElementById('i-email').value.trim();
+  if (!fn || !ln || !em) { alert('Please enter your first name, last name, and email.'); return; }
+  candidate = {
+    firstName: fn,
+    lastName: ln,
+    name: fn + ' ' + ln,
+    email: em,
+    phone: document.getElementById('i-phone').value.trim(),
+    position: document.getElementById('i-position').value.trim() || applicationContext.job_title || 'CCT RN',
+    date: new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'}),
+    completedAt: new Date().toISOString(),
+    context: applicationContext
+  };
+  document.getElementById('screen-welcome').style.display = 'none';
+  document.getElementById('screen-assessment').style.display = 'block';
+  document.getElementById('headerRight').style.display = 'flex';
+  curSec = 0;
+  renderSec();
+}
+
+function renderSec() {
+  const sec = SECTIONS[curSec];
+  const [s, e] = sec.range;
+  document.getElementById('sec-tag').textContent = sec.tag;
+  document.getElementById('sec-title').textContent = sec.name;
+  document.getElementById('sec-sub').textContent = `Questions ${s}–${e} of ${QUESTIONS.length}`;
+  const qs = QUESTIONS.filter(q => q.id >= s && q.id <= e);
+  const cont = document.getElementById('q-container');
+  cont.innerHTML = '';
+  qs.forEach((q, i) => {
+    if (i > 0) { const d = document.createElement('div'); d.className = 'q-divider'; cont.appendChild(d); }
+    const block = document.createElement('div');
+    block.className = 'q-block';
+    block.style.animationDelay = (i * 40) + 'ms';
+    block.innerHTML = `<div class="q-num">Q${q.id}</div><div class="q-text">${q.text}</div>`;
+    block.appendChild(q.type === 'likert' ? buildLikert(q) : buildScenario(q));
+    cont.appendChild(block);
+  });
+  document.getElementById('btn-prev').style.display = curSec > 0 ? '' : 'none';
+  document.getElementById('btn-next').textContent = curSec < SECTIONS.length - 1 ? 'Next Section →' : 'Submit Assessment';
+  updateProg();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function buildLikert(q) {
+  const wrap = document.createElement('div');
+  const lw = document.createElement('div');
+  lw.className = 'likert-wrap';
+  lw.id = 'lw' + q.id;
+  LIKERT.forEach(lbl => {
+    const opt = document.createElement('div');
+    opt.className = 'l-opt' + (answers[q.id] === lbl ? ' selected' : '');
+    opt.textContent = lbl;
+    opt.onclick = () => {
+      lw.querySelectorAll('.l-opt').forEach(o => o.classList.remove('selected'));
+      opt.classList.add('selected');
+      answers[q.id] = lbl;
+      updateProg();
+    };
+    lw.appendChild(opt);
+  });
+  const ends = document.createElement('div');
+  ends.className = 'likert-ends';
+  ends.innerHTML = '<span>Strongly Disagree</span><span>Strongly Agree</span>';
+  wrap.appendChild(lw);
+  wrap.appendChild(ends);
+  return wrap;
+}
+
+function buildScenario(q) {
+  const letters = ['A','B','C','D'];
+  const wrap = document.createElement('div');
+  wrap.className = 'scenario-opts';
+  wrap.id = 'sw' + q.id;
+  q.opts.forEach((txt, i) => {
+    const l = letters[i];
+    const opt = document.createElement('div');
+    opt.className = 's-opt' + (answers[q.id] === l ? ' selected' : '');
+    opt.innerHTML = `<div class="s-letter">${l}</div><div class="s-text">${txt}</div>`;
+    opt.onclick = () => {
+      wrap.querySelectorAll('.s-opt').forEach(o => o.classList.remove('selected'));
+      opt.classList.add('selected');
+      answers[q.id] = l;
+      updateProg();
+    };
+    wrap.appendChild(opt);
+  });
+  return wrap;
+}
+
+function updateProg() {
+  const ans = Object.keys(answers).length;
+  const total = QUESTIONS.length;
+  document.getElementById('prog-label').textContent = ans + ' / ' + total;
+  document.getElementById('prog-bar').style.width = Math.round((ans / total) * 100) + '%';
+  const sec = SECTIONS[curSec];
+  const qs = QUESTIONS.filter(q => q.id >= sec.range[0] && q.id <= sec.range[1]);
+  const done = qs.filter(q => answers[q.id] !== undefined).length;
+  document.getElementById('nav-info').textContent = done + ' of ' + qs.length + ' answered';
+}
+
+function nextSec() {
+  const sec = SECTIONS[curSec];
+  const missing = QUESTIONS.filter(q => q.id >= sec.range[0] && q.id <= sec.range[1] && answers[q.id] === undefined);
+  if (missing.length) { alert('Please answer all questions before continuing. (' + missing.length + ' remaining)'); return; }
+  if (curSec < SECTIONS.length - 1) { curSec++; renderSec(); }
+  else showResults();
+}
+
+function prevSec() { if (curSec > 0) { curSec--; renderSec(); } }
+
+function scoreQ(q, ans) {
+  if (q.type === 'likert') {
+    const raw = LIKERT.indexOf(ans) + 1;
+    return q.rev ? (6 - raw) : raw;
+  }
+  return q.sc[ans] || 0;
+}
+
+function computeScores() {
+  const groups = {};
+  QUESTIONS.forEach(q => {
+    if (q.g === 'Validity') return;
+    const v = scoreQ(q, answers[q.id]);
+    if (!groups[q.g]) groups[q.g] = [];
+    groups[q.g].push(v);
+  });
+  const avg = {};
+  Object.entries(groups).forEach(([g, vals]) => {
+    avg[g] = vals.reduce((a,b)=>a+b,0) / vals.length;
+  });
+  const composite =
+    (avg['Integrity']           || 0) * 0.25 +
+    (avg['Safety']              || 0) * 0.25 +
+    (avg['Team Conduct']        || 0) * 0.20 +
+    (avg['Endurance']           || 0) * 0.15 +
+    (avg['Professionalism']     || 0) * 0.15 +
+    (avg['Situational Judgment']|| 0) * 0.20;
+  return { avg, composite: composite / 1.20 };
+}
+
+function getRedFlags() {
+  return QUESTIONS.filter(q => q.rf && q.rf.includes(answers[q.id]))
+    .map(q => ({ text: q.text, ans: answers[q.id] }));
+}
+
+function getValidityConcerns() {
+  return [48,49,50].filter(id => ['Agree','Strongly Agree'].includes(answers[id])).length;
+}
+
+function getVerdict(composite, redFlagCount, integrity, safety, teamConduct) {
+  if (redFlagCount >= 3 || integrity < 3.4 || safety < 3.6) return { label:'Do Not Advance', cls:'vp-no' };
+  if (teamConduct < 3.2) return { label:'Do Not Advance', cls:'vp-no' };
+  if (composite >= 4.2 && redFlagCount === 0) return { label:'Recommended: Hire', cls:'vp-hire' };
+  if (composite >= 3.8 && redFlagCount <= 1)  return { label:'Hire with Review', cls:'vp-review' };
+  if (composite >= 3.4) return { label:'Review Further', cls:'vp-review' };
+  return { label:'Do Not Advance', cls:'vp-no' };
+}
+
+
+async function showResults() {
+  document.getElementById('screen-assessment').style.display = 'none';
+  document.getElementById('headerRight').style.display = 'none';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  const { avg, composite } = computeScores();
+  const redFlags = getRedFlags();
+  const validity = getValidityConcerns();
+  const verdict = getVerdict(composite, redFlags.length, avg['Integrity']||0, avg['Safety']||0, avg['Team Conduct']||0);
+
+  const tc = avg['Team Conduct'] || 0;
+  const end = avg['Endurance'] || 0;
+
+  let summary = '';
+  if (verdict.cls === 'vp-hire') {
+    summary = 'This candidate demonstrates strong alignment with CCT RN standards across all measured dimensions. Scores indicate documentation integrity, sound clinical judgment, and the interprofessional conduct required in a transport team setting.';
+  } else if (verdict.cls === 'vp-review') {
+    summary = 'This candidate shows generally positive attributes with some areas requiring direct interview follow-up. Probe scenarios around team dynamics, EMS adaptation, and fatigue management specifically.';
+  } else {
+    summary = "This candidate's responses indicate significant concerns in one or more critical areas. A thorough review is required before advancing. Hard stops in integrity, safety, or team conduct require discussion with the hiring manager.";
+  }
+  if ((avg['Integrity']||0) < 3.8) summary += ` Documentation Integrity score (${(avg['Integrity']||0).toFixed(1)}) is below target - probe accountability and accuracy habits directly.`;
+  if ((avg['Safety']||0) < 3.8) summary += ` Safety & Clinical Judgment score (${(avg['Safety']||0).toFixed(1)}) warrants close attention.`;
+  if (tc < 3.5) summary += ` Team Conduct score (${tc.toFixed(1)}) is low - explore attitudes toward EMS partners and operational authority directly in the oral board.`;
+  if (end < 3.5) summary += ` 24-Hour Shift Readiness score (${end.toFixed(1)}) warrants direct conversation about extended shift experience and fatigue management strategies.`;
+  if (validity >= 2) summary += ' Validity flags suggest possible impression-management responding - probe with specific behavioral examples in interview.';
+
+  const report = buildReport(avg, composite, redFlags, validity, verdict, summary);
+  const redFlagResponses = buildRedFlagResponses(redFlags);
+
+  const payload = {
+    completionDate: candidate.completedAt || new Date().toISOString(),
+    email: candidate.email || '',
+    firstName: candidate.firstName || '',
+    lastName: candidate.lastName || '',
+    phone: candidate.phone || '',
+    position: candidate.position || 'CCT RN',
+    assessmentType: ASSESSMENT_TYPE,
+    assessmentVersion: ASSESSMENT_VERSION,
+    score: composite.toFixed(2),
+    compositeScore: composite.toFixed(2),
+    recommendation: verdict.label,
+    redFlags: String(redFlags.length),
+    redFlagCount: String(redFlags.length),
+    validityConcernCount: String(validity),
+    redFlagResponses: redFlagResponses,
+    report: report,
+    fullReport: report,
+
+    candidate_id: applicationContext.candidate_id || '',
+    application_id: applicationContext.application_id || '',
+    job_id: applicationContext.job_id || '',
+    job_shortcode: applicationContext.job_shortcode || '',
+    job_title: applicationContext.job_title || candidate.position || '',
+    source: applicationContext.source || 'workable_email',
+
+    documentationIntegrity: (avg['Integrity']||0).toFixed(2),
+    safetyClinicalJudgment: (avg['Safety']||0).toFixed(2),
+    teamConduct: (avg['Team Conduct']||0).toFixed(2),
+    shiftReadiness: (avg['Endurance']||0).toFixed(2),
+    professionalism: (avg['Professionalism']||0).toFixed(2),
+    situationalJudgment: (avg['Situational Judgment']||0).toFixed(2),
+    selfAwareness: (avg['Self-Awareness']||0).toFixed(2)
+  };
+
+  const submitted = await sendToFlow(buildSubmissionPayload(payload));
+  showCompletion(submitted);
+}
+
+function buildReport(avg, composite, redFlags, validity, verdict, summary) {
+  return [
+    '=== CCT RN Assessment Results - NW Ambulance ===',
+    '',
+    'Candidate: ' + candidate.name,
+    'Email:     ' + candidate.email,
+    'Phone:     ' + (candidate.phone || 'N/A'),
+    'Position:  ' + (candidate.position || 'CCT RN'),
+    'Date:      ' + candidate.date,
+    'Completed: ' + (candidate.completedAt || new Date().toISOString()),
+    '',
+    '--- WORKABLE APPLICATION CONTEXT ---',
+    'Candidate ID:   ' + (applicationContext.candidate_id || 'Not provided'),
+    'Application ID: ' + (applicationContext.application_id || 'Not provided'),
+    'Job ID:         ' + (applicationContext.job_id || 'Not provided'),
+    'Job Shortcode:  ' + (applicationContext.job_shortcode || 'Not provided'),
+    'Job Title:      ' + (applicationContext.job_title || candidate.position || 'Not provided'),
+    '',
+    'RECOMMENDATION: ' + verdict.label,
+    'Weighted Composite Score: ' + composite.toFixed(2) + ' / 5.00',
+    '',
+    '--- CATEGORY SCORES ---',
+    'Documentation Integrity:    ' + ((avg['Integrity']||0).toFixed(2)),
+    'Safety & Clinical Judgment: ' + ((avg['Safety']||0).toFixed(2)),
+    'Team Conduct:               ' + ((avg['Team Conduct']||0).toFixed(2)),
+    '24-Hr Shift Readiness:      ' + ((avg['Endurance']||0).toFixed(2)),
+    'Professionalism:            ' + ((avg['Professionalism']||0).toFixed(2)),
+    'Situational Judgment:       ' + ((avg['Situational Judgment']||0).toFixed(2)),
+    'Self-Awareness:             ' + ((avg['Self-Awareness']||0).toFixed(2)),
+    '',
+    'Red Flag Count:    ' + redFlags.length,
+    'Validity Concerns: ' + validity,
+    '',
+    '--- RED FLAG RESPONSES ---',
+    ...(redFlags.length ? redFlags.map((f,i)=>'Flag '+(i+1)+': '+f.text+' -> '+f.ans) : ['None identified']),
+    '',
+    '--- KEY INTERVIEW PROBES (if advancing) ---',
+    'Team Conduct: How have they worked alongside paramedics/EMTs as partners? Look for mutual respect vs. hierarchy.',
+    '24-Hr Shifts: Specific example of managing fatigue on an extended shift. What did they actually do?',
+    'EMS Adaptation: What surprised them about transport nursing vs. hospital nursing? No answer is a flag.',
+    'Documentation: Describe a time they caught an error - theirs or a coworker\'s. What happened?',
+    '24-Hr Duty: What is their responsibility when their relief has not arrived and a call comes in?',
+    '',
+    '--- SUMMARY ---',
+    summary,
+    '',
+    'Assessment: CCT RN Character & Conduct Assessment v1.0',
+    'Northwest Ambulance - Talent Acquisition - Confidential'
+  ].join('\n');
+}
+
+function buildRedFlagResponses(redFlags) {
+  if (!redFlags.length) return 'None';
+
+  return [
+    '=== Red Flag Responses ===',
+    '',
+    ...redFlags.flatMap((f, i) => [
+      'Flag ' + (i + 1),
+      'Question: ' + f.text,
+      'Candidate Response: ' + f.ans,
+      'Reason Flagged: Response matched a configured red-flag answer for this assessment.',
+      '',
+      '--------------------------------------------------',
+      ''
+    ])
+  ].join('\n');
+}
+
+function excelSafeText(value, maxLength = 30000){
+  return String(value || '')
+    .replace(/\r\n/g, '\n')
+    .replace(/\r/g, '\n')
+    .replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g, '')
+    .replace(/[⚠✓→—–]/g, '-')
+    .replace(/[“”]/g, '"')
+    .replace(/[‘’]/g, "'")
+    .replace(/[\t ]+/g, ' ')
+    .substring(0, maxLength);
+}
+
+function buildSubmissionPayload(payload){
+  const safeReport = "'" + excelSafeText(payload.report || '', 30000);
+  const safeRedFlagResponses = excelSafeText(payload.redFlagResponses || '', 12000);
+
+  return {
+    completionDate: payload.completionDate || '',
+    email: payload.email || '',
+    firstName: payload.firstName || '',
+    lastName: payload.lastName || '',
+    phone: payload.phone || '',
+    position: payload.position || '',
+    assessmentType: payload.assessmentType || 'CCT RN',
+    assessmentVersion: payload.assessmentVersion || '',
+    score: payload.score || '',
+    compositeScore: payload.compositeScore || '',
+    recommendation: payload.recommendation || '',
+    redFlags: payload.redFlags || '',
+    redFlagCount: payload.redFlagCount || '',
+    validityConcernCount: payload.validityConcernCount || '',
+    redFlagResponses: safeRedFlagResponses,
+    report: safeReport,
+    fullReport: safeReport,
+
+    candidate_id: payload.candidate_id || '',
+    application_id: payload.application_id || '',
+    job_id: payload.job_id || '',
+    job_shortcode: payload.job_shortcode || '',
+    job_title: payload.job_title || '',
+    source: payload.source || 'workable_email',
+
+    documentationIntegrity: payload.documentationIntegrity || '',
+    safetyClinicalJudgment: payload.safetyClinicalJudgment || '',
+    teamConduct: payload.teamConduct || '',
+    shiftReadiness: payload.shiftReadiness || '',
+    professionalism: payload.professionalism || '',
+    situationalJudgment: payload.situationalJudgment || '',
+    selfAwareness: payload.selfAwareness || '',
+
+    payloadJson: excelSafeText(JSON.stringify({
+      assessmentType: payload.assessmentType,
+      assessmentVersion: payload.assessmentVersion,
+      candidate: {
+        firstName: payload.firstName,
+        lastName: payload.lastName,
+        email: payload.email,
+        phone: payload.phone,
+        position: payload.position
+      },
+      applicationContext: {
+        candidate_id: payload.candidate_id,
+        application_id: payload.application_id,
+        job_id: payload.job_id,
+        job_shortcode: payload.job_shortcode,
+        job_title: payload.job_title,
+        source: payload.source
+      },
+      scores: {
+        compositeScore: payload.compositeScore,
+        recommendation: payload.recommendation,
+        redFlags: payload.redFlags,
+        validityConcernCount: payload.validityConcernCount
+      },
+      submittedAt: payload.completionDate
+    }), 30000)
+  };
+}
+
+async function sendToFlow(data){
+  try{
+    console.log('Assessment payload sent to Power Automate:', data);
+    const response = await fetch(FLOW_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+    return response.ok;
+  }catch(e){
+    console.error('Flow submission failed', e);
+    return false;
+  }
+}
+
+function showCompletion(submitted){
+  const ref = document.getElementById('complete-ref');
+  document.getElementById('screen-results').style.display = 'none';
+  document.getElementById('screen-complete').style.display = 'block';
+
+  if(submitted){
+    ref.style.display = 'none';
+    ref.textContent = '';
+  }else{
+    ref.style.display = 'block';
+    ref.textContent = 'Submission issue: Power Automate did not confirm receipt. Please notify recruiting that your assessment did not submit successfully.';
+  }
+}
+
+function copyReport() {
+  const el = document.getElementById('copy-area');
+  if(!el) return;
+  navigator.clipboard.writeText(el.textContent).then(() => {
+    const btn = document.querySelector('.btn-copy');
+    if(!btn) return;
+    btn.textContent = '✓ Copied!';
+    setTimeout(() => btn.textContent = 'Copy to Clipboard', 2000);
+  });
+}
+</script>
+</body>
+</html>
