@@ -532,7 +532,6 @@
   .exp-row { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 26px; }
 
 
-
   /* ── COMPLETION SCREEN ───────────────────────── */
   #screen-complete { display: none; }
 
@@ -736,13 +735,13 @@
 
 // ════════════════════════════════════════════════════════════════
 // AUTOMATION CONFIGURATION
-// Replace this with the n8n production webhook URL before publishing.
-// Keep Workable and Power Automate credentials in n8n, never in this HTML file.
+// Mirrored to field_staff_assessment_mirrored_to_leadership.html.
+// Candidate-facing results are hidden. Power Automate receives a flat JSON payload.
 // ════════════════════════════════════════════════════════════════
 const FLOW_URL = "https://defaultb9fe31c2de0742529875da1c500446.c8.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/2060ee1512924bb39b9ae0e6385659c6/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=8fVaHVHX9KKYP_xuD35nc2zk-yXKkNgtvcujapIHRZ4";
 const SUBMISSION_WEBHOOK_URL = FLOW_URL;
-const ASSESSMENT_TYPE = "Field Staff Assessment";
-const ASSESSMENT_VERSION = "2.1-standard";
+const ASSESSMENT_TYPE = "Field Staff";
+const ASSESSMENT_VERSION = "3.0-leadership-mirrored";
 
 const urlParams = new URLSearchParams(window.location.search);
 const applicationContext = {
@@ -757,7 +756,7 @@ const applicationContext = {
 function applyUrlContext(){
   if(applicationContext.job_title){
     const pos=document.getElementById('i-pos');
-    pos.value=applicationContext.job_title;
+    if(pos) pos.value=applicationContext.job_title;
   }
 }
 
@@ -1216,19 +1215,37 @@ function computeScores(){
 
 function getFlags(){
   return QS.filter(q=>{
-    if(!q.rf||!q.rf.length)return false;
-    if(q.id>=71&&q.id<=76) return q.rf.includes(ans[q.id]);
-    if([77,78,79,80].includes(q.id)) return q.rf.includes(ans[q.id]);
+    if(q.g==='Validity') return false;      // validity handled separately, by cluster pattern
+    if(!q.rf||!q.rf.length) return false;
     return q.rf.includes(ans[q.id]);
   }).map(q=>({text:q.q,a:ans[q.id],g:q.g}));
 }
 
 function getValidity(){
-  // Q71-76: should DISAGREE (would be suspicious to agree)
-  const impossible=[71,72,73,74,75,76].filter(id=>['Agree','Strongly Agree'].includes(ans[id])).length;
-  // Q77-80: should AGREE (honest people admit imperfection)
-  const denial=[77,78,79,80].filter(id=>['Strongly Disagree','Disagree'].includes(ans[id])).length;
-  return{impossible,denial,total:impossible+denial};
+  // Count how many of each cluster the candidate hit
+  const impossibleHits=[71,72,73,74,75,76].filter(id=>['Agree','Strongly Agree'].includes(ans[id])).length;
+  const denialHits=[77,78,79,80].filter(id=>['Strongly Disagree','Disagree'].includes(ans[id])).length;
+
+  // Cluster thresholds — a few honest answers are fine; a pattern is not.
+  // A high-integrity person may truthfully endorse a couple of the absolute
+  // claims; only a near-complete sweep signals impression management.
+  const impossibleConcern = impossibleHits >= 4;   // maxing 4+ of 6 perfection claims
+  const denialConcern     = denialHits >= 2;       // denying 2+ of 4 self-awareness items
+
+  // A single validity concern = one cluster crossed.
+  // A strong concern = both clusters crossed, OR one cluster maxed hard.
+  const concerns = (impossibleConcern?1:0) + (denialConcern?1:0);
+  const strongConcern = (impossibleConcern && denialConcern) || impossibleHits>=6 || denialHits>=4;
+
+  return {
+    impossibleHits, denialHits,
+    impossibleConcern, denialConcern,
+    concerns,          // 0, 1, or 2 — number of clusters that crossed
+    strongConcern,     // boolean — the real impression-management profile
+    impossible: impossibleHits,  // kept for backward compatibility
+    denial: denialHits,          // kept for backward compatibility
+    total: concerns
+  };
 }
 
 function getRiskLevel(score100,flagCount){
@@ -1255,8 +1272,9 @@ function getVerdict(score100,flagCount,integrity,safety,abuse){
 // ══════════════════════════════════════════════════════════════════
 // RESULTS
 // ══════════════════════════════════════════════════════════════════
-function showResults(){
+async function showResults(){
   document.getElementById('screen-assessment').style.display='none';
+  document.getElementById('screen-results').style.display='none';
   document.getElementById('hRight').style.display='none';
   window.scrollTo({top:0,behavior:'smooth'});
 
@@ -1266,15 +1284,47 @@ function showResults(){
   const risk=getRiskLevel(score100,flags.length);
   const verdict=getVerdict(score100,flags.length,avg['Integrity']||0,avg['Safety']||0,avg['Abuse Risk']||0);
 
+  // Header
+  const vb=document.getElementById('v-badge');
+  vb.textContent=verdict.label;vb.className='v-badge '+verdict.cls;
+  document.getElementById('r-name').textContent=cand.name;
+  document.getElementById('r-meta').textContent=cand.position+' · '+cand.date;
+  document.getElementById('r-score').textContent=score100;
+
+  // Risk bar
+  document.getElementById('risk-label-text').textContent=risk.label;
+  document.getElementById('risk-fill').style.cssText=`width:${risk.pct}%;background:${risk.color}`;
+
+  // Score cards — convert to 0-100
+  const grid=document.getElementById('score-grid');grid.innerHTML='';
+  DCATS.forEach(({key,label})=>{
+    const val=avg[key]||0;
+    const s100=Math.round(((val-1)/4)*100);
+    const col=s100>=75?'var(--green)':s100>=60?'var(--amber)':'var(--red)';
+    const card=document.createElement('div');card.className='sc';
+    card.innerHTML=`
+      <div class="sc-lbl">${label}</div>
+      <div class="sc-row">
+        <div class="sc-bg"><div class="sc-fill" style="width:${s100}%;background:${col}"></div></div>
+        <div class="sc-val" style="color:${col}">${s100}</div>
+      </div>`;
+    grid.appendChild(card);
+  });
+
+  // Flags
+  if(flags.length>0){
+    document.getElementById('flags-box').style.display='block';
+    document.getElementById('flags-list').innerHTML=
+      flags.map(f=>`<div class="fi">• "${f.text}"<br><strong>Answered: ${f.a} — ${f.g}</strong></div>`).join('');
+  }
+
+  // Risk profile text
+  let profile='';
   const intScore=Math.round(((avg['Integrity']||0)-1)/4*100);
   const abuseScore=Math.round(((avg['Abuse Risk']||0)-1)/4*100);
   const safeScore=Math.round(((avg['Safety']||0)-1)/4*100);
-  const proScore=Math.round(((avg['Professionalism']||0)-1)/4*100);
-  const teamScore=Math.round(((avg['Teamwork']||0)-1)/4*100);
-  const sjScore=Math.round(((avg['Situational Judgment']||0)-1)/4*100);
   const condScore=Math.round(((avg['Conduct Risk']||0)-1)/4*100);
 
-  let profile='';
   if(verdict.cls==='vb-hire'&&verdict.label.includes('Recommended')){
     profile='This candidate demonstrates strong character and values alignment across all dimensions. Integrity, resource responsibility, and safety adherence scores are all in the acceptable range with no significant risk indicators. The pattern of responses is consistent with someone who internalizes ethical standards rather than performing compliance when observed.';
   } else if(verdict.cls==='vb-hire'){
@@ -1289,44 +1339,23 @@ function showResults(){
   if(abuseScore<60) profile+=` Resource & System Risk score (${abuseScore}/100) indicates elevated risk of resource misuse or policy exploitation.`;
   if(safeScore<60) profile+=` Safety Adherence score (${safeScore}/100) is below acceptable — responses suggest a willingness to skip safety steps under pressure.`;
   if(condScore<60) profile+=` Conduct Risk score (${condScore}/100) indicates a pattern of entitlement-based rationalization that warrants direct interview probing.`;
-  if(validity.total>=3) profile+=` Validity check concerns (${validity.total} flags): ${validity.impossible} impossible-to-agree items answered with Agree/SA, ${validity.denial} honest-imperfection items denied. Scores may reflect impression management — weight interview and reference checks more heavily.`;
+  if(validity.strongConcern){
+    profile+=` Validity check: response pattern suggests possible impression management — ${validity.impossibleHits} of 6 absolute-perfection claims endorsed and ${validity.denialHits} of 4 self-awareness items denied. Weight interview and reference checks more heavily.`;
+  } else if(validity.concerns>=1){
+    profile+=` Minor validity note: ${validity.impossibleHits} of 6 absolute-perfection claims endorsed, ${validity.denialHits} of 4 self-awareness items denied. Within normal range for an honest respondent; no action needed unless corroborated in interview.`;
+  }
 
-  const workableComment=[
-    'Assessment Result — Field Staff Assessment',
-    '',
-    `Application: ${cand.position}`,
-    `Job Shortcode: ${applicationContext.job_shortcode||'Not provided'}`,
-    `Application ID: ${applicationContext.application_id||'Not provided'}`,
-    `Candidate ID: ${applicationContext.candidate_id||'Not provided'}`,
-    '',
-    `Recommendation: ${verdict.label}`,
-    `Composite Score: ${score100} / 100`,
-    `Risk Profile: ${risk.label}`,
-    `Completed: ${cand.completedAt}`,
-    '',
-    'Category Scores:',
-    `- Personal Integrity: ${intScore}`,
-    `- Resource / System Risk: ${abuseScore}${abuseScore<60?' BELOW THRESHOLD':''}`,
-    `- Safety Adherence: ${safeScore}${safeScore<60?' BELOW THRESHOLD':''}`,
-    `- Professional Conduct: ${proScore}`,
-    `- Reliability: ${teamScore}`,
-    `- Situational Judgment: ${sjScore}`,
-    `- Conduct Risk: ${condScore}${condScore<60?' BELOW THRESHOLD':''}`,
-    '',
-    `Risk Indicators: ${flags.length}`,
-    `Validity Concerns: ${validity.total}`,
-    '',
-    'This result applies only to the application listed above.'
-  ].join('\n');
+  document.getElementById('profile-text').textContent=profile;
 
-  const fullReport=[
+  // Workable report
+  const report=[
     '=== EMS Field Staff Assessment Results ===',
     `Candidate: ${cand.name}`,
     `Email:     ${cand.email}`,
     `Phone:     ${cand.phone||'N/A'}`,
     `Position:  ${cand.position}`,
     `Date:      ${cand.date}`,
-    `Completed: ${cand.completedAt}`,
+    `Completed: ${cand.completedAt||new Date().toISOString()}`,
     '',
     '--- WORKABLE APPLICATION CONTEXT ---',
     `Candidate ID:   ${applicationContext.candidate_id||'Not provided'}`,
@@ -1341,15 +1370,15 @@ function showResults(){
     '',
     '--- CATEGORY SCORES (0-100) ---',
     `Personal Integrity:       ${intScore}`,
-    `Resource / System Risk:   ${abuseScore}  ${abuseScore<60?'BELOW THRESHOLD':''}`,
-    `Safety Adherence:         ${safeScore}  ${safeScore<60?'BELOW THRESHOLD':''}`,
-    `Professional Conduct:     ${proScore}`,
-    `Reliability:              ${teamScore}`,
-    `Situational Judgment:     ${sjScore}`,
-    `Conduct Risk:             ${condScore}  ${condScore<60?'BELOW THRESHOLD':''}`,
+    `Resource / System Risk:   ${abuseScore}  ${abuseScore<60?'⚠ BELOW THRESHOLD':''}`,
+    `Safety Adherence:         ${safeScore}  ${safeScore<60?'⚠ BELOW THRESHOLD':''}`,
+    `Professional Conduct:     ${Math.round(((avg['Professionalism']||0)-1)/4*100)}`,
+    `Reliability:              ${Math.round(((avg['Teamwork']||0)-1)/4*100)}`,
+    `Situational Judgment:     ${Math.round(((avg['Situational Judgment']||0)-1)/4*100)}`,
+    `Conduct Risk:             ${condScore}  ${condScore<60?'⚠ BELOW THRESHOLD':''}`,
     '',
     `Risk Indicators (Flags): ${flags.length}`,
-    `Validity Concerns:       ${validity.total} (Impossible agreements: ${validity.impossible} | Honest-imperfection denials: ${validity.denial})`,
+    `Validity:                ${validity.strongConcern?'CONCERN — possible impression management':validity.concerns>=1?'Minor note — within honest range':'Clear'} (Perfection claims: ${validity.impossibleHits}/6 | Self-awareness denials: ${validity.denialHits}/4)`,
     '',
     '--- HARD STOP THRESHOLDS ---',
     `Personal Integrity < 60:      ${intScore<60?'TRIGGERED':'Clear'}`,
@@ -1358,11 +1387,13 @@ function showResults(){
     `4+ Risk Indicator Flags:      ${flags.length>=4?'TRIGGERED':'Clear'}`,
     '',
     '--- RISK FLAGS ---',
-    ...(flags.length>0?flags.map(f=>`  • ${f.text.substring(0,120)} → ${f.a}`):['  None identified']),
+    ...(flags.length>0?flags.map(f=>`  • ${f.text.substring(0,80)} → ${f.a}`):['  None identified']),
     '',
     '--- CHARACTER PROFILE ---',
     profile
   ].join('\n');
+
+  document.getElementById('wtext').textContent=report;
 
   const payload={
     assessmentType: ASSESSMENT_TYPE,
@@ -1377,9 +1408,9 @@ function showResults(){
         personalIntegrity:intScore,
         resourceSystemRisk:abuseScore,
         safetyAdherence:safeScore,
-        professionalConduct:proScore,
-        reliability:teamScore,
-        situationalJudgment:sjScore,
+        professionalConduct:Math.round(((avg['Professionalism']||0)-1)/4*100),
+        reliability:Math.round(((avg['Teamwork']||0)-1)/4*100),
+        situationalJudgment:Math.round(((avg['Situational Judgment']||0)-1)/4*100),
         conductRisk:condScore
       },
       riskIndicatorCount: flags.length,
@@ -1388,18 +1419,16 @@ function showResults(){
     },
     flags,
     answers: ans,
-    workableComment,
-    report: fullReport,
+    workableComment: report,
+    report,
     submittedAt: new Date().toISOString()
   };
 
-  submitAssessment(payload);
+  const submitted = await sendToFlow(buildSubmissionPayload(payload));
+  showCompletion(submitted);
 }
 
 function excelSafeText(value, maxLength = 30000){
-  // Excel cells support up to 32,767 characters. Graph can fail earlier when long
-  // multiline text contains smart punctuation, emoji, or control characters.
-  // This keeps the report readable while making it safe for Excel table rows.
   return String(value || '')
     .replace(/\r\n/g, '\n')
     .replace(/\r/g, '\n')
@@ -1412,9 +1441,6 @@ function excelSafeText(value, maxLength = 30000){
 }
 
 function buildSubmissionPayload(payload){
-  // Flat JSON payload, mirrored to the known-working leadership.html pattern.
-  // Report/fullReport are sanitized and prefixed with an apostrophe so Excel treats
-  // the long narrative as plain text.
   const safeReport = "'" + excelSafeText(payload.report || '', 30000);
   const safeRedFlagResponses = excelSafeText(JSON.stringify(payload.flags || []), 12000);
 
@@ -1425,7 +1451,7 @@ function buildSubmissionPayload(payload){
     lastName: payload.candidate.lastName || '',
     phone: payload.candidate.phone || '',
     position: payload.candidate.position || '',
-    assessmentType: 'Field Staff',
+    assessmentType: ASSESSMENT_TYPE,
     assessmentVersion: payload.assessmentVersion || '',
     score: String(payload.scores.compositeScore ?? ''),
     compositeScore: String(payload.scores.compositeScore ?? ''),
@@ -1479,12 +1505,6 @@ async function sendToFlow(data){
     console.error('Flow submission failed', e);
     return false;
   }
-}
-
-async function submitAssessment(payload){
-  // Candidate-facing standard: never display score, recommendation, or risk flags.
-  const submitted = await sendToFlow(buildSubmissionPayload(payload));
-  showCompletion(submitted);
 }
 
 function showCompletion(submitted){
