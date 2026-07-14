@@ -1,0 +1,993 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Operations Manager — Leadership Profile Assessment</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,700;1,400&family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0F1117;--surface:#181C25;--card:#1E2330;
+  --border:rgba(255,255,255,0.07);--border-hi:rgba(255,255,255,0.14);
+  --text:#E8EAF0;--muted:#8B92A5;--faint:#4B5263;
+  --gold:#C9A84C;--gold-light:#E8C96A;--gold-dim:rgba(201,168,76,0.15);
+  --blue:#3B6FE8;--blue-dim:rgba(59,111,232,0.15);
+  --green:#2E7D4F;--green-bg:rgba(46,125,79,0.15);--green-light:#5AC888;
+  --red:#C0392B;--red-bg:rgba(192,57,43,0.12);--red-border:rgba(192,57,43,0.3);
+  --amber:#B47B28;--amber-bg:rgba(180,123,40,0.15);
+  --r:12px;--r-sm:8px;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:15px;min-height:100vh}
+
+/* HEADER */
+.hdr{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(15,17,23,0.92);backdrop-filter:blur(14px);border-bottom:1px solid var(--border);padding:12px 24px;display:flex;align-items:center;justify-content:space-between}
+.hdr-left{display:flex;align-items:center;gap:12px}
+.diamond{width:34px;height:34px;background:var(--gold);border-radius:6px;transform:rotate(45deg);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.diamond span{transform:rotate(-45deg);font-size:8px;font-weight:700;color:#1a1200;letter-spacing:.04em}
+.hdr-title{font-size:13px;font-weight:600;line-height:1.3}
+.hdr-sub{font-size:11px;color:var(--muted);font-weight:400}
+.prog-pill{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--border);border-radius:30px;padding:6px 14px}
+.prog-txt{font-size:12px;font-family:'DM Mono',monospace;color:var(--muted)}
+.prog-outer{width:90px;height:4px;background:rgba(255,255,255,0.08);border-radius:2px;overflow:hidden}
+.prog-inner{height:100%;background:var(--gold);border-radius:2px;transition:width .4s ease}
+
+/* MAIN */
+.main{max-width:660px;margin:0 auto;padding:90px 20px 80px}
+
+/* WELCOME */
+.eyebrow{font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin-bottom:18px}
+.welcome-h{font-family:'Fraunces',serif;font-size:clamp(30px,6vw,50px);font-weight:700;line-height:1.15;margin-bottom:18px}
+.welcome-h em{color:var(--gold-light);font-style:italic}
+.welcome-p{color:var(--muted);line-height:1.8;margin-bottom:28px;font-size:15px}
+.meta-row{display:flex;gap:10px;margin-bottom:32px;flex-wrap:wrap}
+.meta-cell{flex:1;min-width:90px;background:var(--card);border:1px solid var(--border);border-radius:var(--r-sm);padding:14px;text-align:center}
+.meta-v{font-size:26px;font-weight:700;color:var(--gold-light);line-height:1}
+.meta-l{font-size:11px;color:var(--muted);margin-top:4px}
+
+/* CANDIDATE FORM */
+.cand-form{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:22px;margin-bottom:24px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+.fg label{display:block;font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:5px}
+.fg input,.fg select{width:100%;background:var(--bg);border:1px solid var(--border-hi);border-radius:var(--r-sm);padding:10px 13px;color:var(--text);font-size:14px;font-family:'DM Sans',sans-serif;outline:none;transition:border-color .2s}
+.fg input:focus,.fg select:focus{border-color:var(--gold)}
+.fg input::placeholder{color:var(--faint)}
+.fg select option{background:var(--surface);color:var(--text)}
+
+.btn-gold{width:100%;background:var(--gold);color:#1a1200;border:none;border-radius:var(--r-sm);padding:15px;font-size:16px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;transition:background .2s,transform .1s}
+.btn-gold:hover{background:var(--gold-light);transform:translateY(-1px)}
+.btn-gold:disabled{opacity:.4;cursor:not-allowed;transform:none}
+.btn-ghost{background:transparent;border:1px solid var(--border-hi);color:var(--muted);border-radius:var(--r-sm);padding:12px 20px;font-size:14px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s}
+.btn-ghost:hover{border-color:var(--text);color:var(--text)}
+
+/* SECTION HEADER */
+#screen-assessment,#screen-results{display:none}
+.sec-eye{font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin-bottom:6px}
+.sec-h{font-family:'Fraunces',serif;font-size:24px;font-weight:700;margin-bottom:3px}
+.sec-desc{font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:14px;max-width:560px}
+.sec-type-badge{display:inline-block;font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;padding:4px 12px;border-radius:20px;margin-bottom:20px}
+.badge-fact{background:rgba(59,111,232,0.2);color:#93B4F0}
+.badge-freq{background:rgba(46,125,79,0.2);color:#5AC888}
+.badge-know{background:rgba(201,168,76,0.2);color:var(--gold-light)}
+.badge-trade{background:rgba(192,57,43,0.15);color:#E85050}
+.badge-disc{background:rgba(92,33,182,0.2);color:#B07EF0}
+
+/* QUESTION CARD */
+.q-wrap{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:24px 26px;margin-bottom:12px;transition:border-color .2s}
+.q-wrap.answered{border-color:rgba(201,168,76,0.4)}
+.q-num{font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+.q-text{font-size:16px;line-height:1.65;color:var(--text);margin-bottom:18px}
+.q-text em{color:var(--gold-light);font-style:normal;font-weight:600}
+.q-context{background:var(--blue-dim);border:1px solid rgba(59,111,232,0.2);border-radius:var(--r-sm);padding:12px 16px;font-size:13px;color:#93B4F0;line-height:1.65;margin-bottom:16px}
+
+/* OPTIONS */
+.opts{display:flex;flex-direction:column;gap:7px}
+.opt-radio{display:none}
+.opt-label{display:flex;align-items:flex-start;gap:12px;padding:12px 15px;border:1px solid var(--border-hi);border-radius:var(--r-sm);cursor:pointer;transition:all .15s;font-size:14px;color:var(--muted);line-height:1.5}
+.opt-label:hover{border-color:var(--gold);color:var(--text);background:var(--gold-dim)}
+.opt-radio:checked+.opt-label{border-color:var(--gold);background:rgba(201,168,76,0.12);color:var(--text)}
+.opt-key{flex-shrink:0;width:22px;height:22px;border-radius:50%;border:1.5px solid currentColor;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;margin-top:1px}
+
+/* NAV */
+.q-nav{display:flex;justify-content:space-between;align-items:center;margin-top:28px}
+.nav-info{font-size:13px;color:var(--muted)}
+.nav-btns{display:flex;gap:10px}
+
+/* RESULTS */
+.r-top{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:34px;text-align:center;margin-bottom:22px}
+.v-pill{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:6px 18px;border-radius:30px;margin-bottom:18px}
+.vp-hire{background:var(--green-bg);color:var(--green-light);border:1px solid rgba(46,125,79,0.4)}
+.vp-review{background:var(--amber-bg);color:#E8A840;border:1px solid rgba(180,123,40,0.4)}
+.vp-no{background:var(--red-bg);color:#E85050;border:1px solid var(--red-border)}
+.r-name{font-family:'Fraunces',serif;font-size:24px;font-weight:700;margin-bottom:4px}
+.r-meta{font-size:13px;color:var(--muted);margin-bottom:16px}
+.score-big{font-family:'Fraunces',serif;font-size:54px;font-weight:700;color:var(--gold-light);line-height:1}
+.score-denom{font-size:18px;color:var(--muted)}
+.qual-banner{margin-top:16px;font-size:12px;font-weight:600;letter-spacing:.04em;padding:8px 14px;border-radius:var(--r-sm);display:inline-block}
+.qual-ok{background:var(--green-bg);color:var(--green-light);border:1px solid rgba(46,125,79,0.4)}
+.qual-bad{background:var(--red-bg);color:#E85050;border:1px solid var(--red-border)}
+
+/* CATEGORY BREAKDOWN */
+.cat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:20px 0}
+.cat-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r-sm);padding:15px}
+.cat-lbl{font-size:10px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+.cat-score-row{display:flex;align-items:center;gap:8px}
+.cat-bar-bg{flex:1;height:4px;background:rgba(255,255,255,0.07);border-radius:2px;overflow:hidden}
+.cat-bar{height:100%;border-radius:2px;transition:width 1s ease}
+.cat-val{font-family:'DM Mono',monospace;font-size:13px;width:36px;text-align:right;flex-shrink:0}
+
+/* FLAGS */
+.flags-box{background:var(--red-bg);border:1px solid var(--red-border);border-radius:var(--r);padding:22px;margin-bottom:18px}
+.flags-box h3{color:#E85050;font-size:15px;margin-bottom:12px}
+.flag-row{display:flex;gap:10px;margin-bottom:10px;font-size:13px;padding-bottom:10px;border-bottom:1px solid var(--red-border)}
+.flag-row:last-child{border:none;margin:0;padding:0}
+.flag-q{color:var(--muted);flex:1;line-height:1.5}
+.flag-a{color:#E85050;font-weight:600;font-family:'DM Mono',monospace;font-size:12px;white-space:nowrap}
+.flag-why{font-size:12px;color:#E85050;margin-top:4px;opacity:.8}
+
+/* SUMMARY */
+.sum-box{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:22px;margin-bottom:18px}
+.sum-box h3{font-size:15px;font-weight:600;margin-bottom:14px}
+.sum-row{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;padding:9px 0;border-bottom:1px solid var(--border);font-size:13px}
+.sum-row:last-child{border:none}
+.sum-lbl{color:var(--muted);flex-shrink:0;max-width:180px}
+.sum-val{color:var(--text);font-weight:500;text-align:right}
+.sum-note{font-size:11px;color:var(--muted);margin-top:3px}
+
+/* WORKABLE */
+.wb-box{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:22px;margin-bottom:18px}
+.wb-box h3{font-size:15px;font-weight:600;margin-bottom:6px}
+.wb-box p{font-size:13px;color:var(--muted);margin-bottom:12px}
+.copy-area{background:var(--bg);border:1px solid var(--border);border-radius:var(--r-sm);padding:13px;font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);line-height:1.8;white-space:pre-wrap;max-height:200px;overflow-y:auto;margin-bottom:10px}
+.btn-copy{background:var(--blue);color:white;border:none;border-radius:var(--r-sm);padding:9px 18px;font-size:13px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif}
+.btn-copy:hover{background:#2D5FD8}
+.export-row{display:flex;gap:10px;margin-top:18px}
+.export-row .btn-gold{flex:1}
+.export-row .btn-ghost{flex:1}
+
+/* COMPLETION SCREEN */
+#screen-complete{display:none}
+.complete-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:36px 32px;max-width:620px}
+.complete-icon{width:46px;height:46px;border-radius:50%;background:var(--green-bg);border:1px solid rgba(46,125,79,.4);color:var(--green-light);display:flex;align-items:center;justify-content:center;font-size:24px;margin-bottom:20px}
+.complete-title{font-family:'Fraunces',serif;font-size:30px;color:var(--text);margin-bottom:12px}
+.complete-text{color:var(--muted);font-size:15px;line-height:1.8;max-width:520px}
+.complete-ref{margin-top:22px;padding:12px 14px;border:1px solid var(--border);background:var(--bg);border-radius:var(--r-sm);color:var(--muted);font-size:12px;font-family:'DM Mono',monospace;word-break:break-word}
+
+@media(max-width:520px){
+  .form-grid,.cat-grid{grid-template-columns:1fr}
+  .export-row{flex-direction:column}
+  .q-wrap{padding:16px}
+}
+@media print{
+  .hdr,.q-nav,.export-row,.btn-copy,.wb-box{display:none!important}
+  body{background:white;color:black}
+}
+</style>
+</head>
+<body>
+
+<header class="hdr">
+  <div class="hdr-left">
+    <div class="diamond"><span>EMS</span></div>
+    <div>
+      <div class="hdr-title">Leadership Profile Assessment</div>
+      <div class="hdr-sub">Operations Manager (OM) Level · No-Interpretation Format</div>
+    </div>
+  </div>
+  <div id="hdr-right" style="display:none">
+    <div class="prog-pill">
+      <span class="prog-txt" id="prog-txt">0 / 40</span>
+      <div class="prog-outer"><div class="prog-inner" id="prog-bar"></div></div>
+    </div>
+  </div>
+</header>
+
+<main class="main">
+
+<!-- WELCOME -->
+<div id="screen-welcome">
+  <div class="eyebrow">Leadership Selection · EMS Operations</div>
+  <h1 class="welcome-h">Operations Manager<br><em>Leadership Profile</em></h1>
+  <p class="welcome-p">
+    This assessment uses factual, behavioral, and operational questions — not attitude statements.
+    Every question has a specific answer based on what you have actually done, how often you have done it,
+    or what the correct decision is in a defined situation as an Operations Manager.<br><br>
+    There are no statements to agree or disagree with, and no interpretation of what your answer means.
+    Answer based on your actual experience and your actual decisions. Your responses can be explored in
+    the oral board and verified through reference checks.
+  </p>
+  <div class="meta-row">
+    <div class="meta-cell"><div class="meta-v">40</div><div class="meta-l">Questions</div></div>
+    <div class="meta-cell"><div class="meta-v">5</div><div class="meta-l">Categories</div></div>
+    <div class="meta-cell"><div class="meta-v">15–20</div><div class="meta-l">Minutes</div></div>
+    <div class="meta-cell"><div class="meta-v">OM</div><div class="meta-l">Level</div></div>
+  </div>
+  <div class="cand-form">
+    <div class="form-grid">
+      <div class="fg"><label>First Name *</label><input type="text" id="i-fn" placeholder="First"></div>
+      <div class="fg"><label>Last Name *</label><input type="text" id="i-ln" placeholder="Last"></div>
+    </div>
+    <div class="form-grid">
+      <div class="fg"><label>Email *</label><input type="email" id="i-em" placeholder="email@domain.com"></div>
+      <div class="fg"><label>Phone</label><input type="tel" id="i-ph" placeholder="(555) 000-0000"></div>
+    </div>
+    <div class="form-grid">
+      <div class="fg">
+        <label>Certification Level *</label>
+        <select id="i-cert">
+          <option value="">Select…</option>
+          <option value="EMT">EMT</option>
+          <option value="AEMT">AEMT / Intermediate</option>
+          <option value="Paramedic">Paramedic</option>
+          <option value="Critical Care Paramedic">Critical Care Paramedic</option>
+          <option value="RN / Nurse">RN / Nurse</option>
+          <option value="Physician / Other Advanced">Physician / Other Advanced</option>
+        </select>
+      </div>
+      <div class="fg"><label>Position Applied For</label><input type="text" id="i-pos" placeholder="Operations Manager"></div>
+    </div>
+    <button class="btn-gold" onclick="start()" style="margin-top:6px">Begin Assessment →</button>
+  </div>
+</div>
+
+<!-- ASSESSMENT -->
+<div id="screen-assessment">
+  <div class="sec-eye" id="sec-eye">Section 1 of 5</div>
+  <div class="sec-h" id="sec-h">Leadership Track Record</div>
+  <div class="sec-desc" id="sec-desc"></div>
+  <div class="sec-type-badge badge-fact" id="sec-badge">Disclosed Facts</div>
+  <div id="q-container"></div>
+  <div class="q-nav">
+    <span class="nav-info" id="nav-info"></span>
+    <div class="nav-btns">
+      <button class="btn-ghost" id="btn-prev" onclick="prev()" style="display:none">← Back</button>
+      <button class="btn-gold" id="btn-next" onclick="next()" style="max-width:200px">Next Section →</button>
+    </div>
+  </div>
+</div>
+
+<!-- RESULTS -->
+<div id="screen-results">
+  <div class="r-top">
+    <div class="v-pill" id="v-pill"></div>
+    <div class="r-name" id="r-name"></div>
+    <div class="r-meta" id="r-meta"></div>
+    <div><span class="score-big" id="r-score">—</span><span class="score-denom"> / 100</span></div>
+    <div id="qual-banner"></div>
+  </div>
+  <div class="cat-grid" id="cat-grid"></div>
+  <div class="flags-box" id="flags-box" style="display:none">
+    <h3>⚠ Flagged Responses</h3>
+    <div id="flags-list"></div>
+  </div>
+  <div class="sum-box" id="sum-box"></div>
+  <div class="wb-box">
+    <h3>Workable Notes</h3>
+    <p>Copy and paste into the candidate's Notes tab in Workable.</p>
+    <div class="copy-area" id="copy-area"></div>
+    <button class="btn-copy" onclick="copyIt()">Copy to Clipboard</button>
+  </div>
+  <div class="export-row">
+    <button class="btn-gold" onclick="window.print()">Print / Save PDF</button>
+    <button class="btn-ghost" onclick="location.reload()">New Candidate</button>
+  </div>
+</div>
+
+
+<!-- COMPLETION -->
+<div id="screen-complete">
+  <div class="complete-card">
+    <div class="complete-icon">✓</div>
+    <h2 class="complete-title">Assessment Submitted</h2>
+    <p class="complete-text">
+      Thank you. Your assessment has been submitted successfully. The hiring team will review your application and follow up through the normal recruiting process.
+    </p>
+    <div class="complete-ref" id="complete-ref" style="display:none"></div>
+  </div>
+</div>
+
+</main>
+
+<script>
+
+// ================================================================
+// AUTOMATION CONFIGURATION
+// Mirrored to field_staff_assessment_v3_mirrored_to_leadership.html.
+// Candidate-facing results are hidden. Power Automate receives flat JSON.
+// ================================================================
+const FLOW_URL = "https://defaultb9fe31c2de0742529875da1c500446.c8.environment.api.powerplatform.com:443/powerautomate/automations/direct/cu/05/workflows/38122e305d9c46769d04b198d8ca2afc/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=GmtZBbiGdn72pW0bm48DUT4alKowQa29xGH-ZvIuKWQ";
+const ASSESSMENT_TYPE = "Operations Manager Leadership Profile";
+const ASSESSMENT_VERSION = "1.0-fieldstaff-v3-leadership-standard";
+
+const urlParams = new URLSearchParams(window.location.search);
+const applicationContext = {
+  candidate_id: urlParams.get('candidate_id') || '',
+  application_id: urlParams.get('application_id') || '',
+  job_shortcode: urlParams.get('job_shortcode') || '',
+  job_title: urlParams.get('job_title') || '',
+  job_id: urlParams.get('job_id') || '',
+  source: urlParams.get('source') || 'workable_email'
+};
+
+function applyUrlContext(){
+  if(applicationContext.job_title){
+    const pos=document.getElementById('i-pos');
+    if(pos) pos.value=applicationContext.job_title;
+  }
+}
+document.addEventListener('DOMContentLoaded', applyUrlContext);
+
+// ═══════════════════════════════════════════
+// QUESTION DATA — Operations Manager (OM)
+// 5 categories, 8 questions each = 40 total
+// Calibrated to OM scope: regional people-manager of the FS tier,
+// owns formal discipline up to Written Final Corrective Action,
+// cross-shift consistency, scheduling, FS development.
+// Types: FACT, FREQ, KNOW, TRADE, DISC
+// ═══════════════════════════════════════════
+
+const SECTIONS = [
+{
+  name:"Leadership Track Record",
+  eye:"Section 1 of 5",
+  badge:"badge-fact",
+  badgeTxt:"Disclosed Facts",
+  desc:"What you have actually done managing and developing supervisors — verifiable through reference checks.",
+  qs:[
+    { id:1, type:"FACT",
+      text:"How many supervisors or lead staff have you been directly responsible for developing in a leadership role?",
+      opts:["A. None — I have supervised frontline staff only","B. 1 to 2","C. 3 to 6","D. More than 6"],
+      flag:"A", flagWhy:"The OM's core function is developing the Field Supervisor tier. A candidate who has only supervised frontline staff has not managed a supervisory layer — which is exactly the structure they will own in this role.",
+      score:{A:0,B:2,C:4,D:5} },
+
+    { id:2, type:"FACT",
+      text:"How many times have you personally written and delivered formal corrective action — written warning, PIP, Written Corrective Action, or equivalent — to someone who reported to you?",
+      opts:["A. Never — I handled performance issues informally","B. Once","C. Between 2 and 5 times","D. More than 5 times"],
+      flag:"A", flagWhy:"Formal corrective action is the OM's discipline ceiling (up to Written Final Corrective Action). A leader who has only handled performance informally has not tested their willingness to formalize accountability.",
+      score:{A:0,B:2,C:4,D:5} },
+
+    { id:3, type:"FACT",
+      text:"How many formal, structured performance evaluations have you personally written and delivered for a supervisor or lead who reported to you?",
+      opts:["A. Never","B. 1 to 5","C. 6 to 20","D. More than 20"],
+      flag:"A", flagWhy:"The OM conducts FS evaluations and reviews crew evaluations before they reach the DO. A candidate who has never written a formal evaluation of a subordinate will be learning a core duty on the job.",
+      score:{A:0,B:2,C:4,D:5} },
+
+    { id:4, type:"FACT",
+      text:"Have you owned the schedule and staffing plan for a 24/7 operation where you were accountable for coverage across multiple shifts?",
+      opts:["A. No","B. I managed scheduling for a single shift or a limited window","C. Yes — for one multi-shift operation","D. Yes — across multiple operations or hubs"],
+      flag:"A", flagWhy:"The OM owns the regional schedule, staffing fill, and the coverage ceiling across all shifts. No multi-shift scheduling experience means a steep learning curve on a primary responsibility.",
+      score:{A:0,B:2,C:4,D:5} },
+
+    { id:5, type:"FACT",
+      text:"Have you ever built the documented case that led to a termination — the write-ups, the timeline, the evidence — even if the final decision sat above you?",
+      opts:["A. No","B. I contributed to a case someone else assembled","C. Yes — once","D. Yes — more than once"],
+      flag:"A", flagWhy:"An OM cannot terminate alone (that requires DO and HR approval) but owns building the defensible case up to Written Final Corrective Action. A candidate who has never built one has not been tested on documented accountability.",
+      score:{A:0,B:2,C:4,D:4} },
+
+    { id:6, type:"FACT",
+      text:"How many years have you worked in a role where you were accountable for the performance of other supervisors or leads — not just frontline staff?",
+      opts:["A. None","B. Less than 2 years","C. 2 to 5 years","D. More than 5 years"],
+      flag:"A", flagWhy:"The OM manages a supervisory layer. Zero years of supervisor-of-supervisors experience is a significant gap for a role defined by developing and holding that tier accountable.",
+      score:{A:0,B:2,C:4,D:5} },
+
+    { id:7, type:"FACT",
+      text:"Have you ever inherited a group of supervisors applying standards inconsistently across shifts — and been responsible for bringing them into alignment?",
+      opts:["A. No","B. Yes — one significant inconsistency","C. Yes — multiple inconsistencies across the group","D. Yes — I rebuilt the standard and held the group to it"],
+      flag:"A", flagWhy:"Cross-shift consistency is the OM's defining mandate. A candidate who has only worked with already-aligned teams may underestimate how hard it is to standardize a group that has drifted.",
+      score:{A:1,B:3,C:4,D:5} },
+
+    { id:8, type:"FACT",
+      text:"Have you ever been responsible for preparing a subordinate for promotion into a higher leadership role?",
+      opts:["A. No","B. Yes — informally","C. Yes — I formally developed at least one person who was promoted","D. Yes — multiple people I developed advanced"],
+      flag:"A", flagWhy:"The OM prepares Field Supervisors for advancement to Shift Commander. Succession development is an explicit part of the role; no experience here signals a leader who has not invested in growing people.",
+      score:{A:0,B:2,C:4,D:5} },
+  ]
+},
+
+{
+  name:"Accountability & Work Ethic",
+  eye:"Section 2 of 5",
+  badge:"badge-freq",
+  badgeTxt:"Behavioral Frequency",
+  desc:"How often you have performed specific accountability and work-ethic behaviors — not whether you would, but how often you actually did.",
+  qs:[
+    { id:9, type:"FREQ",
+      text:"In your most recent leadership role, how often did you conduct documented field observations or ride-alongs of the supervisors or staff you were developing?",
+      opts:["A. Never — I relied on reports and metrics","B. Occasionally — a few times per year","C. Regularly — monthly or more frequently","D. It was a structured program with a defined schedule"],
+      flag:"A", flagWhy:"Documented observation is the OM's primary development tool — you cannot coach what you have not seen. A candidate who has never done it formally does not have the practice.",
+      score:{A:0,B:2,C:4,D:5} },
+
+    { id:10, type:"FREQ",
+      text:"How often did you personally verify that required documentation — shift reports, attendance records, break attestations, evaluations — was actually completed, rather than relying on confirmation that it was done?",
+      opts:["A. Rarely or never — I trusted it was done","B. Occasionally — spot-checked a few times a year","C. Regularly — monthly audits or more frequent","D. It was a systematic review process I built and ran"],
+      flag:"A", flagWhy:"Trust without verification is not accountability — it is hope. The OM owns corrective-action follow-through and documentation currency for the tier; closing that loop is a habit, not an intention.",
+      score:{A:0,B:2,C:4,D:5} },
+
+    { id:11, type:"FREQ",
+      text:"In the last 5 years, how many times have you had a direct performance conversation where you named the specific gap, the specific expectation, and the specific consequence for non-improvement?",
+      opts:["A. Never — I give feedback but do not attach consequences","B. Once or twice","C. Between 3 and 10 times","D. More than 10 times"],
+      flag:"A", flagWhy:"Feedback without a named consequence is coaching, not accountability. A leader who has never attached a consequence to a gap has not tested their follow-through.",
+      score:{A:0,B:2,C:4,D:5} },
+
+    { id:12, type:"FREQ",
+      text:"How often did you review your area's KPI data — response times, attendance, overtime, QA — in your most recent role?",
+      opts:["A. Monthly or less frequently","B. Weekly","C. Several times per week","D. Daily / near real-time monitoring"],
+      flag:"A", flagWhy:"Monthly review at the regional level is too slow — by the time a monthly report surfaces a problem it has been running for weeks. The OM cadence is weekly for most indicators, daily for PCR and rig-checks.",
+      score:{A:0,B:3,C:4,D:4} },
+
+    { id:13, type:"FREQ",
+      text:"How many times have you ended your workday significantly later than scheduled because a personnel or operational situation required you personally?",
+      opts:["A. Rarely or never","B. A few times total","C. Several times per year","D. Regularly — it was part of the reality of the role"],
+      flag:"A", flagWhy:"The OM is salaried, works across all shifts, and is available for critical-incident response. A leader who is never operationally stretched has either had an unusually clean run or has not made themselves available when it mattered.",
+      score:{A:0,B:2,C:3,D:4} },
+
+    { id:14, type:"FREQ",
+      text:"How often did you address an attendance or conduct issue in real time or same-shift, rather than letting it accumulate until a review?",
+      opts:["A. Rarely — I addressed issues in batches at review time","B. Occasionally","C. Usually — I addressed issues promptly","D. Always — same-shift documentation was my standard"],
+      flag:"A", flagWhy:"Same-shift, contemporaneous documentation is what makes the attendance and discipline picture defensible. Batching issues to review time is how problems grow and how records fail to hold up.",
+      score:{A:0,B:2,C:4,D:5} },
+
+    { id:15, type:"FREQ",
+      text:"How many times have you redesigned or rebuilt a process — scheduling, documentation, onboarding, accountability — because the existing one was not producing results?",
+      opts:["A. Never — I implement the processes I inherit","B. Once in my career","C. Several times across different roles","D. It has been a consistent part of every role I have held"],
+      flag:"A", flagWhy:"A leader who has never rebuilt a failing process has only managed things that already worked. This role requires fixing what is not working, not just running what is.",
+      score:{A:0,B:2,C:4,D:5} },
+
+    { id:16, type:"FREQ",
+      text:"When you have started a formal corrective action, how consistently have you tracked it through to documented completion rather than letting it lapse?",
+      opts:["A. Inconsistently — I start them but tracking to completion has been spotty","B. Usually — most get tracked to completion","C. Nearly always","D. Always — I track every action to closure"],
+      flag:"A", flagWhy:"Corrective-action follow-through is an explicit OM KPI. An action started and forgotten undermines the whole system and cannot support a later escalation.",
+      score:{A:0,B:2,C:4,D:5} },
+  ]
+},
+
+{
+  name:"Operational Knowledge",
+  eye:"Section 3 of 5",
+  badge:"badge-know",
+  badgeTxt:"Correct Answer Exists",
+  desc:"These questions have one correct answer based on the OM's authority, EMS operational policy, employment law, or wage-and-hour compliance.",
+  qs:[
+    { id:17, type:"KNOW",
+      text:"A Field Supervisor brings you a documented case recommending a Written Corrective Action against a crew member. The crew member has a prior Letter of Discussion on the same issue from 60 days ago. What is the correct action?",
+      opts:["A. Issue the Written Corrective Action — the prior LOD and documented recurrence support the escalation","B. Start over with a verbal counseling","C. Wait until 90 days have passed before escalating","D. Skip straight to a Written Final Corrective Action given the recurrence"],
+      correct:"A", correctWhy:"The ladder is verbal → LOD → Written Corrective Action → Written Final → termination. An LOD with a documented recurrence is exactly what a Written Corrective Action escalation requires, and this sits squarely within OM authority. B resets progress; C invents a waiting period; D skips a step.",
+      score:{A:5,B:0,C:1,D:1} },
+
+    { id:18, type:"KNOW",
+      text:"You learn a crew member attested to taking a meal break they did not actually take — and the Field Supervisor knew and allowed the attestation. What is the correct action?",
+      opts:["A. Treat it as a minor paperwork issue and remind the FS to be more careful","B. Address it formally — a false break attestation is a wage-and-hour and integrity issue, and an FS permitting it is a supervisory failure","C. Quietly correct the record and move on","D. Leave it — the crew was too busy to break anyway, so the outcome is the same"],
+      correct:"B", correctWhy:"Policy is explicit that an FS must never permit attestation to a break that was not taken. A false attestation is a wage-and-hour compliance exposure and an integrity failure by the supervisor. Missed breaks are captured honestly as operational data; they are never papered over.",
+      score:{A:1,B:5,C:0,D:0} },
+
+    { id:19, type:"KNOW",
+      text:"A termination appears warranted for a Field Supervisor based on a documented pattern you have built. What is the correct process for you as Operations Manager?",
+      opts:["A. Terminate — you own discipline for your region","B. Issue the termination, then notify the Director afterward","C. Complete the documented case, then obtain Director of Operations and HR approval before the termination proceeds","D. Hand the whole matter to HR and step back"],
+      correct:"C", correctWhy:"The OM's ceiling is a Written Final Corrective Action. Termination requires Director of Operations and HR approval, and HR confirms whether any employee protections apply before it proceeds. A and B exceed OM authority; D abandons the case the OM is responsible for building.",
+      score:{A:0,B:0,C:5,D:1} },
+
+    { id:20, type:"KNOW",
+      text:"A crew member files a complaint alleging a Field Supervisor created a hostile work environment. The FS denies it and there are no witnesses. What is the correct action?",
+      opts:["A. Close the complaint — without witnesses it cannot be substantiated","B. Document the complaint, conduct a fact-finding inquiry, coordinate with HR, and preserve all documentation regardless of outcome","C. Issue a verbal counseling to the FS as a precaution while you monitor","D. Mediate informally and close it if the two reach an agreement"],
+      correct:"B", correctWhy:"Hostile-work-environment complaints carry legal handling requirements. Closing without inquiry, disciplining without findings, or informal mediation without documentation all create liability. B is the only option that meets the legal and organizational obligation.",
+      score:{A:0,B:5,C:1,D:1} },
+
+    { id:21, type:"KNOW",
+      text:"Your region's response-time compliance meets the standard on average, but one shift consistently underperforms while the others are well above standard. The average masks the problem. What does this tell you, and what is the correct response?",
+      opts:["A. The region is meeting standard — shift-level variance is normal in EMS","B. The average is valid, but the shift variance is worth a conversation with the supervisor","C. The consistent shift-level failure is the real performance problem — the average is misleading and that shift must be investigated","D. The contractual standard is the only metric that matters; internal variance is a detail"],
+      correct:"C", correctWhy:"Catching the weak shift while the average still looks fine is the entire reason the OM role exists — variance, not the average, is the OM's unique lens. A, B, and D all accept an average that is hiding a chronic failure.",
+      score:{A:0,B:2,C:5,D:0} },
+
+    { id:22, type:"KNOW",
+      text:"You are reviewing a crew evaluation written by a Field Supervisor before it goes to the DO. It rates the crew member 'Meets Expectations' across the board, but you have direct knowledge this crew member had the worst PCR-timeliness compliance on the shift for the past year. What do you do?",
+      opts:["A. Pass it up — the FS is closer to the crew and it is their professional judgment","B. Return it to the FS for revision with specific, documented grounds for your disagreement","C. Adjust the rating yourself and forward it with your signature","D. Forward it as written but attach a private side note to the file"],
+      correct:"B", correctWhy:"The OM reviews crew evaluations before they reach the DO precisely to catch evaluations that do not reflect reality. Forwarding a demonstrably inaccurate evaluation creates a false record and limits future accountability. B preserves the integrity of the evaluation system.",
+      score:{A:0,B:5,C:2,D:1} },
+
+    { id:23, type:"KNOW",
+      text:"A Shift Commander removes a Field Supervisor from duty mid-shift for conduct and notifies you. What is your correct role as Operations Manager?",
+      opts:["A. Reverse the removal — real-time operational calls are not yours to make","B. Own the formal follow-up: document, investigate, and determine formal corrective action, coordinating with DO and HR if termination is warranted","C. Do nothing further — the Shift Commander already handled it","D. Terminate the FS immediately given the removal"],
+      correct:"B", correctWhy:"The Shift Commander owns the on-duty operational removal; formal discipline hands cleanly to the OM, who owns the region's formal corrective action. The OM does not reverse the operational call, ignore it, or exceed authority by terminating unilaterally.",
+      score:{A:1,B:5,C:1,D:0} },
+
+    { id:24, type:"KNOW",
+      text:"Overtime in your region has run consistently over budget for three months, and the pattern traces to one hub's scheduling practice. What is the correct first action?",
+      opts:["A. Accept it — overtime is unavoidable in EMS","B. Analyze the scheduling practice driving it, address it with the responsible supervisor, and rebuild the hub's staffing approach","C. Cut overtime authorization across the entire region","D. Report it to the DO and wait for direction before acting"],
+      correct:"B", correctWhy:"The OM owns the regional schedule and overtime to budget. The correct move is root-cause analysis at the source and a rebuilt approach — not a blanket cut that punishes the whole region, and not waiting for direction on something the OM owns.",
+      score:{A:0,B:5,C:1,D:2} },
+  ]
+},
+
+{
+  name:"Forced Trade-offs",
+  eye:"Section 4 of 5",
+  badge:"badge-trade",
+  badgeTxt:"One Wrong Answer",
+  desc:"Each scenario has one answer that is factually wrong for this role. The others may reflect different leadership styles — but one is wrong.",
+  qs:[
+    { id:25, type:"TRADE",
+      text:"A Field Supervisor you are personally close with makes a documentation error that warrants a Letter of Discussion.",
+      context:"Which of these is the wrong action to take?",
+      opts:["A. Give them a pass because you trust them and it was a one-off","B. Issue the LOD — the standard applies regardless of the relationship","C. Issue the LOD and document it exactly as you would for anyone else","D. Address it and document it factually while remaining supportive"],
+      wrong:"A", wrongWhy:"Exempting someone from a standard because of a personal relationship is the one factually wrong action. Inconsistent discipline based on relationships is a leading source of grievances and destroys the OM's credibility across the tier.",
+      score:{A:5,B:0,C:0,D:0} },
+
+    { id:26, type:"TRADE",
+      text:"A high-performing Field Supervisor is well-liked and hits every operational number, but their crew evaluations are late every cycle and thinly documented.",
+      context:"Which of these is the wrong action to take?",
+      opts:["A. Address the evaluation gap formally — operational results do not exempt documentation duties","B. Set a clear expectation and timeline with a named consequence","C. Let it go — their operational numbers are what really matter","D. Coach with documentation and monitor the next cycle"],
+      wrong:"C", wrongWhy:"Exempting a high performer from a documentation duty that applies to everyone creates selective enforcement, which undermines the standard for the whole tier and creates exposure if a lower performer is later held to it.",
+      score:{A:0,B:0,C:5,D:0} },
+
+    { id:27, type:"TRADE",
+      text:"You are new to the OM role and inherit a region where Field Supervisors document attendance inconsistently — some rigorously, some not at all — and the previous OM allowed it. The team is experienced.",
+      context:"Which of these is the wrong action to take?",
+      opts:["A. Establish a single documentation standard clearly and quickly","B. Identify the FSs who document well and use them to model the standard","C. Implement the standard while openly acknowledging it is a change from the past","D. Allow the inconsistency to continue for a year while you build relationships"],
+      wrong:"D", wrongWhy:"Allowing an inconsistent, non-compliant documentation practice to run for a year means the region operates outside its own policy under your watch. The relationship-building rationale is real; the year-long delay on a compliance gap is not acceptable.",
+      score:{A:0,B:0,C:0,D:5} },
+
+    { id:28, type:"TRADE",
+      text:"The Director or ownership directs a schedule change you believe drops supervisory coverage below a safe threshold. You have raised your concern in writing and been overruled.",
+      context:"Which of these is the wrong action to take?",
+      opts:["A. Implement it and keep your written objection on record","B. Implement it and drop the matter entirely, leaving no record","C. Request one more meeting to present the risk data before implementation","D. Comply while escalating a genuine safety concern through the appropriate channel"],
+      wrong:"B", wrongWhy:"Implementing a change you believe creates a safety risk with no record, no escalation, and no recorded objection leaves you personally absorbing the liability. B is the only option that leaves you without a record or a final escalation attempt.",
+      score:{A:0,B:5,C:0,D:0} },
+
+    { id:29, type:"TRADE",
+      text:"A crew member reports that a veteran Field Supervisor made a discriminatory remark. The FS is one of your strongest performers.",
+      context:"Which of these is the wrong action to take?",
+      opts:["A. Document it, coordinate with HR, and investigate per policy","B. Take the report seriously regardless of the FS's performance level","C. Follow the same process you would follow for any FS","D. Handle it quietly with an informal word to the FS because they are too valuable to lose"],
+      wrong:"D", wrongWhy:"Informal, off-the-record handling of a discrimination report — especially to protect a high performer — is legally insufficient and models suppression. Performance level does not change the handling obligation.",
+      score:{A:0,B:0,C:0,D:5} },
+
+    { id:30, type:"TRADE",
+      text:"You have a long-tenured Field Supervisor, liked by crews, whose documentation, on-time evaluations, and attendance record are consistently below standard. You have had two documented conversations with no improvement.",
+      context:"Which of these is the wrong action to take?",
+      opts:["A. Keep giving them time because the crews like them","B. Initiate formal progressive discipline — two documented conversations without improvement triggers escalation","C. Escalate with a written standard, a timeline, and a named consequence","D. Consider whether their strengths fit a different role — but hold the standard either way"],
+      wrong:"A", wrongWhy:"Continuing to give time after two documented conversations with no improvement is not patience — it is avoidance. Relational value belongs in the decision about what role fits the person, not in whether to hold the standard.",
+      score:{A:5,B:0,C:0,D:0} },
+
+    { id:31, type:"TRADE",
+      text:"A Field Supervisor asks you to approve their crew's break attestations for a shift where you know breaks were missed due to call volume — so the numbers 'look clean.'",
+      context:"Which of these is the wrong action to take?",
+      opts:["A. Record the missed breaks honestly as operational data","B. Approve the clean attestations to avoid the compliance flag","C. Capture the misses and use them as evidence the hub is under-resourced","D. Refuse to falsify the record and address the staffing strain driving it"],
+      wrong:"B", wrongWhy:"Approving attestations you know are false is falsifying a wage-and-hour record — an integrity and compliance failure. Genuinely missed breaks are captured honestly and used as a strain signal, never papered over.",
+      score:{A:0,B:5,C:0,D:0} },
+
+    { id:32, type:"TRADE",
+      text:"A chronic problem — one hub's slow chute times — has been worked with crew conversations, schedule tweaks, and retraining over 12 months with no sustained improvement.",
+      context:"Which of these is the wrong action to take?",
+      opts:["A. Escalate to a formal performance process for the responsible FS — the individual fixes have not worked","B. Run a systemic analysis — 12 months of failed individual fixes points at the system","C. Lower the chute-time benchmark for that hub to match the performance","D. Bring in outside observation to find what the internal team is missing"],
+      wrong:"C", wrongWhy:"Lowering the benchmark to match chronic underperformance is not management — it is abandoning the standard to avoid solving the problem. Chute time is a firm owner commitment; A, B, and D are all legitimate next steps.",
+      score:{A:0,B:0,C:5,D:0} },
+  ]
+},
+
+{
+  name:"Self-Disclosure",
+  eye:"Section 5 of 5",
+  badge:"badge-disc",
+  badgeTxt:"Verifiable Disclosures",
+  desc:"Questions about specific past situations. These answers can be explored in the oral board and verified through reference checks.",
+  qs:[
+    { id:33, type:"DISC",
+      text:"In your most recent leadership role, what best describes the state of documentation and accountability in your area when you left?",
+      opts:["A. Roughly the same as when I arrived","B. Improved in some areas, with gaps remaining in others","C. Measurably stronger in most dimensions than when I arrived","D. I built systems that continued to function effectively after I left"],
+      flag:"A", flagWhy:"A leader who left an area in the same state they found it either inherited a perfect system or did not make meaningful improvements during their tenure.",
+      score:{A:0,B:2,C:4,D:5} },
+
+    { id:34, type:"DISC",
+      text:"Have you ever had to hold a position under pressure from your own team — a decision that made you unpopular — and held it?",
+      opts:["A. No — my decisions have generally had team support","B. Yes — once, and the team came around eventually","C. Yes — multiple times, and some of those teams never fully came around","D. Yes — regularly — holding unpopular positions is part of the role at this level"],
+      flag:"A", flagWhy:"A leader who has never held an unpopular position under team pressure has either never led through meaningful change or has modified decisions based on team reaction. Both raise questions.",
+      score:{A:0,B:3,C:4,D:5} },
+
+    { id:35, type:"DISC",
+      text:"In your most recent role, what was the longest a performance issue went unaddressed on your watch before you initiated formal action?",
+      opts:["A. I addressed performance issues formally within 30 days of identifying them","B. Between 1 and 3 months","C. Between 3 and 6 months","D. Longer than 6 months"],
+      flag:"D", flagWhy:"A performance issue left unaddressed for more than 6 months suggests either avoidance of difficult conversations or a failure to identify the problem in time. Both are worth probing in the oral board.",
+      score:{A:5,B:4,C:2,D:0} },
+
+    { id:36, type:"DISC",
+      text:"Have you ever removed or reassigned someone who was technically competent but was damaging team culture or morale?",
+      opts:["A. No — I address culture through coaching and development, not removal","B. Yes — once, and it was one of the harder decisions I have made","C. Yes — more than once","D. Yes — I have a clear threshold for when culture damage outweighs technical competence"],
+      flag:"A", flagWhy:"Culture damage from a tenured, competent performer is one of the most common leadership avoidance patterns. A candidate who has never acted on it has not been tested on one of the hardest calls at this level.",
+      score:{A:0,B:3,C:4,D:5} },
+
+    { id:37, type:"DISC",
+      text:"Have you ever directly managed a discrimination or hostile-work-environment complaint involving someone who reported to you?",
+      opts:["A. No — I have not had a situation like this","B. Yes — it was resolved informally between the parties","C. Yes — I managed a formal complaint process with HR involvement","D. Yes — I managed more than one situation of this type"],
+      flag:"B", flagWhy:"Resolving a discrimination or hostile-work-environment complaint informally is almost always the wrong handling from a legal and HR standpoint. The flag is about how it was handled, not that it occurred.",
+      score:{A:1,B:0,C:5,D:4} },
+
+    { id:38, type:"DISC",
+      text:"How do you typically handle a leadership decision that turned out to be wrong?",
+      opts:["A. I reassess and correct quickly — I do not dwell on it","B. I own it directly to whoever was affected, name what went wrong, correct it, and use it to adjust my process","C. I analyze it thoroughly before acknowledging it, to be sure I understand the full cause","D. I address it internally with my team first before any broader acknowledgment"],
+      flag:null,
+      score:{A:3,B:5,C:2,D:2} },
+
+    { id:39, type:"DISC",
+      text:"What best describes your track record on completing evaluations, documentation, and reporting on time?",
+      opts:["A. I prioritized operations, and documentation sometimes slipped","B. Generally on time, with occasional lapses under pressure","C. Consistently on time — I treat it as a core duty, not an afterthought","D. On time, and I built the system that kept the whole tier on time"],
+      flag:"A", flagWhy:"On-time evaluations and the regional KPI package are explicit OM duties. A candidate who admits documentation slipped is disclosing a work-ethic gap directly relevant to the role's reporting obligations.",
+      score:{A:0,B:3,C:4,D:5} },
+
+    { id:40, type:"DISC",
+      text:"What best describes the feedback you have received from direct reports in formal or informal 360-degree feedback about your leadership?",
+      opts:["A. I have not participated in 360 feedback processes","B. Generally positive, with minor development areas noted","C. It surfaced real, specific development areas that I have actively worked on","D. I have received significant critical feedback that required meaningful changes to my approach"],
+      flag:"A", flagWhy:"A leader who has not participated in 360 feedback has either avoided it or been in organizations that do not practice it. Neither is a strength for a role that requires developing others and self-awareness.",
+      score:{A:1,B:3,C:5,D:4} },
+  ]
+},
+];
+
+// ═══════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════
+let ans = {};
+let sec = 0;
+let cand = {};
+
+const CATS = [
+  {key:"Track Record",   label:"Leadership Track Record",     color:"#3B6FE8"},
+  {key:"Frequency",      label:"Accountability & Work Ethic", color:"#2E7D4F"},
+  {key:"Knowledge",      label:"Operational Knowledge",       color:"#C9A84C"},
+  {key:"Trade-offs",     label:"Forced Trade-offs",           color:"#C0392B"},
+  {key:"Disclosure",     label:"Self-Disclosure",             color:"#7C3AED"},
+];
+
+// Certification levels that meet the Paramedic-or-higher requirement
+const CERT_OK = ["Paramedic","Critical Care Paramedic","RN / Nurse","Physician / Other Advanced"];
+
+function start(){
+  const fn=document.getElementById('i-fn').value.trim();
+  const ln=document.getElementById('i-ln').value.trim();
+  const em=document.getElementById('i-em').value.trim();
+  const cert=document.getElementById('i-cert').value;
+  if(!fn||!ln||!em){alert('Please enter your first name, last name, and email.');return;}
+  if(!cert){alert('Please select your current certification level.');return;}
+  cand={
+    firstName:fn,
+    lastName:ln,
+    name:fn+' '+ln,
+    email:em,
+    phone:document.getElementById('i-ph').value.trim(),
+    cert:cert,
+    pos:document.getElementById('i-pos').value.trim()||applicationContext.job_title||'Operations Manager',
+    position:document.getElementById('i-pos').value.trim()||applicationContext.job_title||'Operations Manager',
+    date:new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'}),
+    completedAt:new Date().toISOString(),
+    context:applicationContext
+  };
+  document.getElementById('screen-welcome').style.display='none';
+  document.getElementById('screen-assessment').style.display='block';
+  document.getElementById('hdr-right').style.display='block';
+  sec=0; render();
+}
+
+function render(){
+  const s=SECTIONS[sec];
+  document.getElementById('sec-eye').textContent=s.eye;
+  document.getElementById('sec-h').textContent=s.name;
+  document.getElementById('sec-desc').textContent=s.desc;
+  const badge=document.getElementById('sec-badge');
+  badge.className='sec-type-badge '+s.badge;
+  badge.textContent=s.badgeTxt;
+  const c=document.getElementById('q-container');
+  c.innerHTML='';
+  s.qs.forEach(q=>{
+    const d=document.createElement('div');
+    d.className='q-wrap'+(ans[q.id]?' answered':'');
+    d.id='qw'+q.id;
+    let html=`<div class="q-num">Question ${q.id} of 40</div>`;
+    html+=`<div class="q-text">${q.text}</div>`;
+    if(q.context) html+=`<div class="q-context">${q.context}</div>`;
+    html+=`<div class="opts">`;
+    ['A','B','C','D'].forEach((l,i)=>{
+      html+=`<input class="opt-radio" type="radio" name="q${q.id}" id="q${q.id}${l}" value="${l}" ${ans[q.id]===l?'checked':''} onchange="pick(${q.id},'${l}')">
+      <label class="opt-label" for="q${q.id}${l}">
+        <span class="opt-key">${l}</span>${q.opts[i].replace(/^[A-D]\.\s*/,'')}
+      </label>`;
+    });
+    html+='</div>';
+    d.innerHTML=html;
+    c.appendChild(d);
+  });
+  document.getElementById('btn-prev').style.display=sec>0?'inline-block':'none';
+  document.getElementById('btn-next').textContent=sec===SECTIONS.length-1?'Submit Assessment →':'Next Section →';
+  upProg(); window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function pick(id,val){
+  ans[id]=val;
+  document.getElementById('qw'+id).classList.add('answered');
+  upProg();
+}
+function upProg(){
+  const done=Object.keys(ans).length;
+  document.getElementById('prog-txt').textContent=done+' / 40';
+  document.getElementById('prog-bar').style.width=(done/40*100)+'%';
+  document.getElementById('nav-info').textContent=done+' of 40 answered';
+}
+function prev(){if(sec>0){sec--;render();}}
+function next(){
+  const missing=SECTIONS[sec].qs.filter(q=>!ans[q.id]);
+  if(missing.length){
+    alert('Please answer all questions before continuing.\n'+missing.length+' remaining.');
+    document.getElementById('qw'+missing[0].id).scrollIntoView({behavior:'smooth',block:'center'});
+    return;
+  }
+  if(sec<SECTIONS.length-1){sec++;render();}
+  else showResults();
+}
+
+// ═══════════════════════════════════════════
+// SCORING
+// ═══════════════════════════════════════════
+function score(){
+  const catScores={};
+  SECTIONS.forEach((s,si)=>{
+    const catKey=CATS[si].key;
+    let total=0, max=0;
+    s.qs.forEach(q=>{
+      const maxScore=Math.max(...Object.values(q.score));
+      max+=maxScore;
+      total+=(q.score[ans[q.id]]||0);
+    });
+    catScores[catKey]={raw:total,max,pct:Math.round(total/max*100)};
+  });
+  const totalRaw=Object.values(catScores).reduce((a,b)=>a+b.raw,0);
+  const totalMax=Object.values(catScores).reduce((a,b)=>a+b.max,0);
+  const composite=Math.round(totalRaw/totalMax*100);
+  return {catScores,composite};
+}
+
+function getFlags(){
+  const flags=[];
+  SECTIONS.forEach(s=>{
+    s.qs.forEach(q=>{
+      if(q.flag && ans[q.id]===q.flag){
+        flags.push({q:q.text.replace(/<[^>]+>/g,''),a:q.opts[['A','B','C','D'].indexOf(q.flag)],why:q.flagWhy||''});
+      }
+      if(q.wrong && ans[q.id]!==q.wrong){
+        const wrongOpt=q.opts[['A','B','C','D'].indexOf(q.wrong)].replace(/^[A-D]\.\s*/,'');
+        flags.push({q:q.text.replace(/<[^>]+>/g,''),a:'Missed — chose '+ans[q.id],why:'Did not identify the wrong action ('+q.wrong+': "'+wrongOpt.substring(0,55)+'"). '+q.wrongWhy});
+      }
+      if(q.correct && ans[q.id]!==q.correct){
+        flags.push({q:q.text.replace(/<[^>]+>/g,''),a:'Incorrect: '+q.opts[['A','B','C','D'].indexOf(ans[q.id])],why:q.correctWhy||''});
+      }
+    });
+  });
+  return flags;
+}
+
+function verdict(composite,flags){
+  if(flags.length>=5||composite<50) return{label:'Do Not Advance',cls:'vp-no'};
+  if(composite>=80&&flags.length===0) return{label:'Recommended: Hire',cls:'vp-hire'};
+  if(composite>=70&&flags.length<=2) return{label:'Hire with Review',cls:'vp-review'};
+  if(composite>=60&&flags.length<=3) return{label:'Review Further',cls:'vp-review'};
+  return{label:'Do Not Advance',cls:'vp-no'};
+}
+
+async function showResults(){
+  document.getElementById('screen-assessment').style.display='none';
+  document.getElementById('hdr-right').style.display='none';
+  window.scrollTo({top:0,behavior:'smooth'});
+
+  const {catScores,composite}=score();
+  const flags=getFlags();
+  const certOk=CERT_OK.includes(cand.cert);
+  let v=verdict(composite,flags);
+  if(!certOk){
+    v={label:'Does Not Meet Minimum Qualification',cls:'vp-no'};
+  }
+
+  const summary=buildSummary(catScores,composite,flags,certOk,v);
+  const report=buildReport(catScores,composite,flags,certOk,v,summary);
+  const redFlagResponses=buildRedFlagResponses(flags);
+
+  const payload={
+    assessmentType:ASSESSMENT_TYPE,
+    assessmentVersion:ASSESSMENT_VERSION,
+    candidate:cand,
+    applicationContext,
+    scores:{
+      compositeScore:composite,
+      recommendation:v.label,
+      certification:cand.cert,
+      meetsMinimumQualification:certOk,
+      categories:{
+        leadershipTrackRecord:catScores['Track Record'].pct,
+        accountabilityWorkEthic:catScores['Frequency'].pct,
+        operationalKnowledge:catScores['Knowledge'].pct,
+        forcedTradeoffs:catScores['Trade-offs'].pct,
+        selfDisclosure:catScores['Disclosure'].pct
+      },
+      redFlagCount:flags.length,
+      validityConcernCount:0
+    },
+    flags,
+    answers:ans,
+    report,
+    redFlagResponses,
+    summary,
+    submittedAt:new Date().toISOString()
+  };
+
+  const submitted=await sendToFlow(buildSubmissionPayload(payload));
+  showCompletion(submitted);
+}
+
+function buildSummary(catScores,composite,flags,certOk,v){
+  const parts=[];
+  parts.push('Recommendation: '+v.label+'. Composite score: '+composite+'/100.');
+  parts.push(certOk
+    ? 'Certification requirement met: '+cand.cert+'.'
+    : 'Minimum qualification not met: '+cand.cert+' is below the Paramedic-or-higher requirement.');
+  parts.push('Leadership Track Record: '+catScores['Track Record'].pct+'%.');
+  parts.push('Accountability & Work Ethic: '+catScores['Frequency'].pct+'%.');
+  parts.push('Operational Knowledge: '+catScores['Knowledge'].pct+'%.');
+  parts.push('Forced Trade-offs: '+catScores['Trade-offs'].pct+'%.');
+  parts.push('Self-Disclosure: '+catScores['Disclosure'].pct+'%.');
+  parts.push('Flagged responses: '+flags.length+'.');
+  return parts.join(' ');
+}
+
+function buildReport(catScores,composite,flags,certOk,v,summary){
+  return [
+    '=== Operations Manager Leadership Profile Assessment ===',
+    '',
+    'Candidate: '+cand.name,
+    'Email:     '+cand.email,
+    'Phone:     '+(cand.phone||'N/A'),
+    'Position:  '+cand.pos,
+    'Certification: '+cand.cert,
+    'Date:      '+cand.date,
+    'Completed: '+(cand.completedAt||new Date().toISOString()),
+    '',
+    '--- WORKABLE APPLICATION CONTEXT ---',
+    'Candidate ID:   '+(applicationContext.candidate_id||'Not provided'),
+    'Application ID: '+(applicationContext.application_id||'Not provided'),
+    'Job ID:         '+(applicationContext.job_id||'Not provided'),
+    'Job Shortcode:  '+(applicationContext.job_shortcode||'Not provided'),
+    'Job Title:      '+(applicationContext.job_title||cand.pos||'Not provided'),
+    '',
+    'RECOMMENDATION: '+v.label,
+    'Composite Score: '+composite+' / 100',
+    'Minimum Qualification: '+(certOk?'Met':'Not Met'),
+    '',
+    '--- CATEGORY SCORES ---',
+    'Leadership Track Record:     '+catScores['Track Record'].pct+'%',
+    'Accountability & Work Ethic: '+catScores['Frequency'].pct+'%',
+    'Operational Knowledge:       '+catScores['Knowledge'].pct+'%',
+    'Forced Trade-offs:           '+catScores['Trade-offs'].pct+'%',
+    'Self-Disclosure:             '+catScores['Disclosure'].pct+'%',
+    '',
+    'Flag Count: '+flags.length,
+    '',
+    '--- FLAGGED RESPONSES ---',
+    ...(flags.length?flags.map((f,i)=>'Flag '+(i+1)+': '+f.q+' -> '+f.a+(f.why?' | '+f.why:'')):['None identified']),
+    '',
+    '--- SUMMARY ---',
+    summary,
+    '',
+    'Assessment: OM Leadership Profile Assessment - No-Interpretation Format',
+    'Northwest Ambulance - Talent Acquisition - Confidential'
+  ].join('\n');
+}
+
+function buildRedFlagResponses(flags){
+  if(!flags.length) return 'None';
+  return [
+    '=== Flagged Responses ===','',
+    ...flags.flatMap((f,i)=>[
+      'Flag '+(i+1),
+      'Question: '+f.q,
+      'Candidate Response: '+f.a,
+      'Reason Flagged: '+(f.why||'Response matched a configured flag condition.'),
+      '',
+      '--------------------------------------------------',''
+    ])
+  ].join('\n');
+}
+
+function excelSafeText(value,maxLength=30000){
+  return String(value||'')
+    .replace(/\r\n/g,'\n')
+    .replace(/\r/g,'\n')
+    .replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g,'')
+    .replace(/[⚠✓→—–]/g,'-')
+    .replace(/[“”]/g,'"')
+    .replace(/[‘’]/g,"'")
+    .replace(/[\t ]+/g,' ')
+    .substring(0,maxLength);
+}
+
+function buildSubmissionPayload(payload){
+  const safeReport="'"+excelSafeText(payload.report||'',30000);
+  const safeRedFlagResponses=excelSafeText(payload.redFlagResponses||'',12000);
+  return {
+    completionDate:payload.submittedAt||payload.candidate.completedAt||'',
+    email:payload.candidate.email||'',
+    firstName:payload.candidate.firstName||'',
+    lastName:payload.candidate.lastName||'',
+    phone:payload.candidate.phone||'',
+    position:payload.candidate.position||payload.candidate.pos||'',
+    certification:payload.candidate.cert||'',
+    assessmentType:payload.assessmentType||'Operations Manager Leadership Profile',
+    assessmentVersion:payload.assessmentVersion||'',
+    score:String(payload.scores.compositeScore??''),
+    compositeScore:String(payload.scores.compositeScore??''),
+    recommendation:payload.scores.recommendation||'',
+    meetsMinimumQualification:String(payload.scores.meetsMinimumQualification??''),
+    redFlags:String(payload.scores.redFlagCount??''),
+    redFlagCount:String(payload.scores.redFlagCount??''),
+    validityConcernCount:String(payload.scores.validityConcernCount??0),
+    redFlagResponses:safeRedFlagResponses,
+    report:safeReport,
+    fullReport:safeReport,
+    candidate_id:payload.applicationContext.candidate_id||'',
+    application_id:payload.applicationContext.application_id||'',
+    job_id:payload.applicationContext.job_id||'',
+    job_shortcode:payload.applicationContext.job_shortcode||'',
+    job_title:payload.applicationContext.job_title||'',
+    source:payload.applicationContext.source||'workable_email',
+    leadershipTrackRecord:String(payload.scores.categories.leadershipTrackRecord??''),
+    accountabilityWorkEthic:String(payload.scores.categories.accountabilityWorkEthic??''),
+    operationalKnowledge:String(payload.scores.categories.operationalKnowledge??''),
+    forcedTradeoffs:String(payload.scores.categories.forcedTradeoffs??''),
+    selfDisclosure:String(payload.scores.categories.selfDisclosure??''),
+    payloadJson:excelSafeText(JSON.stringify({
+      assessmentType:payload.assessmentType,
+      assessmentVersion:payload.assessmentVersion,
+      candidate:payload.candidate,
+      applicationContext:payload.applicationContext,
+      scores:payload.scores,
+      flagCount:payload.flags?payload.flags.length:0,
+      submittedAt:payload.submittedAt
+    }),30000)
+  };
+}
+
+async function sendToFlow(data){
+  try{
+    console.log('Assessment payload sent to Power Automate:',data);
+    const response=await fetch(FLOW_URL,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify(data)
+    });
+    return response.ok;
+  }catch(e){
+    console.error('Flow submission failed',e);
+    return false;
+  }
+}
+
+function showCompletion(submitted){
+  const ref=document.getElementById('complete-ref');
+  document.getElementById('screen-complete').style.display='block';
+  if(submitted){
+    ref.style.display='none';
+    ref.textContent='';
+  }else{
+    ref.style.display='block';
+    ref.textContent='Submission issue: Power Automate did not confirm receipt. Please notify recruiting that your assessment did not submit successfully.';
+  }
+}
+
+function copyIt(){
+  const area=document.getElementById('copy-area');
+  if(!area) return;
+  navigator.clipboard.writeText(area.textContent).then(()=>{
+    const b=document.querySelector('.btn-copy');
+    if(!b) return;
+    b.textContent='✓ Copied';
+    setTimeout(()=>{b.textContent='Copy to Clipboard';},2000);
+  });
+}
+
+</script>
+</body>
+</html>
