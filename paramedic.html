@@ -1,0 +1,1043 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Paramedic Assessment</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,600;0,700;1,400&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1a2e;
+    --ink2: #16213e;
+    --gold: #c9a84c;
+    --gold-light: #e8c97a;
+    --gold-pale: rgba(201,168,76,0.12);
+    --gold-border: rgba(201,168,76,0.25);
+    --cream: #f5f0e8;
+    --cream2: #ede7d9;
+    --muted: #8b8097;
+    --border: rgba(255,255,255,0.07);
+    --card: rgba(255,255,255,0.03);
+    --green: #6dbf8b;
+    --green-bg: rgba(109,191,139,0.12);
+    --green-border: rgba(109,191,139,0.3);
+    --amber: #e8b84b;
+    --amber-bg: rgba(232,184,75,0.12);
+    --amber-border: rgba(232,184,75,0.3);
+    --red: #e05c6a;
+    --red-bg: rgba(224,92,106,0.12);
+    --red-border: rgba(224,92,106,0.3);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--ink);
+    color: var(--cream);
+    min-height: 100vh;
+    font-size: 15px;
+    line-height: 1.65;
+  }
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(201,168,76,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(201,168,76,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .header {
+    background: var(--ink2);
+    border-bottom: 1px solid var(--gold-border);
+    padding: 0 40px;
+    height: 62px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .logo-mark { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+  .logo-diamond {
+    width: 28px; height: 28px;
+    background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 100%);
+    transform: rotate(45deg);
+    border-radius: 4px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .logo-diamond span {
+    transform: rotate(-45deg);
+    font-size: 10px; font-weight: 700; color: var(--ink); letter-spacing: -0.5px;
+  }
+  .logo-text {
+    font-family: 'Fraunces', serif; font-size: 15px; font-weight: 600;
+    color: var(--cream); letter-spacing: 0.01em;
+  }
+  .logo-text small {
+    display: block; font-family: 'DM Sans', sans-serif; font-size: 10px; font-weight: 400;
+    color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; font-style: normal;
+  }
+  .header-center { flex: 1; }
+  .header-right { display: flex; align-items: center; gap: 14px; }
+  .prog-pill {
+    display: flex; align-items: center; gap: 10px;
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 99px; padding: 5px 14px;
+  }
+  .prog-label { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--muted); }
+  .prog-outer { width: 100px; height: 3px; background: rgba(255,255,255,0.08); border-radius: 2px; overflow: hidden; }
+  .prog-inner { height: 100%; background: var(--gold); border-radius: 2px; transition: width 0.4s ease; width: 0%; }
+  .main { max-width: 780px; margin: 0 auto; padding: 44px 24px 100px; position: relative; z-index: 1; }
+  #screen-welcome { display: block; }
+  .eyebrow {
+    font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--gold); margin-bottom: 18px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .eyebrow::before { content: ''; display: inline-block; width: 24px; height: 1px; background: var(--gold); }
+  .welcome-title {
+    font-family: 'Fraunces', serif; font-size: clamp(32px, 5vw, 52px); font-weight: 700;
+    line-height: 1.05; letter-spacing: -0.02em; margin-bottom: 24px; color: var(--cream);
+  }
+  .welcome-title em { font-style: italic; color: var(--gold-light); }
+  .welcome-desc { font-size: 15px; color: var(--muted); max-width: 520px; line-height: 1.75; margin-bottom: 36px; }
+  .meta-row { display: flex; gap: 1px; margin-bottom: 44px; max-width: 480px; }
+  .meta-cell { flex: 1; background: var(--card); border: 1px solid var(--border); padding: 14px 18px; }
+  .meta-cell:first-child { border-radius: 8px 0 0 8px; }
+  .meta-cell:last-child { border-radius: 0 8px 8px 0; }
+  .meta-val { font-family: 'Fraunces', serif; font-size: 26px; font-weight: 600; color: var(--cream); line-height: 1; margin-bottom: 3px; }
+  .meta-lbl { font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+  .cand-form { max-width: 480px; margin-bottom: 36px; }
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+  .form-group { display: flex; flex-direction: column; gap: 6px; }
+  .form-group label { font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); font-weight: 500; }
+  .form-group input {
+    background: rgba(255,255,255,0.04); border: 1px solid var(--border); border-radius: 6px;
+    padding: 9px 12px; color: var(--cream); font-size: 13px; font-family: 'DM Sans', sans-serif;
+    outline: none; transition: border-color 0.2s;
+  }
+  .form-group input:focus { border-color: var(--gold-border); }
+  .form-group input::placeholder { color: rgba(255,255,255,0.15); }
+  .btn-primary {
+    background: var(--gold); color: var(--ink); border: none; border-radius: 6px;
+    padding: 13px 28px; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 600;
+    letter-spacing: 0.04em; cursor: pointer; transition: background 0.2s, transform 0.1s;
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+  .btn-primary:hover { background: var(--gold-light); }
+  .btn-primary:active { transform: scale(0.98); }
+  .btn-ghost {
+    background: transparent; color: var(--muted); border: 1px solid var(--border); border-radius: 6px;
+    padding: 11px 22px; font-family: 'DM Sans', sans-serif; font-size: 13px; cursor: pointer; transition: all 0.15s;
+  }
+  .btn-ghost:hover { border-color: rgba(255,255,255,0.2); color: var(--cream); }
+  #screen-assessment { display: none; }
+  .sec-eyebrow { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold); margin-bottom: 6px; }
+  .sec-title { font-family: 'Fraunces', serif; font-size: 24px; font-weight: 600; color: var(--cream); margin-bottom: 4px; }
+  .sec-sub { font-size: 12px; color: var(--muted); margin-bottom: 32px; }
+  .q-block { margin-bottom: 0; animation: slideIn 0.25s ease both; }
+  @keyframes slideIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+  .q-divider { height: 1px; background: var(--border); margin: 24px 0; }
+  .q-num { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--gold); letter-spacing: 0.1em; margin-bottom: 7px; }
+  .q-text { font-size: 15px; color: var(--cream); line-height: 1.55; margin-bottom: 14px; font-weight: 400; }
+  .likert-wrap { display: flex; gap: 6px; flex-wrap: wrap; }
+  .l-opt {
+    flex: 1 1 0; min-width: 90px; background: var(--card); border: 1px solid var(--border);
+    border-radius: 6px; padding: 9px 6px; text-align: center; cursor: pointer; font-size: 11px;
+    color: var(--muted); line-height: 1.3; transition: all 0.15s; user-select: none;
+  }
+  .l-opt:hover { background: rgba(201,168,76,0.06); color: var(--cream); }
+  .l-opt.selected { background: var(--gold-pale); border-color: var(--gold-border); color: var(--cream); }
+  .likert-ends { display: flex; justify-content: space-between; font-size: 10px; color: var(--muted); margin-top: 5px; padding: 0 2px; letter-spacing: 0.04em; }
+  .scenario-opts { display: flex; flex-direction: column; gap: 7px; }
+  .s-opt {
+    display: flex; align-items: flex-start; gap: 12px; background: var(--card);
+    border: 1px solid var(--border); border-radius: 8px; padding: 13px 15px; cursor: pointer;
+    transition: all 0.15s; user-select: none;
+  }
+  .s-opt:hover { background: rgba(201,168,76,0.04); }
+  .s-opt.selected { background: var(--gold-pale); border-color: var(--gold-border); }
+  .s-letter {
+    width: 22px; height: 22px; border-radius: 50%; border: 1.5px solid var(--muted);
+    display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700;
+    flex-shrink: 0; margin-top: 1px; transition: all 0.15s; font-family: 'DM Mono', monospace;
+  }
+  .s-opt.selected .s-letter { background: var(--gold); border-color: var(--gold); color: var(--ink); }
+  .s-text { font-size: 13px; color: var(--cream2); line-height: 1.5; }
+  .q-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 36px; padding-top: 24px; border-top: 1px solid var(--border); gap: 12px; }
+  .nav-info { font-size: 11px; color: var(--muted); font-family: 'DM Mono', monospace; }
+  .nav-btns { display: flex; gap: 10px; }
+  #screen-results { display: none; }
+  .results-top { text-align: center; padding: 36px 0 28px; }
+  .verdict-pill { display: inline-block; font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; padding: 6px 18px; border-radius: 99px; margin-bottom: 16px; }
+  .vp-hire { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-border); }
+  .vp-review { background: var(--amber-bg); color: var(--amber); border: 1px solid var(--amber-border); }
+  .vp-no { background: var(--red-bg); color: var(--red); border: 1px solid var(--red-border); }
+  .r-name { font-family: 'Fraunces', serif; font-size: 32px; font-weight: 700; color: var(--cream); margin-bottom: 6px; }
+  .r-meta { font-size: 12px; color: var(--muted); }
+  .r-composite { display: inline-flex; align-items: baseline; gap: 4px; margin-top: 16px; }
+  .r-composite .big { font-family: 'Fraunces', serif; font-size: 48px; font-weight: 700; color: var(--gold-light); line-height: 1; }
+  .r-composite .denom { font-size: 18px; color: var(--muted); }
+  .score-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 28px 0; }
+  .sc-card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 16px; }
+  .sc-label { font-size: 10px; letter-spacing: 0.07em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
+  .sc-bar-wrap { display: flex; align-items: center; gap: 8px; }
+  .sc-bar-bg { flex: 1; height: 4px; background: rgba(255,255,255,0.07); border-radius: 2px; overflow: hidden; }
+  .sc-bar-fill { height: 100%; border-radius: 2px; transition: width 1s ease; }
+  .sc-val { font-family: 'DM Mono', monospace; font-size: 14px; font-weight: 500; width: 30px; text-align: right; flex-shrink: 0; }
+  .flags-box { background: var(--red-bg); border: 1px solid var(--red-border); border-radius: 10px; padding: 18px 20px; margin-bottom: 16px; }
+  .flags-box h3 { font-size: 13px; font-weight: 600; color: var(--red); margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
+  .flag-item { font-size: 12px; color: var(--muted); padding: 4px 0; border-bottom: 1px solid rgba(255,255,255,0.04); }
+  .flag-item:last-child { border-bottom: none; }
+  .summary-box { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 18px 20px; margin-bottom: 20px; font-size: 13px; color: var(--muted); line-height: 1.7; }
+  .workable-box { background: var(--ink2); border: 1px solid var(--gold-border); border-radius: 10px; padding: 20px; margin-top: 24px; }
+  .workable-box h3 { font-family: 'Fraunces', serif; font-size: 15px; font-weight: 600; color: var(--cream); margin-bottom: 6px; }
+  .workable-box p { font-size: 12px; color: var(--muted); margin-bottom: 12px; }
+  .copy-area { background: rgba(0,0,0,0.3); border: 1px solid var(--border); border-radius: 7px; padding: 14px; font-family: 'DM Mono', monospace; font-size: 11px; color: var(--muted); white-space: pre-wrap; line-height: 1.7; margin-bottom: 10px; }
+  .btn-copy { font-size: 12px; color: var(--muted); background: rgba(255,255,255,0.04); border: 1px solid var(--border); border-radius: 6px; padding: 7px 14px; cursor: pointer; transition: all 0.15s; font-family: 'DM Sans', sans-serif; }
+  .btn-copy:hover { background: rgba(255,255,255,0.08); color: var(--cream); }
+  .export-row { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 28px; }
+  @media (max-width: 580px) {
+    .header { padding: 0 16px; }
+    .main { padding: 24px 14px 80px; }
+    .form-grid { grid-template-columns: 1fr; }
+    .meta-row { flex-wrap: wrap; }
+    .score-grid { grid-template-columns: 1fr 1fr; }
+    .likert-wrap { gap: 4px; }
+    .l-opt { min-width: 60px; padding: 7px 4px; font-size: 10px; }
+    .prog-pill { display: none; }
+  }
+  #screen-complete { display: none; }
+  .complete-card {
+    max-width: 560px; margin: 70px auto 0; text-align: center;
+    background: var(--card); border: 1px solid var(--gold-border); border-radius: 12px;
+    padding: 44px 30px;
+  }
+  .complete-icon {
+    width: 58px; height: 58px; margin: 0 auto 18px; border-radius: 50%;
+    background: var(--green-bg); border: 1px solid var(--green-border); color: var(--green);
+    display: flex; align-items: center; justify-content: center; font-size: 28px; font-weight: 700;
+  }
+  .complete-title { font-family: 'Fraunces', serif; font-size: 30px; margin-bottom: 12px; }
+  .complete-text { color: var(--muted); line-height: 1.8; }
+  .complete-ref { margin-top: 18px; padding: 12px; border-radius: 7px; background: var(--red-bg); border: 1px solid var(--red-border); color: var(--red); font-size: 12px; }
+
+  @media print {
+    body::before { display: none; }
+    .header { position: static; background: #1a1a2e; }
+    .btn-primary, .btn-ghost, .btn-copy, .export-row { display: none !important; }
+    body { background: white; color: #111; }
+    .r-name, .sec-title, .workable-box h3 { color: #111; }
+    .sc-card, .flags-box, .summary-box, .workable-box { background: #f9f9f9; border-color: #ddd; }
+  }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="logo-mark">
+    <div class="logo-diamond"><span>EMS</span></div>
+    <div class="logo-text">
+      Paramedic Assessment
+      <small>Talent Acquisition</small>
+    </div>
+  </div>
+  <div class="header-center"></div>
+  <div class="header-right" id="headerRight" style="display:none">
+    <div class="prog-pill">
+      <span class="prog-label" id="prog-label">0 / 50</span>
+      <div class="prog-outer"><div class="prog-inner" id="prog-bar"></div></div>
+    </div>
+  </div>
+</header>
+
+<main class="main">
+
+  <!-- ============ WELCOME ============ -->
+  <div id="screen-welcome">
+    <div class="eyebrow">Clinical Selection · EMS</div>
+    <h2 class="welcome-title">Paramedic<br><em>Conduct &amp; Clinical</em><br>Judgment Assessment</h2>
+    <p class="welcome-desc">
+      This assessment evaluates readiness for a Paramedic role at NW Ambulance across documentation integrity,
+      safety and clinical judgment, teamwork with your crew, readiness for extended (24-hour) shifts, and
+      professional conduct. Answer honestly — we are looking for self-awareness and sound judgment, not perfection.
+    </p>
+
+    <div class="meta-row">
+      <div class="meta-cell"><div class="meta-val">50</div><div class="meta-lbl">Questions</div></div>
+      <div class="meta-cell"><div class="meta-val">12–15</div><div class="meta-lbl">Minutes</div></div>
+      <div class="meta-cell"><div class="meta-val">7</div><div class="meta-lbl">Sections</div></div>
+    </div>
+
+    <div class="cand-form">
+      <div class="form-grid">
+        <div class="form-group"><label>First Name *</label><input type="text" id="i-fname" placeholder="Jane"></div>
+        <div class="form-group"><label>Last Name *</label><input type="text" id="i-lname" placeholder="Smith"></div>
+      </div>
+      <div class="form-grid">
+        <div class="form-group"><label>Email *</label><input type="email" id="i-email" placeholder="jane@email.com"></div>
+        <div class="form-group"><label>Phone</label><input type="tel" id="i-phone" placeholder="(555) 000-0000"></div>
+      </div>
+      <div class="form-grid">
+        <div class="form-group"><label>Position Applied For</label><input type="text" id="i-position" placeholder="Paramedic"></div>
+        <div class="form-group"><label>Current Certification</label><input type="text" id="i-cert" placeholder="Paramedic / NRP / State #"></div>
+      </div>
+    </div>
+
+    <button class="btn-primary" onclick="startAssessment()">Begin Assessment →</button>
+  </div>
+
+  <!-- ============ ASSESSMENT ============ -->
+  <div id="screen-assessment">
+    <div class="sec-eyebrow" id="sec-tag">Section 1 of 7</div>
+    <div class="sec-title" id="sec-title">Professional Integrity &amp; Documentation</div>
+    <div class="sec-sub" id="sec-sub">Questions 1–7</div>
+    <div id="q-container"></div>
+    <div class="q-nav">
+      <span class="nav-info" id="nav-info"></span>
+      <div class="nav-btns">
+        <button class="btn-ghost" id="btn-prev" onclick="prevSec()" style="display:none">← Back</button>
+        <button class="btn-primary" id="btn-next" onclick="nextSec()">Next Section →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ RESULTS ============ -->
+  <div id="screen-results">
+    <div class="results-top">
+      <div class="verdict-pill" id="v-pill"></div>
+      <div class="r-name" id="r-name"></div>
+      <div class="r-meta" id="r-meta"></div>
+      <div class="r-composite">
+        <span class="big" id="r-score">—</span>
+        <span class="denom">/ 5.00</span>
+      </div>
+    </div>
+    <div class="score-grid" id="score-grid"></div>
+    <div class="flags-box" id="flags-box" style="display:none">
+      <h3>⚠ Red Flag Responses</h3>
+      <div id="flags-list"></div>
+    </div>
+    <div class="summary-box" id="summary-box"></div>
+    <div class="workable-box">
+      <h3>Workable Notes — Copy &amp; Paste</h3>
+      <p>Paste the text below into the candidate's Notes tab in Workable.</p>
+      <div class="copy-area" id="copy-area"></div>
+      <button class="btn-copy" onclick="copyReport()">Copy to Clipboard</button>
+    </div>
+    <div class="export-row">
+      <button class="btn-primary" onclick="window.print()">Print / Save PDF</button>
+      <button class="btn-ghost" onclick="location.reload()">New Assessment</button>
+    </div>
+  </div>
+
+  <!-- ============ COMPLETION ============ -->
+  <div id="screen-complete">
+    <div class="complete-card">
+      <div class="complete-icon">✓</div>
+      <h2 class="complete-title">Assessment Submitted</h2>
+      <p class="complete-text">
+        Thank you. Your assessment has been submitted successfully. The hiring team will review your application and follow up through the normal recruiting process.
+      </p>
+      <div class="complete-ref" id="complete-ref" style="display:none"></div>
+    </div>
+  </div>
+
+</main>
+
+<script>
+
+// =====================================================================
+// AUTOMATION CONFIGURATION
+// Mirrored to field_staff_assessment_v3_mirrored_to_leadership.html.
+// Candidate-facing results are hidden. Power Automate receives a flat JSON payload.
+// =====================================================================
+const FLOW_URL = "https://defaultb9fe31c2de0742529875da1c500446.c8.environment.api.powerplatform.com:443/powerautomate/automations/direct/cu/28/workflows/bfc59626b68a4bb59a8c7d694e1778d1/triggers/manual/paths/invoke?api-version=1";
+const SUBMISSION_WEBHOOK_URL = FLOW_URL;
+const ASSESSMENT_TYPE = "Paramedic";
+const ASSESSMENT_VERSION = "1.0-fieldstaff-v3-mirrored";
+
+const urlParams = new URLSearchParams(window.location.search);
+const applicationContext = {
+  candidate_id: urlParams.get('candidate_id') || '',
+  application_id: urlParams.get('application_id') || '',
+  job_shortcode: urlParams.get('job_shortcode') || '',
+  job_title: urlParams.get('job_title') || '',
+  job_id: urlParams.get('job_id') || '',
+  source: urlParams.get('source') || 'workable_email'
+};
+
+function applyUrlContext(){
+  if(applicationContext.job_title){
+    const pos=document.getElementById('i-position');
+    if(pos) pos.value=applicationContext.job_title;
+  }
+}
+
+document.addEventListener('DOMContentLoaded', applyUrlContext);
+
+// =====================================================================
+// QUESTION DATA — 50 questions across 7 sections
+// Adapted from the CCT RN (Nurse) instrument. Nurse-specific items were
+// re-framed for a Paramedic; all other questions are unchanged.
+// =====================================================================
+const LIKERT = ["Strongly Disagree","Disagree","Neutral","Agree","Strongly Agree"];
+
+const QUESTIONS = [
+
+  // ── SECTION 1: Professional Integrity & Documentation (Q1–7) ──────
+  { id:1, s:"Professional Integrity & Documentation", g:"Integrity", type:"likert", rev:false,
+    text:"I document patient care accurately and completely, even when it takes additional time at the end of a long shift." },
+  { id:2, s:"Professional Integrity & Documentation", g:"Integrity", type:"likert", rev:false,
+    text:"If I make a clinical error, I report it accurately regardless of the consequence to myself." },
+  { id:3, s:"Professional Integrity & Documentation", g:"Integrity", type:"likert", rev:true,
+    text:"Bending documentation slightly to match the expected clinical picture is a normal part of charting.",
+    rf:["Agree","Strongly Agree"] },
+  { id:4, s:"Professional Integrity & Documentation", g:"Integrity", type:"likert", rev:false,
+    text:"I follow protocols and orders precisely, not approximately." },
+  { id:5, s:"Professional Integrity & Documentation", g:"Integrity", type:"likert", rev:false,
+    text:"I would report a coworker's documentation error even if it created friction between us." },
+  { id:6, s:"Professional Integrity & Documentation", g:"Integrity", type:"likert", rev:false,
+    text:"My documentation is as accurate at hour 22 of a shift as it is at hour 2." },
+  { id:7, s:"Professional Integrity & Documentation", g:"Integrity", type:"likert", rev:false,
+    text:"I take personal responsibility for the quality of my patient care reports." },
+
+  // ── SECTION 2: Safety Culture & Clinical Judgment (Q8–16) ─────────
+  { id:8, s:"Safety Culture & Clinical Judgment", g:"Safety", type:"likert", rev:false,
+    text:"Patient safety takes priority over staying on schedule, without exception." },
+  { id:9, s:"Safety Culture & Clinical Judgment", g:"Safety", type:"likert", rev:false,
+    text:"I reassess a patient's status throughout a transport, not only at the start." },
+  { id:10, s:"Safety Culture & Clinical Judgment", g:"Safety", type:"likert", rev:true,
+    text:"Once a patient is packaged and moving, minor changes in their condition can usually wait until arrival.",
+    rf:["Agree","Strongly Agree"] },
+  { id:11, s:"Safety Culture & Clinical Judgment", g:"Safety", type:"likert", rev:false,
+    text:"I check equipment and medication at the start of every shift regardless of who used it before me." },
+  { id:12, s:"Safety Culture & Clinical Judgment", g:"Safety", type:"likert", rev:false,
+    text:"When I see a potential safety issue with a patient setup, I raise it even if the sending team seems confident." },
+  // Behavioral fatigue disclosures — track record, not attitude
+  { id:13, s:"Safety Culture & Clinical Judgment", g:"Safety", type:"scenario",
+    text:"How many times in your career have you worked a shift of 16 hours or longer?",
+    opts:[
+      "Never — my shifts have been 12 hours or under",
+      "Once or twice — it has not been a regular part of my work",
+      "Occasionally — several times across different roles",
+      "Regularly — extended shifts have been a consistent part of my clinical work"
+    ],
+    sc:{A:1,B:2,C:3,D:5} },
+  { id:14, s:"Safety Culture & Clinical Judgment", g:"Safety", type:"scenario",
+    text:"Think of the most fatigued you have ever been during a clinical shift. What did you do?",
+    opts:[
+      "Pushed through it and said nothing — showing fatigue is unprofessional",
+      "Told my partner I was tired but kept going without escalating",
+      "Informed my supervisor, took any available break, and monitored my own performance closely",
+      "I have never been significantly fatigued during a clinical shift"
+    ],
+    sc:{A:1,B:2,C:5,D:1} },
+  { id:15, s:"Safety Culture & Clinical Judgment", g:"Safety", type:"scenario",
+    text:"What best describes how fatigue affects your clinical performance on extended shifts?",
+    opts:[
+      "I perform at the same level regardless of how long I have been working",
+      "I notice minor effects but they do not impact patient care",
+      "I recognize specific ways fatigue affects me and have concrete strategies to manage them",
+      "I have not worked shifts long enough to know how fatigue affects my clinical performance"
+    ],
+    sc:{A:2,B:3,C:5,D:1} },
+  { id:16, s:"Safety Culture & Clinical Judgment", g:"Safety", type:"likert", rev:false,
+    text:"I would refuse to transport a patient I believed was not stable for transport, even under pressure to proceed." },
+
+  // ── SECTION 3: Team Conduct & Interprofessional Behavior (Q17–23) ─
+  // Nurse→Paramedic adaptations: "nurse on the unit"→"paramedic on the unit";
+  // hospital-origin items reframed to prior-service framing.
+  { id:17, s:"Team Conduct & Interprofessional Behavior", g:"Team Conduct", type:"likert", rev:true,
+    text:"As the paramedic on the unit, I do not need to explain my clinical decisions to my EMT partner.",
+    rf:["Agree","Strongly Agree"] },
+  { id:18, s:"Team Conduct & Interprofessional Behavior", g:"Team Conduct", type:"likert", rev:false,
+    text:"When a supervisor gives me an operational direction — posting, routing, scheduling — I follow it, even if I would have made a different choice." },
+  { id:19, s:"Team Conduct & Interprofessional Behavior", g:"Team Conduct", type:"likert", rev:true,
+    text:"When a new employer's protocols differ from how I was trained, it is usually because my previous training was more rigorous.",
+    rf:["Agree","Strongly Agree"] },
+  { id:20, s:"Team Conduct & Interprofessional Behavior", g:"Team Conduct", type:"likert", rev:false,
+    text:"I adapt my communication style when working with people from different clinical backgrounds." },
+  { id:21, s:"Team Conduct & Interprofessional Behavior", g:"Team Conduct", type:"likert", rev:true,
+    text:"If I disagree with an operational decision made by a supervisor, I have the right to handle things my own way.",
+    rf:["Agree","Strongly Agree"] },
+  { id:22, s:"Team Conduct & Interprofessional Behavior", g:"Team Conduct", type:"likert", rev:true,
+    text:"As the clinical lead on the unit, certain operational tasks are below my role and can be left to the partner.",
+    rf:["Agree","Strongly Agree"] },
+  { id:23, s:"Team Conduct & Interprofessional Behavior", g:"Team Conduct", type:"likert", rev:false,
+    text:"I resolve interpersonal friction with a partner directly and professionally, not by complaining to others." },
+
+  // ── SECTION 4: 24-Hour Shift Readiness (Q24–29) ───────────────────
+  { id:24, s:"24-Hour Shift Readiness", g:"Endurance", type:"likert", rev:false,
+    text:"I have worked extended shifts (12 hours or longer) and maintained clinical performance throughout." },
+  { id:25, s:"24-Hour Shift Readiness", g:"Endurance", type:"likert", rev:false,
+    text:"I understand that a 24-hour shift means I may be called to a critical transport at hour 22." },
+  { id:26, s:"24-Hour Shift Readiness", g:"Endurance", type:"likert", rev:false,
+    text:"I take responsibility for preparing myself physically before long shifts — sleep, nutrition, hydration." },
+  { id:27, s:"24-Hour Shift Readiness", g:"Endurance", type:"likert", rev:false,
+    text:"I can remain professional and patient-focused even when I have not slept well during a shift." },
+  { id:28, s:"24-Hour Shift Readiness", g:"Endurance", type:"likert", rev:true,
+    text:"A paramedic who finds 24-hour shifts too demanding should be accommodated with shorter assignments.",
+    rf:["Agree","Strongly Agree"] },
+  { id:29, s:"24-Hour Shift Readiness", g:"Endurance", type:"likert", rev:false,
+    text:"I inform my supervisor when my fatigue level is affecting my ability to perform safely." },
+
+  // ── SECTION 5: Conduct & Professionalism (Q30–34) ─────────────────
+  { id:30, s:"Conduct & Professionalism", g:"Professionalism", type:"likert", rev:false,
+    text:"I maintain professional conduct with patients and families regardless of how they treat me." },
+  { id:31, s:"Conduct & Professionalism", g:"Professionalism", type:"likert", rev:false,
+    text:"I arrive to shifts on time and prepared, treating tardiness as a patient safety issue, not just a scheduling one." },
+  { id:32, s:"Conduct & Professionalism", g:"Professionalism", type:"likert", rev:true,
+    text:"Repeatedly complaining about coworkers or the organization to other staff is a normal way to cope with a hard job.",
+    rf:["Agree","Strongly Agree"] },
+  { id:33, s:"Conduct & Professionalism", g:"Professionalism", type:"likert", rev:false,
+    text:"When I disagree with a protocol or policy, I follow it while raising the disagreement formally." },
+  { id:34, s:"Conduct & Professionalism", g:"Professionalism", type:"likert", rev:false,
+    text:"I protect patient confidentiality just as strictly during transport and in casual conversation as I would in any clinical setting." },
+
+  // ── SECTION 6: Clinical & Workplace Scenarios (Q35–42) ────────────
+  { id:35, s:"Clinical & Workplace Scenarios", g:"Situational Judgment", type:"scenario",
+    text:"You arrive to transport a patient. The sending staff give you a rushed handoff and the paperwork is missing recent vitals and part of the medication list. They are eager for you to get moving.",
+    opts:[
+      "Accept the patient and sort out the missing information en route",
+      "Complete your own assessment and get the missing information before accepting the patient",
+      "Accept the patient to avoid holding up the sending unit — you can catch up on the details later",
+      "Ask your partner to chase down the paperwork while you load the patient"
+    ],
+    sc:{A:2,B:5,C:1,D:3} },
+  { id:36, s:"Clinical & Workplace Scenarios", g:"Situational Judgment", type:"scenario",
+    text:"It is hour 22 of your 24-hour shift. You have had no sleep, your eyes are burning, and your reaction time is slower. Dispatch calls with a critical, unstable patient and a long transport ahead.",
+    opts:[
+      "Accept and complete the transport without mentioning your fatigue — it is the job",
+      "Notify your supervisor of your fatigue level and let them make the coverage decision, then proceed if directed",
+      "Decline the transport outright — you are too tired to be safe",
+      "Accept it but rush the transport to get back and rest sooner"
+    ],
+    sc:{A:2,B:5,C:3,D:1} },
+  { id:37, s:"Clinical & Workplace Scenarios", g:"Situational Judgment", type:"scenario",
+    text:"The Field Supervisor asks you to do something operationally — covering a post, adjusting your route — that you believe is not the most clinically efficient choice.",
+    opts:[
+      "Comply with the operational direction without comment",
+      "Comply and express your clinical concern to the supervisor respectfully",
+      "Override the operational direction because your clinical judgment takes priority",
+      "Do what the supervisor says and document that the decision was theirs"
+    ],
+    sc:{A:3,B:5,C:1,D:2} },
+  { id:38, s:"Clinical & Workplace Scenarios", g:"Situational Judgment", type:"scenario",
+    text:"A signed DNR is on the chart. The patient is sedated and cannot speak for themselves. The patient's adult child — who is not the healthcare proxy — insists at the bedside that the patient is a full code. You are about to depart.",
+    opts:[
+      "Honor the family member's wishes and treat the patient as a full code",
+      "Follow the signed DNR, notify the sending facility / medical control of the family's objection, and document",
+      "Delay departure and let the sending facility resolve the dispute before you leave",
+      "Depart and decide how to handle it en route if the situation changes"
+    ],
+    sc:{A:1,B:5,C:3,D:2} },
+  { id:39, s:"Clinical & Workplace Scenarios", g:"Situational Judgment", type:"scenario",
+    text:"Your partner seems withdrawn and off after a difficult pediatric call. They say they are fine. You are parked at a post.",
+    opts:[
+      "Leave them alone — they said they are fine",
+      "Check in genuinely, offer to debrief, and notify the supervisor if you remain concerned",
+      "Report your concern to the supervisor immediately without speaking to the partner",
+      "Ask the partner directly what is wrong and push until you get an answer"
+    ],
+    sc:{A:1,B:5,C:3,D:2} },
+  { id:40, s:"Clinical & Workplace Scenarios", g:"Situational Judgment", type:"scenario",
+    text:"You are at hour 23 of a 24-hour shift. Your relief has not yet arrived and there is an active transport request. What is your responsibility?",
+    opts:[
+      "Notify dispatch that your shift is ending and wait for relief before accepting anything",
+      "Remain on duty, accept the transport if directed, and complete a full handoff to the incoming crew before going off duty",
+      "Contact your supervisor to request relief coverage before the transport departs",
+      "Accept the transport only if the estimated return puts you back before your relief is expected"
+    ],
+    sc:{A:1,B:5,C:3,D:2} },
+  { id:41, s:"Clinical & Workplace Scenarios", g:"Situational Judgment", type:"scenario",
+    text:"You notice the controlled substance log does not reconcile — there is a one-unit discrepancy on a narcotic. The end of your shift is in 30 minutes.",
+    opts:[
+      "Leave it for the next crew — you did not cause the discrepancy",
+      "Document the discrepancy immediately, notify your supervisor, and do not leave until it is resolved",
+      "Recount and, if the discrepancy persists, note it in the handoff and leave on time",
+      "Ask your partner if they know what happened before doing anything official"
+    ],
+    sc:{A:1,B:5,C:2,D:2} },
+  { id:42, s:"Clinical & Workplace Scenarios", g:"Situational Judgment", type:"scenario",
+    text:"After completing a transport, you realize you left a required medication administration time off the patient care report. The report has already been submitted.",
+    opts:[
+      "Leave it — the report is submitted and the transport went fine",
+      "Complete a documented amendment to the report and notify the appropriate person",
+      "Correct it quietly without noting that the record was changed",
+      "Mention it verbally to your partner but leave the record as it is"
+    ],
+    sc:{A:1,B:5,C:2,D:2} },
+
+  // ── SECTION 7: Self-Assessment & Validity (Q43–50) ────────────────
+  // Nurse→Paramedic adaptation: hospital-to-transport transition item reframed
+  // to a service-to-service transition.
+  { id:43, s:"Self-Assessment & Validity", g:"Self-Awareness", type:"likert", rev:true,
+    text:"An experienced paramedic can step into a new service and its protocols without much of an adjustment period.",
+    rf:["Agree","Strongly Agree"] },
+  { id:44, s:"Self-Assessment & Validity", g:"Self-Awareness", type:"likert", rev:false,
+    text:"I have blind spots in my clinical practice that feedback has helped me identify." },
+  { id:45, s:"Self-Assessment & Validity", g:"Self-Awareness", type:"likert", rev:true,
+    text:"After several years of clinical experience, most professionals have reached their ceiling of significant learning.",
+    rf:["Agree","Strongly Agree"] },
+  { id:46, s:"Self-Assessment & Validity", g:"Self-Awareness", type:"likert", rev:false,
+    text:"I have received critical feedback from a supervisor that I initially disagreed with but later accepted as valid." },
+  { id:47, s:"Self-Assessment & Validity", g:"Self-Awareness", type:"likert", rev:false,
+    text:"I can distinguish between feedback that is unfair and feedback that is simply uncomfortable." },
+  // Validity items (Q48–50)
+  { id:48, s:"Self-Assessment & Validity", g:"Validity", type:"likert", rev:false,
+    text:"I have never made a clinical error or a documentation mistake in my career.",
+    rf:["Agree","Strongly Agree"] },
+  { id:49, s:"Self-Assessment & Validity", g:"Validity", type:"likert", rev:false,
+    text:"Every colleague I have worked with has described me as easy to work with.",
+    rf:["Strongly Agree"] },
+  { id:50, s:"Self-Assessment & Validity", g:"Validity", type:"likert", rev:false,
+    text:"I have never felt frustrated with an organizational policy or decision I was required to follow.",
+    rf:["Agree","Strongly Agree"] },
+];
+
+const SECTIONS = [
+  { name:"Professional Integrity & Documentation",    tag:"Section 1 of 7", range:[1,7] },
+  { name:"Safety Culture & Clinical Judgment",        tag:"Section 2 of 7", range:[8,16] },
+  { name:"Team Conduct & Interprofessional Behavior", tag:"Section 3 of 7", range:[17,23] },
+  { name:"24-Hour Shift Readiness",                   tag:"Section 4 of 7", range:[24,29] },
+  { name:"Conduct & Professionalism",                 tag:"Section 5 of 7", range:[30,34] },
+  { name:"Clinical & Workplace Scenarios",            tag:"Section 6 of 7", range:[35,42] },
+  { name:"Self-Assessment & Validity",                tag:"Section 7 of 7", range:[43,50] },
+];
+
+// Weighted composite categories (Validity is a check, not weighted;
+// Self-Awareness informs but is not weighted).
+const DISPLAY_CATS = [
+  { key:"Integrity",           label:"Documentation Integrity", weight:0.20 },
+  { key:"Safety",              label:"Safety & Clinical",       weight:0.25 },
+  { key:"Team Conduct",        label:"Team Conduct",            weight:0.20 },
+  { key:"Endurance",           label:"24-Hr Shift Readiness",   weight:0.10 },
+  { key:"Professionalism",     label:"Professionalism",         weight:0.10 },
+  { key:"Situational Judgment",label:"Situational Judgment",    weight:0.15 },
+];
+
+// =====================================================================
+// STATE
+// =====================================================================
+let candidate = {};
+let answers = {};
+let curSec = 0;
+
+function startAssessment() {
+  const fn = document.getElementById('i-fname').value.trim();
+  const ln = document.getElementById('i-lname').value.trim();
+  const em = document.getElementById('i-email').value.trim();
+  if (!fn || !ln || !em) { alert('Please enter your first name, last name, and email.'); return; }
+  candidate = {
+    firstName: fn,
+    lastName: ln,
+    name: fn + ' ' + ln,
+    email: em,
+    phone: document.getElementById('i-phone').value.trim(),
+    position: document.getElementById('i-position').value.trim() || applicationContext.job_title || 'Paramedic',
+    cert: document.getElementById('i-cert').value.trim() || 'N/A',
+    date: new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'}),
+    completedAt: new Date().toISOString()
+  };
+  document.getElementById('screen-welcome').style.display = 'none';
+  document.getElementById('screen-assessment').style.display = 'block';
+  document.getElementById('headerRight').style.display = 'flex';
+  curSec = 0;
+  renderSec();
+}
+
+function renderSec() {
+  const sec = SECTIONS[curSec];
+  const [s, e] = sec.range;
+  document.getElementById('sec-tag').textContent = sec.tag;
+  document.getElementById('sec-title').textContent = sec.name;
+  document.getElementById('sec-sub').textContent = `Questions ${s}–${e} of ${QUESTIONS.length}`;
+
+  const qs = QUESTIONS.filter(q => q.id >= s && q.id <= e);
+  const cont = document.getElementById('q-container');
+  cont.innerHTML = '';
+
+  qs.forEach((q, i) => {
+    if (i > 0) {
+      const div = document.createElement('div');
+      div.className = 'q-divider';
+      cont.appendChild(div);
+    }
+    const block = document.createElement('div');
+    block.className = 'q-block';
+    block.style.animationDelay = (i * 40) + 'ms';
+    block.innerHTML = `<div class="q-num">Q${q.id}</div><div class="q-text">${q.text}</div>`;
+    block.appendChild(q.type === 'likert' ? buildLikert(q) : buildScenario(q));
+    cont.appendChild(block);
+  });
+
+  document.getElementById('btn-prev').style.display = curSec > 0 ? '' : 'none';
+  document.getElementById('btn-next').textContent =
+    curSec < SECTIONS.length - 1 ? 'Next Section →' : 'Submit Assessment';
+  updateProg();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function buildLikert(q) {
+  const wrap = document.createElement('div');
+  const lw = document.createElement('div');
+  lw.className = 'likert-wrap';
+  lw.id = 'lw' + q.id;
+  LIKERT.forEach(lbl => {
+    const opt = document.createElement('div');
+    opt.className = 'l-opt' + (answers[q.id] === lbl ? ' selected' : '');
+    opt.textContent = lbl;
+    opt.onclick = () => {
+      lw.querySelectorAll('.l-opt').forEach(o => o.classList.remove('selected'));
+      opt.classList.add('selected');
+      answers[q.id] = lbl;
+      updateProg();
+    };
+    lw.appendChild(opt);
+  });
+  const ends = document.createElement('div');
+  ends.className = 'likert-ends';
+  ends.innerHTML = '<span>Strongly Disagree</span><span>Strongly Agree</span>';
+  wrap.appendChild(lw);
+  wrap.appendChild(ends);
+  return wrap;
+}
+
+function buildScenario(q) {
+  const letters = ['A','B','C','D'];
+  const wrap = document.createElement('div');
+  wrap.className = 'scenario-opts';
+  wrap.id = 'sw' + q.id;
+  q.opts.forEach((txt, i) => {
+    const l = letters[i];
+    const opt = document.createElement('div');
+    opt.className = 's-opt' + (answers[q.id] === l ? ' selected' : '');
+    opt.innerHTML = `<div class="s-letter">${l}</div><div class="s-text">${txt}</div>`;
+    opt.onclick = () => {
+      wrap.querySelectorAll('.s-opt').forEach(o => o.classList.remove('selected'));
+      opt.classList.add('selected');
+      answers[q.id] = l;
+      updateProg();
+    };
+    wrap.appendChild(opt);
+  });
+  return wrap;
+}
+
+function updateProg() {
+  const ans = Object.keys(answers).length;
+  const total = QUESTIONS.length;
+  document.getElementById('prog-label').textContent = ans + ' / ' + total;
+  document.getElementById('prog-bar').style.width = Math.round((ans / total) * 100) + '%';
+  const sec = SECTIONS[curSec];
+  const qs = QUESTIONS.filter(q => q.id >= sec.range[0] && q.id <= sec.range[1]);
+  const done = qs.filter(q => answers[q.id] !== undefined).length;
+  document.getElementById('nav-info').textContent = done + ' of ' + qs.length + ' answered';
+}
+
+function nextSec() {
+  const sec = SECTIONS[curSec];
+  const missing = QUESTIONS.filter(q => q.id >= sec.range[0] && q.id <= sec.range[1] && answers[q.id] === undefined);
+  if (missing.length) { alert('Please answer all questions before continuing. (' + missing.length + ' remaining)'); return; }
+  if (curSec < SECTIONS.length - 1) { curSec++; renderSec(); }
+  else showResults();
+}
+
+function prevSec() { if (curSec > 0) { curSec--; renderSec(); } }
+
+// =====================================================================
+// SCORING
+// =====================================================================
+function scoreQ(q, ans) {
+  if (q.type === 'likert') {
+    const raw = LIKERT.indexOf(ans) + 1;
+    return q.rev ? (6 - raw) : raw;
+  }
+  return q.sc[ans] || 0;
+}
+
+function computeScores() {
+  const groups = {};
+  QUESTIONS.forEach(q => {
+    if (q.g === 'Validity') return;
+    const v = scoreQ(q, answers[q.id]);
+    if (!groups[q.g]) groups[q.g] = [];
+    groups[q.g].push(v);
+  });
+  const avg = {};
+  Object.entries(groups).forEach(([g, vals]) => {
+    avg[g] = vals.reduce((a,b)=>a+b,0) / vals.length;
+  });
+
+  let composite = 0, wsum = 0;
+  DISPLAY_CATS.forEach(({ key, weight }) => {
+    composite += (avg[key] || 0) * weight;
+    wsum += weight;
+  });
+  composite = composite / wsum;
+
+  return { avg, composite };
+}
+
+function getRedFlags() {
+  return QUESTIONS.filter(q => q.rf && q.rf.includes(answers[q.id]))
+    .map(q => ({ text: q.text, ans: answers[q.id] }));
+}
+
+function getValidityConcerns() {
+  return QUESTIONS.filter(q => q.g === 'Validity' && q.rf && q.rf.includes(answers[q.id])).length;
+}
+
+function getVerdict(composite, redFlagCount, integrity, safety, teamConduct) {
+  if (redFlagCount >= 3 || integrity < 3.4 || safety < 3.6 || teamConduct < 3.2)
+    return { label:'Do Not Advance', cls:'vp-no' };
+  if (composite >= 4.2 && redFlagCount === 0)
+    return { label:'Recommended: Hire', cls:'vp-hire' };
+  if (composite >= 3.8 && redFlagCount <= 1)
+    return { label:'Hire with Review', cls:'vp-review' };
+  if (composite >= 3.4)
+    return { label:'Review Further', cls:'vp-review' };
+  return { label:'Do Not Advance', cls:'vp-no' };
+}
+
+// =====================================================================
+// RESULTS
+// =====================================================================
+async function showResults() {
+  document.getElementById('screen-assessment').style.display = 'none';
+  document.getElementById('screen-results').style.display = 'none';
+  document.getElementById('headerRight').style.display = 'none';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  const { avg, composite } = computeScores();
+  const redFlags = getRedFlags();
+  const validity = getValidityConcerns();
+  const tc = avg['Team Conduct'] || 0;
+  const end = avg['Endurance'] || 0;
+  const verdict = getVerdict(composite, redFlags.length, avg['Integrity']||0, avg['Safety']||0, tc);
+
+  let summary = '';
+  if (verdict.cls === 'vp-hire') {
+    summary = 'This candidate demonstrates strong alignment with Paramedic standards across all measured dimensions. Scores indicate documentation integrity, sound clinical and safety judgment, and the crew conduct required in a two-person transport unit.';
+  } else if (verdict.cls === 'vp-review') {
+    summary = 'This candidate shows generally positive attributes with some areas requiring direct interview follow-up. Probe crew dynamics, extended-shift experience, and fatigue management specifically.';
+  } else {
+    summary = "This candidate's responses indicate significant concerns in one or more critical areas. A thorough review is required before advancing. Hard stops in integrity, safety, or team conduct should be discussed with the hiring manager before proceeding.";
+  }
+  if ((avg['Integrity']||0) < 3.8) summary += ' Documentation Integrity score (' + ((avg['Integrity']||0).toFixed(1)) + ') is below target - probe accountability and accuracy habits directly.';
+  if ((avg['Safety']||0) < 3.8) summary += ' Safety & Clinical Judgment score (' + ((avg['Safety']||0).toFixed(1)) + ') warrants close attention.';
+  if (tc < 3.5) summary += ' Team Conduct score (' + tc.toFixed(1) + ') is low - explore attitudes toward the EMT partner and operational authority directly in the interview.';
+  if (end < 3.5) summary += ' 24-Hour Shift Readiness score (' + end.toFixed(1) + ') warrants a direct conversation about extended-shift experience and fatigue strategies.';
+  if (validity >= 2) summary += ' Validity check flags suggest possible impression-management responding - interpret all scores with additional caution and probe with specific behavioral examples.';
+
+  const report = buildReport(avg, composite, redFlags, validity, verdict, summary);
+  const redFlagResponses = buildRedFlagResponses(redFlags);
+
+  const payload = {
+    assessmentType: ASSESSMENT_TYPE,
+    assessmentVersion: ASSESSMENT_VERSION,
+    candidate,
+    applicationContext,
+    scores: {
+      compositeScore: composite.toFixed(2),
+      recommendation: verdict.label,
+      categories: {
+        documentationIntegrity: (avg['Integrity']||0).toFixed(2),
+        safetyClinicalJudgment: (avg['Safety']||0).toFixed(2),
+        teamConduct: (avg['Team Conduct']||0).toFixed(2),
+        shiftReadiness: (avg['Endurance']||0).toFixed(2),
+        professionalism: (avg['Professionalism']||0).toFixed(2),
+        situationalJudgment: (avg['Situational Judgment']||0).toFixed(2),
+        selfAwareness: (avg['Self-Awareness']||0).toFixed(2)
+      },
+      redFlagCount: redFlags.length,
+      validityConcernCount: validity
+    },
+    flags: redFlags,
+    answers,
+    report,
+    redFlagResponses,
+    summary,
+    submittedAt: new Date().toISOString()
+  };
+
+  const submitted = await sendToFlow(buildSubmissionPayload(payload));
+  showCompletion(submitted);
+}
+
+function buildReport(avg, composite, redFlags, validity, verdict, summary) {
+  return [
+    '=== Paramedic Assessment Results - Northwest Ambulance ===',
+    '',
+    'Candidate:     ' + candidate.name,
+    'Email:         ' + candidate.email,
+    'Phone:         ' + (candidate.phone || 'N/A'),
+    'Position:      ' + candidate.position,
+    'Certification: ' + candidate.cert,
+    'Date:          ' + candidate.date,
+    'Completed:     ' + (candidate.completedAt || new Date().toISOString()),
+    '',
+    '--- WORKABLE APPLICATION CONTEXT ---',
+    'Candidate ID:   ' + (applicationContext.candidate_id || 'Not provided'),
+    'Application ID: ' + (applicationContext.application_id || 'Not provided'),
+    'Job ID:         ' + (applicationContext.job_id || 'Not provided'),
+    'Job Shortcode:  ' + (applicationContext.job_shortcode || 'Not provided'),
+    'Job Title:      ' + (applicationContext.job_title || candidate.position || 'Not provided'),
+    '',
+    'RECOMMENDATION: ' + verdict.label,
+    'Weighted Composite Score: ' + composite.toFixed(2) + ' / 5.00',
+    '',
+    '--- CATEGORY SCORES ---',
+    'Documentation Integrity:    ' + ((avg['Integrity']||0).toFixed(2)),
+    'Safety & Clinical Judgment: ' + ((avg['Safety']||0).toFixed(2)),
+    'Team Conduct:               ' + ((avg['Team Conduct']||0).toFixed(2)),
+    '24-Hr Shift Readiness:      ' + ((avg['Endurance']||0).toFixed(2)),
+    'Professionalism:            ' + ((avg['Professionalism']||0).toFixed(2)),
+    'Situational Judgment:       ' + ((avg['Situational Judgment']||0).toFixed(2)),
+    'Self-Awareness:             ' + ((avg['Self-Awareness']||0).toFixed(2)),
+    '',
+    'Red Flag Count:    ' + redFlags.length,
+    'Validity Concerns: ' + validity,
+    '',
+    '--- RED FLAG RESPONSES ---',
+    ...(redFlags.length ? redFlags.map((f,i)=>'Flag '+(i+1)+': '+f.text+' -> '+f.ans) : ['None identified']),
+    '',
+    '--- KEY INTERVIEW PROBES (IF ADVANCING) ---',
+    'Team Conduct: How have they worked alongside an EMT partner as part of one crew? Look for mutual respect versus hierarchy.',
+    '24-Hr Shifts: Request a specific example of managing fatigue on an extended shift and what they actually did.',
+    'Service Transition: Ask what they expect to be the hardest adjustment moving to this operation.',
+    'Documentation: Ask them to describe a time they caught an error, theirs or a coworker\'s, and what happened.',
+    '24-Hr Duty: Ask their responsibility when relief has not arrived and a call comes in.',
+    '',
+    '--- SUMMARY ---',
+    summary,
+    '',
+    'Assessment: Northwest Ambulance Paramedic Conduct & Clinical Judgment Assessment',
+    'Northwest Ambulance - Talent Acquisition - Confidential'
+  ].join('\n');
+}
+
+function buildRedFlagResponses(flags) {
+  if (!flags.length) return 'None';
+  return [
+    '=== Red Flag Responses ===',
+    '',
+    ...flags.flatMap((f, i) => [
+      'Flag ' + (i + 1),
+      'Question: ' + f.text,
+      'Candidate Response: ' + f.ans,
+      'Reason Flagged: Response matched a configured red-flag answer for this assessment.',
+      '',
+      '--------------------------------------------------',
+      ''
+    ])
+  ].join('\n');
+}
+
+function excelSafeText(value, maxLength = 30000){
+  return String(value || '')
+    .replace(/\r\n/g, '\n')
+    .replace(/\r/g, '\n')
+    .replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g, '')
+    .replace(/[⚠✓→—–]/g, '-')
+    .replace(/[“”]/g, '"')
+    .replace(/[‘’]/g, "'")
+    .replace(/[\t ]+/g, ' ')
+    .substring(0, maxLength);
+}
+
+function buildSubmissionPayload(payload){
+  const safeReport = "'" + excelSafeText(payload.report || '', 30000);
+  const safeRedFlagResponses = excelSafeText(payload.redFlagResponses || '', 12000);
+
+  return {
+    completionDate: payload.submittedAt || payload.candidate.completedAt || '',
+    email: payload.candidate.email || '',
+    firstName: payload.candidate.firstName || '',
+    lastName: payload.candidate.lastName || '',
+    phone: payload.candidate.phone || '',
+    position: payload.candidate.position || '',
+    assessmentType: payload.assessmentType || 'Paramedic',
+    assessmentVersion: payload.assessmentVersion || '',
+    score: payload.scores.compositeScore || '',
+    compositeScore: payload.scores.compositeScore || '',
+    recommendation: payload.scores.recommendation || '',
+    redFlags: String(payload.scores.redFlagCount ?? ''),
+    redFlagCount: String(payload.scores.redFlagCount ?? ''),
+    validityConcernCount: String(payload.scores.validityConcernCount ?? ''),
+    redFlagResponses: safeRedFlagResponses,
+    report: safeReport,
+    fullReport: safeReport,
+
+    candidate_id: payload.applicationContext.candidate_id || '',
+    application_id: payload.applicationContext.application_id || '',
+    job_id: payload.applicationContext.job_id || '',
+    job_shortcode: payload.applicationContext.job_shortcode || '',
+    job_title: payload.applicationContext.job_title || '',
+    source: payload.applicationContext.source || 'workable_email',
+
+    certification: payload.candidate.cert || '',
+    documentationIntegrity: payload.scores.categories.documentationIntegrity || '',
+    safetyClinicalJudgment: payload.scores.categories.safetyClinicalJudgment || '',
+    teamConduct: payload.scores.categories.teamConduct || '',
+    shiftReadiness: payload.scores.categories.shiftReadiness || '',
+    professionalism: payload.scores.categories.professionalism || '',
+    situationalJudgment: payload.scores.categories.situationalJudgment || '',
+    selfAwareness: payload.scores.categories.selfAwareness || '',
+
+    payloadJson: excelSafeText(JSON.stringify({
+      assessmentType: payload.assessmentType,
+      assessmentVersion: payload.assessmentVersion,
+      candidate: payload.candidate,
+      applicationContext: payload.applicationContext,
+      scores: payload.scores,
+      flagCount: payload.flags ? payload.flags.length : 0,
+      submittedAt: payload.submittedAt
+    }), 30000)
+  };
+}
+
+async function sendToFlow(data){
+  try{
+    console.log('Assessment payload sent to Power Automate:', data);
+    const response = await fetch(FLOW_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+    return response.ok;
+  }catch(e){
+    console.error('Flow submission failed', e);
+    return false;
+  }
+}
+
+function showCompletion(submitted){
+  const ref = document.getElementById('complete-ref');
+  document.getElementById('screen-complete').style.display = 'block';
+  if(submitted){
+    ref.style.display = 'none';
+    ref.textContent = '';
+  }else{
+    ref.style.display = 'block';
+    ref.textContent = 'Submission issue: Power Automate did not confirm receipt. Please notify recruiting that your assessment did not submit successfully.';
+  }
+}
+
+function copyReport() {
+  const area = document.getElementById('copy-area');
+  if (!area) return;
+  navigator.clipboard.writeText(area.textContent).then(() => {
+    const btn = document.querySelector('.btn-copy');
+    if (!btn) return;
+    btn.textContent = '✓ Copied!';
+    setTimeout(() => btn.textContent = 'Copy to Clipboard', 2000);
+  });
+}
+</script>
+</body>
+</html>
