@@ -1,0 +1,990 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vehicle Supply Technician Assessment — Northwest Ambulance</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,600;0,700;1,400&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0e1a1c;
+    --ink2: #122427;
+    --teal: #2fb8a6;
+    --teal-light: #5fd8c6;
+    --teal-pale: rgba(47,184,166,0.12);
+    --teal-border: rgba(47,184,166,0.28);
+    --bronze: #d9a866;
+    --cream: #eef3f2;
+    --muted: #7e9794;
+    --border: rgba(255,255,255,0.07);
+    --card: rgba(255,255,255,0.03);
+    --green: #6dbf8b;
+    --green-bg: rgba(109,191,139,0.12);
+    --green-border: rgba(109,191,139,0.3);
+    --amber: #e8b84b;
+    --amber-bg: rgba(232,184,75,0.12);
+    --amber-border: rgba(232,184,75,0.3);
+    --red: #e05c6a;
+    --red-bg: rgba(224,92,106,0.12);
+    --red-border: rgba(224,92,106,0.3);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--ink);
+    color: var(--cream);
+    min-height: 100vh;
+    font-size: 15px;
+    line-height: 1.65;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(47,184,166,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(47,184,166,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .header {
+    background: var(--ink2);
+    border-bottom: 1px solid var(--teal-border);
+    padding: 0 40px;
+    height: 62px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .logo-mark { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+
+  .logo-box {
+    width: 30px; height: 30px;
+    background: linear-gradient(135deg, var(--teal) 0%, var(--teal-light) 100%);
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .logo-box span { font-size: 11px; font-weight: 700; color: var(--ink); letter-spacing: -0.5px; }
+
+  .logo-text {
+    font-family: 'Fraunces', serif;
+    font-size: 15px; font-weight: 600; color: var(--cream); letter-spacing: 0.01em;
+  }
+  .logo-text small {
+    display: block; font-family: 'DM Sans', sans-serif; font-size: 10px; font-weight: 400;
+    color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; font-style: normal;
+  }
+
+  .header-center { flex: 1; }
+  .header-right { display: flex; align-items: center; gap: 14px; }
+
+  .prog-pill {
+    display: flex; align-items: center; gap: 10px;
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 99px; padding: 5px 14px;
+  }
+  .prog-label { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--muted); }
+  .prog-outer { width: 100px; height: 3px; background: rgba(255,255,255,0.08); border-radius: 2px; overflow: hidden; }
+  .prog-inner { height: 100%; background: var(--teal); border-radius: 2px; transition: width 0.4s ease; width: 0%; }
+
+  .main { max-width: 780px; margin: 0 auto; padding: 44px 24px 100px; position: relative; z-index: 1; }
+
+  #screen-welcome { display: block; }
+
+  .eyebrow {
+    font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--teal); margin-bottom: 18px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .eyebrow::before { content: ''; display: inline-block; width: 24px; height: 1px; background: var(--teal); }
+
+  .welcome-title {
+    font-family: 'Fraunces', serif; font-size: clamp(32px, 5vw, 52px); font-weight: 700;
+    line-height: 1.05; letter-spacing: -0.02em; margin-bottom: 24px; color: var(--cream);
+  }
+  .welcome-title em { font-style: italic; color: var(--teal-light); }
+
+  .welcome-desc { font-size: 15px; color: var(--muted); max-width: 540px; line-height: 1.75; margin-bottom: 36px; }
+
+  .meta-row { display: flex; gap: 1px; margin-bottom: 44px; max-width: 480px; }
+  .meta-cell { flex: 1; background: var(--card); border: 1px solid var(--border); padding: 14px 18px; }
+  .meta-cell:first-child { border-radius: 8px 0 0 8px; }
+  .meta-cell:last-child { border-radius: 0 8px 8px 0; }
+  .meta-val { font-family: 'Fraunces', serif; font-size: 26px; font-weight: 600; color: var(--cream); line-height: 1; margin-bottom: 3px; }
+  .meta-lbl { font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+
+  .cand-form { max-width: 480px; margin-bottom: 36px; }
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+  .form-group { display: flex; flex-direction: column; gap: 6px; }
+  .form-group label { font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); font-weight: 500; }
+  .form-group input {
+    background: rgba(255,255,255,0.04); border: 1px solid var(--border); border-radius: 6px;
+    padding: 9px 12px; color: var(--cream); font-size: 13px; font-family: 'DM Sans', sans-serif;
+    outline: none; transition: border-color 0.2s;
+  }
+  .form-group input:focus { border-color: var(--teal-border); }
+  .form-group input::placeholder { color: rgba(255,255,255,0.15); }
+
+  .btn-primary {
+    background: var(--teal); color: var(--ink); border: none; border-radius: 6px;
+    padding: 13px 28px; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 600;
+    letter-spacing: 0.04em; cursor: pointer; transition: background 0.2s, transform 0.1s;
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+  .btn-primary:hover { background: var(--teal-light); }
+  .btn-primary:active { transform: scale(0.98); }
+
+  .btn-ghost {
+    background: transparent; color: var(--muted); border: 1px solid var(--border);
+    border-radius: 6px; padding: 11px 22px; font-family: 'DM Sans', sans-serif; font-size: 13px;
+    cursor: pointer; transition: all 0.15s;
+  }
+  .btn-ghost:hover { border-color: rgba(255,255,255,0.2); color: var(--cream); }
+
+  #screen-assessment { display: none; }
+
+  .sec-eyebrow { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--teal); margin-bottom: 6px; }
+  .sec-title { font-family: 'Fraunces', serif; font-size: 24px; font-weight: 600; color: var(--cream); margin-bottom: 4px; }
+  .sec-sub { font-size: 12px; color: var(--muted); margin-bottom: 32px; }
+
+  .q-block { margin-bottom: 0; animation: slideIn 0.25s ease both; }
+  @keyframes slideIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+  .q-divider { height: 1px; background: var(--border); margin: 24px 0; }
+  .q-num { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--teal); letter-spacing: 0.1em; margin-bottom: 7px; }
+  .q-text { font-size: 15px; color: var(--cream); line-height: 1.55; margin-bottom: 14px; font-weight: 400; }
+
+  .likert-wrap { display: flex; gap: 6px; flex-wrap: wrap; }
+  .l-opt {
+    flex: 1 1 0; min-width: 90px; background: var(--card); border: 1px solid var(--border);
+    border-radius: 6px; padding: 9px 6px; text-align: center; cursor: pointer; font-size: 11px;
+    color: var(--muted); line-height: 1.3; transition: all 0.15s; user-select: none;
+  }
+  .l-opt:hover { background: rgba(47,184,166,0.06); color: var(--cream); }
+  .l-opt.selected { background: var(--teal-pale); border-color: var(--teal-border); color: var(--cream); }
+  .likert-ends { display: flex; justify-content: space-between; font-size: 10px; color: var(--muted); margin-top: 5px; padding: 0 2px; letter-spacing: 0.04em; }
+
+  .scenario-opts { display: flex; flex-direction: column; gap: 7px; }
+  .s-opt {
+    display: flex; align-items: flex-start; gap: 12px; background: var(--card);
+    border: 1px solid var(--border); border-radius: 8px; padding: 13px 15px; cursor: pointer;
+    transition: all 0.15s; user-select: none;
+  }
+  .s-opt:hover { background: rgba(47,184,166,0.04); }
+  .s-opt.selected { background: var(--teal-pale); border-color: var(--teal-border); }
+  .s-letter {
+    width: 22px; height: 22px; border-radius: 50%; border: 1.5px solid var(--muted);
+    display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700;
+    flex-shrink: 0; margin-top: 1px; transition: all 0.15s; font-family: 'DM Mono', monospace;
+  }
+  .s-opt.selected .s-letter { background: var(--teal); border-color: var(--teal); color: var(--ink); }
+  .s-text { font-size: 13px; color: var(--cream); line-height: 1.5; }
+
+  .q-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 36px; padding-top: 24px; border-top: 1px solid var(--border); gap: 12px; }
+  .nav-info { font-size: 11px; color: var(--muted); font-family: 'DM Mono', monospace; }
+  .nav-btns { display: flex; gap: 10px; }
+
+  #screen-results { display: none; }
+  .results-top { text-align: center; padding: 36px 0 28px; }
+  .verdict-pill { display: inline-block; font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; padding: 6px 18px; border-radius: 99px; margin-bottom: 16px; }
+  .vp-hire { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-border); }
+  .vp-review { background: var(--amber-bg); color: var(--amber); border: 1px solid var(--amber-border); }
+  .vp-no { background: var(--red-bg); color: var(--red); border: 1px solid var(--red-border); }
+  .r-name { font-family: 'Fraunces', serif; font-size: 32px; font-weight: 700; color: var(--cream); margin-bottom: 6px; }
+  .r-meta { font-size: 12px; color: var(--muted); }
+  .r-composite { display: inline-flex; align-items: baseline; gap: 4px; margin-top: 16px; }
+  .r-composite .big { font-family: 'Fraunces', serif; font-size: 48px; font-weight: 700; color: var(--teal-light); line-height: 1; }
+  .r-composite .denom { font-size: 18px; color: var(--muted); }
+
+  .score-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 28px 0; }
+  .sc-card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 16px; }
+  .sc-label { font-size: 10px; letter-spacing: 0.07em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
+  .sc-bar-wrap { display: flex; align-items: center; gap: 8px; }
+  .sc-bar-bg { flex: 1; height: 4px; background: rgba(255,255,255,0.07); border-radius: 2px; overflow: hidden; }
+  .sc-bar-fill { height: 100%; border-radius: 2px; transition: width 1s ease; }
+  .sc-val { font-family: 'DM Mono', monospace; font-size: 14px; font-weight: 500; width: 30px; text-align: right; flex-shrink: 0; }
+
+  .flags-box { background: var(--red-bg); border: 1px solid var(--red-border); border-radius: 10px; padding: 18px 20px; margin-bottom: 16px; }
+  .flags-box h3 { font-size: 13px; font-weight: 600; color: var(--red); margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
+  .flag-item { font-size: 12px; color: var(--muted); padding: 4px 0; border-bottom: 1px solid rgba(255,255,255,0.04); }
+  .flag-item:last-child { border-bottom: none; }
+
+  .summary-box { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 18px 20px; margin-bottom: 20px; font-size: 13px; color: var(--muted); line-height: 1.7; }
+
+  .workable-box { background: var(--ink2); border: 1px solid var(--teal-border); border-radius: 10px; padding: 20px; margin-top: 24px; }
+  .workable-box h3 { font-family: 'Fraunces', serif; font-size: 15px; font-weight: 600; color: var(--cream); margin-bottom: 6px; }
+  .workable-box p { font-size: 12px; color: var(--muted); margin-bottom: 12px; }
+  .copy-area { background: rgba(0,0,0,0.3); border: 1px solid var(--border); border-radius: 7px; padding: 14px; font-family: 'DM Mono', monospace; font-size: 11px; color: var(--muted); white-space: pre-wrap; line-height: 1.7; margin-bottom: 10px; }
+  .btn-copy { font-size: 12px; color: var(--muted); background: rgba(255,255,255,0.04); border: 1px solid var(--border); border-radius: 6px; padding: 7px 14px; cursor: pointer; transition: all 0.15s; font-family: 'DM Sans', sans-serif; }
+  .btn-copy:hover { background: rgba(255,255,255,0.08); color: var(--cream); }
+
+  .export-row { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 28px; }
+
+  @media (max-width: 580px) {
+    .header { padding: 0 16px; }
+    .main { padding: 24px 14px 80px; }
+    .form-grid { grid-template-columns: 1fr; }
+    .meta-row { flex-wrap: wrap; }
+    .score-grid { grid-template-columns: 1fr 1fr; }
+    .likert-wrap { gap: 4px; }
+    .l-opt { min-width: 60px; padding: 7px 4px; font-size: 10px; }
+    .prog-pill { display: none; }
+  }
+
+
+  #screen-complete { display:none; min-height:60vh; align-items:center; justify-content:center; }
+  .complete-card { max-width:560px; margin:70px auto 0; text-align:center; background:var(--card); border:1px solid var(--teal-border); border-radius:14px; padding:42px 32px; }
+  .complete-icon { width:56px; height:56px; border-radius:50%; margin:0 auto 18px; background:var(--green-bg); border:1px solid var(--green-border); color:var(--green); display:flex; align-items:center; justify-content:center; font-size:28px; font-weight:700; }
+  .complete-title { font-family:'Fraunces',serif; font-size:30px; margin-bottom:12px; color:var(--cream); }
+  .complete-text { color:var(--muted); font-size:14px; line-height:1.75; }
+  .complete-ref { margin-top:18px; padding:12px 14px; border-radius:8px; background:var(--red-bg); border:1px solid var(--red-border); color:var(--red); font-size:12px; }
+
+  @media print {
+    body::before { display: none; }
+    .header { position: static; background: #122427; }
+    .btn-primary, .btn-ghost, .btn-copy, .export-row { display: none !important; }
+    body { background: white; color: #111; }
+    .r-name, .sec-title, .workable-box h3 { color: #111; }
+    .sc-card, .flags-box, .summary-box, .workable-box { background: #f9f9f9; border-color: #ddd; }
+  }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="logo-mark">
+    <div class="logo-box"><span>NW</span></div>
+    <div class="logo-text">
+      Vehicle Supply Technician Assessment
+      <small>Northwest Ambulance · Talent Acquisition</small>
+    </div>
+  </div>
+  <div class="header-center"></div>
+  <div class="header-right" id="headerRight" style="display:none">
+    <div class="prog-pill">
+      <span class="prog-label" id="prog-label">0 / 50</span>
+      <div class="prog-outer"><div class="prog-inner" id="prog-bar"></div></div>
+    </div>
+  </div>
+</header>
+
+<main class="main">
+
+  <!-- ============ WELCOME ============ -->
+  <div id="screen-welcome">
+    <div class="eyebrow">Support Services · Vehicle Supply Technician</div>
+    <h2 class="welcome-title">Vehicle Supply Technician<br><em>Character &amp; Work Ethic</em><br>Assessment</h2>
+    <p class="welcome-desc">
+      This assessment is part of the hiring process for the Vehicle Supply Technician (VST) role. It isn't a
+      skills test — it's designed to understand your character and work style: honesty and integrity, reliability,
+      work ethic, and how you handle rules and everyday decisions. There are no trick questions and no
+      right résumé — just answer honestly.
+    </p>
+
+    <div class="meta-row">
+      <div class="meta-cell"><div class="meta-val">50</div><div class="meta-lbl">Questions</div></div>
+      <div class="meta-cell"><div class="meta-val">10–12</div><div class="meta-lbl">Minutes</div></div>
+      <div class="meta-cell"><div class="meta-val">6</div><div class="meta-lbl">Categories</div></div>
+    </div>
+
+    <div class="cand-form">
+      <div class="form-grid">
+        <div class="form-group"><label>First Name *</label><input type="text" id="i-fname" placeholder="Jane"></div>
+        <div class="form-group"><label>Last Name *</label><input type="text" id="i-lname" placeholder="Smith"></div>
+      </div>
+      <div class="form-grid">
+        <div class="form-group"><label>Email *</label><input type="email" id="i-email" placeholder="jane@email.com"></div>
+        <div class="form-group"><label>Phone</label><input type="tel" id="i-phone" placeholder="(555) 000-0000"></div>
+      </div>
+      <div class="form-group" style="margin-top:4px">
+        <label>Position Applied For</label>
+        <input type="text" id="i-position" placeholder="Vehicle Supply Technician">
+      </div>
+    </div>
+
+    <button class="btn-primary" onclick="startAssessment()">Begin Assessment →</button>
+  </div>
+
+  <!-- ============ ASSESSMENT ============ -->
+  <div id="screen-assessment">
+    <div class="sec-eyebrow" id="sec-tag">Section 1 of 6</div>
+    <div class="sec-title" id="sec-title">Integrity &amp; Honesty</div>
+    <div class="sec-sub" id="sec-sub">Questions 1–10</div>
+
+    <div id="q-container"></div>
+
+    <div class="q-nav">
+      <span class="nav-info" id="nav-info"></span>
+      <div class="nav-btns">
+        <button class="btn-ghost" id="btn-prev" onclick="prevSec()" style="display:none">← Back</button>
+        <button class="btn-primary" id="btn-next" onclick="nextSec()">Next Section →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ RESULTS ============ -->
+  <div id="screen-results">
+    <div class="results-top">
+      <div class="verdict-pill" id="v-pill"></div>
+      <div class="r-name" id="r-name"></div>
+      <div class="r-meta" id="r-meta"></div>
+      <div class="r-composite">
+        <span class="big" id="r-score">—</span>
+        <span class="denom">/ 5.00</span>
+      </div>
+    </div>
+
+    <div class="score-grid" id="score-grid"></div>
+
+    <div class="flags-box" id="flags-box" style="display:none">
+      <h3>⚠ Red Flag Responses</h3>
+      <div id="flags-list"></div>
+    </div>
+
+    <div class="summary-box" id="summary-box"></div>
+
+    <div class="workable-box">
+      <h3>Workable Notes — Copy &amp; Paste</h3>
+      <p>Paste the text below into the candidate's Notes tab in Workable.</p>
+      <div class="copy-area" id="copy-area"></div>
+      <button class="btn-copy" onclick="copyReport()">Copy to Clipboard</button>
+    </div>
+
+    <div class="export-row">
+      <button class="btn-primary" onclick="window.print()">Print / Save PDF</button>
+      <button class="btn-ghost" onclick="location.reload()">New Assessment</button>
+    </div>
+  </div>
+
+
+  <!-- ============ COMPLETION ============ -->
+  <div id="screen-complete">
+    <div class="complete-card">
+      <div class="complete-icon">✓</div>
+      <h2 class="complete-title">Assessment Submitted</h2>
+      <p class="complete-text">
+        Thank you. Your assessment has been submitted successfully. The hiring team will review your application and follow up through the normal recruiting process.
+      </p>
+      <div class="complete-ref" id="complete-ref" style="display:none"></div>
+    </div>
+  </div>
+
+</main>
+
+<script>
+
+// =====================================================================
+// AUTOMATION CONFIGURATION
+// Mirrored to field_staff_assessment_v3_mirrored_to_leadership.html.
+// Candidate-facing results are hidden. Power Automate receives a flat JSON payload.
+// =====================================================================
+const FLOW_URL = "https://defaultb9fe31c2de0742529875da1c500446.c8.environment.api.powerplatform.com:443/powerautomate/automations/direct/cu/18/workflows/7d77050f7c9b41ea840c66f8833d363f/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=lEZs__8bJdMmLIeR43OOvfh18LWY6Njpfldgdu348c0";
+const SUBMISSION_WEBHOOK_URL = FLOW_URL;
+const ASSESSMENT_TYPE = "Vehicle Supply Technician";
+const ASSESSMENT_VERSION = "1.0-fieldstaff-v3-mirrored";
+
+const urlParams = new URLSearchParams(window.location.search);
+const applicationContext = {
+  candidate_id: urlParams.get('candidate_id') || '',
+  application_id: urlParams.get('application_id') || '',
+  job_shortcode: urlParams.get('job_shortcode') || '',
+  job_title: urlParams.get('job_title') || '',
+  job_id: urlParams.get('job_id') || '',
+  source: urlParams.get('source') || 'workable_email'
+};
+
+function applyUrlContext(){
+  if(applicationContext.job_title){
+    const pos=document.getElementById('i-position');
+    if(pos) pos.value=applicationContext.job_title;
+  }
+}
+
+document.addEventListener('DOMContentLoaded', applyUrlContext);
+
+// =====================================================================
+// QUESTION DATA — 50 questions across 6 categories
+// This is a CHARACTER screen, not a skills test. It gauges integrity,
+// reliability, work ethic, rule/safety adherence, judgment, and overall
+// hire risk for the Vehicle Supply Technician (VST) role. The job is
+// only light framing — the questions measure who the person is.
+// =====================================================================
+const LIKERT = ["Strongly Disagree","Disagree","Neutral","Agree","Strongly Agree"];
+
+const QUESTIONS = [
+
+  // ── SECTION 1: Integrity & Honesty (Q1–10) — weight 0.30 ──
+  { id:1, s:"Integrity & Honesty", g:"Integrity", type:"likert", rev:false,
+    text:"I tell the truth even when it would be easier to shade it." },
+  { id:2, s:"Integrity & Honesty", g:"Integrity", type:"likert", rev:true,
+    text:"Taking company property for personal use is okay if no one would miss it.",
+    rf:["Agree","Strongly Agree"] },
+  { id:3, s:"Integrity & Honesty", g:"Integrity", type:"likert", rev:false,
+    text:"If I made a mistake that no one noticed, I would still own up to it." },
+  { id:4, s:"Integrity & Honesty", g:"Integrity", type:"likert", rev:true,
+    text:"It's fine to sign off that a task was done when it was only mostly done.",
+    rf:["Agree","Strongly Agree"] },
+  { id:5, s:"Integrity & Honesty", g:"Integrity", type:"likert", rev:false,
+    text:"I would give an honest account of what happened even if it made me look bad." },
+  { id:6, s:"Integrity & Honesty", g:"Integrity", type:"likert", rev:true,
+    text:"Using a company vehicle, fuel, or supplies for personal errands now and then is harmless.",
+    rf:["Agree","Strongly Agree"] },
+  { id:7, s:"Integrity & Honesty", g:"Integrity", type:"likert", rev:false,
+    text:"I treat the company's money and property with the same care as my own." },
+  { id:8, s:"Integrity & Honesty", g:"Integrity", type:"likert", rev:true,
+    text:"If a coworker asked me to cover for something dishonest, I might go along to keep the peace.",
+    rf:["Agree","Strongly Agree"] },
+  { id:9, s:"Integrity & Honesty", g:"Integrity", type:"likert", rev:false,
+    text:"I would report a problem I caused rather than hope it goes unnoticed." },
+  { id:10, s:"Integrity & Honesty", g:"Integrity", type:"likert", rev:true,
+    text:"Small lies at work are harmless if they smooth things over.",
+    rf:["Agree","Strongly Agree"] },
+
+  // ── SECTION 2: Reliability & Dependability (Q11–18) — 0.20 ──
+  { id:11, s:"Reliability & Dependability", g:"Reliability", type:"likert", rev:false,
+    text:"When I commit to getting something done, it gets done without reminders." },
+  { id:12, s:"Reliability & Dependability", g:"Reliability", type:"likert", rev:false,
+    text:"I show up on time and ready to work." },
+  { id:13, s:"Reliability & Dependability", g:"Reliability", type:"likert", rev:true,
+    text:"If I'm running late or can't finish something, I'd rather not make a big deal of it.",
+    rf:["Agree","Strongly Agree"] },
+  { id:14, s:"Reliability & Dependability", g:"Reliability", type:"likert", rev:false,
+    text:"People can count on me to do what I said I would." },
+  { id:15, s:"Reliability & Dependability", g:"Reliability", type:"likert", rev:false,
+    text:"I follow tasks through to completion rather than leaving them mostly finished." },
+  { id:16, s:"Reliability & Dependability", g:"Reliability", type:"likert", rev:true,
+    text:"Calling out or leaving early isn't a big deal as long as the work eventually gets covered.",
+    rf:["Agree","Strongly Agree"] },
+  { id:17, s:"Reliability & Dependability", g:"Reliability", type:"likert", rev:false,
+    text:"I let someone know early when I anticipate a delay or a problem." },
+  { id:18, s:"Reliability & Dependability", g:"Reliability", type:"likert", rev:false,
+    text:"I keep track of what I'm responsible for so nothing falls through the cracks." },
+
+  // ── SECTION 3: Work Ethic & Self-Motivation (Q19–26) — 0.20 ──
+  { id:19, s:"Work Ethic & Self-Motivation", g:"Work Ethic", type:"likert", rev:false,
+    text:"I stay productive without someone checking on me." },
+  { id:20, s:"Work Ethic & Self-Motivation", g:"Work Ethic", type:"likert", rev:true,
+    text:"I work hardest only when someone is watching.",
+    rf:["Agree","Strongly Agree"] },
+  { id:21, s:"Work Ethic & Self-Motivation", g:"Work Ethic", type:"likert", rev:false,
+    text:"I take pride in doing a thorough job even on routine, unglamorous tasks." },
+  { id:22, s:"Work Ethic & Self-Motivation", g:"Work Ethic", type:"likert", rev:true,
+    text:"Once a job is \"good enough,\" spending more effort on it is usually a waste.",
+    rf:["Agree","Strongly Agree"] },
+  { id:23, s:"Work Ethic & Self-Motivation", g:"Work Ethic", type:"likert", rev:false,
+    text:"When I see something that needs doing, I take care of it without being told." },
+  { id:24, s:"Work Ethic & Self-Motivation", g:"Work Ethic", type:"likert", rev:true,
+    text:"If a task isn't specifically assigned to me, it's not really my problem.",
+    rf:["Agree","Strongly Agree"] },
+  { id:25, s:"Work Ethic & Self-Motivation", g:"Work Ethic", type:"likert", rev:false,
+    text:"I'd rather do a job right and a little slower than fast and sloppy." },
+  { id:26, s:"Work Ethic & Self-Motivation", g:"Work Ethic", type:"likert", rev:false,
+    text:"I push through tedious or physically demanding work without cutting corners." },
+
+  // ── SECTION 4: Rule & Safety Adherence (Q27–34) — 0.15 ──
+  { id:27, s:"Rule & Safety Adherence", g:"Adherence", type:"likert", rev:false,
+    text:"I follow procedures and safety rules even when they slow me down." },
+  { id:28, s:"Rule & Safety Adherence", g:"Adherence", type:"likert", rev:true,
+    text:"Rules and checklists are often stricter than they need to be.",
+    rf:["Agree","Strongly Agree"] },
+  { id:29, s:"Rule & Safety Adherence", g:"Adherence", type:"likert", rev:false,
+    text:"I follow traffic laws when driving for work, even when I'm behind schedule." },
+  { id:30, s:"Rule & Safety Adherence", g:"Adherence", type:"likert", rev:true,
+    text:"Skipping a step or a safety check is fine when I'm confident nothing is wrong.",
+    rf:["Agree","Strongly Agree"] },
+  { id:31, s:"Rule & Safety Adherence", g:"Adherence", type:"likert", rev:false,
+    text:"I'd rather be a few minutes late than take a shortcut that creates a risk." },
+  { id:32, s:"Rule & Safety Adherence", g:"Adherence", type:"likert", rev:true,
+    text:"If everyone bends a certain rule and nothing bad happens, the rule probably doesn't matter.",
+    rf:["Agree","Strongly Agree"] },
+  { id:33, s:"Rule & Safety Adherence", g:"Adherence", type:"likert", rev:false,
+    text:"I speak up when I see something unsafe or out of order rather than ignore it." },
+  { id:34, s:"Rule & Safety Adherence", g:"Adherence", type:"likert", rev:false,
+    text:"I follow company and county guidelines even when no one is checking." },
+
+  // ── SECTION 5: Job Scenarios (Q35–40) — Situational Judgment, 0.20 ──
+  { id:35, s:"Job Scenarios", g:"Situational Judgment", type:"scenario",
+    text:"You're behind and a required checklist has a few items left. You're fairly confident they're fine.",
+    opts:["Sign off on all of it — you're confident","Finish the remaining items before signing, even if it makes you a little late","Sign the ones you did and leave the rest blank","Sign all of it and circle back only if there's time"],
+    sc:{A:1,B:5,C:2,D:1} },
+
+  { id:36, s:"Job Scenarios", g:"Situational Judgment", type:"scenario",
+    text:"You notice a problem — a worn tire, a weak piece of equipment — that isn't strictly your job to fix.",
+    opts:["Ignore it — it's not your responsibility","Report it so the right person knows, and flag it out of service if it's unsafe","Mention it in passing if you happen to run into someone","Assume someone else has already noticed it"],
+    sc:{A:1,B:5,C:2,D:1} },
+
+  { id:37, s:"Job Scenarios", g:"Situational Judgment", type:"scenario",
+    text:"You realize you made an error last week that went unnoticed and could still be corrected.",
+    opts:["Quietly fix it and hope no one noticed","Correct it, tell your supervisor, and adjust how you work so it doesn't recur","Wait to see if anyone brings it up","Cover it up so it looks like nothing went wrong"],
+    sc:{A:2,B:5,C:1,D:1} },
+
+  { id:38, s:"Job Scenarios", g:"Situational Judgment", type:"scenario",
+    text:"A coworker asks you to look the other way on something against policy, \"just this once.\"",
+    opts:["Go along with it to avoid conflict","Decline and follow policy — offer to help them do it the right way","Do it this once but tell them not to ask again","Do it and keep it between the two of you"],
+    sc:{A:1,B:5,C:2,D:1} },
+
+  { id:39, s:"Job Scenarios", g:"Situational Judgment", type:"scenario",
+    text:"It's the end of a long shift and there's still an unglamorous task left that's technically yours.",
+    opts:["Leave it for the next person — you're tired","Finish it properly before you leave","Do a quick, partial version and go","Leave a note saying it still needs doing"],
+    sc:{A:2,B:5,C:2,D:2} },
+
+  { id:40, s:"Job Scenarios", g:"Situational Judgment", type:"scenario",
+    text:"You could put a small personal purchase on the company fuel card or account, and it would likely never be noticed.",
+    opts:["Use it — you'll settle up later","Keep personal and company spending completely separate","Use it but note it so it's \"transparent\"","Use it — a small amount won't matter"],
+    sc:{A:1,B:5,C:2,D:1} },
+
+  // ── SECTION 6: Work Attitudes & Validity (Q41–50) ──
+  // Conduct / Hire Risk (Q41–46)
+  { id:41, s:"Work Attitudes & Validity", g:"Conduct Risk", type:"likert", rev:true,
+    text:"Most workplace rules exist because managers don't trust employees.",
+    rf:["Agree","Strongly Agree"] },
+  { id:42, s:"Work Attitudes & Validity", g:"Conduct Risk", type:"likert", rev:false,
+    text:"Following procedures protects both me and the people who depend on my work." },
+  { id:43, s:"Work Attitudes & Validity", g:"Conduct Risk", type:"likert", rev:true,
+    text:"Everyone takes small liberties with company time or property — it's just how it works.",
+    rf:["Agree","Strongly Agree"] },
+  { id:44, s:"Work Attitudes & Validity", g:"Conduct Risk", type:"likert", rev:false,
+    text:"Being honest and dependable matters more than being fast." },
+  { id:45, s:"Work Attitudes & Validity", g:"Conduct Risk", type:"likert", rev:true,
+    text:"If I could get away with doing less for the same pay, I probably would.",
+    rf:["Agree","Strongly Agree"] },
+  { id:46, s:"Work Attitudes & Validity", g:"Conduct Risk", type:"likert", rev:false,
+    text:"I hold myself to the same standard whether or not anyone is watching." },
+
+  // Validity items (Q47–50)
+  { id:47, s:"Work Attitudes & Validity", g:"Validity", type:"likert", rev:false,
+    text:"I have never told even a small lie.",
+    rf:["Agree","Strongly Agree"] },
+  { id:48, s:"Work Attitudes & Validity", g:"Validity", type:"likert", rev:false,
+    text:"I have never once cut a corner or rushed a task.",
+    rf:["Agree","Strongly Agree"] },
+  { id:49, s:"Work Attitudes & Validity", g:"Validity", type:"likert", rev:false,
+    text:"I have always kept every commitment I have ever made, without exception.",
+    rf:["Agree","Strongly Agree"] },
+  { id:50, s:"Work Attitudes & Validity", g:"Validity", type:"likert", rev:false,
+    text:"I have never disagreed with a workplace rule or policy.",
+    rf:["Agree","Strongly Agree"] },
+];
+
+const SECTIONS = [
+  { name:"Integrity & Honesty",           tag:"Section 1 of 6", range:[1,10]  },
+  { name:"Reliability & Dependability",   tag:"Section 2 of 6", range:[11,18] },
+  { name:"Work Ethic & Self-Motivation",  tag:"Section 3 of 6", range:[19,26] },
+  { name:"Rule & Safety Adherence",       tag:"Section 4 of 6", range:[27,34] },
+  { name:"Job Scenarios",                 tag:"Section 5 of 6", range:[35,40] },
+  { name:"Work Attitudes & Validity",     tag:"Section 6 of 6", range:[41,50] },
+];
+
+// Category weights — this is a character and hire-risk screen.
+// Integrity is weighted highest (30%) because it's the core of the
+// decision; Reliability and Work Ethic (20% each) capture dependability
+// and effort; Rule/Safety Adherence (15%) and Situational Judgment (20%)
+// show character in action. Conduct / Hire Risk is shown separately and
+// gates the verdict; Validity is a check only. Composite is normalized
+// back to a 1–5 scale.
+const DISPLAY_CATS = [
+  { key:"Integrity",          label:"Integrity & Honesty",      weight:0.30 },
+  { key:"Reliability",        label:"Reliability",              weight:0.20 },
+  { key:"Work Ethic",         label:"Work Ethic",               weight:0.20 },
+  { key:"Adherence",          label:"Rule & Safety Adherence",  weight:0.15 },
+  { key:"Situational Judgment",label:"Situational Judgment",    weight:0.20 },
+];
+const TOTAL_WEIGHT = DISPLAY_CATS.reduce((a,c)=>a+c.weight,0); // 1.05
+
+// =====================================================================
+// STATE
+// =====================================================================
+let candidate = {};
+let answers = {};
+let curSec = 0;
+
+function startAssessment() {
+  const fn = document.getElementById('i-fname').value.trim();
+  const ln = document.getElementById('i-lname').value.trim();
+  const em = document.getElementById('i-email').value.trim();
+  if (!fn || !ln || !em) { alert('Please enter your first name, last name, and email.'); return; }
+  candidate = {
+    firstName: fn,
+    lastName: ln,
+    name: fn + ' ' + ln,
+    email: em,
+    phone: document.getElementById('i-phone').value.trim(),
+    position: document.getElementById('i-position').value.trim() || 'Vehicle Supply Technician',
+    date: new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'}),
+    completedAt: ''
+  };
+  document.getElementById('screen-welcome').style.display = 'none';
+  document.getElementById('screen-assessment').style.display = 'block';
+  document.getElementById('headerRight').style.display = 'flex';
+  curSec = 0;
+  renderSec();
+}
+
+function renderSec() {
+  const sec = SECTIONS[curSec];
+  const [s, e] = sec.range;
+  document.getElementById('sec-tag').textContent = sec.tag;
+  document.getElementById('sec-title').textContent = sec.name;
+  document.getElementById('sec-sub').textContent = `Questions ${s}–${e} of ${QUESTIONS.length}`;
+
+  const qs = QUESTIONS.filter(q => q.id >= s && q.id <= e);
+  const cont = document.getElementById('q-container');
+  cont.innerHTML = '';
+
+  qs.forEach((q, i) => {
+    if (i > 0) { const div = document.createElement('div'); div.className = 'q-divider'; cont.appendChild(div); }
+    const block = document.createElement('div');
+    block.className = 'q-block';
+    block.style.animationDelay = (i * 40) + 'ms';
+    block.innerHTML = `<div class="q-num">Q${q.id}</div><div class="q-text">${q.text}</div>`;
+    block.appendChild(q.type === 'likert' ? buildLikert(q) : buildScenario(q));
+    cont.appendChild(block);
+  });
+
+  document.getElementById('btn-prev').style.display = curSec > 0 ? '' : 'none';
+  document.getElementById('btn-next').textContent = curSec < SECTIONS.length - 1 ? 'Next Section →' : 'Submit Assessment';
+  updateProg();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function buildLikert(q) {
+  const wrap = document.createElement('div');
+  const lw = document.createElement('div');
+  lw.className = 'likert-wrap';
+  lw.id = 'lw' + q.id;
+  LIKERT.forEach(lbl => {
+    const opt = document.createElement('div');
+    opt.className = 'l-opt' + (answers[q.id] === lbl ? ' selected' : '');
+    opt.textContent = lbl;
+    opt.onclick = () => {
+      lw.querySelectorAll('.l-opt').forEach(o => o.classList.remove('selected'));
+      opt.classList.add('selected');
+      answers[q.id] = lbl;
+      updateProg();
+    };
+    lw.appendChild(opt);
+  });
+  const ends = document.createElement('div');
+  ends.className = 'likert-ends';
+  ends.innerHTML = '<span>Strongly Disagree</span><span>Strongly Agree</span>';
+  wrap.appendChild(lw);
+  wrap.appendChild(ends);
+  return wrap;
+}
+
+function buildScenario(q) {
+  const letters = ['A','B','C','D'];
+  const wrap = document.createElement('div');
+  wrap.className = 'scenario-opts';
+  wrap.id = 'sw' + q.id;
+  q.opts.forEach((txt, i) => {
+    const l = letters[i];
+    const opt = document.createElement('div');
+    opt.className = 's-opt' + (answers[q.id] === l ? ' selected' : '');
+    opt.innerHTML = `<div class="s-letter">${l}</div><div class="s-text">${txt}</div>`;
+    opt.onclick = () => {
+      wrap.querySelectorAll('.s-opt').forEach(o => o.classList.remove('selected'));
+      opt.classList.add('selected');
+      answers[q.id] = l;
+      updateProg();
+    };
+    wrap.appendChild(opt);
+  });
+  return wrap;
+}
+
+function updateProg() {
+  const ans = Object.keys(answers).length;
+  const total = QUESTIONS.length;
+  document.getElementById('prog-label').textContent = ans + ' / ' + total;
+  document.getElementById('prog-bar').style.width = Math.round((ans / total) * 100) + '%';
+  const sec = SECTIONS[curSec];
+  const qs = QUESTIONS.filter(q => q.id >= sec.range[0] && q.id <= sec.range[1]);
+  const done = qs.filter(q => answers[q.id] !== undefined).length;
+  document.getElementById('nav-info').textContent = done + ' of ' + qs.length + ' answered';
+}
+
+function nextSec() {
+  const sec = SECTIONS[curSec];
+  const missing = QUESTIONS.filter(q => q.id >= sec.range[0] && q.id <= sec.range[1] && answers[q.id] === undefined);
+  if (missing.length) { alert('Please answer all questions before continuing. (' + missing.length + ' remaining)'); return; }
+  if (curSec < SECTIONS.length - 1) { curSec++; renderSec(); }
+  else showResults();
+}
+
+function prevSec() { if (curSec > 0) { curSec--; renderSec(); } }
+
+// =====================================================================
+// SCORING
+// =====================================================================
+function scoreQ(q, ans) {
+  if (q.type === 'likert') {
+    const raw = LIKERT.indexOf(ans) + 1;
+    return q.rev ? (6 - raw) : raw;
+  }
+  return q.sc[ans] || 0;
+}
+
+function computeScores() {
+  const groups = {};
+  QUESTIONS.forEach(q => {
+    if (q.g === 'Validity') return;
+    const v = scoreQ(q, answers[q.id]);
+    if (!groups[q.g]) groups[q.g] = [];
+    groups[q.g].push(v);
+  });
+  const avg = {};
+  Object.entries(groups).forEach(([g, vals]) => { avg[g] = vals.reduce((a,b)=>a+b,0) / vals.length; });
+
+  let composite = 0;
+  DISPLAY_CATS.forEach(c => { composite += (avg[c.key] || 0) * c.weight; });
+  composite = composite / TOTAL_WEIGHT; // normalize to a true 1–5 scale
+
+  return { avg, composite };
+}
+
+function getRedFlags() {
+  return QUESTIONS.filter(q => q.rf && q.rf.includes(answers[q.id]))
+    .map(q => ({ text: q.text, ans: answers[q.id] }));
+}
+
+function getValidityConcerns() {
+  return [47,48,49,50].filter(id => ['Agree','Strongly Agree'].includes(answers[id])).length;
+}
+
+function getVerdict(composite, redFlagCount, integrity, conduct) {
+  // Hard stops for a character / hire-risk screen: integrity and conduct
+  // risk are non-negotiable, and multiple red-flag responses are decisive.
+  if (redFlagCount >= 3 || integrity < 3.4 || conduct < 3.2)
+    return { label:'Do Not Advance', cls:'vp-no' };
+  if (composite >= 4.2 && redFlagCount === 0)
+    return { label:'Recommended: Hire', cls:'vp-hire' };
+  if (composite >= 3.8 && redFlagCount <= 1)
+    return { label:'Hire with Review', cls:'vp-review' };
+  if (composite >= 3.4)
+    return { label:'Review Further', cls:'vp-review' };
+  return { label:'Do Not Advance', cls:'vp-no' };
+}
+
+// =====================================================================
+// RESULTS
+// =====================================================================
+async function showResults() {
+  document.getElementById('screen-assessment').style.display = 'none';
+  document.getElementById('screen-results').style.display = 'none';
+  document.getElementById('headerRight').style.display = 'none';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  const { avg, composite } = computeScores();
+  const redFlags = getRedFlags();
+  const validity = getValidityConcerns();
+  const verdict = getVerdict(composite, redFlags.length, avg['Integrity']||0, avg['Conduct Risk']||0);
+
+  let summary = '';
+  if (verdict.cls === 'vp-hire') {
+    summary = 'This candidate\'s responses indicate strong character for the role - honesty, dependability, a solid work ethic, and a low tolerance for cutting corners or bending rules. They present as a low hire risk who can be trusted to do the right thing and follow through whether or not anyone is watching.';
+  } else if (verdict.cls === 'vp-review') {
+    summary = 'This candidate shows generally positive character with some areas worth probing in the interview. Pay attention to any red flags and ask for concrete examples of times they owned a mistake, followed through on a commitment, or chose the honest or safe option when a shortcut was available.';
+  } else {
+    summary = 'This candidate\'s responses raise concerns about character or hire risk in areas central to trust and dependability. A thorough review is recommended before advancing. Discuss any hard stops in integrity or conduct risk with the hiring manager before proceeding.';
+  }
+  if ((avg['Integrity']||0) < 3.8) summary += ' Integrity & Honesty score (' + ((avg['Integrity']||0).toFixed(1)) + ') is below target - probe how they handle mistakes, company property, and situations where honesty is inconvenient.';
+  if ((avg['Reliability']||0) < 3.8) summary += ' Reliability score (' + ((avg['Reliability']||0).toFixed(1)) + ') warrants attention - probe attendance, follow-through, and how they handle commitments.';
+  if ((avg['Work Ethic']||0) < 3.8) summary += ' Work Ethic score (' + ((avg['Work Ethic']||0).toFixed(1)) + ') is worth exploring given how independently this person works.';
+  if ((avg['Adherence']||0) < 3.8) summary += ' Rule & Safety Adherence score (' + ((avg['Adherence']||0).toFixed(1)) + ') suggests a tendency to shortcut rules - probe their attitude toward procedures and safety.';
+  if ((avg['Conduct Risk']||0) < 3.8) summary += ' Conduct / Hire Risk score (' + ((avg['Conduct Risk']||0).toFixed(1)) + ') is a concern - interpret alongside the red-flag responses.';
+  if (validity >= 2) summary += ' Validity check flags suggest possible impression-management responding - interpret all scores with additional caution.';
+
+  candidate.completedAt = new Date().toISOString();
+  const report = buildReport(avg, composite, redFlags, validity, verdict, summary);
+  const redFlagResponses = buildRedFlagResponses(redFlags);
+
+  const payload = {
+    assessmentType: ASSESSMENT_TYPE,
+    assessmentVersion: ASSESSMENT_VERSION,
+    submittedAt: candidate.completedAt,
+    candidate: {
+      firstName: candidate.firstName || '',
+      lastName: candidate.lastName || '',
+      name: candidate.name || '',
+      email: candidate.email || '',
+      phone: candidate.phone || '',
+      position: candidate.position || '',
+      completedAt: candidate.completedAt
+    },
+    applicationContext: { ...applicationContext },
+    scores: {
+      compositeScore: composite.toFixed(2),
+      recommendation: verdict.label,
+      redFlagCount: redFlags.length,
+      validityConcernCount: validity,
+      categoryScores: {
+        integrity: (avg['Integrity']||0).toFixed(2),
+        reliability: (avg['Reliability']||0).toFixed(2),
+        workEthic: (avg['Work Ethic']||0).toFixed(2),
+        adherence: (avg['Adherence']||0).toFixed(2),
+        situationalJudgment: (avg['Situational Judgment']||0).toFixed(2),
+        conductRisk: (avg['Conduct Risk']||0).toFixed(2)
+      }
+    },
+    flags: redFlags,
+    redFlagResponses,
+    report
+  };
+
+  const flatPayload = buildSubmissionPayload(payload);
+  const submitted = await sendToFlow(flatPayload);
+  showCompletion(submitted);
+}
+
+function buildReport(avg, composite, redFlags, validity, verdict, summary) {
+  return [
+    '=== Vehicle Supply Technician (VST) Character & Hire-Risk Assessment ===',
+    '',
+    'Candidate:     ' + candidate.name,
+    'Email:         ' + candidate.email,
+    'Phone:         ' + (candidate.phone || 'N/A'),
+    'Position:      ' + candidate.position,
+    'Date:          ' + candidate.date,
+    'Completed:     ' + (candidate.completedAt || new Date().toISOString()),
+    '',
+    '--- WORKABLE APPLICATION CONTEXT ---',
+    'Candidate ID:   ' + (applicationContext.candidate_id || 'Not provided'),
+    'Application ID: ' + (applicationContext.application_id || 'Not provided'),
+    'Job ID:         ' + (applicationContext.job_id || 'Not provided'),
+    'Job Shortcode:  ' + (applicationContext.job_shortcode || 'Not provided'),
+    'Job Title:      ' + (applicationContext.job_title || candidate.position || 'Not provided'),
+    '',
+    'RECOMMENDATION: ' + verdict.label,
+    'Weighted Composite Score: ' + composite.toFixed(2) + ' / 5.00',
+    '',
+    '--- CATEGORY SCORES ---',
+    'Integrity & Honesty:      ' + ((avg['Integrity']||0).toFixed(2)),
+    'Reliability:              ' + ((avg['Reliability']||0).toFixed(2)),
+    'Work Ethic:               ' + ((avg['Work Ethic']||0).toFixed(2)),
+    'Rule & Safety Adherence:  ' + ((avg['Adherence']||0).toFixed(2)),
+    'Situational Judgment:     ' + ((avg['Situational Judgment']||0).toFixed(2)),
+    'Conduct / Hire Risk:      ' + ((avg['Conduct Risk']||0).toFixed(2)) + ' (higher = lower risk)',
+    '',
+    'Red Flag Count:    ' + redFlags.length,
+    'Validity Concerns: ' + validity,
+    '',
+    '--- RED FLAG RESPONSES ---',
+    ...(redFlags.length ? redFlags.map((f,i)=>'Flag '+(i+1)+': '+f.text+' -> '+f.ans) : ['None identified']),
+    '',
+    '--- SUMMARY ---',
+    summary
+  ].join('\n');
+}
+
+function buildRedFlagResponses(flags) {
+  if (!flags.length) return 'None';
+  return [
+    '=== Red Flag Responses ===',
+    '',
+    ...flags.flatMap((f, i) => [
+      'Flag ' + (i + 1),
+      'Question: ' + f.text,
+      'Candidate Response: ' + f.ans,
+      'Reason Flagged: Response matched a configured red-flag answer for this assessment.',
+      '',
+      '--------------------------------------------------',
+      ''
+    ])
+  ].join('\n');
+}
+
+function excelSafeText(value, maxLength = 30000){
+  return String(value || '')
+    .replace(/\r\n/g, '\n')
+    .replace(/\r/g, '\n')
+    .replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g, '')
+    .replace(/[⚠✓→—–]/g, '-')
+    .replace(/[“”]/g, '"')
+    .replace(/[‘’]/g, "'")
+    .replace(/[\t ]+/g, ' ')
+    .substring(0, maxLength);
+}
+
+function buildSubmissionPayload(payload){
+  const safeReport = "'" + excelSafeText(payload.report || '', 30000);
+  const safeRedFlagResponses = excelSafeText(payload.redFlagResponses || '', 12000);
+
+  const flat = {
+    completionDate: payload.submittedAt || payload.candidate.completedAt || '',
+    email: payload.candidate.email || '',
+    firstName: payload.candidate.firstName || '',
+    lastName: payload.candidate.lastName || '',
+    phone: payload.candidate.phone || '',
+    position: payload.candidate.position || '',
+    assessmentType: payload.assessmentType || ASSESSMENT_TYPE,
+    assessmentVersion: payload.assessmentVersion || '',
+    score: String(payload.scores.compositeScore ?? ''),
+    compositeScore: String(payload.scores.compositeScore ?? ''),
+    recommendation: payload.scores.recommendation || '',
+    redFlags: String(payload.scores.redFlagCount ?? ''),
+    redFlagCount: String(payload.scores.redFlagCount ?? ''),
+    validityConcernCount: String(payload.scores.validityConcernCount ?? ''),
+    redFlagResponses: safeRedFlagResponses,
+    report: safeReport,
+    fullReport: safeReport,
+    candidate_id: payload.applicationContext.candidate_id || '',
+    application_id: payload.applicationContext.application_id || '',
+    job_id: payload.applicationContext.job_id || '',
+    job_shortcode: payload.applicationContext.job_shortcode || '',
+    job_title: payload.applicationContext.job_title || payload.candidate.position || '',
+    source: payload.applicationContext.source || 'workable_email'
+  };
+  flat.payloadJson = excelSafeText(JSON.stringify(flat), 30000);
+  return flat;
+}
+
+async function sendToFlow(data){
+  try{
+    console.log('Assessment payload sent to Power Automate:', data);
+    const response = await fetch(FLOW_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+    return response.ok;
+  }catch(e){
+    console.error('Flow submission failed', e);
+    return false;
+  }
+}
+
+function showCompletion(submitted){
+  const ref = document.getElementById('complete-ref');
+  document.getElementById('screen-complete').style.display = 'block';
+  if(submitted){
+    ref.style.display = 'none';
+    ref.textContent = '';
+  }else{
+    ref.style.display = 'block';
+    ref.textContent = 'Submission issue: Power Automate did not confirm receipt. Please notify recruiting that your assessment did not submit successfully.';
+  }
+}
+
+function copyReport() {
+  const area = document.getElementById('copy-area');
+  if (!area) return;
+  navigator.clipboard.writeText(area.textContent).then(() => {
+    const btn = document.querySelector('.btn-copy');
+    if (!btn) return;
+    btn.textContent = '✓ Copied!';
+    setTimeout(() => btn.textContent = 'Copy to Clipboard', 2000);
+  });
+}
+
+</script>
+</body>
+</html>
