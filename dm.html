@@ -1,0 +1,1118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dispatch Manager Assessment</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,600;0,700;1,400&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0e1a24;
+    --ink2: #12222f;
+    --gold: #3fb8af;          /* teal accent — comms/dispatch */
+    --gold-light: #5fd4c9;
+    --gold-pale: rgba(63,184,175,0.12);
+    --gold-border: rgba(63,184,175,0.28);
+    --cream: #eef4f4;
+    --cream2: #dbe6e6;
+    --muted: #7f929c;
+    --border: rgba(255,255,255,0.07);
+    --card: rgba(255,255,255,0.03);
+    --green: #6dbf8b;
+    --green-bg: rgba(109,191,139,0.12);
+    --green-border: rgba(109,191,139,0.3);
+    --amber: #e8b84b;
+    --amber-bg: rgba(232,184,75,0.12);
+    --amber-border: rgba(232,184,75,0.3);
+    --red: #e05c6a;
+    --red-bg: rgba(224,92,106,0.12);
+    --red-border: rgba(224,92,106,0.3);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--ink);
+    color: var(--cream);
+    min-height: 100vh;
+    font-size: 15px;
+    line-height: 1.65;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(63,184,175,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(63,184,175,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .header {
+    background: var(--ink2);
+    border-bottom: 1px solid var(--gold-border);
+    padding: 0 40px;
+    height: 62px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .logo-mark { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+
+  .logo-diamond {
+    width: 28px; height: 28px;
+    background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 100%);
+    transform: rotate(45deg);
+    border-radius: 4px;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  .logo-diamond span {
+    transform: rotate(-45deg);
+    font-size: 9px;
+    font-weight: 700;
+    color: var(--ink);
+    letter-spacing: -0.5px;
+  }
+
+  .logo-text {
+    font-family: 'Fraunces', serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--cream);
+    letter-spacing: 0.01em;
+  }
+
+  .logo-text small {
+    display: block;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 10px;
+    font-weight: 400;
+    color: var(--muted);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    font-style: normal;
+  }
+
+  .header-center { flex: 1; }
+  .header-right { display: flex; align-items: center; gap: 14px; }
+
+  .prog-pill {
+    display: flex; align-items: center; gap: 10px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 99px;
+    padding: 5px 14px;
+  }
+
+  .prog-label { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--muted); }
+  .prog-outer { width: 100px; height: 3px; background: rgba(255,255,255,0.08); border-radius: 2px; overflow: hidden; }
+  .prog-inner { height: 100%; background: var(--gold); border-radius: 2px; transition: width 0.4s ease; width: 0%; }
+
+  .main { max-width: 780px; margin: 0 auto; padding: 44px 24px 100px; position: relative; z-index: 1; }
+
+  #screen-welcome { display: block; }
+
+  .eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 18px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .eyebrow::before { content: ''; display: inline-block; width: 24px; height: 1px; background: var(--gold); }
+
+  .welcome-title {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(30px, 5vw, 50px);
+    font-weight: 700;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    margin-bottom: 24px;
+    color: var(--cream);
+  }
+  .welcome-title em { font-style: italic; color: var(--gold-light); }
+
+  .welcome-desc {
+    font-size: 15px;
+    color: var(--muted);
+    max-width: 540px;
+    line-height: 1.75;
+    margin-bottom: 36px;
+  }
+
+  .meta-row { display: flex; gap: 1px; margin-bottom: 44px; max-width: 500px; }
+
+  .meta-cell { flex: 1; background: var(--card); border: 1px solid var(--border); padding: 14px 18px; }
+  .meta-cell:first-child { border-radius: 8px 0 0 8px; }
+  .meta-cell:last-child { border-radius: 0 8px 8px 0; }
+
+  .meta-val {
+    font-family: 'Fraunces', serif;
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--cream);
+    line-height: 1;
+    margin-bottom: 3px;
+  }
+  .meta-lbl { font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+
+  .cand-form { max-width: 480px; margin-bottom: 36px; }
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+  .form-group { display: flex; flex-direction: column; gap: 6px; }
+
+  .form-group label {
+    font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--muted); font-weight: 500;
+  }
+
+  .form-group input {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 9px 12px;
+    color: var(--cream);
+    font-size: 13px;
+    font-family: 'DM Sans', sans-serif;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .form-group input:focus { border-color: var(--gold-border); }
+  .form-group input::placeholder { color: rgba(255,255,255,0.15); }
+
+  .btn-primary {
+    background: var(--gold);
+    color: var(--ink);
+    border: none;
+    border-radius: 6px;
+    padding: 13px 28px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+  .btn-primary:hover { background: var(--gold-light); }
+  .btn-primary:active { transform: scale(0.98); }
+
+  .btn-ghost {
+    background: transparent;
+    color: var(--muted);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 11px 22px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .btn-ghost:hover { border-color: rgba(255,255,255,0.2); color: var(--cream); }
+
+  #screen-assessment { display: none; }
+
+  .sec-eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 6px;
+  }
+  .sec-title { font-family: 'Fraunces', serif; font-size: 24px; font-weight: 600; color: var(--cream); margin-bottom: 4px; }
+  .sec-sub { font-size: 12px; color: var(--muted); margin-bottom: 32px; }
+
+  .q-block { margin-bottom: 0; animation: slideIn 0.25s ease both; }
+  @keyframes slideIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+  .q-divider { height: 1px; background: var(--border); margin: 24px 0; }
+
+  .q-num { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--gold); letter-spacing: 0.1em; margin-bottom: 7px; }
+  .q-text { font-size: 15px; color: var(--cream); line-height: 1.55; margin-bottom: 14px; font-weight: 400; }
+
+  .likert-wrap { display: flex; gap: 6px; flex-wrap: wrap; }
+  .l-opt {
+    flex: 1 1 0; min-width: 90px;
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 6px; padding: 9px 6px; text-align: center;
+    cursor: pointer; font-size: 11px; color: var(--muted); line-height: 1.3;
+    transition: all 0.15s; user-select: none;
+  }
+  .l-opt:hover { background: rgba(63,184,175,0.06); color: var(--cream); }
+  .l-opt.selected { background: var(--gold-pale); border-color: var(--gold-border); color: var(--cream); }
+
+  .likert-ends { display: flex; justify-content: space-between; font-size: 10px; color: var(--muted); margin-top: 5px; padding: 0 2px; letter-spacing: 0.04em; }
+
+  .scenario-opts { display: flex; flex-direction: column; gap: 7px; }
+  .s-opt {
+    display: flex; align-items: flex-start; gap: 12px;
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 8px; padding: 13px 15px; cursor: pointer;
+    transition: all 0.15s; user-select: none;
+  }
+  .s-opt:hover { background: rgba(63,184,175,0.04); }
+  .s-opt.selected { background: var(--gold-pale); border-color: var(--gold-border); }
+
+  .s-letter {
+    width: 22px; height: 22px; border-radius: 50%;
+    border: 1.5px solid var(--muted);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px; font-weight: 700; flex-shrink: 0; margin-top: 1px;
+    transition: all 0.15s; font-family: 'DM Mono', monospace;
+  }
+  .s-opt.selected .s-letter { background: var(--gold); border-color: var(--gold); color: var(--ink); }
+  .s-text { font-size: 13px; color: var(--cream2); line-height: 1.5; }
+
+  .q-nav {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-top: 36px; padding-top: 24px; border-top: 1px solid var(--border); gap: 12px;
+  }
+  .nav-info { font-size: 11px; color: var(--muted); font-family: 'DM Mono', monospace; }
+  .nav-btns { display: flex; gap: 10px; }
+
+  #screen-results { display: none; }
+  .results-top { text-align: center; padding: 36px 0 28px; }
+
+  .verdict-pill {
+    display: inline-block; font-family: 'DM Mono', monospace;
+    font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase;
+    padding: 6px 18px; border-radius: 99px; margin-bottom: 16px;
+  }
+  .vp-hire   { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-border); }
+  .vp-review { background: var(--amber-bg); color: var(--amber); border: 1px solid var(--amber-border); }
+  .vp-no     { background: var(--red-bg);   color: var(--red);   border: 1px solid var(--red-border); }
+
+  .r-name { font-family: 'Fraunces', serif; font-size: 32px; font-weight: 700; color: var(--cream); margin-bottom: 6px; }
+  .r-meta { font-size: 12px; color: var(--muted); }
+  .r-composite { display: inline-flex; align-items: baseline; gap: 4px; margin-top: 16px; }
+  .r-composite .big { font-family: 'Fraunces', serif; font-size: 48px; font-weight: 700; color: var(--gold-light); line-height: 1; }
+  .r-composite .denom { font-size: 18px; color: var(--muted); }
+
+  .score-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin: 28px 0; }
+  .sc-card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 16px; }
+  .sc-label { font-size: 10px; letter-spacing: 0.07em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
+  .sc-bar-wrap { display: flex; align-items: center; gap: 8px; }
+  .sc-bar-bg { flex: 1; height: 4px; background: rgba(255,255,255,0.07); border-radius: 2px; overflow: hidden; }
+  .sc-bar-fill { height: 100%; border-radius: 2px; transition: width 1s ease; }
+  .sc-val { font-family: 'DM Mono', monospace; font-size: 14px; font-weight: 500; width: 30px; text-align: right; flex-shrink: 0; }
+
+  .flags-box { background: var(--red-bg); border: 1px solid var(--red-border); border-radius: 10px; padding: 18px 20px; margin-bottom: 16px; }
+  .flags-box h3 { font-size: 13px; font-weight: 600; color: var(--red); margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
+  .flag-item { font-size: 12px; color: var(--muted); padding: 4px 0; border-bottom: 1px solid rgba(255,255,255,0.04); }
+  .flag-item:last-child { border-bottom: none; }
+
+  .summary-box { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 18px 20px; margin-bottom: 20px; font-size: 13px; color: var(--muted); line-height: 1.7; }
+
+  .workable-box { background: var(--ink2); border: 1px solid var(--gold-border); border-radius: 10px; padding: 20px; margin-top: 24px; }
+  .workable-box h3 { font-family: 'Fraunces', serif; font-size: 15px; font-weight: 600; color: var(--cream); margin-bottom: 6px; }
+  .workable-box p { font-size: 12px; color: var(--muted); margin-bottom: 12px; }
+
+  .copy-area { background: rgba(0,0,0,0.3); border: 1px solid var(--border); border-radius: 7px; padding: 14px; font-family: 'DM Mono', monospace; font-size: 11px; color: var(--muted); white-space: pre-wrap; line-height: 1.7; margin-bottom: 10px; }
+  .btn-copy { font-size: 12px; color: var(--muted); background: rgba(255,255,255,0.04); border: 1px solid var(--border); border-radius: 6px; padding: 7px 14px; cursor: pointer; transition: all 0.15s; font-family: 'DM Sans', sans-serif; }
+  .btn-copy:hover { background: rgba(255,255,255,0.08); color: var(--cream); }
+
+  .export-row { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 28px; }
+
+  @media (max-width: 580px) {
+    .header { padding: 0 16px; }
+    .main { padding: 24px 14px 80px; }
+    .form-grid { grid-template-columns: 1fr; }
+    .meta-row { flex-wrap: wrap; }
+    .score-grid { grid-template-columns: 1fr 1fr; }
+    .likert-wrap { gap: 4px; }
+    .l-opt { min-width: 60px; padding: 7px 4px; font-size: 10px; }
+    .prog-pill { display: none; }
+  }
+
+
+  #screen-complete { display: none; }
+  .complete-card { max-width:560px; margin:70px auto 0; text-align:center; background:var(--card); border:1px solid var(--gold-border); border-radius:12px; padding:44px 30px; }
+  .complete-icon { width:58px; height:58px; margin:0 auto 18px; border-radius:50%; background:var(--green-bg); border:1px solid var(--green-border); color:var(--green); display:flex; align-items:center; justify-content:center; font-size:28px; font-weight:700; }
+  .complete-title { font-family:'Fraunces',serif; font-size:30px; margin-bottom:12px; }
+  .complete-text { color:var(--muted); line-height:1.8; }
+  .complete-ref { margin-top:18px; padding:12px; border-radius:7px; background:var(--red-bg); border:1px solid var(--red-border); color:var(--red); font-size:12px; }
+
+  @media print {
+    body::before { display: none; }
+    .header { position: static; background: #0e1a24; }
+    .btn-primary, .btn-ghost, .btn-copy, .export-row { display: none !important; }
+    body { background: white; color: #111; }
+    .r-name, .sec-title, .workable-box h3 { color: #111; }
+    .sc-card, .flags-box, .summary-box, .workable-box { background: #f9f9f9; border-color: #ddd; }
+  }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="logo-mark">
+    <div class="logo-diamond"><span>DSP</span></div>
+    <div class="logo-text">
+      Dispatch Manager Assessment
+      <small>Talent Acquisition</small>
+    </div>
+  </div>
+  <div class="header-center"></div>
+  <div class="header-right" id="headerRight" style="display:none">
+    <div class="prog-pill">
+      <span class="prog-label" id="prog-label">0 / 46</span>
+      <div class="prog-outer"><div class="prog-inner" id="prog-bar"></div></div>
+    </div>
+  </div>
+</header>
+
+<main class="main">
+
+  <!-- ============ WELCOME ============ -->
+  <div id="screen-welcome">
+    <div class="eyebrow">Communications / Dispatch · EMS</div>
+    <h2 class="welcome-title">Dispatch Manager<br><em>Systems, Leadership &amp; Character</em><br>Assessment</h2>
+    <p class="welcome-desc">
+      This assessment evaluates readiness to lead a dispatch / communications center: proficiency with
+      CAD and LOGIS, operational judgment, leadership of a dispatch team, and the integrity required to
+      manage sensitive records, timestamps, and patient information. Answer honestly — we are looking for
+      accuracy, consistency, and good judgment, not a perfect score.
+    </p>
+
+    <div class="meta-row">
+      <div class="meta-cell"><div class="meta-val">46</div><div class="meta-lbl">Questions</div></div>
+      <div class="meta-cell"><div class="meta-val">12–18</div><div class="meta-lbl">Minutes</div></div>
+      <div class="meta-cell"><div class="meta-val">5</div><div class="meta-lbl">Categories</div></div>
+    </div>
+
+    <div class="cand-form">
+      <div class="form-grid">
+        <div class="form-group"><label>First Name *</label><input type="text" id="i-fname" placeholder="Jane"></div>
+        <div class="form-group"><label>Last Name *</label><input type="text" id="i-lname" placeholder="Smith"></div>
+      </div>
+      <div class="form-grid">
+        <div class="form-group"><label>Email *</label><input type="email" id="i-email" placeholder="jane@email.com"></div>
+        <div class="form-group"><label>Phone</label><input type="tel" id="i-phone" placeholder="(555) 000-0000"></div>
+      </div>
+      <div class="form-group" style="margin-top:4px">
+        <label>Position Applied For</label>
+        <input type="text" id="i-position" placeholder="Dispatch Manager / Communications Center Manager">
+      </div>
+    </div>
+
+    <button class="btn-primary" onclick="startAssessment()">Begin Assessment →</button>
+  </div>
+
+  <!-- ============ ASSESSMENT ============ -->
+  <div id="screen-assessment">
+    <div class="sec-eyebrow" id="sec-tag">Section 1 of 5</div>
+    <div class="sec-title" id="sec-title">Dispatch &amp; LOGIS Proficiency</div>
+    <div class="sec-sub" id="sec-sub">Questions 1–10</div>
+
+    <div id="q-container"></div>
+
+    <div class="q-nav">
+      <span class="nav-info" id="nav-info"></span>
+      <div class="nav-btns">
+        <button class="btn-ghost" id="btn-prev" onclick="prevSec()" style="display:none">← Back</button>
+        <button class="btn-primary" id="btn-next" onclick="nextSec()">Next Section →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ RESULTS ============ -->
+  <div id="screen-results">
+    <div class="results-top">
+      <div class="verdict-pill" id="v-pill"></div>
+      <div class="r-name" id="r-name"></div>
+      <div class="r-meta" id="r-meta"></div>
+      <div class="r-composite">
+        <span class="big" id="r-score">—</span>
+        <span class="denom">/ 5.00</span>
+      </div>
+    </div>
+
+    <div class="score-grid" id="score-grid"></div>
+
+    <div class="flags-box" id="flags-box" style="display:none">
+      <h3>⚠ Red Flag Responses</h3>
+      <div id="flags-list"></div>
+    </div>
+
+    <div class="summary-box" id="summary-box"></div>
+
+    <div class="workable-box">
+      <h3>Workable Notes — Copy &amp; Paste</h3>
+      <p>Paste the text below into the candidate's Notes tab in Workable.</p>
+      <div class="copy-area" id="copy-area"></div>
+      <button class="btn-copy" onclick="copyReport()">Copy to Clipboard</button>
+    </div>
+
+    <div class="export-row">
+      <button class="btn-primary" onclick="window.print()">Print / Save PDF</button>
+      <button class="btn-ghost" onclick="location.reload()">New Assessment</button>
+    </div>
+  </div>
+
+  <!-- ============ COMPLETION ============ -->
+  <div id="screen-complete">
+    <div class="complete-card">
+      <div class="complete-icon">✓</div>
+      <h2 class="complete-title">Assessment Submitted</h2>
+      <p class="complete-text">Thank you. Your Dispatch Manager assessment has been submitted successfully. The recruiting team will review your responses and contact you regarding next steps.</p>
+      <div class="complete-ref" id="complete-ref" style="display:none"></div>
+    </div>
+  </div>
+
+</main>
+
+<script>
+
+// =====================================================================
+// AUTOMATION CONFIGURATION
+// Mirrored to field_staff_assessment_v3_mirrored_to_leadership.html.
+// Candidate-facing results are hidden. Power Automate receives a flat JSON payload.
+// =====================================================================
+const FLOW_URL = "https://defaultb9fe31c2de0742529875da1c500446.c8.environment.api.powerplatform.com:443/powerautomate/automations/direct/cu/06/workflows/797b850c6936491f93f48e67cc266215/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=R3hcQMz-YCshLnl9w7o9IKxS0_Z8Etcmcs7gPlbHhVw";
+const ASSESSMENT_TYPE = "Dispatch Manager";
+const ASSESSMENT_VERSION = "1.0-fieldstaff-v3-mirrored";
+const urlParams = new URLSearchParams(window.location.search);
+const applicationContext = {
+  candidate_id: urlParams.get('candidate_id') || '',
+  application_id: urlParams.get('application_id') || '',
+  job_shortcode: urlParams.get('job_shortcode') || '',
+  job_title: urlParams.get('job_title') || '',
+  job_id: urlParams.get('job_id') || '',
+  source: urlParams.get('source') || 'workable_email'
+};
+function applyUrlContext(){
+  if(applicationContext.job_title){
+    const pos=document.getElementById('i-position');
+    if(pos) pos.value=applicationContext.job_title;
+  }
+}
+document.addEventListener('DOMContentLoaded', applyUrlContext);
+
+// =====================================================================
+// QUESTION DATA — 46 questions across 5 categories
+//   Likert: standard / reverse (rev), with red-flag (rf) answers
+//   Scenario: 4 options with fixed point scores (sc)
+// =====================================================================
+const LIKERT = ["Strongly Disagree","Disagree","Neutral","Agree","Strongly Agree"];
+
+const QUESTIONS = [
+
+  // ── SECTION 1: Dispatch & LOGIS Proficiency (Q1–10) ───────────────
+  // Scored multiple-choice: disclosed facts, behavioral frequency, and
+  // operational-knowledge items. Group: "Dispatch Proficiency" (0–5).
+  { id:1, s:"Dispatch & LOGIS Proficiency", g:"Dispatch Proficiency", type:"scenario",
+    text:"How many years have you worked directly with a computer-aided dispatch (CAD) system in an EMS or public-safety environment?",
+    opts:["None — no CAD experience","Less than 2 years","2 to 5 years","More than 5 years"],
+    sc:{A:0,B:2,C:4,D:5} },
+
+  { id:2, s:"Dispatch & LOGIS Proficiency", g:"Dispatch Proficiency", type:"scenario",
+    text:"What is your direct, hands-on experience with LOGIS specifically?",
+    opts:["None — I have not used LOGIS","Limited or occasional use","Regular use as a primary dispatch platform","Used it and helped configure or administer it"],
+    sc:{A:0,B:2,C:4,D:5} },
+
+  { id:3, s:"Dispatch & LOGIS Proficiency", g:"Dispatch Proficiency", type:"scenario",
+    text:"Have you configured or administered a CAD system — building unit statuses, response plans, posting plans, or user permissions — rather than only operating it?",
+    opts:["No — operator only","Minor changes within an existing setup","Yes — configured a CAD system in one organization","Yes — in more than one organization, or built from near-scratch"],
+    sc:{A:1,B:3,C:4,D:5} },
+
+  { id:4, s:"Dispatch & LOGIS Proficiency", g:"Dispatch Proficiency", type:"scenario",
+    text:"How many dispatchers or call-takers have reported to you in a supervisory or management role?",
+    opts:["None — I have not supervised a dispatch team","1 to 3","4 to 8","More than 8"],
+    sc:{A:0,B:2,C:4,D:5} },
+
+  { id:5, s:"Dispatch & LOGIS Proficiency", g:"Dispatch Proficiency", type:"scenario",
+    text:"An emergent 911 call is holding, and your only immediately available unit is en route to a non-emergent scheduled IFT pickup. What is the correct action?",
+    opts:["Let the IFT continue — it was assigned first","Divert the available unit to the 911 call and reschedule or reassign the IFT","Wait a few minutes to see if another unit clears","Ask the crew which call they would prefer"],
+    sc:{A:0,B:5,C:1,D:1} },
+
+  { id:6, s:"Dispatch & LOGIS Proficiency", g:"Dispatch Proficiency", type:"scenario",
+    text:"A dispatcher wants to send the closest unit to a priority call, but doing so pulls the only unit covering a high-demand posting area, leaving a coverage gap. What is the correct action?",
+    opts:["Send the closest unit and immediately initiate a move-up to backfill the gap","Keep the unit on post and send a farther unit to protect coverage","Send the closest unit and address the gap only if another call comes in","Hold the call briefly until a non-posting unit frees up"],
+    sc:{A:5,B:2,C:2,D:1} },
+
+  { id:7, s:"Dispatch & LOGIS Proficiency", g:"Dispatch Proficiency", type:"scenario",
+    text:"A unit has shown \u201Cen route\u201D in CAD for 25 minutes with no GPS movement and no radio traffic. What is the correct first action?",
+    opts:["Clear the status and reassign the call to another unit","Attempt immediate contact by radio, then phone; treat as a possible emergency if there is no response","Wait until the 30-minute mark before acting","Note it in the shift log and check again next hour"],
+    sc:{A:1,B:5,C:1,D:0} },
+
+  { id:8, s:"Dispatch & LOGIS Proficiency", g:"Dispatch Proficiency", type:"scenario",
+    text:"Your CAD system goes down mid-shift during normal call volume. What is the correct response?",
+    opts:["Pause dispatching until the system is restored","Activate manual / downtime dispatch procedures, track units by hand, and notify leadership","Have dispatchers use personal cell phones and sort out records later","Route all calls to a neighboring agency"],
+    sc:{A:0,B:5,C:2,D:1} },
+
+  { id:9, s:"Dispatch & LOGIS Proficiency", g:"Dispatch Proficiency", type:"scenario",
+    text:"In your most recent role, how often did you audit or QA dispatcher call handling — reviewing call-processing times, protocol adherence, or radio conduct?",
+    opts:["Never — I relied on complaints to surface issues","Occasionally — a few times a year","Regularly — monthly or more","It was a structured, scheduled QA program"],
+    sc:{A:0,B:2,C:4,D:5} },
+
+  { id:10, s:"Dispatch & LOGIS Proficiency", g:"Dispatch Proficiency", type:"scenario",
+    text:"Multiple 911 calls come in reporting what appears to be the same incident at the same location. What is the correct handling?",
+    opts:["Dispatch a separate unit for each caller to be safe","Link the calls to a single incident and dispatch appropriate resources once, verifying details","Take the first call and disregard the others","Ask callers to call back if it is truly separate"],
+    sc:{A:1,B:5,C:2,D:0} },
+
+  // ── SECTION 2: Integrity & Trustworthiness (Q11–22) ───────────────
+  { id:11, s:"Integrity & Trustworthiness", g:"Integrity", type:"likert", rev:false,
+    text:"I follow established dispatch protocols even when no one is monitoring me." },
+  { id:12, s:"Integrity & Trustworthiness", g:"Integrity", type:"likert", rev:true,
+    text:"Adjusting a recorded response or chute time in CAD is acceptable if the delay wasn't really the crew's fault.",
+    rf:["Agree","Strongly Agree"] },
+  { id:13, s:"Integrity & Trustworthiness", g:"Integrity", type:"likert", rev:false,
+    text:"The accuracy of times and records in CAD is a patient-safety and legal matter, not just paperwork." },
+  { id:14, s:"Integrity & Trustworthiness", g:"Integrity", type:"likert", rev:true,
+    text:"Looking up a call address or patient information out of personal curiosity is harmless.",
+    rf:["Agree","Strongly Agree"] },
+  { id:15, s:"Integrity & Trustworthiness", g:"Integrity", type:"likert", rev:false,
+    text:"When I make a mistake, I acknowledge it openly rather than deflecting." },
+  { id:16, s:"Integrity & Trustworthiness", g:"Integrity", type:"likert", rev:true,
+    text:"Bending a rule is acceptable as long as the outcome turns out fine.",
+    rf:["Agree","Strongly Agree"] },
+  { id:17, s:"Integrity & Trustworthiness", g:"Integrity", type:"likert", rev:false,
+    text:"I would report a policy violation even if the person involved was a colleague I liked." },
+  { id:18, s:"Integrity & Trustworthiness", g:"Integrity", type:"likert", rev:true,
+    text:"A dispatcher backdating or rounding a timestamp to appear compliant is a minor issue.",
+    rf:["Agree","Strongly Agree"] },
+  { id:19, s:"Integrity & Trustworthiness", g:"Integrity", type:"likert", rev:false,
+    text:"Protecting the confidentiality of caller and patient information is essential." },
+  { id:20, s:"Integrity & Trustworthiness", g:"Integrity", type:"likert", rev:true,
+    text:"Sharing interesting call details informally with people outside the center is generally fine.",
+    rf:["Agree","Strongly Agree"] },
+  { id:21, s:"Integrity & Trustworthiness", g:"Integrity", type:"likert", rev:false,
+    text:"I document decisions accurately even when the outcome reflects poorly on me." },
+  { id:22, s:"Integrity & Trustworthiness", g:"Integrity", type:"likert", rev:false,
+    text:"Being trustworthy matters more than being liked." },
+
+  // ── SECTION 3: Leadership & Team Management (Q23–32) ──────────────
+  { id:23, s:"Leadership & Team Management", g:"Leadership", type:"likert", rev:false,
+    text:"I give regular constructive feedback to my team, not only during formal reviews." },
+  { id:24, s:"Leadership & Team Management", g:"Leadership", type:"likert", rev:false,
+    text:"I stay calm and set the tone for the center when call volume and stress spike." },
+  { id:25, s:"Leadership & Team Management", g:"Leadership", type:"likert", rev:true,
+    text:"Strong dispatchers don't need much attention from a manager — I focus on the strugglers.",
+    rf:["Agree","Strongly Agree"] },
+  { id:26, s:"Leadership & Team Management", g:"Leadership", type:"likert", rev:false,
+    text:"I create opportunities for junior dispatchers to develop and take on more responsibility." },
+  { id:27, s:"Leadership & Team Management", g:"Leadership", type:"likert", rev:true,
+    text:"It is not a manager's job to manage how staff feel about feedback.",
+    rf:["Agree","Strongly Agree"] },
+  { id:28, s:"Leadership & Team Management", g:"Leadership", type:"likert", rev:false,
+    text:"I address conflict on the floor promptly rather than hoping it resolves itself." },
+  { id:29, s:"Leadership & Team Management", g:"Leadership", type:"likert", rev:false,
+    text:"I apply standards and discipline consistently regardless of personal relationships." },
+  { id:30, s:"Leadership & Team Management", g:"Leadership", type:"likert", rev:true,
+    text:"A well-liked manager should avoid issuing formal corrective action.",
+    rf:["Agree","Strongly Agree"] },
+  { id:31, s:"Leadership & Team Management", g:"Leadership", type:"likert", rev:false,
+    text:"I document personnel conversations accurately and in a timely manner." },
+  { id:32, s:"Leadership & Team Management", g:"Leadership", type:"likert", rev:false,
+    text:"Difficult conversations are a necessary part of leadership, not a sign of failure." },
+
+  // ── SECTION 4: Judgment & Common Sense (Q33–40) ───────────────────
+  { id:33, s:"Judgment & Common Sense", g:"Situational Judgment", type:"scenario",
+    text:"A dispatcher consistently freelances unit assignments outside the deployment plan \u201Cbecause it works.\u201D Others have noticed.",
+    opts:["Leave it — their approach seems to work","Mention it informally and move on","Address it directly, document it, and reinforce the deployment plan","Wait to see if it generates a formal complaint"],
+    sc:{A:1,B:3,C:5,D:2} },
+
+  { id:34, s:"Judgment & Common Sense", g:"Situational Judgment", type:"scenario",
+    text:"Two dispatchers have ongoing personal friction that is visibly affecting the floor.",
+    opts:["Leave it — they are adults and should sort it out","Speak with each dispatcher separately, then together if needed","Split their shifts to keep them apart without addressing it","Send it straight to HR without speaking to either of them"],
+    sc:{A:1,B:5,C:3,D:2} },
+
+  { id:35, s:"Judgment & Common Sense", g:"Situational Judgment", type:"scenario",
+    text:"During a surge, a dispatcher skips a required verification step to move faster. The call turned out fine, but protocol requires the step.",
+    opts:["Say nothing — the call worked out","Acknowledge the pressure, then privately debrief the skipped step and document it","Write them up formally on the floor in the middle of the surge","Praise the speed to the rest of the team"],
+    sc:{A:1,B:5,C:3,D:1} },
+
+  { id:36, s:"Judgment & Common Sense", g:"Situational Judgment", type:"scenario",
+    text:"A new hire privately reports that a senior dispatcher made a discriminatory remark on the floor.",
+    opts:["Tell them to report it themselves through the formal channel","Thank them, document it, and escalate per policy","Speak to the senior dispatcher informally and consider it handled","Tell them the floor is tough and they need thicker skin"],
+    sc:{A:2,B:5,C:3,D:1} },
+
+  { id:37, s:"Judgment & Common Sense", g:"Situational Judgment", type:"scenario",
+    text:"You discover a timestamp or documentation error in a CAD record for a call from last week.",
+    opts:["Leave it — the call is already closed","Contact the dispatcher, correct it together, and document the amendment","Fix it yourself without telling the dispatcher","Send it to QA without notifying the dispatcher first"],
+    sc:{A:1,B:5,C:2,D:3} },
+
+  { id:38, s:"Judgment & Common Sense", g:"Situational Judgment", type:"scenario",
+    text:"You are one dispatcher short for tonight's shift and the overtime budget is tight.",
+    opts:["Run the floor short and hope call volume stays low","Cover the gap yourself or with a qualified staffer, authorize the overtime needed to keep the floor safe, and document the reason","Order the most junior dispatcher to stay with no plan or explanation","Quietly stop working the IFT queue to free capacity without telling anyone"],
+    sc:{A:1,B:5,C:3,D:1} },
+
+  { id:39, s:"Judgment & Common Sense", g:"Situational Judgment", type:"scenario",
+    text:"A crew calls the center upset, blaming a dispatcher for a bad assignment — over an open radio channel.",
+    opts:["Respond firmly on the radio to shut it down","Move the conversation to a direct line, keep it professional, get the facts, and follow up afterward","Ignore it and let it pass","Agree with the crew on the air and correct the dispatcher publicly"],
+    sc:{A:2,B:5,C:1,D:1} },
+
+  { id:40, s:"Judgment & Common Sense", g:"Situational Judgment", type:"scenario",
+    text:"Ownership asks you to report the shift's response-time numbers more favorably than the raw CAD data shows.",
+    opts:["Report the numbers as requested — leadership asked for it","Provide the accurate data, and add legitimate context separately if there are mitigating factors","Change the numbers but keep the raw data on file in case anyone asks","Refuse and say nothing further about it"],
+    sc:{A:0,B:5,C:1,D:3} },
+
+  // ── SECTION 5: Work Attitudes & Validity (Q41–46) ─────────────────
+  { id:41, s:"Work Attitudes & Validity", g:"Misconduct Risk", type:"likert", rev:true,
+    text:"Occasionally using center systems or resources for personal reasons is harmless.",
+    rf:["Agree","Strongly Agree"] },
+  { id:42, s:"Work Attitudes & Validity", g:"Misconduct Risk", type:"likert", rev:true,
+    text:"A manager should shield their team from consequences even if it means bending policy.",
+    rf:["Agree","Strongly Agree"] },
+  { id:43, s:"Work Attitudes & Validity", g:"Validity", type:"likert", rev:false,
+    text:"I have never made a dispatch or staffing decision I later regretted.",
+    rf:["Agree","Strongly Agree"] },
+  { id:44, s:"Work Attitudes & Validity", g:"Validity", type:"likert", rev:false,
+    text:"Every dispatcher I have supervised has respected me completely.",
+    rf:["Agree","Strongly Agree"] },
+  { id:45, s:"Work Attitudes & Validity", g:"Validity", type:"likert", rev:false,
+    text:"I have never struggled to give critical feedback to a team member.",
+    rf:["Agree","Strongly Agree"] },
+  { id:46, s:"Work Attitudes & Validity", g:"Validity", type:"likert", rev:false,
+    text:"I have stayed perfectly composed in every single high-stress event.",
+    rf:["Agree","Strongly Agree"] },
+];
+
+const SECTIONS = [
+  { name:"Dispatch & LOGIS Proficiency", tag:"Section 1 of 5", range:[1,10] },
+  { name:"Integrity & Trustworthiness",  tag:"Section 2 of 5", range:[11,22] },
+  { name:"Leadership & Team Management",  tag:"Section 3 of 5", range:[23,32] },
+  { name:"Judgment & Common Sense",       tag:"Section 4 of 5", range:[33,40] },
+  { name:"Work Attitudes & Validity",     tag:"Section 5 of 5", range:[41,46] },
+];
+
+// Category weights sum to 1.00. Character (Integrity) weighted highest.
+const DISPLAY_CATS = [
+  { key:"Dispatch Proficiency",  label:"Dispatch & LOGIS",   weight:0.25 },
+  { key:"Integrity",             label:"Integrity & Trust",  weight:0.30 },
+  { key:"Leadership",            label:"Leadership",         weight:0.20 },
+  { key:"Situational Judgment",  label:"Judgment & Sense",   weight:0.25 },
+];
+
+// =====================================================================
+// STATE
+// =====================================================================
+let candidate = {};
+let answers = {};
+let curSec = 0;
+
+function startAssessment() {
+  const fn = document.getElementById('i-fname').value.trim();
+  const ln = document.getElementById('i-lname').value.trim();
+  const em = document.getElementById('i-email').value.trim();
+  if (!fn || !ln || !em) { alert('Please enter your first name, last name, and email.'); return; }
+  candidate = {
+    firstName: fn,
+    lastName: ln,
+    name: fn + ' ' + ln,
+    email: em,
+    phone: document.getElementById('i-phone').value.trim(),
+    position: document.getElementById('i-position').value.trim() || applicationContext.job_title || 'Dispatch Manager',
+    date: new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'}),
+    completedAt: new Date().toISOString()
+  };
+  document.getElementById('screen-welcome').style.display = 'none';
+  document.getElementById('screen-assessment').style.display = 'block';
+  document.getElementById('headerRight').style.display = 'flex';
+  curSec = 0;
+  renderSec();
+}
+
+function renderSec() {
+  const sec = SECTIONS[curSec];
+  const [s, e] = sec.range;
+  document.getElementById('sec-tag').textContent = sec.tag;
+  document.getElementById('sec-title').textContent = sec.name;
+  document.getElementById('sec-sub').textContent = `Questions ${s}–${e} of ${QUESTIONS.length}`;
+
+  const qs = QUESTIONS.filter(q => q.id >= s && q.id <= e);
+  const cont = document.getElementById('q-container');
+  cont.innerHTML = '';
+
+  qs.forEach((q, i) => {
+    if (i > 0) {
+      const div = document.createElement('div');
+      div.className = 'q-divider';
+      cont.appendChild(div);
+    }
+    const block = document.createElement('div');
+    block.className = 'q-block';
+    block.style.animationDelay = (i * 40) + 'ms';
+    block.innerHTML = `<div class="q-num">Q${q.id}</div><div class="q-text">${q.text}</div>`;
+    block.appendChild(q.type === 'likert' ? buildLikert(q) : buildScenario(q));
+    cont.appendChild(block);
+  });
+
+  document.getElementById('btn-prev').style.display = curSec > 0 ? '' : 'none';
+  document.getElementById('btn-next').textContent =
+    curSec < SECTIONS.length - 1 ? 'Next Section →' : 'Submit Assessment';
+  updateProg();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function buildLikert(q) {
+  const wrap = document.createElement('div');
+  const lw = document.createElement('div');
+  lw.className = 'likert-wrap';
+  lw.id = 'lw' + q.id;
+  LIKERT.forEach(lbl => {
+    const opt = document.createElement('div');
+    opt.className = 'l-opt' + (answers[q.id] === lbl ? ' selected' : '');
+    opt.textContent = lbl;
+    opt.onclick = () => {
+      lw.querySelectorAll('.l-opt').forEach(o => o.classList.remove('selected'));
+      opt.classList.add('selected');
+      answers[q.id] = lbl;
+      updateProg();
+    };
+    lw.appendChild(opt);
+  });
+  const ends = document.createElement('div');
+  ends.className = 'likert-ends';
+  ends.innerHTML = '<span>Strongly Disagree</span><span>Strongly Agree</span>';
+  wrap.appendChild(lw);
+  wrap.appendChild(ends);
+  return wrap;
+}
+
+function buildScenario(q) {
+  const letters = ['A','B','C','D'];
+  const wrap = document.createElement('div');
+  wrap.className = 'scenario-opts';
+  wrap.id = 'sw' + q.id;
+  q.opts.forEach((txt, i) => {
+    const l = letters[i];
+    const opt = document.createElement('div');
+    opt.className = 's-opt' + (answers[q.id] === l ? ' selected' : '');
+    opt.innerHTML = `<div class="s-letter">${l}</div><div class="s-text">${txt}</div>`;
+    opt.onclick = () => {
+      wrap.querySelectorAll('.s-opt').forEach(o => o.classList.remove('selected'));
+      opt.classList.add('selected');
+      answers[q.id] = l;
+      updateProg();
+    };
+    wrap.appendChild(opt);
+  });
+  return wrap;
+}
+
+function updateProg() {
+  const ans = Object.keys(answers).length;
+  const total = QUESTIONS.length;
+  document.getElementById('prog-label').textContent = ans + ' / ' + total;
+  document.getElementById('prog-bar').style.width = Math.round((ans / total) * 100) + '%';
+  const sec = SECTIONS[curSec];
+  const qs = QUESTIONS.filter(q => q.id >= sec.range[0] && q.id <= sec.range[1]);
+  const done = qs.filter(q => answers[q.id] !== undefined).length;
+  document.getElementById('nav-info').textContent = done + ' of ' + qs.length + ' answered';
+}
+
+function nextSec() {
+  const sec = SECTIONS[curSec];
+  const missing = QUESTIONS.filter(q => q.id >= sec.range[0] && q.id <= sec.range[1] && answers[q.id] === undefined);
+  if (missing.length) { alert('Please answer all questions before continuing. (' + missing.length + ' remaining)'); return; }
+  if (curSec < SECTIONS.length - 1) { curSec++; renderSec(); }
+  else showResults();
+}
+
+function prevSec() { if (curSec > 0) { curSec--; renderSec(); } }
+
+// =====================================================================
+// SCORING
+// =====================================================================
+function scoreQ(q, ans) {
+  if (q.type === 'likert') {
+    const raw = LIKERT.indexOf(ans) + 1;
+    return q.rev ? (6 - raw) : raw;
+  }
+  return q.sc[ans] || 0;
+}
+
+function computeScores() {
+  const groups = {};
+  QUESTIONS.forEach(q => {
+    if (q.g === 'Validity') return;
+    const v = scoreQ(q, answers[q.id]);
+    if (!groups[q.g]) groups[q.g] = [];
+    groups[q.g].push(v);
+  });
+  const avg = {};
+  Object.entries(groups).forEach(([g, vals]) => {
+    avg[g] = vals.reduce((a,b)=>a+b,0) / vals.length;
+  });
+
+  // Weighted composite — weights sum to 1.00, so no normalization needed.
+  const composite =
+    (avg['Dispatch Proficiency'] || 0) * 0.25 +
+    (avg['Integrity']            || 0) * 0.30 +
+    (avg['Leadership']           || 0) * 0.20 +
+    (avg['Situational Judgment'] || 0) * 0.25;
+
+  return { avg, composite };
+}
+
+function getRedFlags() {
+  return QUESTIONS.filter(q => q.rf && q.rf.includes(answers[q.id]))
+    .map(q => ({ text: q.text, ans: answers[q.id] }));
+}
+
+function getValidityConcerns() {
+  return [43,44,45,46].filter(id => ['Agree','Strongly Agree'].includes(answers[id])).length;
+}
+
+function getVerdict(composite, redFlagCount, integrity, proficiency) {
+  if (redFlagCount >= 3 || integrity < 3.4 || proficiency < 2.5)
+    return { label:'Do Not Advance', cls:'vp-no' };
+  if (composite >= 4.2 && redFlagCount === 0)
+    return { label:'Recommended: Hire', cls:'vp-hire' };
+  if (composite >= 3.8 && redFlagCount <= 1)
+    return { label:'Hire with Review', cls:'vp-review' };
+  if (composite >= 3.4)
+    return { label:'Review Further', cls:'vp-review' };
+  return { label:'Do Not Advance', cls:'vp-no' };
+}
+
+// =====================================================================
+// RESULTS
+// =====================================================================
+async function showResults() {
+  document.getElementById('screen-assessment').style.display = 'none';
+  document.getElementById('screen-results').style.display = 'none';
+  document.getElementById('headerRight').style.display = 'none';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  const { avg, composite } = computeScores();
+  const redFlags = getRedFlags();
+  const validity = getValidityConcerns();
+  const verdict = getVerdict(composite, redFlags.length, avg['Integrity']||0, avg['Dispatch Proficiency']||0);
+
+  const vp = document.getElementById('v-pill');
+  vp.textContent = verdict.label;
+  vp.className = 'verdict-pill ' + verdict.cls;
+  document.getElementById('r-name').textContent = candidate.name;
+  document.getElementById('r-meta').textContent = candidate.position + ' · ' + candidate.date;
+  document.getElementById('r-score').textContent = composite.toFixed(2);
+
+  const grid = document.getElementById('score-grid');
+  grid.innerHTML = '';
+  DISPLAY_CATS.forEach(({ key, label }) => {
+    const val = avg[key] || 0;
+    const pct = Math.max(0, ((val - 1) / 4) * 100);
+    const color = val >= 4.2 ? '#6dbf8b' : val >= 3.4 ? '#e8b84b' : '#e05c6a';
+    const card = document.createElement('div');
+    card.className = 'sc-card';
+    card.innerHTML = `
+      <div class="sc-label">${label}</div>
+      <div class="sc-bar-wrap">
+        <div class="sc-bar-bg"><div class="sc-bar-fill" style="width:${pct}%;background:${color}"></div></div>
+        <div class="sc-val" style="color:${color}">${val.toFixed(1)}</div>
+      </div>`;
+    grid.appendChild(card);
+  });
+
+  if (redFlags.length > 0) {
+    document.getElementById('flags-box').style.display = 'block';
+    document.getElementById('flags-list').innerHTML =
+      redFlags.map(f => `<div class="flag-item">• "${f.text}" — <strong>${f.ans}</strong></div>`).join('');
+  }
+
+  let summary = '';
+  if (verdict.cls === 'vp-hire') {
+    summary = 'This candidate demonstrates strong alignment with dispatch-management standards across systems knowledge, integrity, leadership, and judgment. Confirm hands-on LOGIS proficiency with a short practical or technical interview before finalizing.';
+  } else if (verdict.cls === 'vp-review') {
+    summary = 'This candidate shows generally positive attributes with some areas warranting discussion in the interview. Probe any red flags directly, and verify actual LOGIS / CAD proficiency with a practical exercise.';
+  } else {
+    summary = 'This candidate\'s responses indicate significant concerns in one or more core areas. Review thoroughly before advancing. Hard stops in integrity, dispatch proficiency, or multiple red flags should be discussed with the hiring manager first.';
+  }
+  if ((avg['Dispatch Proficiency']||0) < 3.0) summary += ` Dispatch & LOGIS score (${(avg['Dispatch Proficiency']||0).toFixed(1)}) is low — verify real CAD/LOGIS experience with a hands-on task before advancing.`;
+  if ((avg['Integrity']||0) < 3.8) summary += ` Integrity & Trust score (${(avg['Integrity']||0).toFixed(1)}) is below target — probe records accuracy, timestamp integrity, and confidentiality directly.`;
+  if ((avg['Situational Judgment']||0) < 3.5) summary += ` Judgment score (${(avg['Situational Judgment']||0).toFixed(1)}) is low — walk through operational and personnel scenarios in interview.`;
+  if (validity >= 2) summary += ' Validity check flags suggest possible impression-management responding — interpret all scores with additional caution.';
+  document.getElementById('summary-box').textContent = summary;
+
+  const mr = avg['Misconduct Risk'] || 0;
+  const report = [
+    '=== Dispatch Manager Assessment Results ===',
+    `Candidate: ${candidate.name}`,
+    `Email: ${candidate.email}`,
+    `Phone: ${candidate.phone || 'N/A'}`,
+    `Position: ${candidate.position}`,
+    `Date: ${candidate.date}`,
+    '',
+    `RECOMMENDATION: ${verdict.label}`,
+    `Weighted Composite Score: ${composite.toFixed(2)} / 5.00`,
+    '',
+    '--- CATEGORY SCORES ---',
+    `Dispatch & LOGIS:     ${(avg['Dispatch Proficiency']||0).toFixed(2)}`,
+    `Integrity & Trust:    ${(avg['Integrity']||0).toFixed(2)}`,
+    `Leadership:           ${(avg['Leadership']||0).toFixed(2)}`,
+    `Judgment & Sense:     ${(avg['Situational Judgment']||0).toFixed(2)}`,
+    `Misconduct Risk:      ${mr.toFixed(2)} (lower = better)`,
+    '',
+    `Red Flag Count: ${redFlags.length}`,
+    `Validity Concerns: ${validity}`,
+    '',
+    '--- RED FLAG RESPONSES ---',
+    ...(redFlags.length
+      ? redFlags.flatMap((f, i) => [
+          `Flag ${i + 1}: ${f.text}`,
+          `Candidate Response: ${f.ans}`,
+          ''
+        ])
+      : ['None']),
+    'NOTE: Self-reported LOGIS/CAD proficiency (Q1–Q4) should be confirmed',
+    'with a short hands-on or technical interview. Q5–Q10 test dispatch',
+    'operational knowledge with correct answers.',
+    '',
+    '--- SUMMARY ---',
+    summary
+  ].join('\n');
+
+  document.getElementById('copy-area').textContent = report;
+
+  const redFlagResponses = buildRedFlagResponses(redFlags);
+  const payload = {
+    assessmentType: ASSESSMENT_TYPE,
+    assessmentVersion: ASSESSMENT_VERSION,
+    candidate,
+    applicationContext,
+    scores: {
+      compositeScore: composite.toFixed(2),
+      recommendation: verdict.label,
+      categories: {
+        dispatchProficiency: (avg['Dispatch Proficiency']||0).toFixed(2),
+        integrity: (avg['Integrity']||0).toFixed(2),
+        leadership: (avg['Leadership']||0).toFixed(2),
+        situationalJudgment: (avg['Situational Judgment']||0).toFixed(2),
+        misconductRisk: mr.toFixed(2)
+      },
+      redFlagCount: redFlags.length,
+      validityConcernCount: validity
+    },
+    flags: redFlags,
+    answers,
+    report,
+    redFlagResponses,
+    redFlagQuestions: buildRedFlagQuestions(redFlags),
+    redFlagAnswers: buildRedFlagAnswers(redFlags),
+    summary,
+    submittedAt: new Date().toISOString()
+  };
+  const submitted = await sendToFlow(buildSubmissionPayload(payload));
+  showCompletion(submitted);
+}
+
+
+function buildRedFlagResponses(flags) {
+  if (!flags.length) return 'None';
+  return flags.map((f, i) =>
+    `Flag ${i + 1} | Question: ${f.text} | Candidate Response: ${f.ans}`
+  ).join('\n');
+}
+
+function buildRedFlagQuestions(flags) {
+  if (!flags.length) return 'None';
+  return flags.map((f, i) => `Flag ${i + 1}: ${f.text}`).join('\n');
+}
+
+function buildRedFlagAnswers(flags) {
+  if (!flags.length) return 'None';
+  return flags.map((f, i) => `Flag ${i + 1}: ${f.ans}`).join('\n');
+}
+
+function excelSafeText(value, maxLength = 30000){
+  return String(value || '')
+    .replace(/\r\n/g, '\n').replace(/\r/g, '\n')
+    .replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g, '')
+    .replace(/[⚠✓→—–]/g, '-')
+    .replace(/[“”]/g, '"').replace(/[‘’]/g, "'")
+    .replace(/[\t ]+/g, ' ')
+    .substring(0, maxLength);
+}
+
+function buildSubmissionPayload(payload){
+  const safeReport = "'" + excelSafeText(payload.report || '', 30000);
+  const safeRedFlagResponses = excelSafeText(payload.redFlagResponses || '', 12000);
+  return {
+    completionDate: payload.submittedAt || payload.candidate.completedAt || '',
+    email: payload.candidate.email || '',
+    firstName: payload.candidate.firstName || '',
+    lastName: payload.candidate.lastName || '',
+    phone: payload.candidate.phone || '',
+    position: payload.candidate.position || '',
+    assessmentType: payload.assessmentType || 'Dispatch Manager',
+    assessmentVersion: payload.assessmentVersion || '',
+    score: payload.scores.compositeScore || '',
+    compositeScore: payload.scores.compositeScore || '',
+    recommendation: payload.scores.recommendation || '',
+    redFlags: String(payload.scores.redFlagCount ?? ''),
+    redFlagCount: String(payload.scores.redFlagCount ?? ''),
+    validityConcernCount: String(payload.scores.validityConcernCount ?? ''),
+    redFlagResponses: "'" + safeRedFlagResponses,
+    redFlagQuestions: "'" + excelSafeText(payload.redFlagQuestions || 'None', 12000),
+    redFlagAnswers: "'" + excelSafeText(payload.redFlagAnswers || 'None', 12000),
+    report: safeReport,
+    fullReport: safeReport,
+    candidate_id: payload.applicationContext.candidate_id || '',
+    application_id: payload.applicationContext.application_id || '',
+    job_id: payload.applicationContext.job_id || '',
+    job_shortcode: payload.applicationContext.job_shortcode || '',
+    job_title: payload.applicationContext.job_title || '',
+    source: payload.applicationContext.source || 'workable_email',
+    dispatchProficiency: payload.scores.categories.dispatchProficiency || '',
+    integrity: payload.scores.categories.integrity || '',
+    leadership: payload.scores.categories.leadership || '',
+    situationalJudgment: payload.scores.categories.situationalJudgment || '',
+    misconductRisk: payload.scores.categories.misconductRisk || '',
+    payloadJson: excelSafeText(JSON.stringify({
+      assessmentType: payload.assessmentType,
+      assessmentVersion: payload.assessmentVersion,
+      candidate: payload.candidate,
+      applicationContext: payload.applicationContext,
+      scores: payload.scores,
+      flagCount: payload.flags ? payload.flags.length : 0,
+      submittedAt: payload.submittedAt
+    }), 30000)
+  };
+}
+
+async function sendToFlow(data){
+  try{
+    console.log('Assessment payload sent to Power Automate:', data);
+    const response = await fetch(FLOW_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+    return response.ok;
+  }catch(e){
+    console.error('Flow submission failed', e);
+    return false;
+  }
+}
+
+function showCompletion(submitted){
+  const ref = document.getElementById('complete-ref');
+  document.getElementById('screen-complete').style.display = 'block';
+  if(submitted){
+    ref.style.display = 'none';
+    ref.textContent = '';
+  }else{
+    ref.style.display = 'block';
+    ref.textContent = 'Submission issue: Power Automate did not confirm receipt. Please notify recruiting that your assessment did not submit successfully.';
+  }
+}
+
+function copyReport() {
+  navigator.clipboard.writeText(document.getElementById('copy-area').textContent).then(() => {
+    const btn = document.querySelector('.btn-copy');
+    btn.textContent = '✓ Copied!';
+    setTimeout(() => btn.textContent = 'Copy to Clipboard', 2000);
+  });
+}
+</script>
+</body>
+</html>
