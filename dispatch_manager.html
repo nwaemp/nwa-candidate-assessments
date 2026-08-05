@@ -955,6 +955,14 @@ async function showResults() {
     `Red Flag Count: ${redFlags.length}`,
     `Validity Concerns: ${validity}`,
     '',
+    '--- RED FLAG RESPONSES ---',
+    ...(redFlags.length
+      ? redFlags.flatMap((f, i) => [
+          `Flag ${i + 1}: ${f.text}`,
+          `Candidate Response: ${f.ans}`,
+          ''
+        ])
+      : ['None']),
     'NOTE: Self-reported LOGIS/CAD proficiency (Q1–Q4) should be confirmed',
     'with a short hands-on or technical interview. Q5–Q10 test dispatch',
     'operational knowledge with correct answers.',
@@ -988,6 +996,8 @@ async function showResults() {
     answers,
     report,
     redFlagResponses,
+    redFlagQuestions: buildRedFlagQuestions(redFlags),
+    redFlagAnswers: buildRedFlagAnswers(redFlags),
     summary,
     submittedAt: new Date().toISOString()
   };
@@ -998,16 +1008,19 @@ async function showResults() {
 
 function buildRedFlagResponses(flags) {
   if (!flags.length) return 'None';
-  return [
-    '=== Red Flag Responses ===', '',
-    ...flags.flatMap((f, i) => [
-      'Flag ' + (i + 1),
-      'Question: ' + f.text,
-      'Candidate Response: ' + f.ans,
-      'Reason Flagged: Response matched a configured red-flag answer for this assessment.',
-      '', '--------------------------------------------------', ''
-    ])
-  ].join('\n');
+  return flags.map((f, i) =>
+    `Flag ${i + 1} | Question: ${f.text} | Candidate Response: ${f.ans}`
+  ).join('\n');
+}
+
+function buildRedFlagQuestions(flags) {
+  if (!flags.length) return 'None';
+  return flags.map((f, i) => `Flag ${i + 1}: ${f.text}`).join('\n');
+}
+
+function buildRedFlagAnswers(flags) {
+  if (!flags.length) return 'None';
+  return flags.map((f, i) => `Flag ${i + 1}: ${f.ans}`).join('\n');
 }
 
 function excelSafeText(value, maxLength = 30000){
@@ -1038,7 +1051,9 @@ function buildSubmissionPayload(payload){
     redFlags: String(payload.scores.redFlagCount ?? ''),
     redFlagCount: String(payload.scores.redFlagCount ?? ''),
     validityConcernCount: String(payload.scores.validityConcernCount ?? ''),
-    redFlagResponses: safeRedFlagResponses,
+    redFlagResponses: "'" + safeRedFlagResponses,
+    redFlagQuestions: "'" + excelSafeText(payload.redFlagQuestions || 'None', 12000),
+    redFlagAnswers: "'" + excelSafeText(payload.redFlagAnswers || 'None', 12000),
     report: safeReport,
     fullReport: safeReport,
     candidate_id: payload.applicationContext.candidate_id || '',
