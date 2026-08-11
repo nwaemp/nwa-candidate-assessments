@@ -1,0 +1,1594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Work Style &amp; Judgement Assessment — Northwest Ambulance</title>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Barlow:wght@300;400;500;600&family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --slate:      #1b2332;
+    --slate-mid:  #243044;
+    --slate-lite: #2e3d57;
+    --steel:      #3d4f6e;
+    --cream:      #f0ebe0;
+    --cream2:     #e6e0d4;
+    --muted:      #8a9ab5;
+    --border:     rgba(240,235,224,0.1);
+    --border2:    rgba(240,235,224,0.18);
+    --accent:     #c8a96e;
+    --accent2:    #e8cc96;
+    --accent-bg:  rgba(200,169,110,0.1);
+    --accent-bd:  rgba(200,169,110,0.3);
+    --green:      #4caf82;
+    --green-bg:   rgba(76,175,130,0.12);
+    --green-bd:   rgba(76,175,130,0.3);
+    --amber:      #d4973a;
+    --amber-bg:   rgba(212,151,58,0.12);
+    --amber-bd:   rgba(212,151,58,0.3);
+    --red:        #d45252;
+    --red-bg:     rgba(212,82,82,0.1);
+    --red-bd:     rgba(212,82,82,0.28);
+    --risk:       #e8724a;
+    --risk-bg:    rgba(232,114,74,0.1);
+    --risk-bd:    rgba(232,114,74,0.28);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Barlow', sans-serif;
+    background: var(--slate);
+    color: var(--cream);
+    min-height: 100vh;
+    font-size: 15px;
+    line-height: 1.65;
+  }
+
+  /* Crosshatch texture overlay */
+  body::before {
+    content: '';
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background-image:
+      repeating-linear-gradient(45deg, rgba(240,235,224,0.015) 0px, rgba(240,235,224,0.015) 1px, transparent 1px, transparent 8px),
+      repeating-linear-gradient(-45deg, rgba(240,235,224,0.015) 0px, rgba(240,235,224,0.015) 1px, transparent 1px, transparent 8px);
+  }
+
+  /* ── HEADER ─────────────────────────────────── */
+  .header {
+    background: var(--slate-mid);
+    border-bottom: 1px solid var(--border2);
+    padding: 0 40px;
+    height: 60px;
+    display: flex; align-items: center; gap: 16px;
+    position: sticky; top: 0; z-index: 100;
+  }
+
+  .h-emblem {
+    width: 32px; height: 32px; flex-shrink: 0;
+    background: var(--accent);
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  .h-emblem span {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 10px; font-weight: 700;
+    color: var(--slate); letter-spacing: 0.04em;
+  }
+
+  .h-name {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 14px; font-weight: 700;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--cream);
+  }
+
+  .h-name small {
+    display: block;
+    font-size: 10px; font-weight: 400;
+    letter-spacing: 0.06em; color: var(--muted);
+    text-transform: uppercase;
+  }
+
+  .h-sep { width: 1px; height: 22px; background: var(--border2); }
+
+  .h-tag {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px; font-weight: 600;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .h-right { margin-left: auto; display: flex; align-items: center; gap: 12px; }
+
+  .prog-strip {
+    display: flex; align-items: center; gap: 10px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    padding: 5px 14px;
+  }
+
+  .prog-num { font-family: 'Barlow Condensed', monospace; font-size: 12px; color: var(--muted); letter-spacing: 0.06em; }
+  .prog-track { width: 110px; height: 2px; background: rgba(255,255,255,0.08); border-radius: 1px; overflow: hidden; }
+  .prog-fill { height: 100%; background: var(--accent); border-radius: 1px; transition: width 0.35s ease; width: 0%; }
+
+  /* ── MAIN ───────────────────────────────────── */
+  .main { max-width: 780px; margin: 0 auto; padding: 52px 24px 100px; position: relative; z-index: 1; }
+
+  /* ── WELCOME ────────────────────────────────── */
+  #screen-welcome { display: block; }
+
+  .w-overline {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px; font-weight: 700;
+    letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 20px;
+    display: flex; align-items: center; gap: 12px;
+  }
+
+  .w-overline::before {
+    content: '';
+    display: inline-block;
+    width: 32px; height: 1px;
+    background: var(--accent);
+  }
+
+  .w-title {
+    font-family: 'Libre Baskerville', serif;
+    font-size: clamp(30px, 5.5vw, 50px);
+    font-weight: 700;
+    line-height: 1.06;
+    letter-spacing: -0.01em;
+    color: var(--cream);
+    margin-bottom: 22px;
+  }
+
+  .w-title em {
+    font-style: italic;
+    font-weight: 400;
+    color: var(--accent2);
+  }
+
+  .w-desc {
+    font-size: 15px;
+    color: var(--muted);
+    max-width: 520px;
+    line-height: 1.8;
+    margin-bottom: 40px;
+    font-weight: 300;
+  }
+
+  .stat-row {
+    display: flex;
+    gap: 1px;
+    max-width: 440px;
+    margin-bottom: 48px;
+    border: 1px solid var(--border2);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .stat {
+    flex: 1;
+    background: rgba(255,255,255,0.03);
+    padding: 14px 18px;
+    border-right: 1px solid var(--border);
+  }
+  .stat:last-child { border-right: none; }
+
+  .stat-val {
+    font-family: 'Libre Baskerville', serif;
+    font-size: 26px;
+    color: var(--accent2);
+    line-height: 1;
+    margin-bottom: 3px;
+  }
+
+  .stat-lbl {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /* FORM */
+  .cform { max-width: 480px; margin-bottom: 40px; }
+
+  .frow { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+
+  .fg { display: flex; flex-direction: column; gap: 5px; }
+
+  .fg label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 10px; font-weight: 700;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .fg input {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border2);
+    border-radius: 3px;
+    padding: 9px 12px;
+    color: var(--cream);
+    font-family: 'Barlow', sans-serif;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .fg input:focus { border-color: var(--accent-bd); }
+  .fg input::placeholder { color: rgba(240,235,224,0.2); }
+
+  /* BUTTONS */
+  .btn-primary {
+    background: var(--accent);
+    color: var(--slate);
+    border: none; border-radius: 3px;
+    padding: 13px 30px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 14px; font-weight: 700;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+
+  .btn-primary:hover { background: var(--accent2); }
+  .btn-primary:active { transform: scale(0.98); }
+
+  .btn-ghost {
+    background: transparent;
+    color: var(--muted);
+    border: 1px solid var(--border2);
+    border-radius: 3px;
+    padding: 11px 22px;
+    font-family: 'Barlow', sans-serif;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .btn-ghost:hover { border-color: var(--border2); color: var(--cream); }
+
+  /* ── ASSESSMENT ─────────────────────────────── */
+  #screen-assessment { display: none; }
+
+  .sec-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 10px; font-weight: 700;
+    letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 6px;
+  }
+
+  .sec-title {
+    font-family: 'Libre Baskerville', serif;
+    font-size: 24px; font-weight: 700;
+    color: var(--cream); margin-bottom: 4px;
+  }
+
+  .sec-sub {
+    font-size: 12px; color: var(--muted);
+    margin-bottom: 32px; font-weight: 300;
+  }
+
+  /* QUESTION */
+  .q-block { animation: qfade 0.22s ease both; }
+
+  @keyframes qfade {
+    from { opacity:0; transform: translateY(7px); }
+    to   { opacity:1; transform: translateY(0); }
+  }
+
+  .q-rule { height: 1px; background: var(--border); margin: 22px 0; }
+
+  .q-num {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 10px; font-weight: 700;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 7px;
+  }
+
+  .q-text {
+    font-size: 15px; color: var(--cream);
+    line-height: 1.55; margin-bottom: 14px;
+    font-weight: 400;
+  }
+
+  /* LIKERT */
+  .lw { display: flex; gap: 5px; flex-wrap: wrap; }
+
+  .lo {
+    flex: 1 1 0; min-width: 82px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--border2);
+    border-radius: 3px;
+    padding: 9px 6px;
+    text-align: center; cursor: pointer;
+    font-size: 11px; color: var(--muted);
+    font-family: 'Barlow', sans-serif;
+    line-height: 1.3; transition: all 0.15s; user-select: none;
+  }
+
+  .lo:hover { background: var(--accent-bg); color: var(--cream); border-color: var(--accent-bd); }
+
+  .lo.sel {
+    background: var(--accent-bg);
+    border-color: var(--accent-bd);
+    color: var(--cream);
+    font-weight: 600;
+  }
+
+  .l-ends {
+    display: flex; justify-content: space-between;
+    font-size: 10px; color: var(--muted);
+    margin-top: 5px; padding: 0 2px;
+    letter-spacing: 0.04em;
+    font-family: 'Barlow Condensed', sans-serif;
+    text-transform: uppercase;
+  }
+
+  /* SCENARIO */
+  .so-wrap { display: flex; flex-direction: column; gap: 6px; }
+
+  .so {
+    display: flex; align-items: flex-start; gap: 12px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--border2);
+    border-radius: 3px;
+    padding: 12px 15px;
+    cursor: pointer; transition: all 0.15s; user-select: none;
+  }
+
+  .so:hover { background: var(--accent-bg); border-color: var(--accent-bd); }
+
+  .so.sel { background: var(--accent-bg); border-color: var(--accent-bd); }
+
+  .so-letter {
+    width: 22px; height: 22px; border-radius: 50%;
+    border: 1.5px solid var(--muted);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px; font-weight: 700; flex-shrink: 0; margin-top: 1px;
+    font-family: 'Barlow Condensed', sans-serif;
+    letter-spacing: 0.04em; transition: all 0.15s;
+  }
+
+  .so.sel .so-letter { background: var(--accent); border-color: var(--accent); color: var(--slate); }
+  .so-text { font-size: 13px; color: var(--cream2); line-height: 1.5; }
+
+  /* NAV */
+  .q-nav {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-top: 32px; padding-top: 22px;
+    border-top: 1px solid var(--border);
+  }
+
+  .nav-info { font-size: 11px; color: var(--muted); font-family: 'Barlow Condensed', sans-serif; letter-spacing: 0.06em; }
+  .nav-btns { display: flex; gap: 10px; }
+
+  /* ── RESULTS ────────────────────────────────── */
+  #screen-results { display: none; }
+
+  .rt { text-align: center; padding: 40px 0 28px; }
+
+  .v-badge {
+    display: inline-block;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 12px; font-weight: 700;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    padding: 6px 20px; border-radius: 2px; margin-bottom: 16px;
+  }
+
+  .vb-hire   { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-bd); }
+  .vb-review { background: var(--amber-bg); color: var(--amber); border: 1px solid var(--amber-bd); }
+  .vb-no     { background: var(--red-bg);   color: var(--red);   border: 1px solid var(--red-bd); }
+
+  .r-name {
+    font-family: 'Libre Baskerville', serif;
+    font-size: 34px; color: var(--cream); margin-bottom: 5px;
+  }
+
+  .r-meta { font-size: 12px; color: var(--muted); font-weight: 300; }
+
+  .r-comp { margin-top: 16px; display: inline-flex; align-items: baseline; gap: 5px; }
+  .r-big { font-family: 'Libre Baskerville', serif; font-size: 54px; color: var(--accent2); line-height: 1; }
+  .r-denom { font-size: 18px; color: var(--muted); }
+
+  /* RISK INDICATOR */
+  .risk-bar-wrap {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--border2);
+    border-radius: 4px;
+    padding: 18px 22px;
+    margin: 24px 0;
+  }
+
+  .risk-bar-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px; font-weight: 700;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 10px;
+    display: flex; justify-content: space-between;
+  }
+
+  .risk-track { height: 8px; background: rgba(255,255,255,0.06); border-radius: 4px; overflow: hidden; position: relative; }
+  .risk-fill  { height: 100%; border-radius: 4px; transition: width 1s ease; }
+
+  .risk-zones {
+    display: flex; margin-top: 5px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 10px; letter-spacing: 0.06em;
+  }
+  .rz { flex: 1; text-align: center; }
+
+  /* SCORE GRID */
+  .sgrid {
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    gap: 8px; margin: 20px 0;
+  }
+
+  .sc {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--border2);
+    border-radius: 4px;
+    padding: 14px 16px;
+  }
+
+  .sc-lbl {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 10px; font-weight: 700;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 10px;
+  }
+
+  .sc-row { display: flex; align-items: center; gap: 8px; }
+  .sc-bg  { flex:1; height: 3px; background: rgba(255,255,255,0.07); border-radius: 2px; overflow: hidden; }
+  .sc-fill{ height: 100%; border-radius: 2px; transition: width 1s ease; }
+  .sc-val {
+    font-family: 'Barlow Condensed', monospace;
+    font-size: 15px; font-weight: 600;
+    width: 34px; text-align: right; flex-shrink: 0;
+  }
+
+  /* FLAGS */
+  .flags-box {
+    background: var(--risk-bg);
+    border: 1px solid var(--risk-bd);
+    border-radius: 4px;
+    padding: 18px 20px; margin-bottom: 14px;
+  }
+
+  .flags-box h3 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 13px; font-weight: 700;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--risk); margin-bottom: 10px;
+  }
+
+  .fi {
+    font-size: 12px; color: var(--muted);
+    padding: 5px 0; border-bottom: 1px solid rgba(255,255,255,0.05);
+    line-height: 1.5;
+  }
+  .fi:last-child { border-bottom: none; }
+  .fi strong { color: var(--risk); }
+
+  /* RISK PROFILE */
+  .risk-profile {
+    background: rgba(255,255,255,0.02);
+    border: 1px solid var(--border2);
+    border-radius: 4px;
+    padding: 18px 20px; margin-bottom: 16px;
+  }
+
+  .risk-profile h3 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 12px; font-weight: 700;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 10px;
+  }
+
+  .risk-profile p { font-size: 13px; color: var(--muted); line-height: 1.75; }
+
+  /* WORKABLE */
+  .wbox {
+    background: var(--slate-mid);
+    border: 1px solid var(--accent-bd);
+    border-radius: 4px; padding: 20px; margin-top: 20px;
+  }
+
+  .wbox h3 {
+    font-family: 'Libre Baskerville', serif;
+    font-size: 15px; font-weight: 700;
+    color: var(--cream); margin-bottom: 5px;
+  }
+
+  .wbox p { font-size: 12px; color: var(--muted); margin-bottom: 12px; }
+
+  .wtext {
+    background: rgba(0,0,0,0.25);
+    border: 1px solid var(--border);
+    border-radius: 3px; padding: 14px;
+    font-family: 'Courier New', monospace;
+    font-size: 11px; color: var(--muted);
+    white-space: pre-wrap; line-height: 1.7; margin-bottom: 10px;
+  }
+
+  .btn-copy {
+    font-size: 12px; color: var(--muted);
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border2);
+    border-radius: 3px; padding: 7px 14px;
+    cursor: pointer; transition: all 0.15s;
+    font-family: 'Barlow', sans-serif;
+  }
+  .btn-copy:hover { background: rgba(255,255,255,0.08); color: var(--cream); }
+
+  .exp-row { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 26px; }
+
+
+  /* ── COMPLETION ─────────────────────────────── */
+  #screen-complete { display:none; padding:60px 0; }
+  .complete-card { max-width:560px; margin:0 auto; text-align:center; background:var(--slate-mid); border:1px solid var(--accent-bd); border-radius:6px; padding:42px 30px; }
+  .complete-icon { width:56px; height:56px; margin:0 auto 20px; border-radius:50%; display:flex; align-items:center; justify-content:center; background:var(--green-bg); border:1px solid var(--green-bd); color:var(--green); font-size:28px; font-weight:700; }
+  .complete-title { font-family:'Libre Baskerville',serif; font-size:28px; color:var(--cream); margin-bottom:12px; }
+  .complete-text { color:var(--muted); font-size:15px; line-height:1.75; }
+  .complete-ref { margin-top:18px; padding:12px 14px; border-radius:4px; background:var(--red-bg); border:1px solid var(--red-bd); color:var(--red); font-size:12px; line-height:1.55; }
+
+  @media (max-width: 560px) {
+    .header { padding: 0 14px; }
+    .main { padding: 24px 14px 80px; }
+    .frow { grid-template-columns: 1fr; }
+    .sgrid { grid-template-columns: 1fr 1fr; }
+    .lw { gap: 4px; }
+    .lo { min-width: 58px; padding: 7px 3px; font-size: 10px; }
+    .prog-strip { display: none; }
+  }
+
+  @media print {
+    body::before { display: none; }
+    body { background: white; color: #111; }
+    .header { position: static; background: #1b2332; }
+    .btn-primary, .btn-ghost, .btn-copy, .exp-row { display: none !important; }
+    .wbox { background: #1b2332; }
+  }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="h-emblem"><span>NWA</span></div>
+  <div class="h-name">
+    Work Style &amp; Judgement Assessment
+    <small>Talent Acquisition</small>
+  </div>
+  <div class="h-sep"></div>
+  <div class="h-tag">Training Specialist</div>
+  <div class="h-right" id="hRight" style="display:none">
+    <div class="prog-strip">
+      <span class="prog-num" id="prog-num">0 / 60</span>
+      <div class="prog-track"><div class="prog-fill" id="prog-fill"></div></div>
+    </div>
+  </div>
+</header>
+
+<main class="main">
+
+  <!-- ═══════ WELCOME ═══════ -->
+  <div id="screen-welcome">
+    <div class="w-overline">Training Specialist · Training Department</div>
+    <h2 class="w-title">Work Style<br>&amp; <em>Judgement</em> Assessment</h2>
+    <p class="w-desc">
+      This assessment is part of our hiring process for the Training Specialist position.
+      Most questions ask you to choose between two statements that both sound reasonable —
+      pick whichever is genuinely closer to how you work. There is no scoring key you can
+      guess at, and trying to give the "expected" answer will make your profile less
+      accurate, not better. Answer quickly and honestly. Your responses are confidential.
+    </p>
+
+    <div class="stat-row">
+      <div class="stat"><div class="stat-val">60</div><div class="stat-lbl">Questions</div></div>
+      <div class="stat"><div class="stat-val">12–15</div><div class="stat-lbl">Minutes</div></div>
+      <div class="stat"><div class="stat-val">10</div><div class="stat-lbl">Sections</div></div>
+    </div>
+
+    <div class="cform">
+      <div class="frow">
+        <div class="fg"><label>First Name *</label><input type="text" id="i-fn" placeholder="Jane"></div>
+        <div class="fg"><label>Last Name *</label><input type="text" id="i-ln" placeholder="Smith"></div>
+      </div>
+      <div class="frow">
+        <div class="fg"><label>Email *</label><input type="email" id="i-em" placeholder="jane@email.com"></div>
+        <div class="fg"><label>Phone</label><input type="tel" id="i-ph" placeholder="(555) 000-0000"></div>
+      </div>
+      <div class="fg" style="margin-bottom:12px">
+        <label>Position Applied For</label>
+        <input type="text" id="i-pos" placeholder="Training Specialist">
+      </div>
+    </div>
+
+    <button class="btn-primary" onclick="start()">Begin →</button>
+  </div>
+
+  <!-- ═══════ ASSESSMENT ═══════ -->
+  <div id="screen-assessment">
+    <div class="sec-label" id="sec-label">Section 1 of 10</div>
+    <div class="sec-title" id="sec-title">Working Standards</div>
+    <div class="sec-sub"   id="sec-sub">Questions 1–5</div>
+    <div id="qcont"></div>
+    <div class="q-nav">
+      <span class="nav-info" id="nav-info"></span>
+      <div class="nav-btns">
+        <button class="btn-ghost" id="btn-prev" onclick="prevSec()" style="display:none">← Back</button>
+        <button class="btn-primary" id="btn-next" onclick="nextSec()">Next Section →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════ RESULTS ═══════ -->
+  <div id="screen-results">
+    <div class="rt">
+      <div class="v-badge" id="v-badge"></div>
+      <div class="r-name"  id="r-name"></div>
+      <div class="r-meta"  id="r-meta"></div>
+      <div class="r-comp"><span class="r-big" id="r-score">—</span><span class="r-denom">/ 100</span></div>
+    </div>
+
+    <div class="risk-bar-wrap">
+      <div class="risk-bar-label">
+        <span>Overall Risk Profile</span>
+        <span id="risk-label-text">—</span>
+      </div>
+      <div class="risk-track"><div class="risk-fill" id="risk-fill" style="width:0%"></div></div>
+      <div class="risk-zones">
+        <div class="rz" style="color:var(--green)">Low Risk</div>
+        <div class="rz" style="color:var(--amber)">Moderate</div>
+        <div class="rz" style="color:var(--risk)">Elevated</div>
+        <div class="rz" style="color:var(--red)">High Risk</div>
+      </div>
+    </div>
+
+    <div class="sgrid" id="score-grid"></div>
+
+    <div class="flags-box" id="flags-box" style="display:none">
+      <h3>⚠ Risk Indicators Detected</h3>
+      <div id="flags-list"></div>
+    </div>
+
+    <div class="risk-profile" id="risk-profile">
+      <h3>Risk &amp; Character Profile</h3>
+      <p id="profile-text"></p>
+    </div>
+
+    <div class="wbox">
+      <h3>Workable Notes — Copy &amp; Paste</h3>
+      <p>Paste into the candidate's Notes tab in Workable.</p>
+      <div class="wtext" id="wtext"></div>
+      <button class="btn-copy" onclick="copyReport()">Copy to Clipboard</button>
+    </div>
+
+    <div class="exp-row">
+      <button class="btn-primary" onclick="window.print()">Print / Save PDF</button>
+      <button class="btn-ghost"   onclick="location.reload()">New Assessment</button>
+    </div>
+  </div>
+
+
+  <!-- ═══════ COMPLETION ═══════ -->
+  <div id="screen-complete">
+    <div class="complete-card">
+      <div class="complete-icon">✓</div>
+      <h2 class="complete-title">Assessment Submitted</h2>
+      <p class="complete-text">Thank you. Your assessment has been submitted successfully. The hiring team will review your application and follow up through the normal recruiting process.</p>
+      <div class="complete-ref" id="complete-ref" style="display:none"></div>
+    </div>
+  </div>
+
+</main>
+
+<script>
+
+// =====================================================================
+// AUTOMATION CONFIGURATION
+// Mirrored to field_staff_assessment_v3_mirrored_to_leadership.html.
+// Candidate-facing results are hidden. Power Automate receives flat JSON.
+// =====================================================================
+const FLOW_URL = "https://defaultb9fe31c2de0742529875da1c500446.c8.environment.api.powerplatform.com:443/powerautomate/automations/direct/cu/05/workflows/ba91d94a799f496db4a50649f19a68c4/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=szAiiQW0VVGINwIolmyI7na5giFjfimHgqWs-uCnlhY";
+const SUBMISSION_WEBHOOK_URL = FLOW_URL;
+const ASSESSMENT_TYPE = "Training Specialist";
+const ASSESSMENT_VERSION = "1.0-fieldstaff-v3-mirrored";
+const urlParams = new URLSearchParams(window.location.search);
+const applicationContext = {
+  candidate_id: urlParams.get('candidate_id') || '',
+  application_id: urlParams.get('application_id') || '',
+  job_shortcode: urlParams.get('job_shortcode') || '',
+  job_title: urlParams.get('job_title') || '',
+  job_id: urlParams.get('job_id') || '',
+  source: urlParams.get('source') || 'workable_email'
+};
+function applyUrlContext(){
+  if(applicationContext.job_title){
+    const pos=document.getElementById('i-pos');
+    if(pos) pos.value=applicationContext.job_title;
+  }
+}
+document.addEventListener('DOMContentLoaded', applyUrlContext);
+
+// ════════════════════════════════════════════════════════════════
+// WORK STYLE & JUDGEMENT ASSESSMENT — TRAINING SPECIALIST
+// 60 items, 9 sections. Third revision.
+//
+// DESIGN GOAL: tell the reviewer who the candidate is without the
+// candidate knowing what they are revealing. The previous revision
+// failed this badly — 58% of its Likert items named a socially
+// condemned act ("backdating is acceptable"), and the correct
+// scenario answer was the longest, most procedural option in 6 of 6
+// cases. Any candidate would score it perfectly on the second read.
+//
+// FOUR ITEM FORMATS, chosen for opacity:
+//
+//  1. FORCED-CHOICE PAIRS (t:'c', 2 options) — the workhorse, ~28
+//     items. Both statements describe something a good employee
+//     would plausibly say. Neither is condemned. The pick reveals
+//     which value gets sacrificed when the two collide — pace vs.
+//     documentation, warmth vs. candor, efficiency vs. rigor.
+//     There is no hedge option, so the candidate must commit.
+//     Example: "I'd rather over-document and be told it wasn't
+//     necessary" vs "I'd rather document what matters and not
+//     create busywork." The second sounds sensible. It is the risk.
+//
+//  2. PROJECTION / BASE-RATE ESTIMATES (t:'c', 4 bands) — ~5 items.
+//     Candidates asked to estimate how common a behavior is among
+//     others tend to anchor on their own conduct (false-consensus
+//     effect). The candidate believes they are giving a neutral
+//     factual estimate about the industry, not a self-report.
+//     Deliberately NOT used where the true base rate is genuinely
+//     high (e.g. minor-injury under-reporting in EMS) — there, a
+//     candid, experienced person would be penalized for accuracy.
+//
+//  3. FREQUENCY / PAST-BEHAVIOR COUNTS (t:'c', 4 bands) — 2 items.
+//     Less opaque, but they force a specific falsifiable claim that
+//     reference checks can test. Purpose is verification, not
+//     concealment.
+//
+//  4. LIKERT ANCHORS (t:'l') — 11 scored items, kept DELIBERATELY
+//     transparent. These are the control condition. A candidate who
+//     strongly endorses the obvious virtue anchors while taking the
+//     self-serving option on the forced-choice pairs has produced an
+//     internally inconsistent profile, and that inconsistency is
+//     itself the finding. See ANCHOR CONSISTENCY in the report.
+//
+// SCENARIOS were rewritten so all four options sound procedurally
+// competent. The old tell is gone: the correct answer is no longer
+// always the longest, several distractors now also mention
+// documenting or notifying the manager, and one distractor per item
+// is a near-miss scoring 2–3 rather than an obvious throwaway.
+//
+// HONEST LIMIT: no self-report instrument is fake-proof. Opacity
+// raises the cost of gaming; it does not eliminate it. The validity
+// cluster, the anchor-consistency check, and the interview probes
+// are the backstop.
+//
+// Role logic retained: Records & Certification Integrity is the
+// largest section with the highest hard-stop floor, because this
+// role certifies field readiness.
+// ════════════════════════════════════════════════════════════════
+const LIKERT = ["Strongly Disagree","Disagree","Neutral","Agree","Strongly Agree"];
+const PICK = "Which is more like you?";
+
+const QS = [
+
+  { id:1, s:"Working Standards", g:"Integrity", t:"c", q:PICK,
+    opts:["I'd rather be told I'm too strict about procedure",
+          "I'd rather be told I'm easy to work with"],
+    sc:{A:5,B:2}, rf:[] },
+
+  { id:2, s:"Working Standards", g:"Integrity", t:"c", q:PICK,
+    opts:["When I don't know an answer, I give my best interpretation to keep the class moving",
+          "When I don't know an answer, I say so and follow up after class"],
+    sc:{A:2,B:5}, rf:["A"] },
+
+  { id:3, s:"Working Standards", g:"Integrity", t:"c", q:PICK,
+    opts:["If I made an error nobody noticed, I'd fix the record and move on",
+          "If I made an error nobody noticed, I'd fix the record and tell my manager"],
+    sc:{A:2,B:5}, rf:["A"] },
+
+  { id:4, s:"Working Standards", g:"Integrity", t:"l", rev:false, anchor:true,
+    q:"I follow procedures even when no one is watching.",
+    rf:[] },
+
+  { id:5, s:"Working Standards", g:"Integrity", t:"c", q:PICK,
+    opts:["A rule I think is pointless still gets followed while I question it through channels",
+          "A rule I think is pointless gets followed in spirit while I work to change it"],
+    sc:{A:5,B:2}, rf:["B"] },
+
+  { id:6, s:"Documentation & Records", g:"Records Risk", t:"c", q:PICK,
+    opts:["I take an experienced trainee's word that they've performed a skill before",
+          "I have every trainee demonstrate the skill regardless of their experience"],
+    sc:{A:2,B:5}, rf:["A"] },
+
+  { id:7, s:"Documentation & Records", g:"Records Risk", t:"c", q:PICK,
+    opts:["I write up a trainee's failure exactly as it happened",
+          "I write up a trainee's failure so it leaves them room to recover"],
+    sc:{A:5,B:2}, rf:["B"] },
+
+  { id:8, s:"Documentation & Records", g:"Records Risk", t:"c", q:PICK,
+    opts:["I'd rather document what matters and not create busywork",
+          "I'd rather over-document and be told it wasn't necessary"],
+    sc:{A:2,B:5}, rf:[] },
+
+  { id:9, s:"Documentation & Records", g:"Records Risk", t:"c", q:PICK,
+    opts:["A verbal \"they passed\" from another evaluator is enough for me to complete the record",
+          "I want the evaluator's own documentation before I complete the record"],
+    sc:{A:2,B:5}, rf:["A"] },
+
+  { id:10, s:"Documentation & Records", g:"Records Risk", t:"c", q:PICK,
+    opts:["When operations is short-handed, I look for ways to compress training",
+          "When operations is short-handed, I hold the timeline and explain why"],
+    sc:{A:2,B:5}, rf:["A"] },
+
+  { id:11, s:"Documentation & Records", g:"Records Risk", t:"l", rev:false, anchor:true,
+    q:"A sign-off requires that someone actually observed and documented the skill.",
+    rf:[] },
+
+  { id:12, s:"Documentation & Records", g:"Records Risk", t:"c", band:true,
+    q:"In the last two years, how many times did you submit a record you were not fully certain was accurate?",
+    opts:["None","Once","Two or three times","More than three times"],
+    sc:{A:5,B:3,C:2,D:1}, rf:["C","D"] },
+
+  // ── SECTION 3: Materials, Systems & Coordination (Q13–20) ── g:Craft, weight 22%
+  // Expanded after a Position Summary audit. The summary — not the duty
+  // list — defines this job as: "provides direct support to the Training
+  // Department, working alongside the team to produce and design ongoing
+  // training materials... helps maintain the LMS, and stays current on
+  // training for new equipment, procedures, and techniques."
+  // Three of those clauses had ZERO items. The earlier drafts framed the
+  // role as an autonomous gatekeeper; the JD describes a support role inside
+  // a team, reporting to a Training Program Manager, with no authority.
+
+  { id:13, s:"Materials, Systems & Coordination", g:"Craft", t:"c", q:PICK,
+    opts:["When a protocol changes, I mention it in class and update the deck when I get time",
+          "When a protocol changes, I update the slide deck before the next class"],
+    sc:{A:2,B:5}, rf:["A"] },
+
+  { id:14, s:"Materials, Systems & Coordination", g:"Craft", t:"c", q:PICK,
+    opts:["When orientation scheduling depends on HR and dispatch, I confirm each piece myself",
+          "When orientation scheduling depends on HR and dispatch, I trust them to handle their part"],
+    sc:{A:5,B:2}, rf:["B"] },
+
+  { id:15, s:"Materials, Systems & Coordination", g:"Craft", t:"c",
+    q:"You are running orientation for a mixed group — two dispatchers, a non-medical driver, and three EMTs. The dispatchers are visibly lost during the clinical block.",
+    opts:[
+      "Keep the block moving; the dispatchers do not need that level of clinical detail",
+      "Pause and give the dispatchers a plain-language version of why the material matters to their role",
+      "Let the dispatchers know they can sit this section out and rejoin the group afterward",
+      "Offer to go through the material with the dispatchers separately after the session ends"
+    ],
+    sc:{A:2,B:5,C:1,D:3}, rf:["C"] },
+
+  { id:16, s:"Materials, Systems & Coordination", g:"Craft", t:"c", q:PICK,
+    opts:["When new equipment arrives, I learn it when I'm assigned to teach it",
+          "When new equipment arrives, I learn it before I'm asked to teach it"],
+    sc:{A:2,B:5}, rf:["A"] },
+
+  { id:17, s:"Materials, Systems & Coordination", g:"Craft", t:"c", q:PICK,
+    opts:["A handout or newsletter piece is fine to send as long as the information is right",
+          "A handout or newsletter piece gets proofread before it goes out"],
+    sc:{A:2,B:5}, rf:["A"] },
+
+  { id:18, s:"Materials, Systems & Coordination", g:"Craft", t:"c", q:PICK,
+    opts:["A public CPR class deserves the same preparation as an internal one",
+          "A public CPR class is routine enough that it needs less preparation"],
+    sc:{A:5,B:2}, rf:["B"] },
+
+  { id:19, s:"Materials, Systems & Coordination", g:"Craft", t:"c", q:PICK,
+    opts:["I check the LMS for upcoming certification expirations before anyone asks me",
+          "I handle certification expirations in the LMS as they come up"],
+    sc:{A:5,B:2}, rf:["B"] },
+
+  { id:20, s:"Materials, Systems & Coordination", g:"Craft", t:"c", q:PICK,
+    opts:["When the Training Program Manager sets a direction I disagree with, I deliver it and raise my concerns separately",
+          "When the Training Program Manager sets a direction I disagree with, I adjust it to what works better"],
+    sc:{A:5,B:2}, rf:["B"] },
+
+  { id:21, s:"Demonstration & Physical Work", g:"Safety", t:"c", q:PICK,
+    opts:["In a demonstration I show the ideal technique even if it's slower",
+          "In a demonstration I show the technique the way it's actually done in the field"],
+    sc:{A:5,B:2}, rf:["B"] },
+
+  { id:22, s:"Demonstration & Physical Work", g:"Safety", t:"c", q:PICK,
+    opts:["I'd let a scenario run so the trainee feels the consequence of the error",
+          "I'd stop a scenario the moment a technique looks unsafe"],
+    sc:{A:2,B:5}, rf:["A"] },
+
+  { id:23, s:"Demonstration & Physical Work", g:"Safety", t:"c", q:PICK,
+    opts:["If I strained my back setting up for a skills session, I'd report it that day",
+          "If I strained my back setting up for a skills session, I'd watch it first"],
+    sc:{A:5,B:2}, rf:["B"] },
+
+  { id:24, s:"Demonstration & Physical Work", g:"Safety", t:"l", rev:false, anchor:true,
+    q:"How I model safety determines how employees behave in the field.",
+    rf:[] },
+
+  { id:25, s:"Demonstration & Physical Work", g:"Safety", t:"c", q:PICK,
+    opts:["If a trainee got hurt ignoring instruction, I'd still review how I taught it",
+          "If a trainee got hurt ignoring instruction, the lesson is on them"],
+    sc:{A:5,B:2}, rf:["B"] },
+
+  // ── SECTION 5: In the Classroom (Q26–31) ── g:Professionalism, weight 15%
+  // Includes the authority-limit item. The JD twice states this role has no
+  // corrective-action authority and escalates to the Training Program
+  // Manager — so telling a new hire they won't make it, however kindly
+  // meant, is a personnel judgment this role is not authorized to make.
+
+  { id:26, s:"In the Classroom", g:"Professionalism", t:"c", q:PICK,
+    opts:["Choosing FTOs, I weigh field credibility most \u2014 crews follow people they respect",
+          "Choosing FTOs, I weigh willingness to hold the training standard most"],
+    sc:{A:2,B:5}, rf:["A"] },
+
+  { id:27, s:"In the Classroom", g:"Professionalism", t:"c", q:PICK,
+    opts:["New hires benefit from hearing how things really work versus the manual",
+          "New hires benefit from learning the standard before anyone's workarounds"],
+    sc:{A:2,B:5}, rf:["A"] },
+
+  { id:28, s:"In the Classroom", g:"Professionalism", t:"c", q:PICK,
+    opts:["The point of orientation is that new hires meet the standard before they touch a patient",
+          "The point of orientation is that new hires feel prepared and welcomed"],
+    sc:{A:5,B:2}, rf:["B"] },
+
+  { id:29, s:"In the Classroom", g:"Professionalism", t:"l", rev:false, anchor:true,
+    q:"I treat every trainee with equal respect regardless of their background.",
+    rf:[] },
+
+  { id:30, s:"In the Classroom", g:"Professionalism", t:"c", q:PICK,
+    opts:["A trainee asking a lot of basic questions may be in the wrong field",
+          "A trainee asking a lot of basic questions needs more patience"],
+    sc:{A:2,B:5}, rf:["A"] },
+
+  { id:31, s:"In the Classroom", g:"Professionalism", t:"c", q:PICK,
+    opts:["If a new hire clearly isn't going to work out, I'd tell them so they can plan",
+          "If a new hire clearly isn't going to work out, I'd document it and let HR and the manager handle it"],
+    sc:{A:2,B:5}, rf:["A"] },
+
+  { id:32, s:"Scheduling & Time", g:"Reliability", t:"c", q:PICK,
+    opts:["I plan my week around what's on the training calendar",
+          "I plan my week around what I can get done most efficiently"],
+    sc:{A:5,B:2}, rf:[] },
+
+  { id:33, s:"Scheduling & Time", g:"Reliability", t:"c", band:true,
+    q:"In the last 12 months, how many scheduled work days did you miss for reasons other than illness or approved leave?",
+    opts:["None","One or two","Three to five","More than five"],
+    sc:{A:5,B:3,C:2,D:1}, rf:["D"] },
+
+  { id:34, s:"Scheduling & Time", g:"Reliability", t:"c", q:PICK,
+    opts:["If I might have to miss a class day, I flag it early even if it turns out I don't",
+          "If I might have to miss a class day, I wait until I'm certain before telling anyone"],
+    sc:{A:5,B:2}, rf:["B"] },
+
+  { id:35, s:"Scheduling & Time", g:"Reliability", t:"c", q:PICK,
+    opts:["If I'm going to miss a deadline, I say so before the date, not after",
+          "If I'm going to miss a deadline, I push to finish and explain it if it slips"],
+    sc:{A:5,B:2}, rf:["B"] },
+
+  { id:36, s:"Scheduling & Time", g:"Reliability", t:"c", q:PICK,
+    opts:["On a day with no scheduled class, I keep the same hours",
+          "On a day with no scheduled class, I work around what needs doing"],
+    sc:{A:5,B:2}, rf:["B"] },
+
+  { id:37, s:"Scheduling & Time", g:"Reliability", t:"l", rev:false, anchor:true,
+    q:"When a class is scheduled, my attendance is non-negotiable.",
+    rf:[] },
+
+  { id:38, s:"Holding the Room", g:"Resilience", t:"c", q:PICK,
+    opts:["If a class pushes back on a standard, I change how I teach it but not what it requires",
+          "If a class pushes back on a standard, I meet them partway so the session stays productive"],
+    sc:{A:5,B:2}, rf:["B"] },
+
+  { id:39, s:"Holding the Room", g:"Resilience", t:"c", q:PICK,
+    opts:["I tell a struggling trainee exactly where they stand even if it discourages them",
+          "I focus on encouragement so a struggling trainee keeps their confidence"],
+    sc:{A:5,B:2}, rf:["B"] },
+
+  { id:40, s:"Holding the Room", g:"Resilience", t:"c", q:PICK,
+    opts:["By the fifth delivery of a course, I can run it without much preparation",
+          "By the fifth delivery of a course, I prepare the same way I did the first"],
+    sc:{A:2,B:5}, rf:["A"] },
+
+  { id:41, s:"Holding the Room", g:"Resilience", t:"l", rev:false, anchor:true,
+    q:"I can tell someone they are not ready and hold that position under pressure.",
+    rf:[] },
+
+  { id:42, s:"Holding the Room", g:"Resilience", t:"c", q:PICK,
+    opts:["When my workload spikes, documentation is the last thing I let slip",
+          "When my workload spikes, documentation can catch up later"],
+    sc:{A:5,B:2}, rf:["B"] },
+
+  { id:43, s:"Situations", g:"Situational Judgment", t:"c",
+    q:"A new hire is nearly finished with field training. Operations is short-staffed and pressing to release them, but you doubt they can run a scene alone.",
+    opts:[
+      "Document your concerns in detail, release them, and ask their FTO to keep a close watch for the first month",
+      "Tell the Training Program Manager you can't certify readiness and propose a documented extension",
+      "Quietly extend their training by a few shifts so operations isn't drawn into it",
+      "Have a second evaluator assess them and go with whatever that evaluator decides"
+    ],
+    sc:{A:2,B:5,C:1,D:2}, rf:["C"] },
+
+  { id:44, s:"Situations", g:"Situational Judgment", t:"c",
+    q:"On a ride-along you see an FTO let a new hire skip required steps, telling them the checklist is \"just for the office.\"",
+    opts:[
+      "Coach the new hire on the correct steps and note it in their file",
+      "Address it with the FTO, then report it to the Training Program Manager",
+      "Add a checklist refresher to the agenda for the next quarterly FTO meeting",
+      "Write up exactly what you observed and bring it to that FTO's next quarterly performance review"
+    ],
+    sc:{A:2,B:5,C:2,D:1}, rf:["D"] },
+
+  { id:45, s:"Situations", g:"Situational Judgment", t:"c",
+    q:"You realize a full cohort was taught an outdated protocol in class two weeks ago.",
+    opts:[
+      "Send the affected cohort a corrected handout by email and note the correction in your own training records",
+      "Tell the Training Program Manager, correct the cohort and their FTOs in writing, and log it",
+      "Brief each FTO so they can correct it during field training",
+      "Fix it in the next class and add the topic to the quarterly OTEP rotation"
+    ],
+    sc:{A:2,B:5,C:2,D:1}, rf:["D"] },
+
+  { id:46, s:"Situations", g:"Situational Judgment", t:"c",
+    q:"Your BLS Instructor rating expires in three weeks and you have a heavy orientation schedule booked.",
+    opts:[
+      "Tell your manager, book the renewal, and get coverage for what you can't teach",
+      "Book the renewal and keep teaching, since the lapse will only be a few days",
+      "Arrange for a currently rated instructor to co-sign the completion cards until your renewal clears",
+      "Notify your manager and let them decide whether to cancel or reassign the classes"
+    ],
+    sc:{A:5,B:1,C:1,D:3}, rf:["B","C"] },
+
+  { id:47, s:"Situations", g:"Situational Judgment", t:"c",
+    q:"While recording quarterly OTEP completions, you notice several employees never attended the session.",
+    opts:[
+      "Record actual attendance, tell the Training Program Manager, and schedule makeups",
+      "Record actual attendance and email the absentees to complete the material on their own",
+      "Hold the records open until the end of the quarter to give them time to attend",
+      "Record them complete and note in the file that they need a refresher"
+    ],
+    sc:{A:5,B:2,C:2,D:1}, rf:["D"] },
+
+  { id:48, s:"Situations", g:"Situational Judgment", t:"c",
+    q:"Mid-scenario, you notice a trainee lifting in a way that could injure them or the patient.",
+    opts:[
+      "Stop it, correct the mechanics, have them redemonstrate, and log the coaching",
+      "Stop the scenario, correct it, and let them carry on without repeating the lift",
+      "Let the scenario play out to the end, then debrief the lift with the whole group afterward",
+      "Note it for their FTO to reinforce during field training"
+    ],
+    sc:{A:5,B:3,C:2,D:1}, rf:["D"] },
+
+  { id:49, s:"Resources & Obligation", g:"Conduct Risk", t:"c", q:PICK,
+    opts:["Work nobody will review gets the same care as work that's audited",
+          "Work nobody will review gets done well enough to serve its purpose"],
+    sc:{A:5,B:2}, rf:["B"] },
+
+  { id:50, s:"Resources & Obligation", g:"Conduct Risk", t:"c", band:true,
+    q:"Among staff you have worked with, about how many take small department supplies home?",
+    opts:["Almost none","About 1 in 10","About 1 in 4","Half or more"],
+    sc:{A:5,B:4,C:3,D:1}, rf:["D"] },
+
+  { id:51, s:"Resources & Obligation", g:"Conduct Risk", t:"c", q:PICK,
+    opts:["If my employer fell short on their commitments, I'd adjust what I give accordingly",
+          "If my employer fell short on their commitments, I'd raise it and keep my end"],
+    sc:{A:2,B:5}, rf:["A"] },
+
+  { id:52, s:"Resources & Obligation", g:"Conduct Risk", t:"c", q:PICK,
+    opts:["Where my experience conflicts with written protocol, I follow protocol and flag it",
+          "Where my experience conflicts with written protocol, I use my own judgment"],
+    sc:{A:5,B:2}, rf:["B"] },
+
+  { id:53, s:"Resources & Obligation", g:"Conduct Risk", t:"c", q:PICK,
+    opts:["When the department is slammed, I focus on my own assignments so nothing of mine slips",
+          "When the department is slammed, I ask what would help most even if it isn't my assignment"],
+    sc:{A:2,B:5}, rf:["A"] },
+
+  { id:54, s:"Resources & Obligation", g:"Conduct Risk", t:"l", rev:false, anchor:true,
+    q:"I raise policy concerns through proper channels rather than quietly not complying.",
+    rf:[] },
+
+  { id:55, s:"Final Questions", g:"Validity", t:"l", rev:false,
+    q:"I have never called in sick when I was not actually ill.",
+    rf:["Agree","Strongly Agree"] },
+
+  { id:56, s:"Final Questions", g:"Validity", t:"l", rev:false,
+    q:"I have never told a lie to avoid getting in trouble.",
+    rf:["Agree","Strongly Agree"] },
+
+  { id:57, s:"Final Questions", g:"Validity", t:"l", rev:false,
+    q:"I have never cut a corner at work to save time.",
+    rf:["Agree","Strongly Agree"] },
+
+  { id:58, s:"Final Questions", g:"Validity", t:"l", rev:false,
+    q:"I have never lost patience with a coworker or trainee.",
+    rf:["Agree","Strongly Agree"] },
+
+  { id:59, s:"Final Questions", g:"Validity", t:"l", rev:false,
+    q:"There have been times I acted in ways I later regretted.",
+    rf:["Strongly Disagree","Disagree"] },
+
+  { id:60, s:"Final Questions", g:"Validity", t:"l", rev:false,
+    q:"Like most people, I have made decisions I am not proud of.",
+    rf:["Strongly Disagree","Disagree"] },
+];
+
+const SECTIONS = [
+  { name:"Working Standards",                        label:"Section 1 of 10", range:[1,5] },
+  { name:"Documentation & Records",                  label:"Section 2 of 10", range:[6,12] },
+  { name:"Materials, Systems & Coordination",        label:"Section 3 of 10", range:[13,20] },
+  { name:"Demonstration & Physical Work",            label:"Section 4 of 10", range:[21,25] },
+  { name:"In the Classroom",                         label:"Section 5 of 10", range:[26,31] },
+  { name:"Scheduling & Time",                        label:"Section 6 of 10", range:[32,37] },
+  { name:"Holding the Room",                         label:"Section 7 of 10", range:[38,42] },
+  { name:"Situations",                               label:"Section 8 of 10", range:[43,48] },
+  { name:"Resources & Obligation",                   label:"Section 9 of 10", range:[49,54] },
+  { name:"Final Questions",                          label:"Section 10 of 10", range:[55,60] },
+];
+
+// Weights reflect the Position Summary, not just the duty list. Craft &
+// Support rises to 0.22 because the summary defines the job as supporting
+// the department, designing materials, maintaining the LMS, and staying
+// current. Safety stays at 0.15 — classroom and office with occasional
+// ride-alongs, not a field post.
+const DCATS = [
+  { key:"Records Risk",         label:"Records & Cert Integrity",   w:0.25 },
+  { key:"Situational Judgment", label:"Situational Judgement",      w:0.25 },
+  { key:"Craft",                label:"Craft, Systems & Support",   w:0.22 },
+  { key:"Integrity",            label:"Personal Integrity",         w:0.20 },
+  { key:"Reliability",          label:"Reliability & Attendance",   w:0.20 },
+  { key:"Conduct Risk",         label:"Entitlement & Team Support", w:0.18 },
+  { key:"Resilience",           label:"Mental Toughness",           w:0.16 },
+  { key:"Safety",               label:"Safety & Injury Prevention", w:0.15 },
+  { key:"Professionalism",      label:"Conduct & Authority Limits", w:0.15 },
+];
+const TOTAL_W = DCATS.reduce((a,c)=>a+c.w,0);
+
+
+// ══════════════════════════════════════════════════════════════════
+// STATE
+// ══════════════════════════════════════════════════════════════════
+let cand={}, ans={}, curS=0;
+
+function start() {
+  const fn=document.getElementById('i-fn').value.trim();
+  const ln=document.getElementById('i-ln').value.trim();
+  const em=document.getElementById('i-em').value.trim();
+  if(!fn||!ln||!em){alert('Please enter your first name, last name, and email.');return;}
+  cand={
+    firstName:fn, lastName:ln, name:fn+' '+ln, email:em,
+    phone:document.getElementById('i-ph').value.trim(),
+    position:document.getElementById('i-pos').value.trim()||applicationContext.job_title||'Training Specialist',
+    date:new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'}),
+    completedAt:''
+  };
+  document.getElementById('screen-welcome').style.display='none';
+  document.getElementById('screen-assessment').style.display='block';
+  document.getElementById('hRight').style.display='flex';
+  curS=0; render();
+}
+
+// ══════════════════════════════════════════════════════════════════
+// RENDER
+// ══════════════════════════════════════════════════════════════════
+function render(){
+  const sec=SECTIONS[curS],[s,e]=sec.range;
+  document.getElementById('sec-label').textContent=sec.label;
+  document.getElementById('sec-title').textContent=sec.name;
+  document.getElementById('sec-sub').textContent=`Questions ${s}–${e} of ${QS.length}`;
+  const qs=QS.filter(q=>q.id>=s&&q.id<=e);
+  const cont=document.getElementById('qcont'); cont.innerHTML='';
+  qs.forEach((q,i)=>{
+    if(i>0){const d=document.createElement('div');d.className='q-rule';cont.appendChild(d);}
+    const b=document.createElement('div');
+    b.className='q-block';b.style.animationDelay=(i*35)+'ms';
+    b.innerHTML=`<div class="q-num">Q${q.id}</div><div class="q-text">${q.q}</div>`;
+    b.appendChild(q.t==='l'?mkLikert(q):mkChoice(q));
+    cont.appendChild(b);
+  });
+  document.getElementById('btn-prev').style.display=curS>0?'':'none';
+  document.getElementById('btn-next').textContent=curS<SECTIONS.length-1?'Next Section →':'Submit';
+  updateProg();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function mkLikert(q){
+  const wrap=document.createElement('div');
+  const lw=document.createElement('div');lw.className='lw';lw.id='lw'+q.id;
+  LIKERT.forEach(lbl=>{
+    const o=document.createElement('div');
+    o.className='lo'+(ans[q.id]===lbl?' sel':'');
+    o.textContent=lbl;
+    o.onclick=()=>{lw.querySelectorAll('.lo').forEach(x=>x.classList.remove('sel'));o.classList.add('sel');ans[q.id]=lbl;updateProg();};
+    lw.appendChild(o);
+  });
+  const ends=document.createElement('div');ends.className='l-ends';
+  ends.innerHTML='<span>Strongly Disagree</span><span>Strongly Agree</span>';
+  wrap.appendChild(lw);wrap.appendChild(ends);
+  return wrap;
+}
+
+// Generic option renderer — handles 2-option forced-choice pairs,
+// 4-band estimates, and 4-option scenarios identically.
+function mkChoice(q){
+  const letters=['A','B','C','D'];
+  const wrap=document.createElement('div');wrap.className='so-wrap';
+  q.opts.forEach((txt,i)=>{
+    const l=letters[i];
+    const o=document.createElement('div');
+    o.className='so'+(ans[q.id]===l?' sel':'');
+    o.innerHTML=`<div class="so-letter">${l}</div><div class="so-text">${txt}</div>`;
+    o.onclick=()=>{wrap.querySelectorAll('.so').forEach(x=>x.classList.remove('sel'));o.classList.add('sel');ans[q.id]=l;updateProg();};
+    wrap.appendChild(o);
+  });
+  return wrap;
+}
+
+function updateProg(){
+  const n=Object.keys(ans).length,total=QS.length;
+  document.getElementById('prog-num').textContent=n+' / '+total;
+  document.getElementById('prog-fill').style.width=Math.round((n/total)*100)+'%';
+  const sec=SECTIONS[curS];
+  const qs=QS.filter(q=>q.id>=sec.range[0]&&q.id<=sec.range[1]);
+  const done=qs.filter(q=>ans[q.id]!==undefined).length;
+  document.getElementById('nav-info').textContent=done+' of '+qs.length+' answered';
+}
+
+function nextSec(){
+  const sec=SECTIONS[curS];
+  const missing=QS.filter(q=>q.id>=sec.range[0]&&q.id<=sec.range[1]&&ans[q.id]===undefined);
+  if(missing.length){alert('Please answer all questions before continuing. ('+missing.length+' remaining)');return;}
+  if(curS<SECTIONS.length-1){curS++;render();}else showResults();
+}
+
+function prevSec(){if(curS>0){curS--;render();}}
+
+// ══════════════════════════════════════════════════════════════════
+// SCORING
+// ══════════════════════════════════════════════════════════════════
+function scoreQ(q,a){
+  if(q.t==='c') return q.sc[a]||0;
+  const r=LIKERT.indexOf(a)+1;
+  return q.rev?(6-r):r;
+}
+
+function computeScores(){
+  const grps={};
+  QS.forEach(q=>{
+    if(q.g==='Validity')return;
+    const v=scoreQ(q,ans[q.id]);
+    if(!grps[q.g])grps[q.g]=[];
+    grps[q.g].push(v);
+  });
+  const avg={};
+  Object.entries(grps).forEach(([g,vals])=>{avg[g]=vals.reduce((a,b)=>a+b,0)/vals.length;});
+  let raw=0;
+  DCATS.forEach(({key,w})=>{ raw += (avg[key]||0)*w; });
+  const composite=raw/TOTAL_W;
+  return{avg,composite,score100:Math.round(((composite-1)/4)*100)};
+}
+
+function to100(v){ return Math.round((((v||0)-1)/4)*100); }
+
+function getFlags(){
+  return QS.filter(q=>{
+    if(q.g==='Validity') return false;
+    if(!q.rf||!q.rf.length) return false;
+    return q.rf.includes(ans[q.id]);
+  }).map(q=>{
+    const a=ans[q.id];
+    const shown = q.t==='c' ? q.opts[['A','B','C','D'].indexOf(a)] : q.q;
+    return {text:shown, a, g:q.g, id:q.id, type:q.t};
+  });
+}
+
+function getValidity(){
+  const impossibleHits=[55,56,57,58].filter(id=>['Agree','Strongly Agree'].includes(ans[id])).length;
+  const denialHits=[59,60].filter(id=>['Strongly Disagree','Disagree'].includes(ans[id])).length;
+  const impossibleConcern = impossibleHits >= 3;
+  const denialConcern     = denialHits >= 1;
+  const concerns = (impossibleConcern?1:0) + (denialConcern?1:0);
+  const strongConcern = (impossibleConcern && denialConcern) || impossibleHits>=4 || denialHits>=2;
+  return { impossibleHits, denialHits, impossibleConcern, denialConcern, concerns, strongConcern };
+}
+
+// ANCHOR CONSISTENCY — the transparent Likert anchors are the control
+// condition. Someone who endorses the obvious virtue statements while
+// taking the self-serving option on the opaque forced-choice pairs has
+// answered the visible questions and the invisible ones differently.
+// That gap is the finding, and it is the check a coached candidate
+// does not know is running.
+function getConsistency(){
+  const anchors=QS.filter(q=>q.anchor);
+  const aScores=anchors.map(q=>scoreQ(q,ans[q.id]));
+  const anchorAvg=aScores.reduce((a,b)=>a+b,0)/aScores.length;
+
+  const opaque=QS.filter(q=>q.t==='c'&&q.g!=='Validity'&&q.opts.length===2);
+  const oScores=opaque.map(q=>scoreQ(q,ans[q.id]));
+  const opaqueAvg=oScores.reduce((a,b)=>a+b,0)/oScores.length;
+
+  const gap=anchorAvg-opaqueAvg;                 // positive = talks better than they choose
+  return {
+    anchorAvg, opaqueAvg, gap,
+    anchor100:to100(anchorAvg), opaque100:to100(opaqueAvg),
+    // >1.0 on a 5-point scale is a full response-category divergence
+    inconsistent: gap>=1.0,
+    marked: gap>=1.5
+  };
+}
+
+function getRiskLevel(score100,flagCount){
+  if(flagCount>=5||score100<40) return{label:'High Risk',color:'var(--red)',pct:90};
+  if(flagCount>=4||score100<55) return{label:'Elevated Risk',color:'var(--risk)',pct:72};
+  if(flagCount>=2||score100<65) return{label:'Moderate Risk',color:'var(--amber)',pct:50};
+  if(score100>=80&&flagCount===0) return{label:'Low Risk',color:'var(--green)',pct:15};
+  return{label:'Low–Moderate Risk',color:'var(--green)',pct:28};
+}
+
+// Flag threshold is 5 here, not 4. Forced-choice pairs are designed to
+// be close calls, so a reasonable person may take the efficient option
+// once or twice without being a risk. Five separate self-serving picks
+// across different dimensions is a pattern.
+function getVerdict(score100,flagCount,avg,validity,cons){
+  const intS  = to100(avg['Integrity']);
+  const recS  = to100(avg['Records Risk']);
+  const safeS = to100(avg['Safety']);
+  const resS  = to100(avg['Resilience']);
+  const sjS   = to100(avg['Situational Judgment']);
+
+  const relS = to100(avg['Reliability']);
+  const craS = to100(avg['Craft']);
+  if(flagCount>=5||score100<40||recS<62||intS<60||safeS<60||sjS<60||resS<55||relS<55||craS<55)
+    return{label:'Do Not Advance',cls:'vb-no'};
+  if(validity&&validity.strongConcern)
+    return{label:'Review Further — Validity',cls:'vb-review'};
+  if(cons&&cons.marked)
+    return{label:'Review Further — Inconsistent',cls:'vb-review'};
+  if(score100>=85&&flagCount===0) return{label:'Recommended: Hire',cls:'vb-hire'};
+  if(score100>=75&&flagCount<=2)  return{label:'Hire with Review',cls:'vb-hire'};
+  if(score100>=65&&flagCount<=4)  return{label:'Review Further',cls:'vb-review'};
+  return{label:'Do Not Advance',cls:'vb-no'};
+}
+
+// ══════════════════════════════════════════════════════════════════
+// RESULTS
+// ══════════════════════════════════════════════════════════════════
+async function showResults(){
+  document.getElementById('screen-assessment').style.display='none';
+  document.getElementById('screen-results').style.display='none';
+  document.getElementById('hRight').style.display='none';
+  window.scrollTo({top:0,behavior:'smooth'});
+
+  const{avg,composite,score100}=computeScores();
+  const flags=getFlags();
+  const validity=getValidity();
+  const cons=getConsistency();
+  const risk=getRiskLevel(score100,flags.length);
+  const verdict=getVerdict(score100,flags.length,avg,validity,cons);
+
+  const vb=document.getElementById('v-badge');
+  vb.textContent=verdict.label;vb.className='v-badge '+verdict.cls;
+  document.getElementById('r-name').textContent=cand.name;
+  document.getElementById('r-meta').textContent=cand.position+' · '+cand.date;
+  document.getElementById('r-score').textContent=score100;
+
+  document.getElementById('risk-label-text').textContent=risk.label;
+  document.getElementById('risk-fill').style.cssText=`width:${risk.pct}%;background:${risk.color}`;
+
+  const grid=document.getElementById('score-grid');grid.innerHTML='';
+  DCATS.forEach(({key,label})=>{
+    const s100=to100(avg[key]);
+    const col=s100>=75?'var(--green)':s100>=60?'var(--amber)':'var(--red)';
+    const card=document.createElement('div');card.className='sc';
+    card.innerHTML=`
+      <div class="sc-lbl">${label}</div>
+      <div class="sc-row">
+        <div class="sc-bg"><div class="sc-fill" style="width:${s100}%;background:${col}"></div></div>
+        <div class="sc-val" style="color:${col}">${s100}</div>
+      </div>`;
+    grid.appendChild(card);
+  });
+
+  if(flags.length>0){
+    document.getElementById('flags-box').style.display='block';
+    document.getElementById('flags-list').innerHTML=
+      flags.map(f=>`<div class="fi">• Q${f.id} — chose: "${f.text}"<br><strong>${f.g}</strong></div>`).join('');
+  }
+
+  const intS  = to100(avg['Integrity']);
+  const recS  = to100(avg['Records Risk']);
+  const safeS = to100(avg['Safety']);
+  const profS = to100(avg['Professionalism']);
+  const relS  = to100(avg['Reliability']);
+  const resS  = to100(avg['Resilience']);
+  const sjS   = to100(avg['Situational Judgment']);
+  const condS = to100(avg['Conduct Risk']);
+  const craS  = to100(avg['Craft']);
+
+  // Trade-off picks: every 2-option pair where they took the weaker side
+  const pairs=QS.filter(q=>q.t==='c'&&q.opts.length===2&&q.g!=='Validity');
+  const weak=pairs.filter(q=>scoreQ(q,ans[q.id])<=2);
+
+  let profile='';
+  if(verdict.cls==='vb-hire'&&verdict.label.includes('Recommended')){
+    profile='This candidate chose the harder, more rigorous option consistently across the trade-off items — including where the alternative was framed as efficient, kind, or pragmatic. Records discipline, personal integrity, safety, and composure all sit in the acceptable range with no risk indicators. Their transparent and opaque responses agree, which means the profile is internally consistent rather than performed.';
+  } else if(verdict.label.includes('Validity')){
+    profile='This candidate\'s content responses scored well, but the validity check indicates a swept pattern — endorsing absolute-perfection claims while denying ordinary self-awareness. That combination is characteristic of a managed response set rather than a genuinely exceptional candidate, so the composite should not be relied on by itself. Advance only on a structured interview and reference checks, and press for specific verifiable examples.';
+  } else if(verdict.label.includes('Inconsistent')){
+    profile='This candidate scored well on the transparent statements but took the self-serving option repeatedly on the trade-off items, where the scoring direction was not obvious. In other words, they endorsed the right principles and then chose against them when the choice was disguised. This gap is the most useful finding in the report — the stated values and the revealed priorities do not match. Probe the specific picks listed below in interview and weight references heavily.';
+  } else if(verdict.cls==='vb-hire'){
+    profile='This candidate presents a generally positive profile with a few trade-off picks worth discussing. No significant risk pattern was identified. Use the flagged choices below as interview starting points.';
+  } else if(verdict.cls==='vb-review'){
+    profile='This candidate shows a mixed profile. On several trade-offs they chose pace, efficiency, or trainee comfort over documentation, rigor, or candor. Each individual pick is defensible; the pattern is what matters. In a trainer these priorities transfer to every new hire they touch, so explore them directly before advancing.';
+  } else {
+    profile='This candidate\'s response pattern indicates significant concerns in one or more core dimensions, or a hard-stop threshold was triggered. Because this role certifies employee readiness and models conduct for the entire incoming workforce, a thorough review is required before any advancement.';
+  }
+
+  if(recS<62) profile+=` Records & Certification Integrity (${recS}/100) is below the floor for this role — the trade-off picks suggest documentation gets sacrificed to pace, trainee comfort, or operational pressure. This is the highest-liability failure mode for a Training Specialist.`;
+  if(intS<60)  profile+=` Personal Integrity (${intS}/100) is below threshold.`;
+  if(safeS<60) profile+=` Safety & Injury Prevention (${safeS}/100) is below acceptable — indicates both direct L&I exposure and risk of modeling unsafe technique to every incoming cohort.`;
+  if(sjS<60)   profile+=` Situational Judgement (${sjS}/100) is below threshold — scenario picks favored avoidance, informal handling, or deferring decisions that belong to this role.`;
+  if(resS<55)  profile+=` Mental Toughness (${resS}/100) is below threshold — picks suggest difficulty holding a position under pressure or delivering unwelcome assessments.`;
+  if(relS<60)  profile+=` Reliability & Attendance (${relS}/100) is a concern. Training is calendar-locked; absenteeism here stalls a cohort. Verify attendance history in references.`;
+  if(condS<60) profile+=` Entitlement & Team Support (${condS}/100) indicates rationalization around resources or effort, or an unwillingness to pick up work outside their own lane — the JD frames this role as providing direct support to the department, not operating a private lane within it.`;
+  if(craS<60)  profile+=` Craft, Systems & Support (${craS}/100) is below acceptable. This is the substance of the role as the Position Summary defines it — designing and refreshing materials, adjusting delivery for dispatchers and non-medical hires as well as medics, owning LMS certification tracking, closing coordination loops with HR and dispatch, learning new equipment before being told to teach it, and taking direction from the Training Program Manager. A candidate can be honest and reliable and still be unable to do this job.`;
+  if(profS<60) profile+=` Conduct & Authority Limits (${profS}/100) is a concern — risk of optimizing for popularity with a class over the standard, or of stepping into personnel judgments this role is explicitly not authorized to make.`;
+
+  if(cons.inconsistent&&!cons.marked){
+    profile+=` Anchor consistency: transparent items averaged ${cons.anchor100}/100 versus ${cons.opaque100}/100 on the disguised trade-offs — a mild gap between stated principles and revealed priorities. Worth one interview probe.`;
+  }
+  if(validity.strongConcern){
+    profile+=` Validity: ${validity.impossibleHits} of 4 perfection claims endorsed, ${validity.denialHits} of 2 self-awareness items denied.`;
+  } else if(validity.concerns>=1){
+    profile+=` Minor validity note: ${validity.impossibleHits} of 4 perfection claims endorsed, ${validity.denialHits} of 2 self-awareness items denied — within normal range.`;
+  }
+
+  document.getElementById('profile-text').textContent=profile;
+
+  const report=[
+    '=== Work Style & Judgement Assessment ===',
+    'Northwest Ambulance · Training Department',
+    '',
+    `Candidate: ${cand.name}`,
+    `Email:     ${cand.email}`,
+    `Phone:     ${cand.phone||'N/A'}`,
+    `Position:  ${cand.position}`,
+    `Date:      ${cand.date}`,
+    '',
+    `RECOMMENDATION:  ${verdict.label}`,
+    `Composite Score: ${score100} / 100`,
+    `Risk Profile:    ${risk.label}`,
+    '',
+    '--- CATEGORY SCORES (0-100) ---',
+    `Records & Cert Integrity:   ${recS}  ${recS<62?'⚠ BELOW FLOOR':''}`,
+    `Personal Integrity:         ${intS}  ${intS<60?'⚠ BELOW THRESHOLD':''}`,
+    `Situational Judgement:      ${sjS}  ${sjS<60?'⚠ BELOW THRESHOLD':''}`,
+    `Safety & Injury Prevention: ${safeS}  ${safeS<60?'⚠ BELOW THRESHOLD':''}`,
+    `Reliability & Attendance:   ${relS}  ${relS<60?'⚠ CONCERN':''}`,
+    `Mental Toughness:           ${resS}  ${resS<55?'⚠ BELOW THRESHOLD':''}`,
+    `Entitlement & Team Support: ${condS}  ${condS<60?'⚠ CONCERN':''}`,
+    `Craft, Systems & Support:   ${craS}  ${craS<60?'⚠ BELOW ACCEPTABLE':''}`,
+    `Conduct & Authority Limits: ${profS}  ${profS<60?'⚠ CONCERN':''}`,
+    '',
+    '--- ANCHOR CONSISTENCY ---',
+    `Transparent items (obvious answer):   ${cons.anchor100}/100`,
+    `Disguised trade-offs (hidden key):    ${cons.opaque100}/100`,
+    `Gap: ${cons.gap.toFixed(2)} on a 5-point scale  ${cons.marked?'⚠ MARKED — says one thing, chooses another':cons.inconsistent?'⚠ mild gap':'Consistent'}`,
+    '',
+    `Risk Indicators (Flags): ${flags.length}  (threshold for hard stop: 5)`,
+    `Validity: ${validity.strongConcern?'CONCERN':validity.concerns>=1?'Minor note':'Clear'} (Perfection ${validity.impossibleHits}/4 | Denials ${validity.denialHits}/2)`,
+    '',
+    '--- HARD STOP THRESHOLDS ---',
+    `Records & Cert Integrity < 62: ${recS<62?'TRIGGERED':'Clear'}`,
+    `Personal Integrity < 60:       ${intS<60?'TRIGGERED':'Clear'}`,
+    `Safety < 60:                   ${safeS<60?'TRIGGERED':'Clear'}`,
+    `Situational Judgement < 60:    ${sjS<60?'TRIGGERED':'Clear'}`,
+    `Mental Toughness < 55:         ${resS<55?'TRIGGERED':'Clear'}`,
+    `Reliability < 55:              ${relS<55?'TRIGGERED':'Clear'}`,
+    `Craft, Systems & Support < 55: ${craS<55?'TRIGGERED':'Clear'}`,
+    `5+ Risk Indicator Flags:       ${flags.length>=5?'TRIGGERED':'Clear'}`,
+    '',
+    '--- TRADE-OFF PICKS (weaker side chosen) ---',
+    ...(weak.length? weak.map(q=>`  Q${q.id} [${q.g}] → "${q.opts[['A','B'].indexOf(ans[q.id])]}"`) : ['  None — chose the rigorous option on every pair']),
+    '',
+    '--- SITUATION RESPONSES ---',
+    ...QS.filter(q=>q.t==='c'&&q.opts.length===4&&!q.band).map(q=>{
+      const a=ans[q.id], pts=q.sc[a]||0;
+      return `  Q${q.id}: ${a} (${pts}/5)${pts<=2?'  ⚠':''}`;
+    }),
+    '',
+    '--- ESTIMATES & SELF-REPORT ---',
+    ...QS.filter(q=>q.band).map(q=>{
+      const a=ans[q.id], pts=q.sc[a]||0;
+      return `  Q${q.id} [${q.g}]: "${q.opts[['A','B','C','D'].indexOf(a)]}" (${pts}/5)${pts<=2?'  ⚠':''}`;
+    }),
+    '',
+    '--- INTERVIEW FOCUS ---',
+    ...(function(){
+      const p=[];
+      if(cons.inconsistent) p.push('  • Read them two of their own trade-off picks and ask them to talk through the reasoning.');
+      else if(weak.length) p.push('  • Read them their picks on Q'+weak.slice(0,2).map(q=>q.id).join(' and Q')+' and ask what drove each choice.');
+      if(recS<85) p.push('  • Walk me through a time you were pressured to sign off on something you weren\'t comfortable with.');
+      if(resS<85) p.push('  • Tell me about a trainee you had to tell was not ready. What did you say?');
+      if(relS<75) p.push('  • Describe your attendance record over the last two years. (Verify in references.)');
+      if(safeS<75) p.push('  • How do you handle it when you catch yourself demonstrating something the quick way?');
+      if(condS<75) p.push('  • Why this role specifically? What draws you to training over the field?');
+      if(profS<75) p.push('  • How do you teach a policy you personally think is wrong?');
+      if(sjS<75) p.push('  • Tell me about the hardest readiness call you have had to make.');
+      if(craS<85) p.push('  • Walk me through how you would teach the same block to a room of medics and a room of dispatchers.');
+      if(craS<75) p.push('  • What training material have you built or rewritten? What made the old version inadequate?');
+      if(profS<85) p.push('  • A new hire is not going to make it. What exactly do you say to them, and who else do you tell?');
+      if(condS<85) p.push('  • Describe a time you picked up work that was not yours because the team was underwater.');
+      if(!p.length) p.push('  • No category-driven probes required. Use standard structured interview.');
+      return p;
+    })(),
+    '',
+    '--- RED FLAG RESPONSES ---',
+    ...(flags.length ? flags.flatMap((f,i)=>{
+      const q=QS.find(x=>x.id===f.id);
+      const candidateResponse=q ? (q.t==='c' ? q.opts[['A','B','C','D'].indexOf(ans[q.id])] : ans[q.id]) : f.text;
+      return [`Flag ${i+1} - Q${f.id} [${f.g}]`,`Question: ${q ? q.q : ''}`,`Candidate Response: ${candidateResponse}`,''];
+    }) : ['None','']),
+    '--- PROFILE ---',
+    profile
+  ].join('\n');
+
+  document.getElementById('wtext').textContent=report;
+  cand.completedAt=new Date().toISOString();
+  const redFlagResponses=buildRedFlagResponses(flags);
+  const validityConcernResponses=buildValidityConcernResponses();
+  const payload={
+    assessmentType:ASSESSMENT_TYPE,assessmentVersion:ASSESSMENT_VERSION,submittedAt:cand.completedAt,
+    candidate:{firstName:cand.firstName||'',lastName:cand.lastName||'',name:cand.name||'',email:cand.email||'',phone:cand.phone||'',position:cand.position||'',completedAt:cand.completedAt},
+    applicationContext,
+    scores:{compositeScore:String(score100),recommendation:verdict.label,riskProfile:risk.label,redFlagCount:flags.length,validityConcernCount:validity.concerns,validityStrongConcern:validity.strongConcern?'Yes':'No',anchorConsistencyGap:cons.gap.toFixed(2),anchorConsistencyStatus:cons.marked?'Marked':cons.inconsistent?'Mild Gap':'Consistent',categories:{recordsCertIntegrity:recS,personalIntegrity:intS,situationalJudgment:sjS,safetyInjuryPrevention:safeS,reliabilityAttendance:relS,mentalToughness:resS,entitlementTeamSupport:condS,craftSystemsSupport:craS,conductAuthorityLimits:profS}},
+    flags,redFlagResponses,validityConcernResponses,report
+  };
+  const submitted=await sendToFlow(buildSubmissionPayload(payload));
+  showCompletion(submitted);
+}
+
+function buildRedFlagResponses(flags){
+  if(!flags.length) return 'None';
+  return flags.map((f,i)=>{
+    const q=QS.find(x=>x.id===f.id); let response='';
+    if(q){ if(q.t==='c'){ const idx=['A','B','C','D'].indexOf(ans[q.id]); response=idx>=0?q.opts[idx]:String(ans[q.id]||''); } else response=String(ans[q.id]||''); }
+    else response=f.text||'';
+    return [`Flag ${i+1} - Q${f.id} [${f.g}]`,`Question: ${q?q.q:''}`,`Candidate Response: ${response}`].join('\n');
+  }).join('\n\n');
+}
+function buildValidityConcernResponses(){
+  const concerns=QS.filter(q=>q.g==='Validity'&&q.rf&&q.rf.includes(ans[q.id]));
+  if(!concerns.length) return 'None';
+  return concerns.map((q,i)=>[`Validity ${i+1} - Q${q.id}`,`Question: ${q.q}`,`Candidate Response: ${ans[q.id]}`].join('\n')).join('\n\n');
+}
+function excelSafeText(value,maxLength=30000){
+  return String(value||'').replace(/\r\n/g,'\n').replace(/\r/g,'\n').replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g,'').replace(/[⚠✓→—–]/g,'-').replace(/[“”]/g,'"').replace(/[‘’]/g,"'").replace(/[\t ]+/g,' ').substring(0,maxLength);
+}
+function buildSubmissionPayload(payload){
+  const c=payload.scores.categories||{};
+  const flat={completionDate:payload.submittedAt||payload.candidate.completedAt||'',email:payload.candidate.email||'',firstName:payload.candidate.firstName||'',lastName:payload.candidate.lastName||'',phone:payload.candidate.phone||'',position:payload.candidate.position||'',assessmentType:payload.assessmentType||ASSESSMENT_TYPE,assessmentVersion:payload.assessmentVersion||'',score:String(payload.scores.compositeScore??''),compositeScore:String(payload.scores.compositeScore??''),recommendation:payload.scores.recommendation||'',riskProfile:payload.scores.riskProfile||'',redFlags:String(payload.scores.redFlagCount??''),redFlagCount:String(payload.scores.redFlagCount??''),validityConcernCount:String(payload.scores.validityConcernCount??''),validityStrongConcern:payload.scores.validityStrongConcern||'',redFlagResponses:excelSafeText(payload.redFlagResponses||'',12000),validityConcernResponses:excelSafeText(payload.validityConcernResponses||'',8000),report:"'"+excelSafeText(payload.report||'',30000),fullReport:"'"+excelSafeText(payload.report||'',30000),candidate_id:payload.applicationContext.candidate_id||'',application_id:payload.applicationContext.application_id||'',job_id:payload.applicationContext.job_id||'',job_shortcode:payload.applicationContext.job_shortcode||'',job_title:payload.applicationContext.job_title||payload.candidate.position||'',source:payload.applicationContext.source||'workable_email',recordsCertIntegrity:String(c.recordsCertIntegrity??''),personalIntegrity:String(c.personalIntegrity??''),situationalJudgment:String(c.situationalJudgment??''),safetyInjuryPrevention:String(c.safetyInjuryPrevention??''),reliabilityAttendance:String(c.reliabilityAttendance??''),mentalToughness:String(c.mentalToughness??''),entitlementTeamSupport:String(c.entitlementTeamSupport??''),craftSystemsSupport:String(c.craftSystemsSupport??''),conductAuthorityLimits:String(c.conductAuthorityLimits??''),anchorConsistencyGap:payload.scores.anchorConsistencyGap||'',anchorConsistencyStatus:payload.scores.anchorConsistencyStatus||''};
+  flat.payloadJson=excelSafeText(JSON.stringify({assessmentType:payload.assessmentType,assessmentVersion:payload.assessmentVersion,candidate:payload.candidate,applicationContext:payload.applicationContext,scores:payload.scores,redFlagResponses:payload.redFlagResponses,validityConcernResponses:payload.validityConcernResponses,submittedAt:payload.submittedAt}),30000); return flat;
+}
+async function sendToFlow(data){ try{ const response=await fetch(FLOW_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)}); return response.ok; }catch(e){ console.error('Flow submission failed',e); return false; } }
+function showCompletion(submitted){ const ref=document.getElementById('complete-ref'); document.getElementById('screen-complete').style.display='block'; if(submitted){ref.style.display='none';ref.textContent='';}else{ref.style.display='block';ref.textContent='Submission issue: Power Automate did not confirm receipt. Please notify recruiting that your assessment did not submit successfully.';} }
+
+function copyReport(){
+  navigator.clipboard.writeText(document.getElementById('wtext').textContent).then(()=>{
+    const b=document.querySelector('.btn-copy');
+    b.textContent='✓ Copied';
+    setTimeout(()=>b.textContent='Copy to Clipboard',2000);
+  });
+}
+</script>
+</body>
+</html>
