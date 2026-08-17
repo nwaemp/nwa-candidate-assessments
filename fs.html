@@ -673,7 +673,28 @@
 </main>
 
 <script>
-const FLOW_URL = 'https://defaultb9fe31c2de0742529875da1c500446.c8.environment.api.powerplatform.com:443/powerautomate/automations/direct/cu/30/workflows/cb41a4d1e1ec4f63999dd43f18903cab/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=cyJG9WveVukustKxBq6mSmryJZBkkmTwZlqBFOAzqNA';
+const FLOW_URL = "https://defaultb9fe31c2de0742529875da1c500446.c8.environment.api.powerplatform.com:443/powerautomate/automations/direct/cu/30/workflows/cb41a4d1e1ec4f63999dd43f18903cab/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=cyJG9WveVukustKxBq6mSmryJZBkkmTwZlqBFOAzqNA";
+
+const SUBMISSION_WEBHOOK_URL = FLOW_URL;
+const ASSESSMENT_TYPE = "EMS Leadership";
+const ASSESSMENT_VERSION = "1.0-fieldstaff-v3-mirrored";
+const urlParams = new URLSearchParams(window.location.search);
+const applicationContext = {
+  candidate_id: urlParams.get('candidate_id') || '',
+  application_id: urlParams.get('application_id') || '',
+  job_shortcode: urlParams.get('job_shortcode') || '',
+  job_title: urlParams.get('job_title') || '',
+  job_id: urlParams.get('job_id') || '',
+  source: urlParams.get('source') || 'workable_email'
+};
+function applyUrlContext() {
+  if (applicationContext.job_title) {
+    const pos = document.getElementById('i-position');
+    if (pos && !pos.value) pos.value = applicationContext.job_title;
+  }
+}
+document.addEventListener('DOMContentLoaded', applyUrlContext);
+
 // =====================================================================
 // QUESTION DATA — 70 questions across 7 leadership categories
 // =====================================================================
@@ -926,7 +947,7 @@ function startAssessment() {
     name: fn + ' ' + ln,
     email: em,
     phone: document.getElementById('i-phone').value.trim(),
-    position: document.getElementById('i-position').value.trim() || 'EMS Leadership Role',
+    position: document.getElementById('i-position').value.trim() || applicationContext.job_title || 'EMS Leadership Role',
     displayDate: new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'}),
     completionDate: new Date().toISOString().split('T')[0]
   };
@@ -1106,96 +1127,213 @@ function getVerdict(composite, redFlagCount, integrity, safety) {
 // =====================================================================
 // RESULTS
 // =====================================================================
-async function showResults(){
-  document.getElementById('screen-assessment').style.display='none';
-  document.getElementById('screen-results').style.display='block';
-  document.getElementById('hRight').style.display='none';
-  window.scrollTo({top:0,behavior:'smooth'});
+async function showResults() {
+  document.getElementById('screen-assessment').style.display = 'none';
+  document.getElementById('screen-results').style.display = 'block';
+  document.getElementById('headerRight').style.display = 'none';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 
-  const results=document.getElementById('screen-results');
-  results.innerHTML=`<div class="rt"><div class="v-badge vb-review">Submitting</div><div class="r-name">Submitting your assessment...</div><div class="r-meta">Please do not close this page yet.</div></div>`;
+  const results = document.getElementById('screen-results');
+  results.innerHTML = `
+    <div class="results-top">
+      <div class="verdict-pill vp-review">Submitting</div>
+      <div class="r-name">Submitting your assessment...</div>
+      <div class="r-meta">Please do not close this page yet.</div>
+    </div>
+  `;
 
-  const{avg,composite}=computeScores();
-  const flags=getFlags();
-  const validity=getValidity();
-  const verdict=getVerdict(composite,flags.length,avg['Integrity']||0,avg['Confidentiality']||0);
-  const completionDate=new Date().toISOString();
+  const { avg, composite } = computeScores();
+  const redFlags = getRedFlags();
+  const validity = getValidityConcerns();
+  const verdict = getVerdict(composite, redFlags.length, avg['Integrity']||0, avg['Safety Leadership']||0);
+  const completionDate = new Date().toISOString();
 
-  let sum='';
-  if(verdict.cls==='vb-hire')sum='This candidate demonstrates strong alignment with professional ethics, confidentiality standards, and workplace reliability across all measured dimensions.';
-  else if(verdict.cls==='vb-review')sum='This candidate shows generally positive work attitudes with some areas warranting closer discussion. Probe any flagged responses and explore reliability and information-handling habits in interview.';
-  else sum="This candidate's responses indicate concerns in one or more key areas. Review hard-stop criteria and discuss with the hiring manager before advancing.";
-  if((avg['Integrity']||0)<3.8)sum+=` Integrity score (${(avg['Integrity']||0).toFixed(1)}) is below target - probe honesty and accuracy habits in interview.`;
-  if((avg['Confidentiality']||0)<3.8)sum+=` Confidentiality score (${(avg['Confidentiality']||0).toFixed(1)}) warrants close attention for any role with access to sensitive information.`;
-  if((avg['Reliability']||0)<3.5)sum+=` Reliability score (${(avg['Reliability']||0).toFixed(1)}) is low - explore follow-through and error-handling directly.`;
-  if(validity>=2)sum+=' Validity check flags suggest possible impression-management responding - interpret all scores with additional caution and probe directly in interview.';
+  let summary = '';
+  if (verdict.cls === 'vp-hire') {
+    summary = 'This candidate demonstrates strong alignment with EMS leadership standards across all measured dimensions. Scores indicate integrity, sound judgment under pressure, and a healthy approach to team development and accountability.';
+  } else if (verdict.cls === 'vp-review') {
+    summary = 'This candidate shows generally positive leadership attributes with some areas warranting discussion in the interview. Pay close attention to any red flags and probe decision-making and conflict management scenarios directly.';
+  } else {
+    summary = "This candidate's responses indicate significant concerns in key leadership areas. A thorough review is recommended before advancing. Hard stops in integrity or safety leadership should be discussed with the hiring manager before proceeding.";
+  }
+  if ((avg['Integrity']||0) < 3.8) summary += ` Leadership Integrity score (${(avg['Integrity']||0).toFixed(1)}) is below target — probe accountability and transparency in interview.`;
+  if ((avg['Safety Leadership']||0) < 3.8) summary += ` Safety Leadership score (${(avg['Safety Leadership']||0).toFixed(1)}) warrants close attention.`;
+  if ((avg['Conflict Management']||0) < 3.5) summary += ` Conflict Management score (${(avg['Conflict Management']||0).toFixed(1)}) is low — explore personnel management situations directly.`;
+  if (validity >= 2) summary += ' Validity check flags suggest possible impression-management responding — interpret all scores with additional caution.';
 
-  const mr=avg['Misconduct Risk']||0;
-  const redFlagResponses=flags.length?flags.map((f,i)=>[`Flag ${i+1} - Q${f.id}`,`Question: ${f.text}`,`Candidate Response: ${f.a}`].join('\n')).join('\n\n'):'None';
-  const redFlagQuestions=flags.length?flags.map(f=>`Q${f.id}: ${f.text}`).join('\n'):'None';
-  const redFlagAnswers=flags.length?flags.map(f=>`Q${f.id}: ${f.a}`).join('\n'):'None';
+  const mr = avg['Misconduct Risk'] || 0;
+  const redFlagResponses = redFlags.length
+    ? redFlags.map((f, i) => [
+        `Flag ${i + 1} - Q${f.id}`,
+        `Question: ${f.text.replace(/<[^>]+>/g, '')}`,
+        `Candidate Response: ${f.ans}`
+      ].join('\n')).join('\n\n')
+    : 'None';
+  const redFlagQuestions = redFlags.length
+    ? redFlags.map(f => `Q${f.id}: ${f.text.replace(/<[^>]+>/g, '')}`).join('\n')
+    : 'None';
+  const redFlagAnswers = redFlags.length
+    ? redFlags.map(f => `Q${f.id}: ${f.ans}`).join('\n')
+    : 'None';
 
-  const report=[
-    '=== Administrative Staff Assessment Results ===',
-    `Candidate: ${cand.name}`,`Email: ${cand.email}`,`Phone: ${cand.phone||'N/A'}`,`Position: ${cand.position}`,`Date: ${cand.date}`,'',
-    `RECOMMENDATION: ${verdict.label}`,`Weighted Composite Score: ${composite.toFixed(2)} / 5.00`,'',
+  const report = [
+    '=== EMS Leadership Assessment Results ===','',
+    `Candidate: ${candidate.name}`,
+    `Email:     ${candidate.email}`,
+    `Phone:     ${candidate.phone || 'N/A'}`,
+    `Position:  ${candidate.position}`,
+    `Date:      ${candidate.displayDate || candidate.date}`,'',
+    `RECOMMENDATION: ${verdict.label}`,
+    `Weighted Composite Score: ${composite.toFixed(2)} / 5.00`,'',
     '--- CATEGORY SCORES ---',
-    `Integrity & Honesty: ${(avg['Integrity']||0).toFixed(2)}`,
-    `Confidentiality: ${(avg['Confidentiality']||0).toFixed(2)}`,
-    `Professionalism: ${(avg['Professionalism']||0).toFixed(2)}`,
-    `Reliability: ${(avg['Reliability']||0).toFixed(2)}`,
-    `Teamwork & Communication: ${(avg['Teamwork']||0).toFixed(2)}`,
-    `Situational Judgment: ${(avg['Situational Judgment']||0).toFixed(2)}`,
-    `Misconduct Risk: ${mr.toFixed(2)} (lower = better)`,'',
-    `Red Flag Count: ${flags.length}`,`Validity Concerns: ${validity}`,'',
-    '--- RED FLAG RESPONSES ---',redFlagResponses,'','--- SUMMARY ---',sum
+    `Leadership Integrity:     ${(avg['Integrity']||0).toFixed(2)}`,
+    `Safety Leadership:        ${(avg['Safety Leadership']||0).toFixed(2)}`,
+    `Team Development:         ${(avg['Team Development']||0).toFixed(2)}`,
+    `Decision-Making:          ${(avg['Decision-Making']||0).toFixed(2)}`,
+    `Conflict Management:      ${(avg['Conflict Management']||0).toFixed(2)}`,
+    `Situational Judgment:     ${(avg['Situational Judgment']||0).toFixed(2)}`,
+    `Misconduct Risk:          ${mr.toFixed(2)} (lower = better)`,'',
+    `Red Flag Count:    ${redFlags.length}`,
+    `Validity Concerns: ${validity}`,'',
+    '--- RED FLAG RESPONSES ---',redFlagResponses,'',
+    '--- SUMMARY ---',summary,'',
+    'Assessment: EMS Leadership Assessment'
   ].join('\n');
 
-  const payload={
-    assessmentType:ASSESSMENT_TYPE,assessmentVersion:ASSESSMENT_VERSION,submittedAt:completionDate,
-    candidate:{firstName:cand.firstName||'',lastName:cand.lastName||'',name:cand.name||'',email:cand.email||'',phone:cand.phone||'',position:cand.position||''},
+  const payload = {
+    assessmentType: ASSESSMENT_TYPE,
+    assessmentVersion: ASSESSMENT_VERSION,
+    submittedAt: completionDate,
+    candidate: {
+      firstName: candidate.firstName || '',
+      lastName: candidate.lastName || '',
+      name: candidate.name || '',
+      email: candidate.email || '',
+      phone: candidate.phone || '',
+      position: candidate.position || ''
+    },
     applicationContext,
-    scores:{compositeScore:composite.toFixed(2),recommendation:verdict.label,redFlagCount:flags.length,validityConcernCount:validity,categories:{integrity:(avg['Integrity']||0).toFixed(2),confidentiality:(avg['Confidentiality']||0).toFixed(2),professionalism:(avg['Professionalism']||0).toFixed(2),reliability:(avg['Reliability']||0).toFixed(2),teamwork:(avg['Teamwork']||0).toFixed(2),situationalJudgment:(avg['Situational Judgment']||0).toFixed(2),misconductRisk:mr.toFixed(2)}},
-    redFlagResponses,redFlagQuestions,redFlagAnswers,report
+    scores: {
+      compositeScore: composite.toFixed(2),
+      recommendation: verdict.label,
+      redFlagCount: redFlags.length,
+      validityConcernCount: validity,
+      categories: {
+        leadershipIntegrity: (avg['Integrity']||0).toFixed(2),
+        safetyLeadership: (avg['Safety Leadership']||0).toFixed(2),
+        teamDevelopment: (avg['Team Development']||0).toFixed(2),
+        decisionMaking: (avg['Decision-Making']||0).toFixed(2),
+        conflictManagement: (avg['Conflict Management']||0).toFixed(2),
+        situationalJudgment: (avg['Situational Judgment']||0).toFixed(2),
+        misconductRisk: mr.toFixed(2)
+      }
+    },
+    redFlagResponses, redFlagQuestions, redFlagAnswers, report
   };
 
-  const submitted=await sendToFlow(buildSubmissionPayload(payload));
-  if(submitted){
-    results.innerHTML=`<div class="rt"><div class="v-badge vb-hire">Submitted</div><div class="r-name">Thank you for submitting your assessment.</div><div class="r-meta">Please monitor your email for next steps from our hiring team.</div></div><div class="sbox" style="text-align:center;">Your assessment has been received. You may now close this page.</div>`;
-  }else{
-    results.innerHTML=`<div class="rt"><div class="v-badge vb-review">Submission Issue</div><div class="r-name">We could not confirm your submission.</div><div class="r-meta">Please notify the hiring team that your assessment did not submit successfully.</div></div><div class="sbox" style="text-align:center;">You may keep this page open and contact the hiring team for next steps.</div>`;
+  const submitted = await sendToFlow(buildSubmissionPayload(payload));
+  if (submitted) {
+    results.innerHTML = `
+      <div class="results-top">
+        <div class="verdict-pill vp-hire">Submitted</div>
+        <div class="r-name">Thank you for submitting your assessment.</div>
+        <div class="r-meta">Please monitor your email for next steps from our hiring team.</div>
+      </div>
+      <div class="summary-box" style="text-align:center;">Your assessment has been received. You may now close this page.</div>`;
+  } else {
+    results.innerHTML = `
+      <div class="results-top">
+        <div class="verdict-pill vp-review">Submission Issue</div>
+        <div class="r-name">We could not confirm your submission.</div>
+        <div class="r-meta">Please notify the hiring team that your assessment did not submit successfully.</div>
+      </div>
+      <div class="summary-box" style="text-align:center;">You may keep this page open and contact the hiring team for next steps.</div>`;
   }
 }
 
-function excelSafeText(value,maxLength=30000){
-  return String(value||'').replace(/\r\n/g,'\n').replace(/\r/g,'\n').replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g,'').replace(/[⚠✓→—–]/g,'-').replace(/[“”]/g,'"').replace(/[‘’]/g,"'").replace(/[\t ]+/g,' ').substring(0,maxLength);
+function excelSafeText(value, maxLength = 30000) {
+  return String(value || '')
+    .replace(/\r\n/g, '\n')
+    .replace(/\r/g, '\n')
+    .replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g, '')
+    .replace(/[⚠✓→—–]/g, '-')
+    .replace(/[“”]/g, '"')
+    .replace(/[‘’]/g, "'")
+    .replace(/[\t ]+/g, ' ')
+    .substring(0, maxLength);
 }
 
-function buildSubmissionPayload(payload){
-  const c=payload.scores.categories||{};
-  const safeReport="'"+excelSafeText(payload.report||'',30000);
-  const flat={
-    completionDate:payload.submittedAt||'',email:payload.candidate.email||'',firstName:payload.candidate.firstName||'',lastName:payload.candidate.lastName||'',phone:payload.candidate.phone||'',position:payload.candidate.position||'',
-    assessmentType:payload.assessmentType||ASSESSMENT_TYPE,assessmentVersion:payload.assessmentVersion||'',score:String(payload.scores.compositeScore??''),compositeScore:String(payload.scores.compositeScore??''),recommendation:payload.scores.recommendation||'',
-    redFlags:String(payload.scores.redFlagCount??''),redFlagCount:String(payload.scores.redFlagCount??''),validityConcernCount:String(payload.scores.validityConcernCount??''),
-    redFlagResponses:excelSafeText(payload.redFlagResponses||'',12000),redFlagQuestions:excelSafeText(payload.redFlagQuestions||'',12000),redFlagAnswers:excelSafeText(payload.redFlagAnswers||'',8000),
-    report:safeReport,fullReport:safeReport,
-    candidate_id:payload.applicationContext.candidate_id||'',application_id:payload.applicationContext.application_id||'',job_id:payload.applicationContext.job_id||'',job_shortcode:payload.applicationContext.job_shortcode||'',job_title:payload.applicationContext.job_title||payload.candidate.position||'',source:payload.applicationContext.source||'workable_email',
-    integrity:String(c.integrity??''),confidentiality:String(c.confidentiality??''),professionalism:String(c.professionalism??''),reliability:String(c.reliability??''),teamwork:String(c.teamwork??''),situationalJudgment:String(c.situationalJudgment??''),misconductRisk:String(c.misconductRisk??'')
+function buildSubmissionPayload(payload) {
+  const c = payload.scores.categories || {};
+  const safeReport = "'" + excelSafeText(payload.report || '', 30000);
+  const flat = {
+    completionDate: payload.submittedAt || '',
+    email: payload.candidate.email || '',
+    firstName: payload.candidate.firstName || '',
+    lastName: payload.candidate.lastName || '',
+    phone: payload.candidate.phone || '',
+    position: payload.candidate.position || '',
+    assessmentType: payload.assessmentType || ASSESSMENT_TYPE,
+    assessmentVersion: payload.assessmentVersion || '',
+    score: String(payload.scores.compositeScore ?? ''),
+    compositeScore: String(payload.scores.compositeScore ?? ''),
+    recommendation: payload.scores.recommendation || '',
+    redFlags: String(payload.scores.redFlagCount ?? ''),
+    redFlagCount: String(payload.scores.redFlagCount ?? ''),
+    validityConcernCount: String(payload.scores.validityConcernCount ?? ''),
+    redFlagResponses: excelSafeText(payload.redFlagResponses || '', 12000),
+    redFlagQuestions: excelSafeText(payload.redFlagQuestions || '', 12000),
+    redFlagAnswers: excelSafeText(payload.redFlagAnswers || '', 8000),
+    report: safeReport,
+    fullReport: safeReport,
+    candidate_id: payload.applicationContext.candidate_id || '',
+    application_id: payload.applicationContext.application_id || '',
+    job_id: payload.applicationContext.job_id || '',
+    job_shortcode: payload.applicationContext.job_shortcode || '',
+    job_title: payload.applicationContext.job_title || payload.candidate.position || '',
+    source: payload.applicationContext.source || 'workable_email',
+    leadershipIntegrity: String(c.leadershipIntegrity ?? ''),
+    safetyLeadership: String(c.safetyLeadership ?? ''),
+    teamDevelopment: String(c.teamDevelopment ?? ''),
+    decisionMaking: String(c.decisionMaking ?? ''),
+    conflictManagement: String(c.conflictManagement ?? ''),
+    situationalJudgment: String(c.situationalJudgment ?? ''),
+    misconductRisk: String(c.misconductRisk ?? '')
   };
-  flat.payloadJson=excelSafeText(JSON.stringify({assessmentType:payload.assessmentType,assessmentVersion:payload.assessmentVersion,candidate:payload.candidate,applicationContext:payload.applicationContext,scores:payload.scores,redFlagResponses:payload.redFlagResponses,redFlagQuestions:payload.redFlagQuestions,redFlagAnswers:payload.redFlagAnswers,submittedAt:payload.submittedAt}),30000);
+  flat.payloadJson = excelSafeText(JSON.stringify({
+    assessmentType: payload.assessmentType,
+    assessmentVersion: payload.assessmentVersion,
+    candidate: payload.candidate,
+    applicationContext: payload.applicationContext,
+    scores: payload.scores,
+    redFlagResponses: payload.redFlagResponses,
+    redFlagQuestions: payload.redFlagQuestions,
+    redFlagAnswers: payload.redFlagAnswers,
+    submittedAt: payload.submittedAt
+  }), 30000);
   return flat;
 }
 
-async function sendToFlow(data){
-  try{const response=await fetch(FLOW_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});return response.ok;}catch(e){console.error('Flow submission failed',e);return false;}
+async function sendToFlow(data) {
+  try {
+    console.log('Assessment payload sent to Power Automate:', data);
+    const response = await fetch(FLOW_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+    return response.ok;
+  } catch (e) {
+    console.error('Flow submission failed', e);
+    return false;
+  }
 }
 
-function copyReport(){
-  navigator.clipboard.writeText(document.getElementById('wtext').textContent).then(()=>{
-    const b=document.querySelector('.btn-cp');
-    b.textContent='✓ Copied!';
-    setTimeout(()=>b.textContent='Copy to Clipboard',2000);
+function copyReport() {
+  navigator.clipboard.writeText(document.getElementById('copy-area').textContent).then(() => {
+    const btn = document.querySelector('.btn-copy');
+    btn.textContent = '✓ Copied!';
+    setTimeout(() => btn.textContent = 'Copy to Clipboard', 2000);
   });
 }
 </script>
