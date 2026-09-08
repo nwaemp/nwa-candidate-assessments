@@ -321,6 +321,14 @@
 
   .export-row { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 28px; }
 
+
+  #screen-complete { display:none; padding:60px 0; }
+  .complete-card { max-width:560px; margin:0 auto; text-align:center; background:var(--ink2); border:1px solid var(--gold-border); border-radius:10px; padding:42px 30px; }
+  .complete-icon { width:56px; height:56px; margin:0 auto 20px; border-radius:50%; display:flex; align-items:center; justify-content:center; background:var(--green-bg); border:1px solid var(--green-border); color:var(--green); font-size:28px; font-weight:700; }
+  .complete-title { font-family:'Fraunces',serif; font-size:28px; color:var(--cream); margin-bottom:12px; }
+  .complete-text { color:var(--muted); font-size:15px; line-height:1.75; }
+  .complete-error { margin-top:18px; padding:12px 14px; border-radius:6px; background:var(--red-bg); border:1px solid var(--red-border); color:var(--red); font-size:12px; line-height:1.55; }
+
   @media (max-width: 580px) {
     .header { padding: 0 16px; }
     .main { padding: 24px 14px 80px; }
@@ -453,25 +461,33 @@
     </div>
   </div>
 
+
+  <div id="screen-complete">
+    <div class="complete-card">
+      <div class="complete-icon">✓</div>
+      <h2 class="complete-title">Assessment Submitted</h2>
+      <p class="complete-text">Thank you. Your assessment has been submitted successfully. The hiring team will review your application and follow up through the normal recruiting process.</p>
+      <div class="complete-error" id="complete-error" style="display:none"></div>
+    </div>
+  </div>
+
 </main>
 
 <script>
 
-const FLOW_URL = "https://defaultb9fe31c2de0742529875da1c500446.c8.environment.api.powerplatform.com:443/powerautomate/automations/direct/cu/14/workflows/fa27be798a394655a2dd960a143e6c7c/triggers/manual/paths/invoke?api-version=1";
+const FLOW_URL = "https://defaultb9fe31c2de0742529875da1c500446.c8.environment.api.powerplatform.com:443/powerautomate/automations/direct/cu/14/workflows/fa27be798a394655a2dd960a143e6c7c/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=uPSHh1GMULjVEBFzs7xv4zc9YBNDrpLmTVrdbipE35M";
 const SUBMISSION_WEBHOOK_URL = FLOW_URL;
 const ASSESSMENT_TYPE = "Dispatch Team Supervisor";
 const ASSESSMENT_VERSION = "1.0-fieldstaff-v3-mirrored";
-
 const urlParams = new URLSearchParams(window.location.search);
 const applicationContext = {
   candidate_id: urlParams.get('candidate_id') || '',
   application_id: urlParams.get('application_id') || '',
-  job_id: urlParams.get('job_id') || '',
   job_shortcode: urlParams.get('job_shortcode') || '',
   job_title: urlParams.get('job_title') || '',
+  job_id: urlParams.get('job_id') || '',
   source: urlParams.get('source') || 'workable_email'
 };
-
 function applyUrlContext() {
   if (applicationContext.job_title) {
     const pos = document.getElementById('i-position');
@@ -479,7 +495,6 @@ function applyUrlContext() {
   }
 }
 document.addEventListener('DOMContentLoaded', applyUrlContext);
-
 // =====================================================================
 // QUESTION DATA — 58 questions across 5 categories
 //   Likert: standard / reverse (rev), with red-flag (rf) answers
@@ -768,8 +783,7 @@ function startAssessment() {
   candidate = {
     firstName: fn,
     lastName: ln,
-    name: fn + ' ' + ln,
-    email: em,
+    name: fn + ' ' + ln, email: em,
     phone: document.getElementById('i-phone').value.trim(),
     position: document.getElementById('i-position').value.trim() || applicationContext.job_title || 'Dispatch Team Supervisor',
     date: new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'}),
@@ -952,24 +966,14 @@ function getVerdict(composite, redFlagCount, avg, validity) {
 // =====================================================================
 async function showResults() {
   document.getElementById('screen-assessment').style.display = 'none';
-  document.getElementById('screen-results').style.display = 'block';
+  document.getElementById('screen-results').style.display = 'none';
   document.getElementById('headerRight').style.display = 'none';
   window.scrollTo({ top: 0, behavior: 'smooth' });
-
-  const results = document.getElementById('screen-results');
-  results.innerHTML = `
-    <div class="results-top">
-      <div class="verdict-pill vp-review">Submitting</div>
-      <div class="r-name">Submitting your assessment...</div>
-      <div class="r-meta">Please do not close this page yet.</div>
-    </div>
-  `;
 
   const { avg, composite } = computeScores();
   const redFlags = getRedFlags();
   const validity = getValidityConcerns();
   const verdict = getVerdict(composite, redFlags.length, avg, validity);
-  const completionDate = new Date().toISOString();
 
   let summary = '';
   if (verdict.cls === 'vp-hire') {
@@ -977,9 +981,8 @@ async function showResults() {
   } else if (verdict.cls === 'vp-review') {
     summary = 'This candidate shows generally positive attributes with specific areas that warrant discussion in the interview. Probe every red flag directly, and verify actual CAD and console proficiency with a practical exercise rather than relying on self-report.';
   } else {
-    summary = 'This candidate\'s responses indicate significant concerns in one or more core areas. Review thoroughly before advancing. Hard stops in character, reliability, or dispatch proficiency should be discussed with the hiring manager before any interview is scheduled.';
+    summary = "This candidate's responses indicate significant concerns in one or more core areas. Review thoroughly before advancing. Hard stops in character, reliability, or dispatch proficiency should be discussed with the hiring manager before any interview is scheduled.";
   }
-
   if ((avg['Ops Proficiency']||0) < 3.0) summary += ` Dispatch Operations score (${(avg['Ops Proficiency']||0).toFixed(1)}) is low — verify real CAD and console experience with a hands-on task, and review the authority-limit items (Q7, Q8) closely.`;
   if ((avg['Integrity']||0) < 3.8) summary += ` Integrity & Character score (${(avg['Integrity']||0).toFixed(1)}) is below target — probe documentation accuracy, confidentiality, and handling of policy violations directly.`;
   if ((avg['Reliability']||0) < 3.8) summary += ` Reliability & Risk score (${(avg['Reliability']||0).toFixed(1)}) is below target — probe attendance history, schedule expectations, and attitude toward safety reporting in the interview.`;
@@ -987,6 +990,7 @@ async function showResults() {
   if ((avg['Judgment']||0) < 3.5) summary += ` Judgment score (${(avg['Judgment']||0).toFixed(1)}) is low — work through the operational and personnel scenarios verbally in the interview.`;
   if (validity >= 2) summary += ' Validity checks suggest possible impression-management responding — interpret all scores with additional caution and rely more heavily on the interview and references.';
 
+  candidate.completedAt = new Date().toISOString();
   const redFlagResponses = buildRedFlagResponses(redFlags);
   const redFlagQuestions = redFlags.length ? redFlags.map(f => `Q${f.id}: ${f.text}`).join('\n') : 'None';
   const redFlagAnswers = redFlags.length ? redFlags.map(f => `Q${f.id}: ${f.ans}`).join('\n') : 'None';
@@ -1023,26 +1027,36 @@ async function showResults() {
     summary
   ].join('\n');
 
-  candidate.completedAt = completionDate;
   const payload = {
     assessmentType: ASSESSMENT_TYPE,
     assessmentVersion: ASSESSMENT_VERSION,
-    submittedAt: completionDate,
+    submittedAt: candidate.completedAt,
     candidate: {
-      firstName: candidate.firstName || '', lastName: candidate.lastName || '',
-      name: candidate.name || '', email: candidate.email || '', phone: candidate.phone || '', position: candidate.position || ''
+      firstName: candidate.firstName || '',
+      lastName: candidate.lastName || '',
+      name: candidate.name || '',
+      email: candidate.email || '',
+      phone: candidate.phone || '',
+      position: candidate.position || ''
     },
     applicationContext,
     scores: {
-      compositeScore: composite.toFixed(2), recommendation: verdict.label,
-      redFlagCount: redFlags.length, validityConcernCount: validity,
+      compositeScore: composite.toFixed(2),
+      recommendation: verdict.label,
+      redFlagCount: redFlags.length,
+      validityConcernCount: validity,
       categories: {
-        opsProficiency: (avg['Ops Proficiency']||0).toFixed(2), integrity: (avg['Integrity']||0).toFixed(2),
-        reliability: (avg['Reliability']||0).toFixed(2), leadership: (avg['Leadership']||0).toFixed(2),
+        opsProficiency: (avg['Ops Proficiency']||0).toFixed(2),
+        integrity: (avg['Integrity']||0).toFixed(2),
+        reliability: (avg['Reliability']||0).toFixed(2),
+        leadership: (avg['Leadership']||0).toFixed(2),
         judgment: (avg['Judgment']||0).toFixed(2)
       }
     },
-    redFlagResponses, redFlagQuestions, redFlagAnswers, report
+    redFlagResponses,
+    redFlagQuestions,
+    redFlagAnswers,
+    report
   };
 
   const submitted = await sendToFlow(buildSubmissionPayload(payload));
@@ -1060,10 +1074,14 @@ function buildRedFlagResponses(redFlags) {
 
 function excelSafeText(value, maxLength = 30000) {
   return String(value || '')
-    .replace(/\r\n/g, '\n').replace(/\r/g, '\n')
+    .replace(/\r\n/g, '\n')
+    .replace(/\r/g, '\n')
     .replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g, '')
-    .replace(/[⚠✓→—–]/g, '-').replace(/[“”]/g, '"').replace(/[‘’]/g, "'")
-    .replace(/[\t ]+/g, ' ').substring(0, maxLength);
+    .replace(/[⚠✓→—–]/g, '-')
+    .replace(/[“”]/g, '"')
+    .replace(/[‘’]/g, "'")
+    .replace(/[\t ]+/g, ' ')
+    .substring(0, maxLength);
 }
 
 function buildSubmissionPayload(payload) {
@@ -1071,33 +1089,57 @@ function buildSubmissionPayload(payload) {
   const safeReport = "'" + excelSafeText(payload.report || '', 30000);
   const flat = {
     completionDate: payload.submittedAt || '',
-    email: payload.candidate.email || '', firstName: payload.candidate.firstName || '', lastName: payload.candidate.lastName || '',
-    phone: payload.candidate.phone || '', position: payload.candidate.position || '', assessmentType: payload.assessmentType || ASSESSMENT_TYPE,
-    assessmentVersion: payload.assessmentVersion || '', score: String(payload.scores.compositeScore ?? ''), compositeScore: String(payload.scores.compositeScore ?? ''),
-    recommendation: payload.scores.recommendation || '', redFlags: String(payload.scores.redFlagCount ?? ''), redFlagCount: String(payload.scores.redFlagCount ?? ''),
+    email: payload.candidate.email || '',
+    firstName: payload.candidate.firstName || '',
+    lastName: payload.candidate.lastName || '',
+    phone: payload.candidate.phone || '',
+    position: payload.candidate.position || '',
+    assessmentType: payload.assessmentType || ASSESSMENT_TYPE,
+    assessmentVersion: payload.assessmentVersion || '',
+    score: String(payload.scores.compositeScore ?? ''),
+    compositeScore: String(payload.scores.compositeScore ?? ''),
+    recommendation: payload.scores.recommendation || '',
+    redFlags: String(payload.scores.redFlagCount ?? ''),
+    redFlagCount: String(payload.scores.redFlagCount ?? ''),
     validityConcernCount: String(payload.scores.validityConcernCount ?? ''),
     redFlagResponses: excelSafeText(payload.redFlagResponses || '', 12000),
     redFlagQuestions: excelSafeText(payload.redFlagQuestions || '', 12000),
     redFlagAnswers: excelSafeText(payload.redFlagAnswers || '', 8000),
-    report: safeReport, fullReport: safeReport,
-    candidate_id: payload.applicationContext.candidate_id || '', application_id: payload.applicationContext.application_id || '',
-    job_id: payload.applicationContext.job_id || '', job_shortcode: payload.applicationContext.job_shortcode || '',
-    job_title: payload.applicationContext.job_title || payload.candidate.position || '', source: payload.applicationContext.source || 'workable_email',
-    opsProficiency: String(c.opsProficiency ?? ''), integrity: String(c.integrity ?? ''), reliability: String(c.reliability ?? ''),
-    leadership: String(c.leadership ?? ''), judgment: String(c.judgment ?? '')
+    report: safeReport,
+    fullReport: safeReport,
+    candidate_id: payload.applicationContext.candidate_id || '',
+    application_id: payload.applicationContext.application_id || '',
+    job_id: payload.applicationContext.job_id || '',
+    job_shortcode: payload.applicationContext.job_shortcode || '',
+    job_title: payload.applicationContext.job_title || payload.candidate.position || '',
+    source: payload.applicationContext.source || 'workable_email',
+    opsProficiency: String(c.opsProficiency ?? ''),
+    integrity: String(c.integrity ?? ''),
+    reliability: String(c.reliability ?? ''),
+    leadership: String(c.leadership ?? ''),
+    judgment: String(c.judgment ?? '')
   };
   flat.payloadJson = excelSafeText(JSON.stringify({
-    assessmentType: payload.assessmentType, assessmentVersion: payload.assessmentVersion, candidate: payload.candidate,
-    applicationContext: payload.applicationContext, scores: payload.scores, redFlagResponses: payload.redFlagResponses,
-    redFlagQuestions: payload.redFlagQuestions, redFlagAnswers: payload.redFlagAnswers, submittedAt: payload.submittedAt
+    assessmentType: payload.assessmentType,
+    assessmentVersion: payload.assessmentVersion,
+    candidate: payload.candidate,
+    applicationContext: payload.applicationContext,
+    scores: payload.scores,
+    redFlagResponses: payload.redFlagResponses,
+    redFlagQuestions: payload.redFlagQuestions,
+    redFlagAnswers: payload.redFlagAnswers,
+    submittedAt: payload.submittedAt
   }), 30000);
   return flat;
 }
 
 async function sendToFlow(data) {
   try {
-    console.log('Assessment payload sent to Power Automate:', data);
-    const response = await fetch(FLOW_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
+    const response = await fetch(FLOW_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
     return response.ok;
   } catch (e) {
     console.error('Flow submission failed', e);
@@ -1106,23 +1148,15 @@ async function sendToFlow(data) {
 }
 
 function showCompletion(submitted) {
-  const results = document.getElementById('screen-results');
+  const screen = document.getElementById('screen-complete');
+  const err = document.getElementById('complete-error');
+  screen.style.display = 'block';
   if (submitted) {
-    results.innerHTML = `
-      <div class="results-top">
-        <div class="verdict-pill vp-hire">Submitted</div>
-        <div class="r-name">Assessment Submitted</div>
-        <div class="r-meta">Thank you. Your assessment has been received.</div>
-      </div>
-      <div class="summary-box" style="text-align:center;">The hiring team will review your application and follow up through the normal recruiting process.</div>`;
+    err.style.display = 'none';
+    err.textContent = '';
   } else {
-    results.innerHTML = `
-      <div class="results-top">
-        <div class="verdict-pill vp-review">Submission Issue</div>
-        <div class="r-name">We could not confirm your submission.</div>
-        <div class="r-meta">Please notify the hiring team that your assessment did not submit successfully.</div>
-      </div>
-      <div class="summary-box" style="text-align:center;">Keep this page open and contact the hiring team for next steps.</div>`;
+    err.style.display = 'block';
+    err.textContent = 'Submission issue: Power Automate did not confirm receipt. Please notify recruiting that your assessment did not submit successfully.';
   }
 }
 
