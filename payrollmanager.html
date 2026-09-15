@@ -292,7 +292,7 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 // POWER AUTOMATE CONFIGURATION
 // Mirrors the production hidden-results submission pattern.
 // ============================================================
-const POWER_AUTOMATE_URL = "https://defaultb9fe31c2de0742529875da1c500446.c8.environment.api.powerplatform.com:443/powerautomate/automations/direct/cu/14/workflows/78ad970dde0a4d83b102f1f97b5ac728/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=nbT1OEpeb6SorEEfr-q0-SBNwz61WngxFbQfvhOxs18";
+const FLOW_URL = "https://defaultb9fe31c2de0742529875da1c500446.c8.environment.api.powerplatform.com:443/powerautomate/automations/direct/cu/14/workflows/78ad970dde0a4d83b102f1f97b5ac728/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=nbT1OEpeb6SorEEfr-q0-SBNwz61WngxFbQfvhOxs18";
 const ASSESSMENT_TYPE = 'Payroll Manager';
 const ASSESSMENT_VERSION = 'Payroll Manager Character, Conduct & Knowledge Assessment v1.0';
 
@@ -1446,28 +1446,27 @@ async function submitAssessment() {
   btn.textContent = 'Submitting…';
 
   const payload = buildSubmissionPayload();
+  const submitted = await sendToFlow(payload);
 
-  if (!POWER_AUTOMATE_URL) {
-    console.error('Power Automate URL is blank. Payload:', payload);
-    showThankYou('Your assessment was completed, but the Power Automate URL is blank. Please notify the hiring team.');
-    return;
-  }
-
-  console.log('Power Automate URL configured:', POWER_AUTOMATE_URL.substring(0, 120) + '...');
-  console.log('Assessment payload sent to Power Automate:', payload);
-
-  try {
-    // Mirrors production behavior: avoid CORS preflight from GitHub Pages.
-    await fetch(POWER_AUTOMATE_URL, {
-      method: 'POST',
-      mode: 'no-cors',
-      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-      body: JSON.stringify(payload)
-    });
+  if (submitted) {
     showThankYou();
-  } catch (err) {
-    console.error('Submission failed:', err, payload);
-    showThankYou('Your assessment was completed, but the automatic submission could not be confirmed. Please notify the hiring team.');
+  } else {
+    showThankYou('Submission issue: Power Automate did not confirm receipt. Please notify recruiting that your assessment did not submit successfully.');
+  }
+}
+
+async function sendToFlow(data) {
+  try {
+    console.log('Assessment payload sent to Power Automate:', data);
+    const response = await fetch(FLOW_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+    return response.ok;
+  } catch (e) {
+    console.error('Flow submission failed', e);
+    return false;
   }
 }
 
