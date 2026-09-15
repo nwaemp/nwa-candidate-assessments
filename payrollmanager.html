@@ -1,0 +1,1412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Payroll Manager — Character, Conduct &amp; Knowledge Assessment v1.0</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,500&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f7f5f0;
+  --surface: #ffffff;
+  --ink: #1c1a17;
+  --ink2: #3a3733;
+  --muted: #7a7872;
+  --border: rgba(28,26,23,0.1);
+  --border-hi: rgba(28,26,23,0.2);
+  --navy: #1b2d4a;
+  --navy-light: #243d62;
+  --gold: #b8860b;
+  --gold-light: #d4a017;
+  --gold-bg: rgba(184,134,11,0.08);
+  --gold-border: rgba(184,134,11,0.25);
+  --green: #2d6a3f;
+  --green-bg: rgba(45,106,63,0.1);
+  --green-border: rgba(45,106,63,0.3);
+  --amber: #9a5a00;
+  --amber-bg: rgba(154,90,0,0.1);
+  --amber-border: rgba(154,90,0,0.3);
+  --red: #8b1a1a;
+  --red-bg: rgba(139,26,26,0.08);
+  --red-border: rgba(139,26,26,0.25);
+  --r: 6px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'IBM Plex Sans',sans-serif;background:var(--bg);color:var(--ink);min-height:100vh;font-size:15px;line-height:1.65}
+body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(28,26,23,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(28,26,23,0.025) 1px,transparent 1px);background-size:48px 48px;pointer-events:none;z-index:0}
+
+/* HEADER */
+.hdr{background:var(--navy);border-bottom:2px solid var(--gold);padding:0 40px;height:60px;display:flex;align-items:center;gap:16px;position:sticky;top:0;z-index:100}
+.hdr-logo{width:32px;height:32px;background:var(--gold);border-radius:4px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.hdr-logo span{font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:500;color:var(--navy);letter-spacing:0.02em}
+.hdr-title{font-size:13px;font-weight:500;color:#e8e4da;letter-spacing:0.01em}
+.hdr-title small{display:block;font-size:10px;font-weight:400;color:rgba(232,228,218,0.5);letter-spacing:0.06em;text-transform:uppercase;margin-top:1px}
+.hdr-right{margin-left:auto;display:flex;align-items:center;gap:12px}
+.prog-pill{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:99px;padding:5px 14px}
+.prog-txt{font-family:'IBM Plex Mono',monospace;font-size:11px;color:rgba(232,228,218,0.6)}
+.prog-outer{width:90px;height:3px;background:rgba(255,255,255,0.12);border-radius:2px;overflow:hidden}
+.prog-inner{height:100%;background:var(--gold-light);border-radius:2px;transition:width .4s ease;width:0%}
+
+/* MAIN */
+.main{max-width:760px;margin:0 auto;padding:44px 24px 100px;position:relative;z-index:1}
+
+/* WELCOME */
+.eyebrow{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--gold);margin-bottom:18px;display:flex;align-items:center;gap:8px}
+.eyebrow::before{content:'';display:inline-block;width:20px;height:1px;background:var(--gold)}
+.welcome-h{font-family:'Playfair Display',serif;font-size:clamp(30px,5vw,50px);font-weight:700;line-height:1.08;letter-spacing:-0.02em;color:var(--ink);margin-bottom:20px}
+.welcome-h em{font-style:italic;color:var(--navy)}
+.welcome-p{font-size:14px;color:var(--muted);max-width:520px;line-height:1.8;margin-bottom:32px}
+.meta-row{display:flex;gap:1px;margin-bottom:36px;max-width:440px}
+.meta-cell{flex:1;background:var(--surface);border:1px solid var(--border);padding:14px 16px}
+.meta-cell:first-child{border-radius:var(--r) 0 0 var(--r)}
+.meta-cell:last-child{border-radius:0 var(--r) var(--r) 0}
+.meta-v{font-family:'Playfair Display',serif;font-size:26px;font-weight:600;color:var(--navy);line-height:1;margin-bottom:3px}
+.meta-l{font-size:10px;letter-spacing:0.06em;text-transform:uppercase;color:var(--muted)}
+
+/* FORM */
+.cand-form{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:22px;margin-bottom:24px;max-width:500px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+.fg{display:flex;flex-direction:column;gap:5px}
+.fg label{font-size:10px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted)}
+.fg input{background:var(--bg);border:1px solid var(--border-hi);border-radius:var(--r);padding:9px 12px;color:var(--ink);font-family:'IBM Plex Sans',sans-serif;font-size:13px;outline:none;transition:border-color .2s}
+.fg input:focus{border-color:var(--navy)}
+.fg input::placeholder{color:rgba(122,120,114,0.4)}
+
+/* BUTTONS */
+.btn-primary{background:var(--navy);color:#e8e4da;border:none;border-radius:var(--r);padding:13px 28px;font-family:'IBM Plex Sans',sans-serif;font-size:13px;font-weight:600;letter-spacing:0.04em;cursor:pointer;transition:background .2s,transform .1s;display:inline-flex;align-items:center;gap:8px}
+.btn-primary:hover{background:var(--navy-light)}
+.btn-primary:active{transform:scale(0.98)}
+.btn-ghost{background:transparent;color:var(--muted);border:1px solid var(--border-hi);border-radius:var(--r);padding:11px 22px;font-family:'IBM Plex Sans',sans-serif;font-size:13px;cursor:pointer;transition:all .15s}
+.btn-ghost:hover{border-color:var(--ink2);color:var(--ink)}
+
+/* ASSESSMENT */
+#screen-assessment{display:none}
+.sec-eye{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:var(--gold);margin-bottom:6px}
+.sec-h{font-family:'Playfair Display',serif;font-size:22px;font-weight:600;color:var(--ink);margin-bottom:3px}
+.sec-badge{display:inline-block;font-size:10px;font-weight:600;letter-spacing:0.07em;text-transform:uppercase;padding:3px 11px;border-radius:99px;margin-bottom:22px}
+.badge-likert{background:var(--gold-bg);color:var(--gold);border:1px solid var(--gold-border)}
+.badge-ems{background:rgba(139,26,26,0.12);color:#8B1A1A;border:1px solid rgba(139,26,26,0.3)}
+.badge-know{background:rgba(27,45,74,0.08);color:var(--navy);border:1px solid rgba(27,45,74,0.2)}
+.badge-disc{background:rgba(45,106,63,0.1);color:var(--green);border:1px solid rgba(45,106,63,0.3)}
+.badge-trade{background:var(--red-bg);color:var(--red);border:1px solid var(--red-border)}
+
+/* QUESTION CARD */
+.q-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:22px 24px;margin-bottom:10px;transition:border-color .2s}
+.q-card.answered{border-color:var(--gold-border)}
+.q-num{font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-bottom:7px}
+.q-text{font-size:15px;line-height:1.6;color:var(--ink);margin-bottom:16px}
+.q-context{background:rgba(27,45,74,0.05);border-left:3px solid var(--navy);padding:10px 14px;font-size:13px;color:var(--navy-light);line-height:1.65;margin-bottom:14px;border-radius:0 var(--r) var(--r) 0}
+
+/* LIKERT */
+.likert-wrap{display:flex;gap:5px;flex-wrap:wrap}
+.l-opt{flex:1 1 0;min-width:80px;background:var(--bg);border:1px solid var(--border);border-radius:var(--r);padding:9px 6px;text-align:center;cursor:pointer;font-size:11px;color:var(--muted);line-height:1.3;transition:all .15s;user-select:none}
+.l-opt:hover{background:var(--gold-bg);border-color:var(--gold-border);color:var(--ink)}
+.l-opt.selected{background:var(--gold-bg);border-color:var(--gold-border);color:var(--ink);font-weight:500}
+.likert-ends{display:flex;justify-content:space-between;font-size:10px;color:var(--muted);margin-top:5px;padding:0 2px}
+
+/* MCQ / SCENARIO */
+.opts{display:flex;flex-direction:column;gap:6px}
+.opt-radio{display:none}
+.opt-label{display:flex;align-items:flex-start;gap:12px;padding:11px 14px;border:1px solid var(--border);border-radius:var(--r);cursor:pointer;transition:all .15s;font-size:13px;color:var(--muted);line-height:1.5;user-select:none}
+.opt-label:hover{background:var(--gold-bg);border-color:var(--gold-border);color:var(--ink)}
+.opt-radio:checked+.opt-label{background:var(--gold-bg);border-color:var(--gold-border);color:var(--ink);font-weight:500}
+.opt-key{flex-shrink:0;width:22px;height:22px;border-radius:50%;border:1.5px solid currentColor;display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:500;margin-top:1px}
+
+/* NAV */
+.q-nav{display:flex;justify-content:space-between;align-items:center;margin-top:28px;padding-top:22px;border-top:1px solid var(--border)}
+.nav-info{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--muted)}
+.nav-btns{display:flex;gap:10px}
+
+/* RESULTS */
+#screen-results{display:none}
+.r-top{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:34px;text-align:center;margin-bottom:20px}
+.v-pill{display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;padding:6px 18px;border-radius:99px;margin-bottom:16px}
+.vp-hire{background:var(--green-bg);color:var(--green);border:1px solid var(--green-border)}
+.vp-review{background:var(--amber-bg);color:var(--amber);border:1px solid var(--amber-border)}
+.vp-no{background:var(--red-bg);color:var(--red);border:1px solid var(--red-border)}
+.r-name{font-family:'Playfair Display',serif;font-size:28px;font-weight:700;color:var(--ink);margin-bottom:5px}
+.r-meta{font-size:12px;color:var(--muted);margin-bottom:18px}
+.score-big{font-family:'Playfair Display',serif;font-size:56px;font-weight:700;color:var(--navy);line-height:1}
+.score-denom{font-size:18px;color:var(--muted)}
+
+.cat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:18px 0}
+.cat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:14px 16px}
+.cat-lbl{font-size:10px;letter-spacing:0.07em;text-transform:uppercase;color:var(--muted);margin-bottom:9px}
+.cat-row{display:flex;align-items:center;gap:8px}
+.cat-bar-bg{flex:1;height:4px;background:rgba(28,26,23,0.08);border-radius:2px;overflow:hidden}
+.cat-bar{height:100%;border-radius:2px;transition:width 1s ease}
+.cat-val{font-family:'IBM Plex Mono',monospace;font-size:13px;width:38px;text-align:right;flex-shrink:0}
+
+.flags-box{background:var(--red-bg);border:1px solid var(--red-border);border-radius:var(--r);padding:20px 22px;margin-bottom:16px}
+.flags-box h3{font-size:13px;font-weight:600;color:var(--red);margin-bottom:12px;display:flex;align-items:center;gap:6px}
+.flag-row{margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid var(--red-border)}
+.flag-row:last-child{border:none;margin:0;padding:0}
+.flag-q{font-size:12px;color:var(--muted);line-height:1.55;margin-bottom:3px}
+.flag-a{font-size:11px;color:var(--red);font-family:'IBM Plex Mono',monospace;font-weight:500}
+.flag-why{font-size:11px;color:var(--red);opacity:.75;margin-top:3px;line-height:1.5}
+
+.sum-box{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:20px 22px;margin-bottom:16px}
+.sum-box h3{font-size:14px;font-weight:600;color:var(--ink);margin-bottom:14px}
+.sum-row{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px}
+.sum-row:last-child{border:none}
+.sum-lbl{color:var(--muted);max-width:200px;flex-shrink:0}
+.sum-val{color:var(--ink);font-weight:500;text-align:right}
+.sum-note{font-size:11px;color:var(--muted);margin-top:2px}
+
+.wb-box{background:var(--navy);border-radius:var(--r);padding:22px;margin-bottom:16px}
+.wb-box h3{font-size:14px;font-weight:600;color:#e8e4da;margin-bottom:6px}
+.wb-box p{font-size:12px;color:rgba(232,228,218,0.55);margin-bottom:12px}
+.copy-area{background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.08);border-radius:var(--r);padding:13px;font-family:'IBM Plex Mono',monospace;font-size:11px;color:rgba(232,228,218,0.6);white-space:pre-wrap;line-height:1.7;margin-bottom:10px;max-height:200px;overflow-y:auto}
+.btn-copy{font-size:12px;color:rgba(232,228,218,0.7);background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:var(--r);padding:7px 14px;cursor:pointer;font-family:'IBM Plex Sans',sans-serif;transition:all .15s}
+.btn-copy:hover{background:rgba(255,255,255,0.12);color:#e8e4da}
+.export-row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:24px}
+
+@media(max-width:540px){
+  .hdr{padding:0 14px}
+  .main{padding:24px 14px 80px}
+  .form-grid,.cat-grid{grid-template-columns:1fr}
+  .meta-row{flex-wrap:wrap}
+  .prog-pill{display:none}
+}
+@media print{
+  body::before{display:none}
+  .hdr{background:#1b2d4a}
+  .btn-primary,.btn-ghost,.btn-copy,.export-row,.wb-box .btn-copy{display:none!important}
+}
+</style>
+</head>
+<body>
+
+<header class="hdr">
+  <div class="hdr-logo"><span>NWA</span></div>
+  <div class="hdr-title">Payroll Manager Assessment<small>Compliance, Character &amp; Systems</small></div>
+  <div class="hdr-right" id="hdr-right" style="display:none">
+    <div class="prog-pill">
+      <span class="prog-txt" id="prog-txt">0 / 57</span>
+      <div class="prog-outer"><div class="prog-inner" id="prog-bar"></div></div>
+    </div>
+  </div>
+</header>
+
+<main class="main">
+
+<div id="screen-welcome">
+  <div class="eyebrow">Talent Acquisition &middot; NW Ambulance</div>
+  <h1 class="welcome-h">Payroll Manager<br><em>Character, Conduct</em><br>&amp; Knowledge Assessment</h1>
+  <p class="welcome-p">
+    This assessment evaluates integrity, reliability, ADP configuration knowledge, and wage-hour judgment for the
+    Payroll Manager role. Answer based on what you have actually done and how you would actually respond &mdash; not
+    what sounds ideal. There are no trick questions. Honest answers produce the most useful results for everyone.
+  </p>
+  <div class="meta-row">
+    <div class="meta-cell"><div class="meta-v">57</div><div class="meta-l">Questions</div></div>
+    <div class="meta-cell"><div class="meta-v">7</div><div class="meta-l">Sections</div></div>
+    <div class="meta-cell"><div class="meta-v">22&ndash;28</div><div class="meta-l">Minutes</div></div>
+  </div>
+  <div class="cand-form">
+    <div class="form-grid">
+      <div class="fg"><label>First Name *</label><input type="text" id="i-fn" placeholder="First"></div>
+      <div class="fg"><label>Last Name *</label><input type="text" id="i-ln" placeholder="Last"></div>
+    </div>
+    <div class="form-grid">
+      <div class="fg"><label>Email *</label><input type="email" id="i-em" placeholder="email@domain.com"></div>
+      <div class="fg"><label>Phone</label><input type="tel" id="i-ph" placeholder="(555) 000-0000"></div>
+    </div>
+    <div class="fg" style="margin-bottom:14px">
+      <label>Position Applied For</label>
+      <input type="text" id="i-pos" placeholder="Payroll Manager">
+    </div>
+    <button class="btn-primary" onclick="start()">Begin Assessment &rarr;</button>
+  </div>
+</div>
+
+<div id="screen-assessment">
+  <div class="sec-eye" id="sec-eye">Section 1 of 7</div>
+  <div class="sec-h" id="sec-h">Integrity &amp; Confidentiality</div>
+  <div class="sec-badge badge-likert" id="sec-badge">Attitude &amp; Values</div>
+  <div id="q-container"></div>
+  <div class="q-nav">
+    <span class="nav-info" id="nav-info"></span>
+    <div class="nav-btns">
+      <button class="btn-ghost" id="btn-prev" onclick="prev()" style="display:none">&larr; Back</button>
+      <button class="btn-primary" id="btn-next" onclick="next()">Next Section &rarr;</button>
+    </div>
+  </div>
+</div>
+
+<div id="screen-results">
+  <div class="r-top">
+    <div class="v-pill" id="v-pill"></div>
+    <div class="r-name" id="r-name"></div>
+    <div class="r-meta" id="r-meta"></div>
+    <div><span class="score-big" id="r-score">&mdash;</span><span class="score-denom"> / 100</span></div>
+  </div>
+  <div class="cat-grid" id="cat-grid"></div>
+  <div class="flags-box" id="flags-box" style="display:none">
+    <h3>&#9888; Conduct Flags</h3>
+    <div id="flags-list"></div>
+  </div>
+  <div class="flags-box" id="know-box" style="display:none;background:rgba(154,90,0,0.06);border-color:rgba(154,90,0,0.25)">
+    <h3 style="color:#9a5a00">&#9679; Technical Misses</h3>
+    <div id="know-list"></div>
+  </div>
+  <div class="sum-box" id="sum-box"></div>
+  <div class="wb-box">
+    <h3>Workable Notes &mdash; Copy &amp; Paste</h3>
+    <p>Paste the block below into the candidate's Notes tab in Workable.</p>
+    <div class="copy-area" id="copy-area"></div>
+    <button class="btn-copy" onclick="copyIt()">Copy to Clipboard</button>
+  </div>
+  <div class="export-row">
+    <button class="btn-primary" onclick="window.print()">Print / Save PDF</button>
+    <button class="btn-ghost" onclick="location.reload()">New Assessment</button>
+  </div>
+</div>
+
+</main>
+
+<script>
+const FLOW_URL = 'https://defaultb9fe31c2de0742529875da1c500446.c8.environment.api.powerplatform.com:443/powerautomate/automations/direct/cu/14/workflows/78ad970dde0a4d83b102f1f97b5ac728/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=nbT1OEpeb6SorEEfr-q0-SBNwz61WngxFbQfvhOxs18';
+const ASSESSMENT_TYPE = 'Payroll Manager';
+const ASSESSMENT_VERSION = '1.0-fieldstaff-v3-mirrored';
+const urlParams = new URLSearchParams(window.location.search);
+const applicationContext = {candidate_id:urlParams.get('candidate_id')||'',application_id:urlParams.get('application_id')||'',job_shortcode:urlParams.get('job_shortcode')||'',job_title:urlParams.get('job_title')||'',job_id:urlParams.get('job_id')||'',source:urlParams.get('source')||'workable_email'};
+function excelSafeText(v,max=30000){return String(v||'').replace(/\r\n/g,'\n').replace(/\r/g,'\n').replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g,'').substring(0,max);}
+function findQuestion(id){for(const s of SECTIONS){const q=s.qs.find(x=>x.id===id);if(q)return q;}return null;}
+function fullAnswer(id){const q=findQuestion(id),a=ans[id];if(!q||a===undefined)return '';if(q.type==='likert')return a;const i=['A','B','C','D'].indexOf(a);return i>=0&&q.opts? q.opts[i]:a;}
+function recruiterFlags(conduct,knowledge,vFlag){const arr=[];for(const f of conduct)arr.push('CONDUCT FLAG - Q'+f.id+'\nQuestion: '+findQuestion(f.id).text+'\nCandidate Response: '+fullAnswer(f.id)+'\nRecruiter Note: '+(f.why||''));for(const f of knowledge)arr.push('TECHNICAL MISS - Q'+f.id+'\nQuestion: '+findQuestion(f.id).text+'\nCandidate Response: '+fullAnswer(f.id)+'\nRecruiter Note: '+(f.why||''));if(vFlag){const q=findQuestion(57);arr.push('VALIDITY CONCERN - Q57\nQuestion: '+q.text+'\nCandidate Response: '+fullAnswer(57)+'\nRecruiter Note: '+(q.flagWhy||''));}return arr.join('\n\n')||'None';}
+async function submitToFlow(data){try{const r=await fetch(FLOW_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});return r.ok;}catch(e){console.error(e);return false;}}
+
+const LIKERT = ['Strongly Disagree','Disagree','Neutral','Agree','Strongly Agree'];
+const TOTAL_Q = 57;
+
+// ============================================================
+// PAYROLL MANAGER — QUESTION BANK · 7 sections · 57 questions
+//
+// De-duplicated against Payroll Administrator v1, Controller v3,
+// and Accounting Manager v2. Specifically avoided because they
+// already appear in Payroll Administrator v1: L&I premium basis,
+// WA Cares, PFML small-employer relief, sick leave accrual rate,
+// state reciprocity, multi-state W-2 allocation, amended 941s.
+//
+// This instrument is pitched at DETERMINATION level, not
+// processing level. The role owns the call, not the keystrokes.
+// ============================================================
+const SECTIONS = [
+
+// ─────────────────────────────────────────────────────────────
+// SECTION 1 — Integrity & Confidentiality (Q1–10)
+// Likert. Weight 20%. Group: Integrity
+// Sole custodian of pay data for ~430 people, with no payroll
+// staff and no peer review. Reverse items are written as
+// defensible-sounding professional pragmatism.
+// ─────────────────────────────────────────────────────────────
+{
+  name: 'Integrity & Confidentiality',
+  eye: 'Section 1 of 7',
+  badge: 'badge-likert',
+  badgeTxt: 'Attitude & Values',
+  qs: [
+    {
+      id: 1, type: 'likert', group: 'Integrity', rev: true,
+      text: 'As the only person with full access to pay records, occasional personal curiosity about a record is not really a breach.',
+      rf: ['Agree','Strongly Agree'],
+      rfWhy: 'This role holds compensation data for roughly 430 people with no second set of eyes. "Looked but did not disclose" is the rationalization that precedes every payroll data incident, and it is unverifiable after the fact. The only workable standard is access for a business reason or not at all.'
+    },
+    {
+      id: 2, type: 'likert', group: 'Integrity', rev: true,
+      text: 'When my own pay or a correction to it is involved, processing it myself is reasonable because I know the facts best.',
+      rf: ['Agree','Strongly Agree'],
+      rfWhy: 'Self-processing is the single highest-risk control gap in a one-person payroll function. Knowing the facts is exactly why the person should not be the one to execute it unreviewed. Ask in the oral board what control they would put around their own pay changes — a strong candidate raises this before you do.'
+    },
+    {
+      id: 3, type: 'likert', group: 'Integrity', rev: true,
+      text: 'Where an L&I risk classification is genuinely arguable, choosing the lower-premium class is a reasonable business decision.',
+      rf: ['Agree','Strongly Agree'],
+      rfWhy: 'Risk classification is a determination this role owns outright, and it carries direct premium consequence. Framing it as a business decision rather than a factual determination is precisely how retroactive premium assessments and penalties are generated on audit.'
+    },
+    {
+      id: 4, type: 'likert', group: 'Integrity', rev: false,
+      text: 'If an agency auditor asked a question whose honest answer would hurt us, I would still answer it honestly.'
+    },
+    {
+      id: 5, type: 'likert', group: 'Integrity', rev: true,
+      text: 'When an operations manager insists their crew\u2019s time is correct, that approval is enough for me to release the cycle.',
+      rf: ['Agree','Strongly Agree'],
+      rfWhy: 'The job description assigns ownership of reported-time accuracy to this position and makes supervisor approvals something the incumbent audits, not something they defer to. A candidate who treats approval as the end of the inquiry has misread the role and will not catch punch-edit or unapproved-overtime patterns.'
+    },
+    {
+      id: 6, type: 'likert', group: 'Integrity', rev: false,
+      text: 'I would hold a payroll cycle rather than release time I had concluded was unreliable.'
+    },
+    {
+      id: 7, type: 'likert', group: 'Integrity', rev: true,
+      text: 'A pay practice that has been in place for years is unlikely to be worth re-examining.',
+      rf: ['Agree','Strongly Agree'],
+      rfWhy: 'Longevity is not compliance. This position exists because payroll practice was allowed to accumulate without single-point ownership; the incumbent is expected to re-derive whether current practice is defensible, not inherit it. Legacy differential and regular-rate treatments are where the exposure usually sits.'
+    },
+    {
+      id: 8, type: 'likert', group: 'Integrity', rev: false,
+      text: 'If I concluded a position was misclassified as exempt, I would say so even though correcting it costs money.'
+    },
+    {
+      id: 9, type: 'likert', group: 'Integrity', rev: true,
+      text: 'Small underpayments that employees have not noticed are not worth going back to correct.',
+      rf: ['Agree','Strongly Agree'],
+      rfWhy: 'Uncorrected underpayment is unpaid wages regardless of whether the employee noticed, and it compounds across a workforce and across pay periods. This answer indicates someone who will let known exposure sit until a complaint forces it into the open, which is when it becomes a class-wide problem.'
+    },
+    {
+      id: 10, type: 'likert', group: 'Integrity', rev: false,
+      text: 'I document the reasoning behind a filing position at the time I take it, not when it is questioned.'
+    },
+  ]
+},
+
+// ─────────────────────────────────────────────────────────────
+// SECTION 2 — Reliability, Ownership & Risk (Q11–18)
+// Likert. Weight 12%. Group: Reliability
+// Attendance measured ONLY through discretionary-absence and
+// commitment attitudes. No illness, injury, disability, medical
+// history, workers' comp claims, or protected leave content —
+// prohibited pre-offer inquiries under ADA and WA WLAD.
+// ─────────────────────────────────────────────────────────────
+{
+  name: 'Reliability, Ownership & Risk',
+  eye: 'Section 2 of 7',
+  badge: 'badge-likert',
+  badgeTxt: 'Attitude & Values',
+  qs: [
+    {
+      id: 11, type: 'likert', group: 'Reliability', rev: false,
+      text: 'I plan time off around the payroll and filing calendar rather than expecting the calendar to move.'
+    },
+    {
+      id: 12, type: 'likert', group: 'Reliability', rev: true,
+      text: 'In a single-owner function, being unavailable for a day here and there is not really a problem.',
+      rf: ['Agree','Strongly Agree'],
+      rfWhy: 'This is a single point of failure by design — there is no payroll staff. Discretionary unavailability on a processing or deposit day is not absorbed by anyone; it becomes a missed deposit or a late cycle. Verify attendance patterns with prior supervisors rather than peers.'
+    },
+    {
+      id: 13, type: 'likert', group: 'Reliability', rev: true,
+      text: 'Someone at my level should not have to spend time on data entry and file uploads.',
+      rf: ['Agree','Strongly Agree'],
+      rfWhy: 'Entitlement flag against an explicit condition of the job. The posting states the incumbent performs each cycle personally and owns the ESO-to-ADP data path. The judgment content is what is being paid for, but the execution is not delegable — there is nobody to delegate to.'
+    },
+    {
+      id: 14, type: 'likert', group: 'Reliability', rev: false,
+      text: 'I document my own processes well enough that someone else could run a cycle without me.'
+    },
+    {
+      id: 15, type: 'likert', group: 'Reliability', rev: true,
+      text: 'Most of the friction I have had at work came from other departments not doing their part.',
+      rf: ['Agree','Strongly Agree'],
+      rfWhy: 'Payroll genuinely is failed by other departments, which makes this item subtle — the flag is not the observation but the totalising "most." A candidate whose whole career history is other people\'s fault will not build the working relationships with operations that timekeeping governance requires. Probe reasons for leaving the last three employers.'
+    },
+    {
+      id: 16, type: 'likert', group: 'Reliability', rev: true,
+      text: 'Extended hours during quarter-end are something an employer should compensate beyond salary.',
+      rf: ['Agree','Strongly Agree'],
+      rfWhy: 'The job description states plainly that extended hours are expected during processing, quarter-end, and year-end, and that compensation is a fixed salary not based on hours. A candidate who disputes the premise of exempt salaried work will be a persistent friction point, and the disagreement will surface first at the worst possible time of year.'
+    },
+    {
+      id: 17, type: 'likert', group: 'Reliability', rev: false,
+      text: 'I would report an unsafe condition or damaged equipment even if it was not in my work area.'
+    },
+    {
+      id: 18, type: 'likert', group: 'Reliability', rev: false,
+      text: 'I chase items I am waiting on from other departments rather than logging them as blocked.'
+    },
+  ]
+},
+
+// ─────────────────────────────────────────────────────────────
+// SECTION 3 — Concurrent Load & Interruption Control (Q19–25)
+// Likert. Weight 10%. Group: Concurrency
+// The "multi-tasking" requirement, measured properly. Nobody
+// self-reports as bad at multitasking, so no item asks. These
+// measure the underlying behaviours instead: triage by
+// consequence vs. arrival order, external tracking vs. memory,
+// protecting deadline-critical work, and closing loops.
+// ─────────────────────────────────────────────────────────────
+{
+  name: 'Concurrent Load & Interruption Control',
+  eye: 'Section 3 of 7',
+  badge: 'badge-likert',
+  badgeTxt: 'Attitude & Values',
+  qs: [
+    {
+      id: 19, type: 'likert', group: 'Concurrency', rev: false,
+      text: 'I keep a written system for open items rather than holding them in my head.'
+    },
+    {
+      id: 20, type: 'likert', group: 'Concurrency', rev: true,
+      text: 'When several people need something at once, I generally work them in the order they came in.',
+      rf: ['Agree','Strongly Agree'],
+      rfWhy: 'Arrival order is not triage. This function has items with statutory deadlines sitting alongside items that merely feel urgent to whoever is asking, and first-in-first-out means the loudest request displaces the deposit deadline. Ask how they would sequence a garnishment order, a tax notice, and a manager wanting a report.'
+    },
+    {
+      id: 21, type: 'likert', group: 'Concurrency', rev: false,
+      text: 'During a processing cycle I set limits on interruptions rather than taking every question as it arrives.'
+    },
+    {
+      id: 22, type: 'likert', group: 'Concurrency', rev: true,
+      text: 'I usually have several tasks partly finished at any given time.',
+      rf: ['Agree','Strongly Agree'],
+      rfWhy: 'In a compliance function, partly finished is worse than not started — a half-completed registration, filing, or reconciliation looks done from the outside and fails silently. This is the difference between running many things concurrently and finishing none of them, and it is the failure mode this section exists to detect.'
+    },
+    {
+      id: 23, type: 'likert', group: 'Concurrency', rev: false,
+      text: 'When I am interrupted mid-task, I note where I left off before switching.'
+    },
+    {
+      id: 24, type: 'likert', group: 'Concurrency', rev: true,
+      text: 'When a quarter-end filing deadline and a payroll release land in the same week, something has to give.',
+      rf: ['Agree','Strongly Agree'],
+      rfWhy: 'That collision is not an edge case in this role; it is the calendar. Both are statutory and neither can slip. A candidate who frames it as an unavoidable trade-off has not held a function where both landed on them, or has been resolving it by letting one slide.'
+    },
+    {
+      id: 25, type: 'likert', group: 'Concurrency', rev: false,
+      text: 'I would rather decline a new request than accept it and deliver it late.'
+    },
+  ]
+},
+
+// ─────────────────────────────────────────────────────────────
+// SECTION 4 — ADP Configuration & Systems Control (Q26–34)
+// MCQ. Weight 18%. Group: ADP
+// Tests CONFIGURATION knowledge, not end-user navigation, per the
+// requirement for hands-on ADP experience "not solely as an end
+// user." Deliberately platform-general rather than tied to
+// specific ADP screens, which differ across WFN / Run / Vantage
+// and change between releases.
+// ─────────────────────────────────────────────────────────────
+{
+  name: 'ADP Configuration & Systems Control',
+  eye: 'Section 4 of 7',
+  badge: 'badge-know',
+  badgeTxt: 'Correct Answer Exists',
+  qs: [
+    {
+      id: 26, type: 'mcq', group: 'ADP',
+      text: 'You are creating a new earnings code for a shift differential. For FLSA overtime to calculate correctly, the code must be configured so the differential is:',
+      opts: [
+        'A. Excluded from the regular rate, because differentials are a form of premium pay.',
+        'B. Included in the regular rate, because a shift differential is compensation for hours worked and is not among the FLSA\u2019s excludable payments.',
+        'C. Included in the regular rate only where it exceeds a set percentage of base pay.',
+        'D. Included in gross wages but excluded from the overtime calculation.'
+      ],
+      sc: { A: 0, B: 5, C: 0, D: 0 },
+      correct: 'B',
+      correctWhy: 'Shift differentials are remuneration for employment and must be folded into the regular rate before the overtime premium is computed. Configuring the code to sit outside the regular rate is one of the most common and most expensive earnings-code errors, because it silently underpays overtime on every affected cycle.'
+    },
+    {
+      id: 27, type: 'mcq', group: 'ADP',
+      text: 'Your operation runs shifts that cross midnight and cross the workweek boundary. How must the FLSA workweek be configured?',
+      opts: [
+        'A. Set to match the pay period, so overtime is calculated across the full period.',
+        'B. As a fixed, regularly recurring 168-hour period, with hours credited to the workweek in which they are actually worked.',
+        'C. As a rolling seven-day window that begins with each employee\u2019s first shift.',
+        'D. Left at the system default, which handles boundary-crossing shifts automatically.'
+      ],
+      sc: { A: 0, B: 5, C: 0, D: 0 },
+      correct: 'B',
+      correctWhy: 'The FLSA workweek is a fixed, recurring 168-hour period; overtime is owed per workweek, never averaged across a biweekly or semi-monthly pay period. A shift spanning the boundary is split, with hours credited to the workweek in which they were worked. Answer A is the error that produces systematic overtime underpayment in 24-hour operations.'
+    },
+    {
+      id: 28, type: 'mcq', group: 'ADP',
+      text: 'Hours coded as paid time off must be configured so that, for FLSA overtime purposes, they:',
+      opts: [
+        'A. Count as hours worked in the week they are taken.',
+        'B. Do not count as hours worked for FLSA purposes; the employer may choose to pay overtime on them by policy but is not required to.',
+        'C. Count as hours worked only in weeks where total paid hours exceed 40.',
+        'D. Count as hours worked, since the employee is paid for them.'
+      ],
+      sc: { A: 0, B: 5, C: 0, D: 0 },
+      correct: 'B',
+      correctWhy: 'FLSA overtime is owed on hours actually worked. Paid leave is compensated time but not time worked, so it does not trigger the overtime premium unless the employer commits to that by policy or contract. Miscoding leave as worked hours overstates overtime liability on every cycle it occurs.'
+    },
+    {
+      id: 29, type: 'mcq', group: 'ADP',
+      text: 'Which of the following must be configured as a post-tax deduction?',
+      opts: [
+        'A. A Section 125 cafeteria plan medical premium.',
+        'B. A traditional 401(k) elective deferral.',
+        'C. A Roth 401(k) elective deferral.',
+        'D. A dependent care flexible spending account contribution.'
+      ],
+      sc: { A: 0, B: 0, C: 5, D: 0 },
+      correct: 'C',
+      correctWhy: 'Roth deferrals are made from wages that have already been taxed for federal income tax purposes, so the deduction is configured post-tax. Section 125 premiums and dependent care FSA contributions are pre-tax; traditional 401(k) deferrals are pre-tax for income tax though still subject to FICA.'
+    },
+    {
+      id: 30, type: 'mcq', group: 'ADP',
+      text: 'When mapping the payroll journal to the general ledger, recording full employer burden requires which set of items?',
+      opts: [
+        'A. Gross wages and employee tax withholdings.',
+        'B. Gross wages, employer FICA, federal and state unemployment, the employer portion of L&I, and employer benefit contributions.',
+        'C. Net pay plus total taxes remitted.',
+        'D. Gross wages only \u2014 employer taxes are recorded when the deposit clears the bank.'
+      ],
+      sc: { A: 0, B: 5, C: 0, D: 0 },
+      correct: 'B',
+      correctWhy: 'Employer burden is expense the organization incurs on top of gross wages, and it belongs in the same period as the wages that generated it. Recording employer taxes only when the deposit clears \u2014 answer D \u2014 pushes expense into the wrong period and leaves the payroll liability accounts permanently out of balance.'
+    },
+    {
+      id: 31, type: 'mcq', group: 'ADP',
+      text: 'A handwritten check was issued to an employee outside the payroll system to correct an underpayment. What must happen in ADP?',
+      opts: [
+        'A. Record it as a net adjustment on the following cycle.',
+        'B. Enter it as a manual or recorded check so the wages, the taxes, and the corresponding deposit are captured in the correct quarter.',
+        'C. Track it outside the system and reconcile at year end.',
+        'D. Add the gross amount to the employee\u2019s next regular paycheck.'
+      ],
+      sc: { A: 0, B: 5, C: 0, D: 1 },
+      correct: 'B',
+      correctWhy: 'Wages paid outside the system still generate tax liability and deposit obligations in the quarter paid. Recording the check into the system is what keeps the quarterly return, the W-2, and the general ledger in agreement. Anything else produces a year-end reconciliation break that is far harder to unwind than the original correction.'
+    },
+    {
+      id: 32, type: 'mcq', group: 'ADP',
+      text: 'Third-party sick pay paid to an employee by an insurer is best described as:',
+      opts: [
+        'A. Not reportable by the employer under any circumstances.',
+        'B. Reportable on the employee\u2019s W-2 and requiring year-end reconciliation, with the split of responsibility governed by the third-party sick pay agreement.',
+        'C. Reported solely by the insurer, never by the employer.',
+        'D. Exempt from all employment taxes.'
+      ],
+      sc: { A: 0, B: 5, C: 1, D: 0 },
+      correct: 'B',
+      correctWhy: 'Third-party sick pay is taxable wages, and whether the insurer or the employer handles reporting and the employer tax share depends on the agreement in place. It is a classic year-end reconciliation trap because the amounts arrive late and from outside the payroll system.'
+    },
+    {
+      id: 33, type: 'mcq', group: 'ADP',
+      text: 'Your provider prepares and files the quarterly returns. A return is filed late. Where does liability sit?',
+      opts: [
+        'A. With the provider, under the terms of the service agreement.',
+        'B. With the employer \u2014 the tax, interest, and penalties remain the employer\u2019s legal obligation, though the service agreement may allow recovery from the provider.',
+        'C. Shared equally between employer and provider.',
+        'D. With the employer only if the employer supplied incorrect data.'
+      ],
+      sc: { A: 0, B: 5, C: 0, D: 1 },
+      correct: 'B',
+      correctWhy: 'Using a filing agent does not transfer the legal obligation. The employer remains liable to the taxing authority regardless of who prepared the return, which is why the job description assigns ownership of accuracy and completeness to this position even for filings the provider produces. A contractual indemnity is a commercial remedy, not a defence to the agency.'
+    },
+    {
+      id: 34, type: 'mcq', group: 'ADP',
+      text: 'Approved hours import from the timekeeping system into payroll each cycle. What is the most reliable control that the imported hours are correct?',
+      opts: [
+        'A. Reviewing the payroll register for unusual amounts before releasing the cycle.',
+        'B. Reconciling total hours and headcount from the source system to the imported batch every cycle and investigating any variance before release.',
+        'C. Relying on supervisor approval in the source system.',
+        'D. Spot-checking a sample of employees each cycle.'
+      ],
+      sc: { A: 2, B: 5, C: 1, D: 3 },
+      correct: 'B',
+      correctWhy: 'A batch-level reconciliation catches dropped records, duplicated records, and partial imports, which are the failure modes that a register review and a sample will both miss. Sampling detects a systemic problem only by luck, and supervisor approval speaks to whether the hours were right in the source system, not to whether they arrived intact.'
+    },
+  ]
+},
+
+// ─────────────────────────────────────────────────────────────
+// SECTION 5 — Wage-Hour, L&I & Washington Compliance (Q35–43)
+// MCQ. Weight 18%. Group: Compliance
+// Determination-level content. Deliberately avoids the topics
+// already tested in Payroll Administrator v1 (L&I premium basis,
+// WA Cares, PFML relief, sick leave accrual, reciprocity,
+// multi-state W-2, amended returns).
+// ─────────────────────────────────────────────────────────────
+{
+  name: 'Wage-Hour, L&I & Washington Compliance',
+  eye: 'Section 5 of 7',
+  badge: 'badge-ems',
+  badgeTxt: 'Correct Answer Exists',
+  qs: [
+    {
+      id: 35, type: 'mcq', group: 'Compliance',
+      text: 'An employee works 48 hours in a workweek at a $28.00 base rate, receives a $3.00 per hour shift differential on 20 of those hours, and earns a $200 nondiscretionary certification bonus attributable to that week. What is the FLSA regular rate?',
+      opts: [
+        'A. $28.00',
+        'B. $31.00',
+        'C. $33.42',
+        'D. $34.42'
+      ],
+      sc: { A: 0, B: 0, C: 5, D: 0 },
+      correct: 'C',
+      correctWhy: 'Total straight-time compensation is $1,344 in base wages, plus $60 in differential, plus the $200 nondiscretionary bonus, which is $1,604. Divided by the 48 hours worked, the regular rate is $33.42. The half-time overtime premium of $133.68 is then owed on the 8 overtime hours in addition to straight time already paid.'
+    },
+    {
+      id: 36, type: 'mcq', group: 'Compliance',
+      text: 'An employee performs duties falling under two different L&I risk classifications during the same quarter. How are the hours reported?',
+      opts: [
+        'A. All hours in the classification where the employee spends the majority of time.',
+        'B. Split by actual hours worked in each classification, provided accurate records supporting the split are maintained; without those records the hours default to the highest-rated classification.',
+        'C. All hours in the classification assigned to the employee\u2019s home department.',
+        'D. Split evenly between the two classifications.'
+      ],
+      sc: { A: 0, B: 5, C: 0, D: 0 },
+      correct: 'B',
+      correctWhy: 'Splitting hours across classifications is permitted only when the employer keeps records adequate to support the split. Absent those records, all hours are assigned to the highest-rated classification \u2014 which is why the recordkeeping, not the classification judgment, is usually what determines the outcome of a premium audit.'
+    },
+    {
+      id: 37, type: 'mcq', group: 'Compliance',
+      text: 'Which set represents the permitted affordability safe harbors for ACA reporting by an applicable large employer?',
+      opts: [
+        'A. Prior-year household income, current-year household income, or family size.',
+        'B. Rate of pay, Form W-2 wages, or the federal poverty line.',
+        'C. Average premium for the industry, adjusted regionally.',
+        'D. The employee\u2019s self-reported household income.'
+      ],
+      sc: { A: 0, B: 5, C: 0, D: 0 },
+      correct: 'B',
+      correctWhy: 'Employers cannot know household income, which is what affordability is actually measured against, so the regulations provide three proxies: rate of pay, W-2 wages, and the federal poverty line. Selecting and applying the safe harbor consistently is a determination this role owns, and it drives the codes reported on Form 1095-C.'
+    },
+    {
+      id: 38, type: 'mcq', group: 'Compliance',
+      text: 'An employee is paid a salary above the Washington exempt threshold but spends the large majority of each workweek on routine clerical processing. What is the correct conclusion?',
+      opts: [
+        'A. The employee is exempt \u2014 the salary threshold is satisfied.',
+        'B. Salary alone does not establish exemption; the duties test must also be met, and this duty profile likely does not meet it.',
+        'C. The employee is exempt if the written job description describes exempt duties.',
+        'D. The employee is exempt provided they work without direct supervision.'
+      ],
+      sc: { A: 0, B: 5, C: 0, D: 1 },
+      correct: 'B',
+      correctWhy: 'Exemption requires both the salary basis and threshold and a qualifying primary duty. Actual duties govern, not the job description and not the absence of supervision. This is the determination the incumbent is expected to make for other positions, and getting it wrong creates retroactive overtime liability plus penalties.'
+    },
+    {
+      id: 39, type: 'mcq', group: 'Compliance',
+      text: 'An employee is subject to both a child support withholding order and a creditor garnishment. Withholding both in full would exceed the statutory limit. What is the correct treatment?',
+      opts: [
+        'A. Prorate the available amount between the two orders.',
+        'B. Satisfy the child support order first; the creditor garnishment receives only what remains within the applicable limit, if anything.',
+        'C. Honor whichever order was received first and return the other.',
+        'D. Withhold the full amount of both and let the employee resolve the shortfall.'
+      ],
+      sc: { A: 0, B: 5, C: 0, D: 0 },
+      correct: 'B',
+      correctWhy: 'Child support takes priority over ordinary creditor garnishments, and the aggregate withholding is capped by federal and state limits on disposable earnings. Prorating or applying first-received order both produce an underpayment to the support order, which carries employer liability.'
+    },
+    {
+      id: 40, type: 'mcq', group: 'Compliance',
+      text: 'Under Washington law, when must final wages be paid to a terminated employee?',
+      opts: [
+        'A. Immediately on the final day worked.',
+        'B. By the end of the established pay period in which the termination occurs.',
+        'C. Within 72 hours of separation.',
+        'D. Within 30 days of separation.'
+      ],
+      sc: { A: 0, B: 5, C: 0, D: 0 },
+      correct: 'B',
+      correctWhy: 'Washington requires final wages by the end of the established pay period, which is a different and more forgiving standard than the immediate-payment rules in some other states. Applying another state\u2019s timing rule is a common error for candidates whose experience is primarily outside Washington.'
+    },
+    {
+      id: 41, type: 'mcq', group: 'Compliance',
+      text: 'A Washington employee misses a required paid rest period because of operational demand. How is that time treated?',
+      opts: [
+        'A. No adjustment is required, since rest periods are already built into the paid shift.',
+        'B. The missed rest period is compensable as time worked and must be paid, counting toward the overtime threshold if the workweek exceeds 40 hours.',
+        'C. It is handled by offering an extended break on a later shift.',
+        'D. It is treated as a policy violation by the supervisor with no pay consequence.'
+      ],
+      sc: { A: 0, B: 5, C: 1, D: 0 },
+      correct: 'B',
+      correctWhy: 'A missed paid rest period means the employee worked time that should have been rest, so it is compensable and counts toward hours worked. In a 24/7 shift operation this is a recurring exposure, and it surfaces through the punch-edit and break-tracking audits this role is expected to run.'
+    },
+    {
+      id: 42, type: 'mcq', group: 'Compliance',
+      text: 'A meal period is automatically deducted each shift. An employee reports having worked through several of them. What is the correct response?',
+      opts: [
+        'A. The auto-deduction stands unless the employee documented the missed meal at the time.',
+        'B. Reverse the deductions and pay the time, then address whether the auto-deduct arrangement has a reliable mechanism for reporting and correcting worked meal periods.',
+        'C. Pay the time going forward but do not adjust prior periods.',
+        'D. Refer the employee to their supervisor, since meal period compliance is an operational matter.'
+      ],
+      sc: { A: 0, B: 5, C: 1, D: 0 },
+      correct: 'B',
+      correctWhy: 'Automatic meal deduction is permissible only where the employer has a workable way for employees to report and be paid for worked meal periods. Once the employer is on notice that work was performed, the time is owed for the periods already worked, not merely prospectively. Declining to adjust prior periods converts a fixable error into unpaid wages.'
+    },
+    {
+      id: 43, type: 'mcq', group: 'Compliance',
+      text: 'What is the minimum retention period for core payroll records under federal and Washington requirements?',
+      opts: [
+        'A. One year.',
+        'B. At least three years.',
+        'C. Seven years.',
+        'D. Records must be retained indefinitely.'
+      ],
+      sc: { A: 0, B: 5, C: 1, D: 0 },
+      correct: 'B',
+      correctWhy: 'Three years is the baseline retention period for payroll records under both federal and Washington rules, with the supporting records on which wage computations are based subject to a shorter federal minimum. A candidate who answers seven years or indefinitely is applying a general tax or accounting retention habit rather than the wage-hour rule.'
+    },
+  ]
+},
+
+// ─────────────────────────────────────────────────────────────
+// SECTION 6 — Judgment Scenarios (Q44–51)
+// Forced trade-off, one designated wrong answer. Weight 14%.
+// Group: Scenarios
+// Distinct from Payroll Administrator v1 scenarios (unidentified
+// payroll liability, overpayment recovery, late tax deposit).
+// These are ownership-level: the incumbent makes the call and
+// carries it, including against operational and executive push.
+// ─────────────────────────────────────────────────────────────
+{
+  name: 'Judgment Scenarios',
+  eye: 'Section 6 of 7',
+  badge: 'badge-trade',
+  badgeTxt: 'One Wrong Answer',
+  qs: [
+    {
+      id: 44, type: 'trade', group: 'Scenarios',
+      text: 'You discover that a shift differential has been excluded from the FLSA regular rate for roughly 14 months, affecting about 60 employees. Nobody has complained.',
+      context: 'Systemic historical underpayment discovered by the person who owns the function.',
+      opts: [
+        'A. Correct the configuration going forward. The exposure is historical, no one has raised it, and reopening 14 months invites a larger problem.',
+        'B. Correct the configuration immediately, quantify the back-pay exposure by employee, and bring the Controller a remediation plan including whether counsel should be involved.',
+        'C. Correct it going forward and disclose the historical exposure at the next scheduled finance review.',
+        'D. Correct it going forward and quietly begin paying affected employees a make-up amount without characterizing it as back pay.'
+      ],
+      sc: { A: 0, B: 5, C: 2, D: 1 },
+      wrong: 'A',
+      wrongWhy: 'Fixing forward only is a decision to retain known unpaid-wage liability across 60 employees, and the absence of complaints is not a defence \u2014 it is what makes the exposure grow quietly. This is also the answer most likely to convert an expensive but manageable correction into a collective action. Option D is only marginally better because undocumented make-up payments obscure what was owed and when.'
+    },
+    {
+      id: 45, type: 'trade', group: 'Scenarios',
+      text: 'An operations director tells you to release the cycle on time. You have concluded that a department\u2019s reported time is not reliable \u2014 punch edits after the fact, and approvals entered in bulk minutes before the deadline.',
+      context: 'The job description gives this role authority to determine when reported time may not be relied upon, and to withhold or correct a cycle accordingly.',
+      opts: [
+        'A. Release the cycle as instructed. The operations director owns their department\u2019s time and has approved it.',
+        'B. Release pay for the departments whose time is sound, hold or correct the affected department, notify the Controller and the operations director in writing, and document the pattern for follow-up.',
+        'C. Hold the entire payroll until the affected department\u2019s time is re-verified.',
+        'D. Release everything on time and open an audit of the department\u2019s punch edits immediately afterward.'
+      ],
+      sc: { A: 0, B: 5, C: 2, D: 3 },
+      wrong: 'A',
+      wrongWhy: 'Deferring to the approver is exactly the failure this position was created to eliminate \u2014 the incumbent sets the standard those approvals must meet and audits against it. Note that holding the entire payroll is also a poor answer: it punishes employees whose time was fine and creates its own wage-payment problem.'
+    },
+    {
+      id: 46, type: 'trade', group: 'Scenarios',
+      text: 'During an L&I premium audit, the auditor asks for records covering a job role you concluded three months ago had been assigned to the wrong risk classification. You have not yet corrected it.',
+      context: 'This role represents the organization during L&I premium audits.',
+      opts: [
+        'A. Provide only what was specifically requested and say nothing about your own conclusion unless the auditor asks directly.',
+        'B. Provide the records, disclose the classification issue and your analysis, and present the correction and quantified exposure you have prepared.',
+        'C. Ask to pause the audit so you can complete the reclassification first, then resume.',
+        'D. Provide the records and disclose the issue, but wait to discuss the dollar exposure until the auditor raises it.'
+      ],
+      sc: { A: 0, B: 5, C: 1, D: 3 },
+      wrong: 'A',
+      wrongWhy: 'Withholding a known misclassification from an auditor examining that exact subject is concealment, and it converts a premium adjustment into a credibility and penalty problem. Self-disclosure with quantified exposure and a correction already prepared is the posture that produces the best outcome in a premium audit \u2014 and it is why the organization wants this determination owned by one person.'
+    },
+    {
+      id: 47, type: 'trade', group: 'Scenarios',
+      text: 'The CEO asks you to classify a newly created position as exempt to avoid overtime cost. Your analysis of the actual duties does not support exemption.',
+      context: 'The incumbent evaluates positions for exempt status and advises management on classification decisions.',
+      opts: [
+        'A. Classify it as exempt. The CEO has the authority and the accountability for the decision.',
+        'B. Explain why the duties do not support exemption, quantify the misclassification exposure, and offer alternatives \u2014 restructuring the duties, or budgeting for the position as non-exempt.',
+        'C. Classify it as non-exempt without further discussion, since the analysis is clear.',
+        'D. Classify it as exempt but document in writing that you advised against it.'
+      ],
+      sc: { A: 0, B: 5, C: 3, D: 2 },
+      wrong: 'A',
+      wrongWhy: 'Authority does not make a duties test come out differently, and the liability lands on the organization regardless of who directed it. Note that flatly classifying it non-exempt without engaging \u2014 option C \u2014 is technically correct but wastes the advisory function; the strong answer offers the CEO a route to the cost outcome they want that is actually lawful.'
+    },
+    {
+      id: 48, type: 'trade', group: 'Scenarios',
+      text: 'You discover that you personally were overpaid by roughly $2,400 over several cycles because of an earnings code you configured incorrectly.',
+      context: 'Self-dealing exposure in a function with no second reviewer.',
+      opts: [
+        'A. Correct the configuration and repay the amount through a self-processed adjustment on the next cycle, then note it in your records.',
+        'B. Correct the configuration, disclose the error and the amount to the Controller immediately, and have the repayment arrangement approved and processed by someone other than you.',
+        'C. Correct the configuration and raise the overpayment at your next one-on-one with the Controller.',
+        'D. Correct the configuration and repay the full amount immediately from personal funds, then document it.'
+      ],
+      sc: { A: 0, B: 5, C: 2, D: 3 },
+      wrong: 'A',
+      wrongWhy: 'Self-processing a correction to your own pay \u2014 even an honest, self-reported one \u2014 removes the only control that exists and leaves a record indistinguishable from concealment. The disclosure and the execution both have to leave the incumbent\u2019s hands. Immediate personal repayment is well intentioned but still bypasses approval and creates its own tax and record problems.'
+    },
+    {
+      id: 49, type: 'trade', group: 'Scenarios',
+      text: 'A field supervisor has been editing crew punches after the fact in a pattern that consistently removes overtime. Each individual edit is small and each is approved.',
+      context: 'The incumbent audits supervisor approvals and determines which patterns require intervention.',
+      opts: [
+        'A. Treat it as an operational matter and raise it with the supervisor\u2019s manager to handle.',
+        'B. Quantify the affected hours and employees, correct the underpaid time, escalate the pattern to the Controller and operational leadership, and retrain or restrict the supervisor\u2019s edit access.',
+        'C. Contact the supervisor directly, explain the standard, and monitor whether the pattern stops.',
+        'D. Restrict the supervisor\u2019s punch-edit access immediately and notify their manager.'
+      ],
+      sc: { A: 0, B: 5, C: 2, D: 3 },
+      wrong: 'A',
+      wrongWhy: 'A systematic pattern of overtime-removing edits is unpaid wages, not an operational coaching issue, and handing it off leaves the wage exposure uncorrected while the pattern continues. The employees affected have to be made whole first; the personnel question is secondary and belongs to someone else.'
+    },
+    {
+      id: 50, type: 'trade', group: 'Scenarios',
+      text: 'It is the same week as a quarter-end filing deadline. A garnishment order arrives with a short statutory response window, a tax notice needs a reply, and a department wants a custom pay report for a budget meeting.',
+      context: 'Concurrent statutory deadlines against a discretionary internal request.',
+      opts: [
+        'A. Work them in the order received so nobody is deprioritized, and communicate that everything will be handled this week.',
+        'B. Sequence by legal deadline and consequence \u2014 garnishment and tax notice first, quarter-end filing on its schedule \u2014 and tell the department when the report will realistically arrive.',
+        'C. Do the department report first because it is quick, then work the statutory items.',
+        'D. Ask the Controller to decide the order before starting anything.'
+      ],
+      sc: { A: 0, B: 5, C: 1, D: 2 },
+      wrong: 'A',
+      wrongWhy: 'Arrival order is not triage, and promising everything in the same week is how a statutory deadline gets missed. This role is expected to sequence by consequence independently and to tell an internal requester a realistic date rather than an accommodating one. Escalating the sequencing decision upward \u2014 option D \u2014 is also weak in a single-owner function.'
+    },
+    {
+      id: 51, type: 'trade', group: 'Scenarios',
+      text: 'You are eight weeks into the role. Payroll runs, but nothing is documented \u2014 no written pay practice standards, no procedure notes, no record of why current configurations were set the way they were.',
+      context: 'The posting requires documenting the function to a standard that lets another finance team member complete a cycle in the incumbent\u2019s absence.',
+      opts: [
+        'A. Wait until the function is stable and the configuration is settled, then document it properly in one effort.',
+        'B. Document each process at the point it is performed or redesigned, prioritizing the cycle-critical path first so someone else could run payroll if needed.',
+        'C. Write the intended process as designed now, and reconcile it against actual practice later.',
+        'D. Focus on compliance corrections first and document once the backlog is clear.'
+      ],
+      sc: { A: 0, B: 5, C: 2, D: 3 },
+      wrong: 'A',
+      wrongWhy: 'The function is never going to be stable, and until the cycle-critical path is written down the organization has a single point of failure with no continuity. Waiting also means the reasoning behind configuration decisions is reconstructed from memory months later, which is exactly what the current state of the function shows happens.'
+    },
+  ]
+},
+
+// ─────────────────────────────────────────────────────────────
+// SECTION 7 — Self-Disclosure & Validity (Q52–57)
+// Weight 8%. Group: Disclosure (Q57 = Validity, unscored)
+// Every item is verifiable in the oral board or by reference.
+// Flags are probes, not disqualifiers.
+// ─────────────────────────────────────────────────────────────
+{
+  name: 'Self-Disclosure & Validity',
+  eye: 'Section 7 of 7',
+  badge: 'badge-disc',
+  badgeTxt: 'Verifiable Disclosures',
+  qs: [
+    {
+      id: 52, type: 'disc', group: 'Disclosure',
+      text: 'Which best describes your hands-on work in ADP?',
+      opts: [
+        'A. I have configured earnings codes, deductions, accrual rules, workweek settings, and pay rules myself, and can explain the downstream effect of each.',
+        'B. I have configured some settings myself and requested others through ADP support or an internal administrator.',
+        'C. I have processed payroll in ADP as an end user but configuration was handled by someone else.',
+        'D. My hands-on experience is in another payroll platform rather than ADP.'
+      ],
+      sc: { A: 5, B: 3, C: 1, D: 1 },
+      flag: ['C','D'],
+      flagWhy: 'The posting requires ADP experience "not solely as an end user," and this role owns the configuration that enforces the pay practices it designs. C is a genuine gap. D is worth probing rather than excluding \u2014 deep configuration experience in another platform often transfers, though it needs a verified ramp plan. Test either with a live configuration walkthrough.'
+    },
+    {
+      id: 53, type: 'disc', group: 'Disclosure',
+      text: 'What is the largest payroll population you have personally owned, meaning you were the accountable person rather than one of several processors?',
+      opts: [
+        'A. Several hundred employees or more, as the single accountable owner of the function.',
+        'B. Several hundred employees, but as part of a payroll team with shared ownership.',
+        'C. Under one hundred employees as the accountable owner.',
+        'D. I have processed payroll but have not been the accountable owner of the function.'
+      ],
+      sc: { A: 5, B: 3, C: 2, D: 0 },
+      flag: ['D'],
+      flagWhy: 'The posting requires five or more years including responsibility for several hundred employees, and this position consolidates a distributed function into single-point ownership. D has not held accountability at all. C is a scale question rather than a kind-of-work question \u2014 probe whether the smaller population involved the same compliance surface.'
+    },
+    {
+      id: 54, type: 'disc', group: 'Disclosure',
+      text: 'Have you represented an employer directly in an agency audit or examination \u2014 L&I premium, unemployment, IRS, or state wage-hour?',
+      opts: [
+        'A. Yes \u2014 I was the organization\u2019s representative and can describe the issues raised, what I produced, and how it resolved.',
+        'B. Yes \u2014 I prepared the records and supported the audit, but someone else represented the organization.',
+        'C. I have responded to agency notices and correspondence but not an audit.',
+        'D. No \u2014 audits were handled by others or by outside advisors.'
+      ],
+      sc: { A: 5, B: 3, C: 2, D: 0 },
+      flag: ['D'],
+      flagWhy: 'Representing the organization before taxing and regulatory agencies is an explicit duty and part of the basis for the exempt classification. D means the candidate has never held that exposure. Probe how they would prepare for an L&I premium audit and what they would expect the auditor to ask for first.'
+    },
+    {
+      id: 55, type: 'disc', group: 'Disclosure',
+      text: 'Have you made a wage and hour interpretation that cost your employer money, over some internal resistance?',
+      opts: [
+        'A. Yes \u2014 I can describe the practice, the analysis, what it cost, and how I carried the decision.',
+        'B. Yes \u2014 I identified the issue and raised it, but the decision and the advocacy belonged to someone above me.',
+        'C. I have flagged issues of this kind but they were resolved without significant cost or resistance.',
+        'D. I have not been in that situation.'
+      ],
+      sc: { A: 5, B: 3, C: 2, D: 1 },
+      flag: ['D'],
+      flagWhy: 'This is the most predictive disclosure item in the set. The position is defined by making determinations with direct financial consequence and holding them without prior approval. A candidate who has never done this has been operating in a role where someone else absorbed the pressure. D is common and not automatically disqualifying \u2014 probe whether the situation simply never arose.'
+    },
+    {
+      id: 56, type: 'disc', group: 'Disclosure',
+      text: 'How have you handled a week where a payroll release, a statutory filing deadline, and an unplanned urgent item all landed together?',
+      opts: [
+        'A. This is routine for me \u2014 I sequence by legal deadline and consequence, and I can describe a specific week and how it went.',
+        'B. It has happened and I got through it, though it required extended hours and some things ran close to the line.',
+        'C. It has happened and something slipped, and I changed how I plan the calendar as a result.',
+        'D. My previous roles were structured so that these did not usually collide.'
+      ],
+      sc: { A: 5, B: 4, C: 3, D: 1 },
+      flag: ['D'],
+      flagWhy: 'Note that C scores reasonably \u2014 a candidate who had something slip and changed their planning as a result is showing real experience and self-correction, which is more credible than a claim of frictionless competence. D indicates the collision has not been tested, which matters because in this role it is the normal calendar rather than an exception.'
+    },
+    {
+      id: 57, type: 'validity', group: 'Validity',
+      text: 'Which best describes your record on payroll accuracy and compliance?',
+      opts: [
+        'A. I have never had a payroll error reach an employee\u2019s paycheck.',
+        'B. Errors have occurred, and I caught or disclosed them and corrected the process that allowed them.',
+        'C. There have been periods where too much got through, and I changed how I review and reconcile as a result.',
+        'D. I have never received an agency notice, penalty, or correction of any kind in my career.'
+      ],
+      sc: { A: 1, B: 5, C: 4, D: 1 },
+      flag: ['A','D'],
+      flagWhy: 'A and D are claims of career-long perfection in a function where notices and corrections are routine, especially at several hundred employees across multiple jurisdictions. Either the candidate is managing their image or their exposure has been narrower than claimed. Ask for a specific error and a specific notice; inability to produce either is the answer.'
+    },
+  ]
+},
+
+]; // end SECTIONS
+
+// ============================================================
+// CATEGORY DISPLAY CONFIG
+// ============================================================
+const CATS = [
+  { key: 'Integrity',   label: 'Integrity & Confidentiality', color: '#1b2d4a' },
+  { key: 'Scenarios',   label: 'Judgment Scenarios',          color: '#7c1b1b' },
+  { key: 'Reliability', label: 'Reliability & Risk',          color: '#4a7c1b' },
+  { key: 'Concurrency', label: 'Concurrent Load',             color: '#1b5c7c' },
+  { key: 'Disclosure',  label: 'Self-Disclosure',             color: '#4a4a7c' },
+  { key: 'ADP',         label: 'ADP Configuration',           color: '#7c4a1b' },
+  { key: 'Compliance',  label: 'Wage-Hour, L&I & WA',         color: '#8B1A1A' },
+];
+
+// Character, culture and integrity are the primary attributes; knowledge is
+// secondary and treated as a ramp-cost question rather than a gate.
+// Character / conduct / fit = 76%   ·   Technical knowledge = 24%
+const WEIGHTS = {
+  Integrity: 0.26,    // character — primary
+  Scenarios: 0.19,    // character in action, under pressure
+  Reliability: 0.14,  // conduct and ownership
+  Concurrency: 0.09,  // working style and fit
+  Disclosure: 0.08,   // verifiable track record
+  ADP: 0.14,          // knowledge — secondary, but the role owns configuration
+  Compliance: 0.10    // knowledge — secondary, teachable with a strong hire
+};
+// ============================================================
+// STATE
+// ============================================================
+let cand = {};
+let ans = {};
+let sec = 0;
+
+// ============================================================
+// START
+// ============================================================
+function start() {
+  const fn = document.getElementById('i-fn').value.trim();
+  const ln = document.getElementById('i-ln').value.trim();
+  const em = document.getElementById('i-em').value.trim();
+  if (!fn || !ln || !em) { alert('Please enter your first name, last name, and email.'); return; }
+  cand = {
+    firstName: fn, lastName: ln, name: fn + ' ' + ln, email: em,
+    phone: document.getElementById('i-ph').value.trim(),
+    pos: document.getElementById('i-pos').value.trim() || 'Payroll Manager',
+    date: new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
+  };
+  document.getElementById('screen-welcome').style.display = 'none';
+  document.getElementById('screen-assessment').style.display = 'block';
+  document.getElementById('hdr-right').style.display = 'flex';
+  sec = 0;
+  render();
+}
+
+// ============================================================
+// RENDER
+// ============================================================
+function render() {
+  const s = SECTIONS[sec];
+  document.getElementById('sec-eye').textContent = s.eye;
+  document.getElementById('sec-h').textContent = s.name;
+  const badge = document.getElementById('sec-badge');
+  badge.className = 'sec-badge ' + s.badge;
+  badge.textContent = s.badgeTxt;
+
+  const c = document.getElementById('q-container');
+  c.innerHTML = '';
+
+  s.qs.forEach(q => {
+    const card = document.createElement('div');
+    card.className = 'q-card' + (ans[q.id] !== undefined ? ' answered' : '');
+    card.id = 'qc' + q.id;
+    let html = '<div class="q-num">Question ' + q.id + ' of ' + TOTAL_Q + '</div>';
+    if (q.context) html += '<div class="q-context">' + q.context + '</div>';
+    html += '<div class="q-text">' + q.text + '</div>';
+    card.innerHTML = html;
+    card.appendChild(q.type === 'likert' ? buildLikert(q) : buildMCQ(q));
+    c.appendChild(card);
+  });
+
+  document.getElementById('btn-prev').style.display = sec > 0 ? 'inline-flex' : 'none';
+  document.getElementById('btn-next').textContent = sec === SECTIONS.length - 1 ? 'Submit Assessment' : 'Next Section →';
+  upProg();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function buildLikert(q) {
+  const wrap = document.createElement('div');
+  const lw = document.createElement('div');
+  lw.className = 'likert-wrap';
+  lw.id = 'lw' + q.id;
+  LIKERT.forEach(lbl => {
+    const opt = document.createElement('div');
+    opt.className = 'l-opt' + (ans[q.id] === lbl ? ' selected' : '');
+    opt.textContent = lbl;
+    opt.onclick = () => {
+      lw.querySelectorAll('.l-opt').forEach(o => o.classList.remove('selected'));
+      opt.classList.add('selected');
+      ans[q.id] = lbl;
+      document.getElementById('qc' + q.id).classList.add('answered');
+      upProg();
+    };
+    lw.appendChild(opt);
+  });
+  const ends = document.createElement('div');
+  ends.className = 'likert-ends';
+  ends.innerHTML = '<span>Strongly Disagree</span><span>Strongly Agree</span>';
+  wrap.appendChild(lw);
+  wrap.appendChild(ends);
+  return wrap;
+}
+
+function buildMCQ(q) {
+  const letters = ['A','B','C','D'];
+  const wrap = document.createElement('div');
+  wrap.className = 'opts';
+  wrap.id = 'mw' + q.id;
+  q.opts.forEach((txt, i) => {
+    const letter = letters[i];
+    const rid = 'r' + q.id + letter;
+    const radio = document.createElement('input');
+    radio.type = 'radio';
+    radio.name = 'q' + q.id;
+    radio.id = rid;
+    radio.value = letter;
+    radio.className = 'opt-radio';
+    if (ans[q.id] === letter) radio.checked = true;
+    radio.onchange = () => {
+      ans[q.id] = letter;
+      document.getElementById('qc' + q.id).classList.add('answered');
+      upProg();
+    };
+    const label = document.createElement('label');
+    label.htmlFor = rid;
+    label.className = 'opt-label';
+    label.innerHTML = '<span class="opt-key">' + letter + '</span>' + txt.replace(/^[A-D]\.\s*/, '');
+    wrap.appendChild(radio);
+    wrap.appendChild(label);
+  });
+  return wrap;
+}
+
+function upProg() {
+  const done = Object.keys(ans).length;
+  document.getElementById('prog-txt').textContent = done + ' / ' + TOTAL_Q;
+  document.getElementById('prog-bar').style.width = Math.round(done / TOTAL_Q * 100) + '%';
+  const s = SECTIONS[sec];
+  const secDone = s.qs.filter(q => ans[q.id] !== undefined).length;
+  document.getElementById('nav-info').textContent = secDone + ' of ' + s.qs.length + ' answered';
+}
+
+function prev() { if (sec > 0) { sec--; render(); } }
+
+function next() {
+  const s = SECTIONS[sec];
+  const missing = s.qs.filter(q => ans[q.id] === undefined);
+  if (missing.length) {
+    alert('Please answer all questions before continuing. (' + missing.length + ' remaining)');
+    document.getElementById('qc' + missing[0].id).scrollIntoView({ behavior: 'smooth', block: 'center' });
+    return;
+  }
+  if (sec < SECTIONS.length - 1) { sec++; render(); }
+  else showResults();
+}
+
+// ============================================================
+// SCORING ENGINE
+// STANDARD likert: SD=1 D=2 N=3 A=4 SA=5   REVERSE: inverted
+// ============================================================
+function scoreLikert(q, response) {
+  const raw = LIKERT.indexOf(response) + 1;
+  return q.rev ? (6 - raw) : raw;
+}
+
+function scoreQ(q, response) {
+  if (response === undefined) return 0;
+  if (q.type === 'likert') return scoreLikert(q, response);
+  return q.sc[response] !== undefined ? q.sc[response] : 0;
+}
+
+function computeAll() {
+  const groups = {}, maxGroups = {};
+  SECTIONS.forEach(s => {
+    s.qs.forEach(q => {
+      if (q.group === 'Validity') return; // excluded from scoring
+      const v = scoreQ(q, ans[q.id]);
+      if (!groups[q.group]) { groups[q.group] = []; maxGroups[q.group] = []; }
+      groups[q.group].push(v);
+      maxGroups[q.group].push(q.type === 'likert' ? 5 : Math.max(...Object.values(q.sc)));
+    });
+  });
+  const groupPct = {};
+  Object.keys(groups).forEach(g => {
+    const raw = groups[g].reduce((a,b) => a+b, 0);
+    const max = maxGroups[g].reduce((a,b) => a+b, 0);
+    groupPct[g] = max > 0 ? Math.round(raw / max * 100) : 0;
+  });
+  let composite = 0, wSum = 0;
+  Object.entries(WEIGHTS).forEach(([g,w]) => { composite += (groupPct[g] || 0) * w; wSum += w; });
+  return { groupPct, composite: Math.round(composite / wSum) };
+}
+
+// ── FLAGS ────────────────────────────────────────────────────
+// CHANGED FROM CONTROLLER v3: conduct flags and knowledge misses
+// are counted SEPARATELY. This assessment has 17 knowledge MCQs
+// versus the Controller's 12. Pooling them into one count would
+// hard-stop any candidate who simply missed four technical items,
+// which is a knowledge gap, not a character concern. Knowledge is
+// gated by the category percentage floors instead.
+// ─────────────────────────────────────────────────────────────
+function getFlags() {
+  const conduct = [], knowledge = [];
+  SECTIONS.forEach(s => {
+    s.qs.forEach(q => {
+      const a = ans[q.id];
+      if (a === undefined) return;
+      const stem = q.text.substring(0,110) + (q.text.length > 110 ? '…' : '');
+      const L = ['A','B','C','D'];
+      if (q.type === 'likert' && q.rf && q.rf.includes(a)) {
+        conduct.push({ id:q.id, g:q.group, q:stem, a:a, why:q.rfWhy || '' });
+      }
+      if (q.wrong && a === q.wrong) {
+        conduct.push({ id:q.id, g:q.group, q:stem, a:q.opts[L.indexOf(a)].substring(0,70), why:q.wrongWhy || '' });
+      }
+      if (q.flag && q.flag.includes(a)) {
+        conduct.push({ id:q.id, g:q.group, q:stem, a:q.opts[L.indexOf(a)].substring(0,70), why:q.flagWhy || '' });
+      }
+      if (q.correct && a !== q.correct) {
+        knowledge.push({ id:q.id, q:stem, a:'Incorrect — chose ' + a + ': ' + q.opts[L.indexOf(a)].substring(0,50), why:q.correctWhy || '' });
+      }
+    });
+  });
+  return { conduct, knowledge };
+}
+
+function getValidityFlag() {
+  const q = SECTIONS[6].qs.find(x => x.id === 57);
+  const a = ans[57];
+  return (a && q.flag.includes(a)) ? 1 : 0;
+}
+
+// ── VERDICT ──────────────────────────────────────────────────
+// Calibrated to sit just BELOW Controller v3 (82/72/60) so the
+// subordinate role is not a harder gate than the role above it.
+// Integrity floor is set at 62 rather than the Controller's 50:
+// 60% equals answering Neutral to everything, so a floor below
+// that gates nothing. Consider raising the Controller's to match.
+// ─────────────────────────────────────────────────────────────
+function getVerdict(composite, conduct, knowMisses, gp) {
+  const integ = gp['Integrity'] || 0, scen = gp['Scenarios'] || 0,
+        adp   = gp['ADP'] || 0,       comp = gp['Compliance'] || 0,
+        conc  = gp['Concurrency'] || 0;
+  const total = conduct.length;
+  // Core = integrity and scenario flags. These are character findings and they
+  // govern the verdict. Reliability, concurrency and disclosure flags matter
+  // but are fit and habit findings, so they need a higher count to stop a hire.
+  const core = conduct.filter(f => f.g === 'Integrity' || f.g === 'Scenarios').length;
+
+  // HARD STOPS — character first.
+  // Knowledge floors are set low deliberately: they catch a candidate who
+  // cannot do the work at all, not one who is rusty or unfamiliar with
+  // Washington. Technical gaps are a ramp-cost decision, not a rejection.
+  if (core >= 2 || total >= 4 || integ < 68 || scen < 62 || conc < 50) {
+    return { label: 'Do Not Advance', cls: 'vp-no' };
+  }
+  if (adp < 45 || comp < 38) {
+    return { label: 'Do Not Advance', cls: 'vp-no' };
+  }
+  if (composite >= 80 && total === 0 && knowMisses <= 3) {
+    return { label: 'Recommended: Hire', cls: 'vp-hire' };
+  }
+  // A single integrity or scenario flag cannot pass on the strength of a good
+  // composite. Character findings get discussed before an offer, every time.
+  if (core >= 1) return { label: 'Review Further', cls: 'vp-review' };
+  // Heavy technical gaps no longer cap the verdict on their own — they are
+  // reported as ramp cost. Only a near-total failure of the knowledge sections
+  // reaches back into the verdict, and the floors above handle that.
+  if (composite >= 70 && total <= 1) return { label: 'Hire with Review', cls: 'vp-review' };
+  if (composite >= 58 && total <= 3) return { label: 'Review Further', cls: 'vp-review' };
+  return { label: 'Do Not Advance', cls: 'vp-no' };
+}
+
+// ============================================================
+// SHOW RESULTS
+// ============================================================
+async function showResults() {
+  document.getElementById('screen-assessment').style.display = 'none';
+  document.getElementById('screen-results').style.display = 'block';
+  document.getElementById('hdr-right').style.display = 'none';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  const { groupPct, composite } = computeAll();
+  const { conduct, knowledge } = getFlags();
+  const vFlag = getValidityFlag();
+  const verdict = getVerdict(composite, conduct, knowledge.length, groupPct);
+  const redFlagResponses = recruiterFlags(conduct, knowledge, vFlag);
+  const redFlagQuestions = [...conduct,...knowledge].map(f=>'Q'+f.id+': '+findQuestion(f.id).text).concat(vFlag?['Q57: '+findQuestion(57).text]:[]).join('\n') || 'None';
+  const redFlagAnswers = [...conduct,...knowledge].map(f=>'Q'+f.id+': '+fullAnswer(f.id)).concat(vFlag?['Q57: '+fullAnswer(57)]:[]).join('\n') || 'None';
+  const completedAt = new Date().toISOString();
+  const payload = {
+    completionDate: completedAt,
+    email: cand.email || '', firstName: cand.firstName || '', lastName: cand.lastName || '', phone: cand.phone || '',
+    position: cand.pos || 'Payroll Manager', assessmentType: ASSESSMENT_TYPE, assessmentVersion: ASSESSMENT_VERSION,
+    score: String(composite), compositeScore: String(composite), recommendation: verdict.label,
+    redFlags: String(conduct.length + knowledge.length + vFlag), redFlagCount: String(conduct.length + knowledge.length + vFlag),
+    conductFlagCount: String(conduct.length), technicalMissCount: String(knowledge.length), validityConcernCount: String(vFlag),
+    redFlagResponses: excelSafeText(redFlagResponses,16000), redFlagQuestions: excelSafeText(redFlagQuestions,12000), redFlagAnswers: excelSafeText(redFlagAnswers,12000),
+    candidate_id: applicationContext.candidate_id, application_id: applicationContext.application_id, job_id: applicationContext.job_id,
+    job_shortcode: applicationContext.job_shortcode, job_title: applicationContext.job_title || cand.pos || '', source: applicationContext.source,
+    integrity: String(groupPct['Integrity']||0), scenarios: String(groupPct['Scenarios']||0), reliability: String(groupPct['Reliability']||0),
+    concurrency: String(groupPct['Concurrency']||0), disclosure: String(groupPct['Disclosure']||0), adp: String(groupPct['ADP']||0), compliance: String(groupPct['Compliance']||0)
+  };
+  payload.report = "'" + excelSafeText('PAYROLL MANAGER ASSESSMENT - '+cand.name+'\nRECOMMENDATION: '+verdict.label+'\nComposite Score: '+composite+' / 100\n\nRED FLAG RESPONSES:\n'+redFlagResponses,30000);
+  payload.fullReport = payload.report;
+  payload.payloadJson = excelSafeText(JSON.stringify({candidate:cand,applicationContext,scores:{composite,recommendation:verdict.label,groupPct},redFlagResponses,redFlagQuestions,redFlagAnswers,completedAt}),30000);
+  submitToFlow(payload).then(ok => { if(!ok) console.error('Power Automate did not confirm assessment submission.'); });
+
+  const vp = document.getElementById('v-pill');
+  vp.textContent = verdict.label;
+  vp.className = 'v-pill ' + verdict.cls;
+  document.getElementById('r-name').textContent = cand.name;
+  document.getElementById('r-meta').textContent = cand.pos + '  ·  ' + cand.date;
+  document.getElementById('r-score').textContent = composite;
+
+  const cg = document.getElementById('cat-grid');
+  cg.innerHTML = '';
+  CATS.forEach(cat => {
+    const pct = groupPct[cat.key] || 0;
+    const color = pct >= 80 ? '#2d6a3f' : pct >= 60 ? '#7c5a00' : '#8b1a1a';
+    const card = document.createElement('div');
+    card.className = 'cat-card';
+    card.innerHTML =
+      '<div class="cat-lbl">' + cat.label + '</div><div class="cat-row">' +
+      '<div class="cat-bar-bg"><div class="cat-bar" style="width:0%;background:' + color + '" data-pct="' + pct + '"></div></div>' +
+      '<div class="cat-val" style="color:' + color + '">' + pct + '%</div></div>';
+    cg.appendChild(card);
+  });
+  setTimeout(() => { document.querySelectorAll('.cat-bar').forEach(b => { b.style.width = b.dataset.pct + '%'; }); }, 100);
+
+  const row = f => '<div class="flag-row"><div class="flag-q">Q' + f.id + ' · ' + f.q + '</div>' +
+    '<div class="flag-a">→ ' + f.a + '</div>' + (f.why ? '<div class="flag-why">' + f.why + '</div>' : '') + '</div>';
+
+  if (conduct.length > 0) {
+    document.getElementById('flags-box').style.display = 'block';
+    document.getElementById('flags-list').innerHTML = conduct.map(row).join('');
+  }
+  if (knowledge.length > 0) {
+    document.getElementById('know-box').style.display = 'block';
+    document.getElementById('know-list').innerHTML = knowledge.map(row).join('');
+  }
+
+  let summaryText = '';
+  if (verdict.cls === 'vp-hire') {
+    summaryText = 'This candidate shows strong integrity, sound judgment under pressure, and reliable working habits \u2014 the attributes this organization weights most heavily. No conduct flags were raised. Confirm ADP configuration depth with a live walkthrough and verify agency audit experience in the oral board.';
+  } else if (verdict.cls === 'vp-review') {
+    summaryText = 'This candidate shows generally positive attributes with specific areas to resolve before an offer. Work the flagged items below directly rather than holding a general conversation \u2014 each is verifiable in the oral board or through a reference check.';
+  } else {
+    summaryText = 'This candidate\'s responses indicate concerns in at least one area that is non-negotiable for a role that owns pay determinations, holds sole access to compensation data, and represents the organization before regulatory agencies. Review the flagged items with the hiring manager before advancing.';
+  }
+  const g = k => groupPct[k] || 0;
+  const coreCount = conduct.filter(f => f.g === 'Integrity' || f.g === 'Scenarios').length;
+
+  // ── Character first ──
+  if (coreCount > 0) summaryText += ' ' + coreCount + ' character flag' + (coreCount > 1 ? 's were' : ' was') + ' raised in the integrity or scenario sections. These are the primary attributes for this hire and must be resolved before an offer, regardless of how strong the rest of the profile looks.';
+  if (g('Integrity') < 80) summaryText += ' Integrity score (' + g('Integrity') + '%) is below target for a sole-custodian role with no second reviewer \u2014 probe self-processing controls and pay-data access habits directly.';
+  if (g('Scenarios') < 75) summaryText += ' Judgment scenario score (' + g('Scenarios') + '%) warrants close review \u2014 explore how the candidate handles pressure from operations and from executives on classification and release decisions.';
+  if (g('Reliability') < 70) summaryText += ' Reliability score (' + g('Reliability') + '%) warrants attention; this is a single point of failure by design. Verify attendance and follow-through with prior supervisors.';
+  if (g('Concurrency') < 70) summaryText += ' Concurrent load score (' + g('Concurrency') + '%) is a concern \u2014 statutory deadlines routinely collide in this function. Probe how they sequence competing obligations and whether they track commitments externally.';
+
+  // ── Knowledge second: reported as ramp cost, not as a verdict driver ──
+  if (g('ADP') < 70 || g('Compliance') < 65 || knowledge.length >= 5) {
+    summaryText += ' RAMP COST: ';
+    const parts = [];
+    if (g('ADP') < 70) parts.push('ADP configuration scored ' + g('ADP') + '%, suggesting the candidate may be an end user rather than a configurator \u2014 run a live configuration exercise and budget onboarding time');
+    if (g('Compliance') < 65) parts.push('wage-hour, L&I and Washington knowledge scored ' + g('Compliance') + '%, which is teachable but means the first two quarters need Controller oversight on determinations');
+    if (knowledge.length >= 5) parts.push(knowledge.length + ' of 18 technical items were missed');
+    summaryText += parts.join('; ') + '. Technical gaps are weighted as secondary in this assessment. Treat them as a training and supervision question, not as a character concern \u2014 but price the ramp honestly before extending an offer.';
+  }
+  if (vFlag) summaryText += ' Validity flag raised \u2014 the candidate claimed an implausible perfect record in a function where notices and corrections are routine. Weight the oral board and reference checks more heavily.';
+
+  const rows = [
+    { l:'Composite Score', v: composite + ' / 100', n: verdict.label },
+    { l:'Character Flags', v: coreCount === 0 ? 'None' : coreCount + ' flagged', n:'Integrity and scenario items \u2014 2 or more is a hard stop; even 1 blocks a clean hire' },
+    { l:'Other Conduct Flags', v: (conduct.length - coreCount) === 0 ? 'None' : (conduct.length - coreCount) + ' flagged', n:'Reliability, concurrency and disclosure items \u2014 fit and habit findings' },
+    { l:'Technical Misses', v: knowledge.length === 0 ? 'None' : knowledge.length + ' of 18', n:'Secondary. Reported as ramp cost, not weighted into the character judgment' },
+    { l:'Integrity & Confidentiality', v: g('Integrity') + '%', n:'PRIMARY \u2014 sole-custodian access, self-processing, classification under cost pressure, back-pay exposure (26%)' },
+    { l:'Judgment Scenarios', v: g('Scenarios') + '%', n:'PRIMARY \u2014 character under operational and executive pressure (19%)' },
+    { l:'Reliability & Risk', v: g('Reliability') + '%', n:'Discretionary absence in a single-owner function, entitlement, exempt-hours expectations (14%)' },
+    { l:'Concurrent Load', v: g('Concurrency') + '%', n:'Triage by consequence, external tracking, interruption control, closing loops (9%)' },
+    { l:'Self-Disclosure', v: g('Disclosure') + '%', n:'Verifiable claims about ADP depth, owned scope, audit representation, costly determinations (8%)' },
+    { l:'ADP Configuration', v: g('ADP') + '%', n:'SECONDARY \u2014 earnings codes, workweek, accruals, deductions, GL burden, filing-agent liability (14%)' },
+    { l:'Wage-Hour, L&I & WA', v: g('Compliance') + '%', n:'SECONDARY \u2014 regular rate, risk classification, ACA safe harbors, exempt duties, WA rules (10%)' },
+  ];
+
+  document.getElementById('sum-box').innerHTML = '<h3>Assessment Summary</h3>' +
+    '<div style="font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid var(--border)">' + summaryText + '</div>' +
+    rows.map(r => '<div class="sum-row"><div class="sum-lbl">' + r.l + '</div><div><div class="sum-val">' + r.v + '</div>' +
+      (r.n ? '<div class="sum-note">' + r.n + '</div>' : '') + '</div></div>').join('');
+
+  const lines = [
+    'PAYROLL MANAGER ASSESSMENT \u2014 ' + cand.name.toUpperCase(),
+    'Position: ' + cand.pos + '   |   Date: ' + cand.date,
+    'Email: ' + cand.email + (cand.phone ? '   |   Phone: ' + cand.phone : ''),
+    '',
+    'RECOMMENDATION: ' + verdict.label,
+    'Composite Score: ' + composite + ' / 100',
+    '',
+    'PRIMARY \u2014 CHARACTER, CULTURE & CONDUCT (76% of composite):',
+    '  Integrity & Confidentiality:  ' + g('Integrity') + '%   (26%)',
+    '  Judgment Scenarios:           ' + g('Scenarios') + '%   (19%)',
+    '  Reliability & Risk:           ' + g('Reliability') + '%   (14%)',
+    '  Concurrent Load:              ' + g('Concurrency') + '%   (9%)',
+    '  Self-Disclosure:              ' + g('Disclosure') + '%   (8%)',
+    '',
+    'SECONDARY \u2014 TECHNICAL KNOWLEDGE (24% of composite):',
+    '  ADP Configuration:            ' + g('ADP') + '%   (14%)',
+    '  Wage-Hour, L&I & WA:          ' + g('Compliance') + '%   (10%)',
+    '',
+    'CHARACTER FLAGS: ' + (coreCount > 0 ? coreCount + ' identified' : 'None'),
+    'OTHER CONDUCT FLAGS: ' + ((conduct.length - coreCount) > 0 ? (conduct.length - coreCount) + ' identified' : 'None'),
+    ...conduct.map(f => '  \u2022 Q' + f.id + ' ' + f.q.substring(0,80) + ' \u2192 ' + f.a.substring(0,50)),
+    '',
+    'TECHNICAL MISSES (secondary \u2014 ramp cost): ' + (knowledge.length > 0 ? knowledge.length + ' of 18' : 'None'),
+    ...knowledge.map(f => '  \u2022 Q' + f.id + ' ' + f.q.substring(0,80)),
+    '',
+    'SUMMARY:',
+    summaryText,
+    '',
+    'Assessment: Payroll Manager Character, Conduct & Knowledge Assessment v1.0',
+    'NW Ambulance \u2014 Talent Acquisition \u00b7 Confidential',
+  ];
+  document.getElementById('copy-area').textContent = lines.join('\n');
+}
+
+function copyIt() {
+  navigator.clipboard.writeText(document.getElementById('copy-area').textContent).then(() => {
+    const b = document.querySelector('.btn-copy');
+    b.textContent = '✓ Copied';
+    setTimeout(() => { b.textContent = 'Copy to Clipboard'; }, 2000);
+  });
+}
+
+
+</script>
+</body>
+</html>
