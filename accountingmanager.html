@@ -1,0 +1,1421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Accounting Manager — Character, Conduct &amp; Knowledge Assessment v2.0</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,500&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f7f5f0;
+  --surface: #ffffff;
+  --ink: #1c1a17;
+  --ink2: #3a3733;
+  --muted: #7a7872;
+  --border: rgba(28,26,23,0.1);
+  --border-hi: rgba(28,26,23,0.2);
+  --navy: #1b2d4a;
+  --navy-light: #243d62;
+  --gold: #b8860b;
+  --gold-light: #d4a017;
+  --gold-bg: rgba(184,134,11,0.08);
+  --gold-border: rgba(184,134,11,0.25);
+  --green: #2d6a3f;
+  --green-bg: rgba(45,106,63,0.1);
+  --green-border: rgba(45,106,63,0.3);
+  --amber: #9a5a00;
+  --amber-bg: rgba(154,90,0,0.1);
+  --amber-border: rgba(154,90,0,0.3);
+  --red: #8b1a1a;
+  --red-bg: rgba(139,26,26,0.08);
+  --red-border: rgba(139,26,26,0.25);
+  --r: 6px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'IBM Plex Sans',sans-serif;background:var(--bg);color:var(--ink);min-height:100vh;font-size:15px;line-height:1.65}
+body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(28,26,23,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(28,26,23,0.025) 1px,transparent 1px);background-size:48px 48px;pointer-events:none;z-index:0}
+
+/* HEADER */
+.hdr{background:var(--navy);border-bottom:2px solid var(--gold);padding:0 40px;height:60px;display:flex;align-items:center;gap:16px;position:sticky;top:0;z-index:100}
+.hdr-logo{width:32px;height:32px;background:var(--gold);border-radius:4px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.hdr-logo span{font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:500;color:var(--navy);letter-spacing:0.02em}
+.hdr-title{font-size:13px;font-weight:500;color:#e8e4da;letter-spacing:0.01em}
+.hdr-title small{display:block;font-size:10px;font-weight:400;color:rgba(232,228,218,0.5);letter-spacing:0.06em;text-transform:uppercase;margin-top:1px}
+.hdr-right{margin-left:auto;display:flex;align-items:center;gap:12px}
+.prog-pill{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:99px;padding:5px 14px}
+.prog-txt{font-family:'IBM Plex Mono',monospace;font-size:11px;color:rgba(232,228,218,0.6)}
+.prog-outer{width:90px;height:3px;background:rgba(255,255,255,0.12);border-radius:2px;overflow:hidden}
+.prog-inner{height:100%;background:var(--gold-light);border-radius:2px;transition:width .4s ease;width:0%}
+
+/* MAIN */
+.main{max-width:760px;margin:0 auto;padding:44px 24px 100px;position:relative;z-index:1}
+
+/* WELCOME */
+.eyebrow{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--gold);margin-bottom:18px;display:flex;align-items:center;gap:8px}
+.eyebrow::before{content:'';display:inline-block;width:20px;height:1px;background:var(--gold)}
+.welcome-h{font-family:'Playfair Display',serif;font-size:clamp(30px,5vw,50px);font-weight:700;line-height:1.08;letter-spacing:-0.02em;color:var(--ink);margin-bottom:20px}
+.welcome-h em{font-style:italic;color:var(--navy)}
+.welcome-p{font-size:14px;color:var(--muted);max-width:520px;line-height:1.8;margin-bottom:32px}
+.meta-row{display:flex;gap:1px;margin-bottom:36px;max-width:440px}
+.meta-cell{flex:1;background:var(--surface);border:1px solid var(--border);padding:14px 16px}
+.meta-cell:first-child{border-radius:var(--r) 0 0 var(--r)}
+.meta-cell:last-child{border-radius:0 var(--r) var(--r) 0}
+.meta-v{font-family:'Playfair Display',serif;font-size:26px;font-weight:600;color:var(--navy);line-height:1;margin-bottom:3px}
+.meta-l{font-size:10px;letter-spacing:0.06em;text-transform:uppercase;color:var(--muted)}
+
+/* FORM */
+.cand-form{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:22px;margin-bottom:24px;max-width:500px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+.fg{display:flex;flex-direction:column;gap:5px}
+.fg label{font-size:10px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted)}
+.fg input{background:var(--bg);border:1px solid var(--border-hi);border-radius:var(--r);padding:9px 12px;color:var(--ink);font-family:'IBM Plex Sans',sans-serif;font-size:13px;outline:none;transition:border-color .2s}
+.fg input:focus{border-color:var(--navy)}
+.fg input::placeholder{color:rgba(122,120,114,0.4)}
+
+/* BUTTONS */
+.btn-primary{background:var(--navy);color:#e8e4da;border:none;border-radius:var(--r);padding:13px 28px;font-family:'IBM Plex Sans',sans-serif;font-size:13px;font-weight:600;letter-spacing:0.04em;cursor:pointer;transition:background .2s,transform .1s;display:inline-flex;align-items:center;gap:8px}
+.btn-primary:hover{background:var(--navy-light)}
+.btn-primary:active{transform:scale(0.98)}
+.btn-ghost{background:transparent;color:var(--muted);border:1px solid var(--border-hi);border-radius:var(--r);padding:11px 22px;font-family:'IBM Plex Sans',sans-serif;font-size:13px;cursor:pointer;transition:all .15s}
+.btn-ghost:hover{border-color:var(--ink2);color:var(--ink)}
+
+/* ASSESSMENT */
+#screen-assessment{display:none}
+.sec-eye{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:var(--gold);margin-bottom:6px}
+.sec-h{font-family:'Playfair Display',serif;font-size:22px;font-weight:600;color:var(--ink);margin-bottom:3px}
+.sec-badge{display:inline-block;font-size:10px;font-weight:600;letter-spacing:0.07em;text-transform:uppercase;padding:3px 11px;border-radius:99px;margin-bottom:22px}
+.badge-likert{background:var(--gold-bg);color:var(--gold);border:1px solid var(--gold-border)}
+.badge-ems{background:rgba(139,26,26,0.12);color:#8B1A1A;border:1px solid rgba(139,26,26,0.3)}
+.badge-know{background:rgba(27,45,74,0.08);color:var(--navy);border:1px solid rgba(27,45,74,0.2)}
+.badge-disc{background:rgba(45,106,63,0.1);color:var(--green);border:1px solid rgba(45,106,63,0.3)}
+.badge-trade{background:var(--red-bg);color:var(--red);border:1px solid var(--red-border)}
+
+/* QUESTION CARD */
+.q-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:22px 24px;margin-bottom:10px;transition:border-color .2s}
+.q-card.answered{border-color:var(--gold-border)}
+.q-num{font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-bottom:7px}
+.q-text{font-size:15px;line-height:1.6;color:var(--ink);margin-bottom:16px}
+.q-context{background:rgba(27,45,74,0.05);border-left:3px solid var(--navy);padding:10px 14px;font-size:13px;color:var(--navy-light);line-height:1.65;margin-bottom:14px;border-radius:0 var(--r) var(--r) 0}
+
+/* LIKERT */
+.likert-wrap{display:flex;gap:5px;flex-wrap:wrap}
+.l-opt{flex:1 1 0;min-width:80px;background:var(--bg);border:1px solid var(--border);border-radius:var(--r);padding:9px 6px;text-align:center;cursor:pointer;font-size:11px;color:var(--muted);line-height:1.3;transition:all .15s;user-select:none}
+.l-opt:hover{background:var(--gold-bg);border-color:var(--gold-border);color:var(--ink)}
+.l-opt.selected{background:var(--gold-bg);border-color:var(--gold-border);color:var(--ink);font-weight:500}
+.likert-ends{display:flex;justify-content:space-between;font-size:10px;color:var(--muted);margin-top:5px;padding:0 2px}
+
+/* MCQ / SCENARIO */
+.opts{display:flex;flex-direction:column;gap:6px}
+.opt-radio{display:none}
+.opt-label{display:flex;align-items:flex-start;gap:12px;padding:11px 14px;border:1px solid var(--border);border-radius:var(--r);cursor:pointer;transition:all .15s;font-size:13px;color:var(--muted);line-height:1.5;user-select:none}
+.opt-label:hover{background:var(--gold-bg);border-color:var(--gold-border);color:var(--ink)}
+.opt-radio:checked+.opt-label{background:var(--gold-bg);border-color:var(--gold-border);color:var(--ink);font-weight:500}
+.opt-key{flex-shrink:0;width:22px;height:22px;border-radius:50%;border:1.5px solid currentColor;display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:500;margin-top:1px}
+
+/* NAV */
+.q-nav{display:flex;justify-content:space-between;align-items:center;margin-top:28px;padding-top:22px;border-top:1px solid var(--border)}
+.nav-info{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--muted)}
+.nav-btns{display:flex;gap:10px}
+
+
+/* THANK YOU — production hidden-results pattern */
+#screen-thankyou{display:none}
+.thank-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:42px 34px;text-align:center;margin-top:40px}
+.thank-icon{width:54px;height:54px;border-radius:50%;background:var(--green-bg);border:1px solid var(--green-border);display:flex;align-items:center;justify-content:center;margin:0 auto 18px;color:var(--green);font-size:26px}
+.thank-h{font-family:'Playfair Display',serif;font-size:32px;font-weight:700;color:var(--ink);margin-bottom:10px}
+.thank-p{font-size:14px;color:var(--muted);line-height:1.7;max-width:520px;margin:0 auto}
+.submit-error{display:none;margin-top:18px;background:var(--red-bg);border:1px solid var(--red-border);color:var(--red);border-radius:var(--r);padding:12px 14px;font-size:12px;line-height:1.5;text-align:left}
+
+/* RESULTS */
+#screen-results{display:none}
+.r-top{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:34px;text-align:center;margin-bottom:20px}
+.v-pill{display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;padding:6px 18px;border-radius:99px;margin-bottom:16px}
+.vp-hire{background:var(--green-bg);color:var(--green);border:1px solid var(--green-border)}
+.vp-review{background:var(--amber-bg);color:var(--amber);border:1px solid var(--amber-border)}
+.vp-no{background:var(--red-bg);color:var(--red);border:1px solid var(--red-border)}
+.r-name{font-family:'Playfair Display',serif;font-size:28px;font-weight:700;color:var(--ink);margin-bottom:5px}
+.r-meta{font-size:12px;color:var(--muted);margin-bottom:18px}
+.score-big{font-family:'Playfair Display',serif;font-size:56px;font-weight:700;color:var(--navy);line-height:1}
+.score-denom{font-size:18px;color:var(--muted)}
+
+.cat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:18px 0}
+.cat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:14px 16px}
+.cat-lbl{font-size:10px;letter-spacing:0.07em;text-transform:uppercase;color:var(--muted);margin-bottom:9px}
+.cat-row{display:flex;align-items:center;gap:8px}
+.cat-bar-bg{flex:1;height:4px;background:rgba(28,26,23,0.08);border-radius:2px;overflow:hidden}
+.cat-bar{height:100%;border-radius:2px;transition:width 1s ease}
+.cat-val{font-family:'IBM Plex Mono',monospace;font-size:13px;width:38px;text-align:right;flex-shrink:0}
+
+.flags-box{background:var(--red-bg);border:1px solid var(--red-border);border-radius:var(--r);padding:20px 22px;margin-bottom:16px}
+.flags-box h3{font-size:13px;font-weight:600;color:var(--red);margin-bottom:12px;display:flex;align-items:center;gap:6px}
+.flag-row{margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid var(--red-border)}
+.flag-row:last-child{border:none;margin:0;padding:0}
+.flag-q{font-size:12px;color:var(--muted);line-height:1.55;margin-bottom:3px}
+.flag-a{font-size:11px;color:var(--red);font-family:'IBM Plex Mono',monospace;font-weight:500}
+.flag-why{font-size:11px;color:var(--red);opacity:.75;margin-top:3px;line-height:1.5}
+
+.sum-box{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:20px 22px;margin-bottom:16px}
+.sum-box h3{font-size:14px;font-weight:600;color:var(--ink);margin-bottom:14px}
+.sum-row{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px}
+.sum-row:last-child{border:none}
+.sum-lbl{color:var(--muted);max-width:200px;flex-shrink:0}
+.sum-val{color:var(--ink);font-weight:500;text-align:right}
+.sum-note{font-size:11px;color:var(--muted);margin-top:2px}
+
+.wb-box{background:var(--navy);border-radius:var(--r);padding:22px;margin-bottom:16px}
+.wb-box h3{font-size:14px;font-weight:600;color:#e8e4da;margin-bottom:6px}
+.wb-box p{font-size:12px;color:rgba(232,228,218,0.55);margin-bottom:12px}
+.copy-area{background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.08);border-radius:var(--r);padding:13px;font-family:'IBM Plex Mono',monospace;font-size:11px;color:rgba(232,228,218,0.6);white-space:pre-wrap;line-height:1.7;margin-bottom:10px;max-height:200px;overflow-y:auto}
+.btn-copy{font-size:12px;color:rgba(232,228,218,0.7);background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:var(--r);padding:7px 14px;cursor:pointer;font-family:'IBM Plex Sans',sans-serif;transition:all .15s}
+.btn-copy:hover{background:rgba(255,255,255,0.12);color:#e8e4da}
+.export-row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:24px}
+
+@media(max-width:540px){
+  .hdr{padding:0 14px}
+  .main{padding:24px 14px 80px}
+  .form-grid,.cat-grid{grid-template-columns:1fr}
+  .meta-row{flex-wrap:wrap}
+  .prog-pill{display:none}
+}
+@media print{
+  body::before{display:none}
+  .hdr{background:#1b2d4a}
+  .btn-primary,.btn-ghost,.btn-copy,.export-row,.wb-box .btn-copy{display:none!important}
+}
+</style>
+</head>
+<body>
+
+<header class="hdr">
+  <div class="hdr-logo"><span>NWA</span></div>
+  <div class="hdr-title">Accounting Manager Assessment<small>Finance, Character &amp; Conduct</small></div>
+  <div class="hdr-right" id="hdr-right" style="display:none">
+    <div class="prog-pill">
+      <span class="prog-txt" id="prog-txt">0 / 50</span>
+      <div class="prog-outer"><div class="prog-inner" id="prog-bar"></div></div>
+    </div>
+  </div>
+</header>
+
+<main class="main">
+
+<!-- WELCOME -->
+<div id="screen-welcome">
+  <div class="eyebrow">Talent Acquisition &middot; NW Ambulance</div>
+  <h1 class="welcome-h">Accounting Manager<br><em>Character, Conduct</em><br>&amp; Knowledge Assessment</h1>
+  <p class="welcome-p">
+    This assessment evaluates integrity, reliability, and technical accounting knowledge for the Accounting Manager role.
+    Answer based on what you have actually done and how you would actually respond &mdash; not what sounds ideal.
+    There are no trick questions. Honest answers produce the most useful results for everyone.
+  </p>
+  <div class="meta-row">
+    <div class="meta-cell"><div class="meta-v">50</div><div class="meta-l">Questions</div></div>
+    <div class="meta-cell"><div class="meta-v">6</div><div class="meta-l">Sections</div></div>
+    <div class="meta-cell"><div class="meta-v">20&ndash;25</div><div class="meta-l">Minutes</div></div>
+  </div>
+  <div class="cand-form">
+    <div class="form-grid">
+      <div class="fg"><label>First Name *</label><input type="text" id="i-fn" placeholder="First"></div>
+      <div class="fg"><label>Last Name *</label><input type="text" id="i-ln" placeholder="Last"></div>
+    </div>
+    <div class="form-grid">
+      <div class="fg"><label>Email *</label><input type="email" id="i-em" placeholder="email@domain.com"></div>
+      <div class="fg"><label>Phone</label><input type="tel" id="i-ph" placeholder="(555) 000-0000"></div>
+    </div>
+    <div class="fg" style="margin-bottom:14px">
+      <label>Position Applied For</label>
+      <input type="text" id="i-pos" placeholder="Accounting Manager">
+    </div>
+    <button class="btn-primary" onclick="start()">Begin Assessment &rarr;</button>
+  </div>
+</div>
+
+<!-- ASSESSMENT -->
+<div id="screen-assessment">
+  <div class="sec-eye" id="sec-eye">Section 1 of 6</div>
+  <div class="sec-h" id="sec-h">Integrity &amp; Financial Ethics</div>
+  <div class="sec-badge badge-likert" id="sec-badge">Attitude &amp; Values</div>
+  <div id="q-container"></div>
+  <div class="q-nav">
+    <span class="nav-info" id="nav-info"></span>
+    <div class="nav-btns">
+      <button class="btn-ghost" id="btn-prev" onclick="prev()" style="display:none">&larr; Back</button>
+      <button class="btn-primary" id="btn-next" onclick="next()">Next Section &rarr;</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- THANK YOU -->
+<div id="screen-thankyou">
+  <div class="thank-card">
+    <div class="thank-icon">✓</div>
+    <h2 class="thank-h">Assessment Submitted</h2>
+    <p class="thank-p">Your responses have been received. The hiring team will review your assessment as part of the candidate review process.</p>
+    <div class="submit-error" id="submit-error"></div>
+  </div>
+</div>
+
+
+<!-- RESULTS -->
+<div id="screen-results">
+  <div class="r-top">
+    <div class="v-pill" id="v-pill"></div>
+    <div class="r-name" id="r-name"></div>
+    <div class="r-meta" id="r-meta"></div>
+    <div><span class="score-big" id="r-score">&mdash;</span><span class="score-denom"> / 100</span></div>
+  </div>
+  <div class="cat-grid" id="cat-grid"></div>
+  <div class="flags-box" id="flags-box" style="display:none">
+    <h3>&#9888; Conduct Flags</h3>
+    <div id="flags-list"></div>
+  </div>
+  <div class="flags-box" id="know-box" style="display:none;background:rgba(154,90,0,0.06);border-color:rgba(154,90,0,0.25)">
+    <h3 style="color:#9a5a00">&#9679; Technical Misses</h3>
+    <div id="know-list"></div>
+  </div>
+  <div class="sum-box" id="sum-box"></div>
+  <div class="wb-box">
+    <h3>Workable Notes &mdash; Copy &amp; Paste</h3>
+    <p>Paste the block below into the candidate's Notes tab in Workable.</p>
+    <div class="copy-area" id="copy-area"></div>
+    <button class="btn-copy" onclick="copyIt()">Copy to Clipboard</button>
+  </div>
+  <div class="export-row">
+    <button class="btn-primary" onclick="window.print()">Print / Save PDF</button>
+    <button class="btn-ghost" onclick="location.reload()">New Assessment</button>
+  </div>
+</div>
+
+</main>
+
+<script>
+
+const FLOW_URL = "https://defaultb9fe31c2de0742529875da1c500446.c8.environment.api.powerplatform.com:443/powerautomate/automations/direct/cu/22/workflows/c69508059ab24866818f1a4a6df946fb/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=OT-HMY8-aCKm4KElkYDZv749qGVemOqhnZfW_dE7KFs";
+const ASSESSMENT_TYPE = 'Accounting Manager';
+const ASSESSMENT_VERSION = 'Accounting Manager Character, Conduct & Knowledge Assessment v2.1';
+
+const LIKERT = ['Strongly Disagree','Disagree','Neutral','Agree','Strongly Agree'];
+const TOTAL_Q = 50;
+
+// ============================================================
+// QUESTION DATA — 6 sections · 50 questions
+// Deliberately de-duplicated against Controller v3 and Payroll
+// Administrator v1. Shared items were removed, not reworded.
+// ============================================================
+const SECTIONS = [
+
+// ─────────────────────────────────────────────────────────────
+// SECTION 1 — Integrity & Financial Ethics (Q1–10)
+// Likert. Weight 25%. Group: Integrity
+// Reverse items are written as defensible-sounding shortcuts.
+// Focus is EXECUTION-level ethics and the Controller relationship,
+// not ownership-facing fiduciary duty (that is the Controller's test).
+// ─────────────────────────────────────────────────────────────
+{
+  name: 'Integrity & Financial Ethics',
+  eye: 'Section 1 of 6',
+  badge: 'badge-likert',
+  badgeTxt: 'Attitude & Values',
+  qs: [
+    {
+      id: 1, type: 'likert', group: 'Integrity', rev: true,
+      text: 'A journal entry with a clear explanation in the memo line does not also need supporting documentation attached.',
+      rf: ['Agree','Strongly Agree'],
+      rfWhy: 'A memo line is an assertion; support is evidence. This role builds the workpaper set the company will be audited against. Anyone who treats the narrative as a substitute for the document will produce schedules that cannot be defended.'
+    },
+    {
+      id: 2, type: 'likert', group: 'Integrity', rev: true,
+      text: 'When the Controller is unavailable and a deadline is firm, posting a material entry without approval is reasonable if I am confident the treatment is correct.',
+      rf: ['Agree','Strongly Agree'],
+      rfWhy: 'Approval sequence is the control, and confidence is not authorization. Act-first-approve-later is the mechanism behind most unauthorized entries. In a two-person accounting function the approval step is the only review that exists.'
+    },
+    {
+      id: 3, type: 'likert', group: 'Integrity', rev: false,
+      text: 'If I disagreed with an accounting treatment, I would say so before I posted it rather than after.'
+    },
+    {
+      id: 4, type: 'likert', group: 'Integrity', rev: true,
+      text: 'Adding a vendor to the master file on a manager\u2019s verbal request is reasonable when the invoice is already past due.',
+      rf: ['Agree','Strongly Agree'],
+      rfWhy: 'Vendor master maintenance is named in this job description and is one of the highest-risk control points in the company. Urgency is the standard pressure lever in both internal fraud and business email compromise. Anyone who will bypass verification under time pressure is the wrong person to own this file.'
+    },
+    {
+      id: 5, type: 'likert', group: 'Integrity', rev: false,
+      text: 'A reconciliation is not finished until the schedule ties to the general ledger and the support has been retained.'
+    },
+    {
+      id: 6, type: 'likert', group: 'Integrity', rev: true,
+      text: 'Once a balance has been reviewed and approved by someone above me, it stops being my responsibility if it later proves wrong.',
+      rf: ['Agree','Strongly Agree'],
+      rfWhy: 'Review by a supervisor does not transfer ownership of the preparer\u2019s work. This answer signals someone who will treat sign-off as cover rather than as a second check, which is exactly how errors survive a review process.'
+    },
+    {
+      id: 7, type: 'likert', group: 'Integrity', rev: false,
+      text: 'If I could not explain where a number came from, I would not put it in front of the Controller.'
+    },
+    {
+      id: 8, type: 'likert', group: 'Integrity', rev: true,
+      text: 'A small difference that recurs in the same account every month is not worth escalating.',
+      rf: ['Agree','Strongly Agree'],
+      rfWhy: 'A recurring difference is a broken process, not an immaterial amount. Treating it as noise is how a systematic error compounds unnoticed for a year. The pattern is the finding.'
+    },
+    {
+      id: 9, type: 'likert', group: 'Integrity', rev: false,
+      text: 'I would rather bring the Controller bad news early than hand over a clean-looking number I am not sure about.'
+    },
+    {
+      id: 10, type: 'likert', group: 'Integrity', rev: true,
+      text: 'Whether an accounting treatment is really a problem depends largely on whether anyone outside the company is likely to examine it.',
+      rf: ['Agree','Strongly Agree'],
+      rfWhy: 'This is the audit-detection theory of ethics: correct only when observed. It is the single strongest predictor in this section of someone who will cut corners once they understand where the review actually looks.'
+    },
+  ]
+},
+
+// ─────────────────────────────────────────────────────────────
+// SECTION 2 — Reliability, Ownership & Risk (Q11–19)
+// Likert. Weight 15%. Group: Reliability
+// Attendance measured through DISCRETIONARY ABSENCE and commitment
+// only. No illness, injury, disability, leave, or medical content —
+// those are prohibited pre-offer inquiries under ADA and WA WLAD.
+// ─────────────────────────────────────────────────────────────
+{
+  name: 'Reliability, Ownership & Risk',
+  eye: 'Section 2 of 6',
+  badge: 'badge-likert',
+  badgeTxt: 'Attitude & Values',
+  qs: [
+    {
+      id: 11, type: 'likert', group: 'Reliability', rev: false,
+      text: 'I plan my time off around the close calendar rather than expecting the calendar to flex around me.'
+    },
+    {
+      id: 12, type: 'likert', group: 'Reliability', rev: true,
+      text: 'Taking a day off on short notice is fine as long as nothing looks urgent that day.',
+      rf: ['Agree','Strongly Agree'],
+      rfWhy: 'Discretionary short-notice absence. In a close-driven function, "nothing looks urgent" is a judgment the absent person is not positioned to make. Verify attendance patterns directly with prior supervisors.'
+    },
+    {
+      id: 13, type: 'likert', group: 'Reliability', rev: false,
+      text: 'When a task is blocked, I chase the blocker rather than reporting it as blocked and waiting.'
+    },
+    {
+      id: 14, type: 'likert', group: 'Reliability', rev: true,
+      text: 'Someone at my level of experience should not have to spend time on routine transactional work.',
+      rf: ['Agree','Strongly Agree'],
+      rfWhy: 'Entitlement flag. This posting is explicitly hands-on and describes building the reconciliation set personally. A candidate who expects to direct rather than do will underperform and will resent the role within a quarter.'
+    },
+    {
+      id: 15, type: 'likert', group: 'Reliability', rev: false,
+      text: 'Close week is when I make certain I am available and reachable.'
+    },
+    {
+      id: 16, type: 'likert', group: 'Reliability', rev: true,
+      text: 'Most of the conflicts I have had at work were caused by other people.',
+      rf: ['Agree','Strongly Agree'],
+      rfWhy: 'External attribution across a whole career history. Predicts grievance orientation and difficulty accepting review feedback. Probe reasons for leaving each of the last three employers and verify with references.'
+    },
+    {
+      id: 17, type: 'likert', group: 'Reliability', rev: false,
+      text: 'I would report an unsafe condition or damaged equipment even if it was not in my work area.'
+    },
+    {
+      id: 18, type: 'likert', group: 'Reliability', rev: true,
+      text: 'When priorities shift mid-month, it is reasonable for deadlines to slip.',
+      rf: ['Agree','Strongly Agree'],
+      rfWhy: 'Close dates do not move because the month was busy. This answer indicates deadlines are treated as targets rather than commitments, which is incompatible with a repeatable monthly close.'
+    },
+    {
+      id: 19, type: 'likert', group: 'Reliability', rev: false,
+      text: 'I follow up on items I am waiting on rather than assuming someone else will.'
+    },
+  ]
+},
+
+// ─────────────────────────────────────────────────────────────
+// SECTION 3 — Technical Knowledge: GAAP & Close (Q20–28)
+// MCQ, one correct answer. Weight 20%. Group: Knowledge
+// No overlap with Controller Q19–26 (billing-vs-bank, AP reclass,
+// WA Cares, straight-line basics, close acceleration, OT %, ADP).
+// ─────────────────────────────────────────────────────────────
+{
+  name: 'Technical Knowledge \u2014 GAAP & Close',
+  eye: 'Section 3 of 6',
+  badge: 'badge-know',
+  badgeTxt: 'Correct Answer Exists',
+  qs: [
+    {
+      id: 20, type: 'mcq', group: 'Knowledge',
+      text: 'A vendor performed services in June. Their invoice arrives in July, before the June books are closed. Under accrual-basis accounting, what is the correct treatment?',
+      opts: [
+        'A. Record the expense in July \u2014 that is when the invoice was received and the liability documented.',
+        'B. Accrue the expense in June, since the service was received in June, and reverse the accrual when the invoice is recorded in July.',
+        'C. Record it in June only if the amount exceeds the materiality threshold; otherwise record it in July.',
+        'D. Split the expense evenly between June and July.'
+      ],
+      sc: { A: 0, B: 5, C: 2, D: 0 },
+      correct: 'B',
+      correctWhy: 'Accrual accounting matches expense to the period the service was received, not the period the paperwork arrived. Because the period is still open, the accrual belongs in June and reverses in July when the invoice posts.'
+    },
+    {
+      id: 21, type: 'mcq', group: 'Knowledge',
+      text: 'On April 1 the company pays $24,000 for a twelve-month insurance policy running April 1 through March 31. On an accrual basis, what is the prepaid insurance balance at December 31 of that same year?',
+      opts: [
+        'A. $0 \u2014 the policy was paid in full and is fully expensed.',
+        'B. $6,000',
+        'C. $18,000',
+        'D. $24,000'
+      ],
+      sc: { A: 0, B: 5, C: 0, D: 0 },
+      correct: 'B',
+      correctWhy: 'Nine months (April through December) of the $24,000 policy has been consumed, or $18,000 of expense. The three remaining months of coverage, $6,000, stay on the balance sheet as prepaid insurance.'
+    },
+    {
+      id: 22, type: 'mcq', group: 'Knowledge',
+      text: 'A customer pays $30,000 in December for a service contract that runs January through June of the following year. How should the December 31 financial statements reflect this payment?',
+      opts: [
+        'A. $30,000 recognized as revenue in December, when the cash was received.',
+        'B. $30,000 recorded as deferred revenue, a liability, with no revenue recognized in December.',
+        'C. $5,000 recognized as revenue and $25,000 deferred.',
+        'D. $30,000 recorded as accounts receivable.'
+      ],
+      sc: { A: 0, B: 5, C: 0, D: 0 },
+      correct: 'B',
+      correctWhy: 'No service has been delivered as of December 31, so no performance obligation has been satisfied. The cash creates a liability \u2014 deferred revenue \u2014 that is recognized into revenue as the service is provided from January onward.'
+    },
+    {
+      id: 23, type: 'mcq', group: 'Knowledge',
+      text: 'At month end you have received goods but the vendor invoice has not arrived. What is the correct treatment?',
+      opts: [
+        'A. Record nothing \u2014 without an invoice there is no liability to record.',
+        'B. Record an accrued liability based on the purchase order or receiving documentation.',
+        'C. Record it in accounts payable using an estimated invoice number so it can be matched later.',
+        'D. Wait for the invoice and record the whole transaction in the following month.'
+      ],
+      sc: { A: 0, B: 5, C: 1, D: 0 },
+      correct: 'B',
+      correctWhy: 'The obligation exists once the goods are received, regardless of invoice timing. It is accrued from the receiving evidence. Fabricating an invoice number to force it into accounts payable corrupts the subledger and the three-way match.'
+    },
+    {
+      id: 24, type: 'mcq', group: 'Knowledge',
+      text: 'Under US GAAP, revenue from a service is generally recognized when:',
+      opts: [
+        'A. The invoice is issued to the customer.',
+        'B. The cash is collected from the customer.',
+        'C. Control of the service has transferred to the customer \u2014 that is, the performance obligation has been satisfied.',
+        'D. The contract is signed by both parties.'
+      ],
+      sc: { A: 0, B: 0, C: 5, D: 0 },
+      correct: 'C',
+      correctWhy: 'Revenue recognition follows satisfaction of the performance obligation. Invoicing, collection, and contract signature are all administrative events that may or may not coincide with the transfer of control.'
+    },
+    {
+      id: 25, type: 'mcq', group: 'Knowledge',
+      text: 'Your bank statement shows a balance of $250,000. Outstanding checks total $32,000, deposits in transit total $18,000, and a $500 bank service charge has not yet been recorded on the books. What is the correct adjusted bank balance?',
+      opts: [
+        'A. $236,000',
+        'B. $235,500',
+        'C. $264,000',
+        'D. $236,500'
+      ],
+      sc: { A: 5, B: 1, C: 0, D: 0 },
+      correct: 'A',
+      correctWhy: '$250,000 less $32,000 outstanding checks plus $18,000 deposits in transit equals $236,000. The service charge is a book-side adjustment, not a bank-side one \u2014 answer B applies it to the wrong side of the reconciliation.'
+    },
+    {
+      id: 26, type: 'mcq', group: 'Knowledge',
+      text: 'An accrual recorded at month end for an expense that will be invoiced next month should normally be:',
+      opts: [
+        'A. Left on the books until the invoice is actually paid.',
+        'B. Reversed at the start of the following period so the invoice can be recorded normally when it arrives.',
+        'C. Reduced each month until the invoice arrives.',
+        'D. Reclassified from accrued liabilities to accounts payable at period end.'
+      ],
+      sc: { A: 0, B: 5, C: 0, D: 1 },
+      correct: 'B',
+      correctWhy: 'Reversing the accrual in the following period prevents the expense from being recorded twice when the real invoice posts. Leaving the accrual in place alongside the invoice is the most common cause of overstated liabilities.'
+    },
+    {
+      id: 27, type: 'mcq', group: 'Knowledge',
+      text: 'Which set of items should be completed before the general ledger is closed for the month?',
+      opts: [
+        'A. Bank reconciliations, accrual and deferral entries, and balance sheet account reconciliations.',
+        'B. Bank reconciliations only \u2014 the remaining items can be completed after close.',
+        'C. Only the entries and reconciliations that exceed the materiality threshold.',
+        'D. Financial statement preparation first, with reconciliations completed afterward to support the statements.'
+      ],
+      sc: { A: 5, B: 1, C: 1, D: 0 },
+      correct: 'A',
+      correctWhy: 'Reconciliations and adjusting entries are inputs to the financial statements, not follow-up work. Option D inverts the close entirely \u2014 producing statements first and reconciling afterward means the statements were never supported when issued.'
+    },
+    {
+      id: 28, type: 'mcq', group: 'Knowledge',
+      text: 'A company\u2019s accounting procedures have never been documented. What is the most useful way to build that documentation while a monthly close is still running?',
+      opts: [
+        'A. Wait until the close process is stable, then document everything at once in a single effort.',
+        'B. Document each process at the point it is performed or redesigned, so the write-up reflects what is actually done.',
+        'C. Document the intended process as designed, and correct the write-up later if practice diverges.',
+        'D. Assign documentation to staff who do not perform the work, so the description stays objective.'
+      ],
+      sc: { A: 1, B: 5, C: 2, D: 0 },
+      correct: 'B',
+      correctWhy: 'Procedure documentation written contemporaneously captures the real process, including the exceptions and workarounds that make it function. Documenting the intended design instead produces a manual that describes a process nobody follows \u2014 which is worse than no manual, because it will be relied on.'
+    },
+  ]
+},
+
+// ─────────────────────────────────────────────────────────────
+// SECTION 4 — Reconciliation, Fixed Assets & Cash-to-Accrual (Q29–36)
+// MCQ. Weight 15%. Group: ReconKnowledge
+// Straight from the "What You Bring" list in the posting.
+// ─────────────────────────────────────────────────────────────
+{
+  name: 'Reconciliation, Fixed Assets & Cash-to-Accrual',
+  eye: 'Section 4 of 6',
+  badge: 'badge-ems',
+  badgeTxt: 'Correct Answer Exists',
+  qs: [
+    {
+      id: 29, type: 'mcq', group: 'ReconKnowledge',
+      text: 'A balance sheet account reconciliation is complete when:',
+      opts: [
+        'A. The general ledger balance agrees to the prior month\u2019s balance.',
+        'B. The general ledger balance is supported by a detailed schedule that ties to it, with the supporting documentation retained.',
+        'C. The account activity has been reviewed and nothing looks unusual.',
+        'D. A second person has reviewed and approved the account balance.'
+      ],
+      sc: { A: 0, B: 5, C: 1, D: 2 },
+      correct: 'B',
+      correctWhy: 'A reconciliation proves what makes up the balance. Agreement to the prior month proves only that nothing moved, and a reasonableness review proves nothing at all. Second-person approval is a control on top of a reconciliation, not a substitute for one.'
+    },
+    {
+      id: 30, type: 'mcq', group: 'ReconKnowledge',
+      text: 'A vehicle with an original cost of $190,000 and accumulated depreciation of $150,000 is sold for $30,000. What is recorded on disposal?',
+      opts: [
+        'A. A gain of $30,000',
+        'B. A loss of $10,000',
+        'C. A gain of $10,000',
+        'D. No gain or loss \u2014 the asset is simply reduced by the $30,000 received.'
+      ],
+      sc: { A: 0, B: 5, C: 0, D: 0 },
+      correct: 'B',
+      correctWhy: 'Net book value is $190,000 less $150,000, or $40,000. Selling a $40,000 book-value asset for $30,000 produces a $10,000 loss. Both the cost and the accumulated depreciation come off the books in the same entry.'
+    },
+    {
+      id: 31, type: 'mcq', group: 'ReconKnowledge',
+      text: 'A $96,000 asset with an eight-year useful life and no salvage value is placed in service on October 1. Using straight-line depreciation and a December 31 year end, what is depreciation expense for that first partial year?',
+      opts: [
+        'A. $12,000',
+        'B. $3,000',
+        'C. $9,000',
+        'D. $4,000'
+      ],
+      sc: { A: 0, B: 5, C: 0, D: 0 },
+      correct: 'B',
+      correctWhy: 'Annual depreciation is $96,000 divided by eight years, or $12,000. The asset was in service for three of twelve months, so first-year expense is one quarter of that, $3,000.'
+    },
+    {
+      id: 32, type: 'mcq', group: 'ReconKnowledge',
+      text: 'Your fixed asset subledger shows net book value of $1,240,000. The general ledger shows $1,268,000. What is the correct next step?',
+      opts: [
+        'A. Adjust the general ledger down to agree with the subledger, which holds the asset-level detail.',
+        'B. Adjust the subledger up to agree with the general ledger, which is the system of record.',
+        'C. Reconcile additions, disposals, and depreciation between the two to identify the $28,000 difference before adjusting anything.',
+        'D. Record the $28,000 as a depreciation catch-up entry.'
+      ],
+      sc: { A: 1, B: 0, C: 5, D: 0 },
+      correct: 'C',
+      correctWhy: 'Forcing either side to agree destroys the evidence of what caused the break. A $28,000 gap typically resolves to an unrecorded disposal, an addition posted directly to the ledger, or a depreciation run that did not post \u2014 each requiring a different correction.'
+    },
+    {
+      id: 33, type: 'mcq', group: 'ReconKnowledge',
+      text: 'Which of the following should be capitalized rather than expensed as incurred?',
+      opts: [
+        'A. Replacing the tires on a company vehicle.',
+        'B. An engine replacement that extends the vehicle\u2019s useful life by three years.',
+        'C. Routine annual maintenance and safety inspection.',
+        'D. Repainting a vehicle in the current company livery.'
+      ],
+      sc: { A: 0, B: 5, C: 0, D: 0 },
+      correct: 'B',
+      correctWhy: 'Expenditures that extend useful life or increase capacity are capitalized and depreciated over the extended life. Maintenance that keeps an asset in its existing operating condition \u2014 tires, inspections, repainting \u2014 is expensed as incurred.'
+    },
+    {
+      id: 34, type: 'mcq', group: 'ReconKnowledge',
+      text: 'A company on cash basis has recorded no accounts payable. In converting to accrual basis, unpaid vendor invoices for goods and services already received must be:',
+      opts: [
+        'A. Recorded as accounts payable, increasing liabilities.',
+        'B. Recorded as prepaid expenses.',
+        'C. Left off the books until they are paid, consistent with prior treatment.',
+        'D. Recorded as deferred revenue.'
+      ],
+      sc: { A: 5, B: 0, C: 0, D: 0 },
+      correct: 'A',
+      correctWhy: 'A cash-basis set of books systematically understates liabilities. Establishing the accounts payable balance for goods and services already received is one of the two core entries in any cash-to-accrual conversion.'
+    },
+    {
+      id: 35, type: 'mcq', group: 'ReconKnowledge',
+      text: 'When a company converts from cash basis to accrual basis, recording previously unrecognized accounts receivable and accounts payable will:',
+      opts: [
+        'A. Always increase the cumulative adjustment, because receivables are being added.',
+        'B. Always decrease the cumulative adjustment, because payables are being added.',
+        'C. Increase or decrease the cumulative adjustment depending on whether receivables or payables are larger.',
+        'D. Have no net effect, because the two entries offset one another by definition.'
+      ],
+      sc: { A: 0, B: 0, C: 5, D: 0 },
+      correct: 'C',
+      correctWhy: 'Receivables and payables are independent balances with no reason to be equal. The direction of the cumulative conversion adjustment depends entirely on which is larger, and it is frequently material in a company that has grown quickly on cash basis.'
+    },
+    {
+      id: 36, type: 'mcq', group: 'ReconKnowledge',
+      text: 'You are reconciling accounts receivable to an outsourced billing company\u2019s report. Which formula correctly describes the accounts receivable rollforward?',
+      opts: [
+        'A. Beginning AR + cash collected \u2212 charges billed = Ending AR',
+        'B. Beginning AR + charges billed \u2212 cash collected \u2212 contractual adjustments \u2212 write-offs = Ending AR',
+        'C. Beginning AR + charges billed \u2212 cash collected = Ending AR',
+        'D. Charges billed \u2212 cash collected = Ending AR'
+      ],
+      sc: { A: 0, B: 5, C: 1, D: 0 },
+      correct: 'B',
+      correctWhy: 'A rollforward that omits contractual adjustments and write-offs will never tie in any third-party payer environment, because gross charges are never collected in full. Option C is the most common wrong answer and produces a permanently unexplained variance.'
+    },
+  ]
+},
+
+// ─────────────────────────────────────────────────────────────
+// SECTION 5 — Judgment Scenarios (Q37–44)
+// Forced trade-off, one designated wrong answer. Weight 15%.
+// Group: Scenarios
+// The distinctive tension for this role is pressure from the
+// Controller above and operations peers sideways — NOT ownership
+// fiduciary pressure, which the Controller assessment covers.
+// ─────────────────────────────────────────────────────────────
+{
+  name: 'Judgment Scenarios',
+  eye: 'Section 5 of 6',
+  badge: 'badge-trade',
+  badgeTxt: 'One Wrong Answer',
+  qs: [
+    {
+      id: 37, type: 'trade', group: 'Scenarios',
+      text: 'The Controller tells you to write off an unsupported $18,000 balance so the month can close on time. You have not identified where it came from.',
+      context: 'This role reports to the Controller. How disagreement is handled inside that relationship is the central dynamic of the job.',
+      opts: [
+        'A. Write it off as directed \u2014 the Controller has both the authority and the accountability for the decision.',
+        'B. Tell the Controller what you have ruled out so far, state that you cannot support the write-off, and propose carrying it as a documented open item with an owner and a resolution date.',
+        'C. Write it off, but document in the workpapers that it was done at the Controller\u2019s direction and that the source was never identified.',
+        'D. Ask for two more days to trace it, and if it is still unresolved, write it off with the reasoning documented.'
+      ],
+      sc: { A: 0, B: 5, C: 3, D: 4 },
+      wrong: 'A',
+      wrongWhy: 'Authority is not support. Executing a directed write-off silently leaves no record that anyone identified the problem, and the Accounting Manager \u2014 who prepared it \u2014 owns that entry regardless of who asked for it. Option C is survivable because it at least creates the record; A creates nothing.'
+    },
+    {
+      id: 38, type: 'trade', group: 'Scenarios',
+      text: 'An operations manager emails you updated banking details for an existing vendor and asks you to change the vendor master file before today\u2019s payment run.',
+      context: 'Vendor master maintenance is named in this job description. Unverified bank detail changes are the single most common vector for both payment fraud and business email compromise.',
+      opts: [
+        'A. Update the record \u2014 the request came from a manager you know and the payment is time sensitive.',
+        'B. Do not update from the email. Verify the change by contacting the vendor using details already on file, then update with the verification documented.',
+        'C. Update the record but hold the payment until the Controller confirms the change.',
+        'D. Reply to the email asking the manager to confirm the change is legitimate before you update anything.'
+      ],
+      sc: { A: 0, B: 5, C: 2, D: 1 },
+      wrong: 'A',
+      wrongWhy: 'Bank detail changes are verified out-of-band, using contact information already held, never using details supplied in the request itself. Option D scores poorly for the same reason \u2014 replying to a possibly compromised thread asks the attacker to confirm their own instruction.'
+    },
+    {
+      id: 39, type: 'trade', group: 'Scenarios',
+      text: 'A department manager asks you to reclassify an expense to a different cost center so their budget variance looks better.',
+      context: 'This role reviews accounts payable and owns coding accuracy. Pressure here comes sideways from peers, not down from leadership.',
+      opts: [
+        'A. Make the change \u2014 cost center coding involves judgment and the total expense is unaffected.',
+        'B. Decline unless the new coding is factually correct, explain why, and offer to walk them through what is actually driving their variance.',
+        'C. Make the change and mention it to the Controller afterward.',
+        'D. Tell them to take it up with the Controller.'
+      ],
+      sc: { A: 0, B: 5, C: 1, D: 3 },
+      wrong: 'A',
+      wrongWhy: 'Departmental coding is a factual attribute of the transaction, not a negotiable one. Recoding to improve a variance report makes every department report unreliable and hides the cost driver that leadership needs to see. That the consolidated total is unchanged is precisely the rationalization to watch for.'
+    },
+    {
+      id: 40, type: 'trade', group: 'Scenarios',
+      text: 'A direct report has carried the same unresolved reconciling item forward for three consecutive months.',
+      context: 'Prior supervisory experience is a stated requirement for this role.',
+      opts: [
+        'A. Clear the item yourself so it stops appearing on the schedule.',
+        'B. Raise it with them now, find out what is actually blocking it, agree a resolution date, and follow up on that date.',
+        'C. Bring it up at their next scheduled one-on-one.',
+        'D. Report the pattern to the Controller.'
+      ],
+      sc: { A: 0, B: 5, C: 3, D: 2 },
+      wrong: 'A',
+      wrongWhy: 'Doing the work yourself removes the symptom, teaches the employee nothing, and quietly transfers ownership of the account away from the person accountable for it. It is the most common failure mode in newly promoted accounting supervisors and it does not scale past two staff.'
+    },
+    {
+      id: 41, type: 'trade', group: 'Scenarios',
+      text: 'You realize a journal entry you posted last month was wrong, and it changed reported results.',
+      context: 'Self-reported error disclosure when the error is unlikely to be discovered independently.',
+      opts: [
+        'A. Correct it in the current month without drawing attention to it.',
+        'B. Tell the Controller immediately, quantify the impact, and propose the correcting entry.',
+        'C. Wait and see whether anyone raises it.',
+        'D. Correct it now and raise it at the next scheduled monthly meeting.'
+      ],
+      sc: { A: 1, B: 5, C: 0, D: 2 },
+      wrong: 'C',
+      wrongWhy: 'Waiting to see whether an error is detected is a decision to conceal it. The impact has already reached reported results, which means someone may act on figures now known to be wrong. Delay converts a correctable mistake into a credibility problem.'
+    },
+    {
+      id: 42, type: 'trade', group: 'Scenarios',
+      text: 'You are halfway through building the balance sheet reconciliation workpaper set when the Controller changes the required format.',
+      context: 'This is a build role. Rework is expected and how a candidate absorbs it matters more than the format itself.',
+      opts: [
+        'A. Push back \u2014 the change wastes the work already invested and the current format is functional.',
+        'B. Ask what is driving the change, then adopt the new format and rework what is already complete.',
+        'C. Finish the current version first, then convert the whole set.',
+        'D. Use the new format going forward and leave the completed schedules in the old one.'
+      ],
+      sc: { A: 0, B: 5, C: 3, D: 1 },
+      wrong: 'A',
+      wrongWhy: 'Sunk cost is not an argument, and the posting states plainly that this is a build role rather than a maintain role. A candidate who resists format changes three months in will resist the far larger changes the accrual conversion will require.'
+    },
+    {
+      id: 43, type: 'trade', group: 'Scenarios',
+      text: 'While reviewing accounts payable you notice two payments to the same vendor referencing the same invoice number, issued in different months.',
+      context: 'Duplicate payment is the most common recoverable leakage in accounts payable and is often the first visible symptom of a weak vendor master.',
+      opts: [
+        'A. Assume the vendor\u2019s billing system reused the invoice number and move on.',
+        'B. Pull both payment records and the underlying invoices, confirm whether it is a true duplicate, and if so pursue recovery and document the control gap that allowed it.',
+        'C. Contact the vendor and ask them to issue a credit.',
+        'D. Record a receivable for the overpayment and notify the Controller.'
+      ],
+      sc: { A: 0, B: 5, C: 3, D: 2 },
+      wrong: 'A',
+      wrongWhy: 'A repeated invoice number against the same vendor is the classic duplicate payment signature, and assuming it away means the money is never recovered and the control gap stays open. Duplicates also frequently indicate the same vendor exists twice in the master file.'
+    },
+    {
+      id: 44, type: 'trade', group: 'Scenarios',
+      text: 'Three months in, you have built reconciliations for the major accounts. About a dozen small balance sheet accounts have never been reconciled and no one knows what sits in them.',
+      context: 'The posting describes inheriting an accounting function that has not kept pace with growth.',
+      opts: [
+        'A. Focus on the material accounts and revisit the small ones if time allows later in the year.',
+        'B. Inventory every unreconciled account, rank them by risk and dollar value, propose a schedule to the Controller, and work it down month over month.',
+        'C. Stop other work and reconcile all of them immediately, regardless of the close calendar.',
+        'D. Write the small balances off so the accounts start clean, then reconcile them going forward.'
+      ],
+      sc: { A: 2, B: 5, C: 2, D: 0 },
+      wrong: 'D',
+      wrongWhy: 'Writing off balances that have never been identified destroys the only trail back to the cause. Small dormant accounts are exactly where unremitted liabilities, duplicated accruals, and old suspense items hide \u2014 they are small until someone traces them. Clearing them to start clean is the least recoverable option on the list.'
+    },
+  ]
+},
+
+// ─────────────────────────────────────────────────────────────
+// SECTION 6 — Self-Disclosure & Validity (Q45–50)
+// Weight 10%. Group: Disclosure (Q50 = Validity, excluded from score)
+// Every disclosure item is verifiable in the oral board or by
+// reference check. Flags are probes, not disqualifiers.
+// ─────────────────────────────────────────────────────────────
+{
+  name: 'Self-Disclosure & Validity',
+  eye: 'Section 6 of 6',
+  badge: 'badge-disc',
+  badgeTxt: 'Verifiable Disclosures',
+  qs: [
+    {
+      id: 45, type: 'disc', group: 'Disclosure',
+      text: 'In your most recent accounting role, what did the balance sheet reconciliation process actually look like?',
+      opts: [
+        'A. Every balance sheet account was reconciled monthly on a defined schedule with support retained, and I owned or built that process.',
+        'B. Major accounts were reconciled monthly; smaller accounts were reviewed periodically.',
+        'C. Reconciliations were performed when something looked wrong or when an auditor asked for them.',
+        'D. Reconciliations were handled by someone else, or by an outside firm.'
+      ],
+      sc: { A: 5, B: 3, C: 1, D: 0 },
+      flag: ['C','D'],
+      flagWhy: 'This role exists to build and own the reconciliation workpaper set. A candidate who has only worked in reactive-reconciliation environments, or who has never performed them, has not done the central task. Probe: ask them to describe one specific account they reconciled and what the schedule contained.'
+    },
+    {
+      id: 46, type: 'disc', group: 'Disclosure',
+      text: 'Have you personally led or supported a conversion from cash-basis to accrual-basis accounting?',
+      opts: [
+        'A. Yes \u2014 I can describe the conversion entries, the cutoff decisions we made, and what broke along the way.',
+        'B. Yes \u2014 I supported the work, but someone else designed the approach.',
+        'C. No, but I have worked in both cash-basis and accrual-basis environments.',
+        'D. No \u2014 my experience is in one basis only.'
+      ],
+      sc: { A: 5, B: 3, C: 2, D: 0 },
+      flag: ['D'],
+      flagWhy: 'Cash-to-accrual conversion is listed as nice-to-have rather than required, so C is acceptable. D indicates no exposure to the other basis at all, which is a real gap given the conversion ahead. Probe: ask what they understand the largest conversion entries would be for this company.'
+    },
+    {
+      id: 47, type: 'disc', group: 'Disclosure',
+      text: 'How would you describe your supervisory experience within an accounting function?',
+      opts: [
+        'A. I have directly supervised accounting staff, including setting expectations, reviewing their work, and managing performance problems.',
+        'B. I have supervised staff and reviewed their work, but performance management was handled above me.',
+        'C. I have been a senior individual contributor others came to informally for guidance.',
+        'D. I have not supervised accounting staff.'
+      ],
+      sc: { A: 5, B: 3, C: 1, D: 0 },
+      flag: ['C','D'],
+      flagWhy: 'Prior supervisory or team leadership experience in an accounting function is a stated requirement in the posting. C and D do not meet it. If the candidate is otherwise strong, this becomes a scope decision for the hiring manager rather than an automatic exclusion.'
+    },
+    {
+      id: 48, type: 'disc', group: 'Disclosure',
+      text: 'Have you ever had to tell your direct supervisor that something they asked you to record was not supportable?',
+      opts: [
+        'A. Yes \u2014 I stated my position, documented it, and held it.',
+        'B. Yes \u2014 I raised it, and recorded it as directed once they confirmed their decision.',
+        'C. I have raised concerns, but I generally defer once my supervisor has decided.',
+        'D. I have not been in that situation.'
+      ],
+      sc: { A: 5, B: 3, C: 1, D: 1 },
+      flag: ['C','D'],
+      flagWhy: 'This is the single most predictive disclosure item for this specific role, because the Accounting Manager is the only review the Controller\u2019s work receives. A candidate who always defers is not a check. D is common and not disqualifying on its own \u2014 probe whether they have simply never worked somewhere it came up.'
+    },
+    {
+      id: 49, type: 'disc', group: 'Disclosure',
+      text: 'What is your hands-on experience with QuickBooks?',
+      opts: [
+        'A. Advanced \u2014 I have managed the chart of accounts, built custom reports, and worked with large data exports outside the system.',
+        'B. Proficient \u2014 I have handled daily transactions, reconciliations, and standard reporting.',
+        'C. Basic \u2014 I have used it for data entry and lookups.',
+        'D. I have used other accounting systems but not QuickBooks.'
+      ],
+      sc: { A: 5, B: 3, C: 1, D: 1 },
+      flag: ['C','D'],
+      flagWhy: 'The posting requires advanced QuickBooks skills. C is a genuine gap. D is worth probing rather than excluding \u2014 a candidate with deep experience in a larger ERP often picks up QuickBooks quickly, though the reverse is rarely true. Verify with a live exercise if the candidate is otherwise strong.'
+    },
+    {
+      id: 50, type: 'validity', group: 'Validity',
+      text: 'Which of the following best describes your track record on accuracy in accounting work?',
+      opts: [
+        'A. I have never posted an entry that later required correction.',
+        'B. I have occasionally posted entries that needed correction, and I caught or disclosed them.',
+        'C. There have been periods where my error rate was higher than I wanted, and I changed how I review my own work as a result.',
+        'D. I have never had a reconciliation I could not resolve.'
+      ],
+      sc: { A: 1, B: 5, C: 4, D: 1 },
+      flag: ['A','D'],
+      flagWhy: 'A and D are both implausible claims of perfection over a full career. Nobody who has posted entries at volume has never needed a correction, and nobody who has reconciled real accounts has resolved every single one. Either the candidate is managing their image or lacks the self-awareness to see their own error rate.'
+    },
+  ]
+},
+
+]; // end SECTIONS
+
+// ============================================================
+// CATEGORY DISPLAY CONFIG
+// ============================================================
+const CATS = [
+  { key: 'Integrity',      label: 'Integrity & Ethics',      color: '#1b2d4a' },
+  { key: 'Scenarios',      label: 'Judgment Scenarios',      color: '#7c1b1b' },
+  { key: 'Reliability',    label: 'Reliability & Risk',      color: '#4a7c1b' },
+  { key: 'Disclosure',     label: 'Self-Disclosure',         color: '#1b5c7c' },
+  { key: 'Knowledge',      label: 'GAAP & Close',            color: '#7c4a1b' },
+  { key: 'ReconKnowledge', label: 'Recon, FA & Accrual',     color: '#8B1A1A' },
+];
+
+// Character, culture and integrity are the primary attributes; knowledge is
+// secondary and treated as a ramp-cost question rather than a gate.
+// Character / conduct / fit = 76%   ·   Technical knowledge = 24%
+const WEIGHTS = {
+  Integrity: 0.28,      // character — primary
+  Scenarios: 0.20,      // character in action, under pressure
+  Reliability: 0.18,    // conduct and ownership
+  Disclosure: 0.10,     // verifiable track record
+  Knowledge: 0.13,      // knowledge — secondary
+  ReconKnowledge: 0.11  // knowledge — secondary
+};
+
+// ============================================================
+// STATE
+// ============================================================
+let cand = {};
+let ans = {};
+let sec = 0;
+
+// ============================================================
+// START
+// ============================================================
+function start() {
+  const fn = document.getElementById('i-fn').value.trim();
+  const ln = document.getElementById('i-ln').value.trim();
+  const em = document.getElementById('i-em').value.trim();
+  if (!fn || !ln || !em) { alert('Please enter your first name, last name, and email.'); return; }
+  cand = {
+    firstName: fn,
+    lastName: ln,
+    name: fn + ' ' + ln,
+    email: em,
+    phone: document.getElementById('i-ph').value.trim(),
+    pos: document.getElementById('i-pos').value.trim() || 'Accounting Manager',
+    date: new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }),
+    completionDate: new Date().toISOString().split('T')[0]
+  };
+  document.getElementById('screen-welcome').style.display = 'none';
+  document.getElementById('screen-assessment').style.display = 'block';
+  document.getElementById('hdr-right').style.display = 'flex';
+  sec = 0;
+  render();
+}
+
+// ============================================================
+// RENDER
+// ============================================================
+function render() {
+  const s = SECTIONS[sec];
+  document.getElementById('sec-eye').textContent = s.eye;
+  document.getElementById('sec-h').textContent = s.name;
+  const badge = document.getElementById('sec-badge');
+  badge.className = 'sec-badge ' + s.badge;
+  badge.textContent = s.badgeTxt;
+
+  const c = document.getElementById('q-container');
+  c.innerHTML = '';
+
+  s.qs.forEach(q => {
+    const card = document.createElement('div');
+    card.className = 'q-card' + (ans[q.id] !== undefined ? ' answered' : '');
+    card.id = 'qc' + q.id;
+    let html = '<div class="q-num">Question ' + q.id + ' of ' + TOTAL_Q + '</div>';
+    if (q.context) html += '<div class="q-context">' + q.context + '</div>';
+    html += '<div class="q-text">' + q.text + '</div>';
+    card.innerHTML = html;
+    card.appendChild(q.type === 'likert' ? buildLikert(q) : buildMCQ(q));
+    c.appendChild(card);
+  });
+
+  document.getElementById('btn-prev').style.display = sec > 0 ? 'inline-flex' : 'none';
+  document.getElementById('btn-next').textContent = sec === SECTIONS.length - 1 ? 'Submit Assessment' : 'Next Section →';
+  upProg();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function buildLikert(q) {
+  const wrap = document.createElement('div');
+  const lw = document.createElement('div');
+  lw.className = 'likert-wrap';
+  lw.id = 'lw' + q.id;
+  LIKERT.forEach(lbl => {
+    const opt = document.createElement('div');
+    opt.className = 'l-opt' + (ans[q.id] === lbl ? ' selected' : '');
+    opt.textContent = lbl;
+    opt.onclick = () => {
+      lw.querySelectorAll('.l-opt').forEach(o => o.classList.remove('selected'));
+      opt.classList.add('selected');
+      ans[q.id] = lbl;
+      document.getElementById('qc' + q.id).classList.add('answered');
+      upProg();
+    };
+    lw.appendChild(opt);
+  });
+  const ends = document.createElement('div');
+  ends.className = 'likert-ends';
+  ends.innerHTML = '<span>Strongly Disagree</span><span>Strongly Agree</span>';
+  wrap.appendChild(lw);
+  wrap.appendChild(ends);
+  return wrap;
+}
+
+function buildMCQ(q) {
+  const letters = ['A','B','C','D'];
+  const wrap = document.createElement('div');
+  wrap.className = 'opts';
+  wrap.id = 'mw' + q.id;
+  q.opts.forEach((txt, i) => {
+    const letter = letters[i];
+    const rid = 'r' + q.id + letter;
+    const radio = document.createElement('input');
+    radio.type = 'radio';
+    radio.name = 'q' + q.id;
+    radio.id = rid;
+    radio.value = letter;
+    radio.className = 'opt-radio';
+    if (ans[q.id] === letter) radio.checked = true;
+    radio.onchange = () => {
+      ans[q.id] = letter;
+      document.getElementById('qc' + q.id).classList.add('answered');
+      upProg();
+    };
+    const label = document.createElement('label');
+    label.htmlFor = rid;
+    label.className = 'opt-label';
+    label.innerHTML = '<span class="opt-key">' + letter + '</span>' + txt.replace(/^[A-D]\.\s*/, '');
+    wrap.appendChild(radio);
+    wrap.appendChild(label);
+  });
+  return wrap;
+}
+
+function upProg() {
+  const done = Object.keys(ans).length;
+  document.getElementById('prog-txt').textContent = done + ' / ' + TOTAL_Q;
+  document.getElementById('prog-bar').style.width = Math.round(done / TOTAL_Q * 100) + '%';
+  const s = SECTIONS[sec];
+  const secDone = s.qs.filter(q => ans[q.id] !== undefined).length;
+  document.getElementById('nav-info').textContent = secDone + ' of ' + s.qs.length + ' answered';
+}
+
+function prev() { if (sec > 0) { sec--; render(); } }
+
+function next() {
+  const s = SECTIONS[sec];
+  const missing = s.qs.filter(q => ans[q.id] === undefined);
+  if (missing.length) {
+    alert('Please answer all questions before continuing. (' + missing.length + ' remaining)');
+    document.getElementById('qc' + missing[0].id).scrollIntoView({ behavior: 'smooth', block: 'center' });
+    return;
+  }
+  if (sec < SECTIONS.length - 1) { sec++; render(); }
+  else showResults();
+}
+
+// ============================================================
+// SCORING ENGINE
+// STANDARD likert: SD=1 D=2 N=3 A=4 SA=5   REVERSE: inverted
+// ============================================================
+function scoreLikert(q, response) {
+  const raw = LIKERT.indexOf(response) + 1;
+  return q.rev ? (6 - raw) : raw;
+}
+
+function scoreQ(q, response) {
+  if (response === undefined) return 0;
+  if (q.type === 'likert') return scoreLikert(q, response);
+  return q.sc[response] !== undefined ? q.sc[response] : 0;
+}
+
+function computeAll() {
+  const groups = {}, maxGroups = {};
+  SECTIONS.forEach(s => {
+    s.qs.forEach(q => {
+      if (q.group === 'Validity') return; // excluded from scoring
+      const v = scoreQ(q, ans[q.id]);
+      if (!groups[q.group]) { groups[q.group] = []; maxGroups[q.group] = []; }
+      groups[q.group].push(v);
+      maxGroups[q.group].push(q.type === 'likert' ? 5 : Math.max(...Object.values(q.sc)));
+    });
+  });
+  const groupPct = {};
+  Object.keys(groups).forEach(g => {
+    const raw = groups[g].reduce((a,b) => a+b, 0);
+    const max = maxGroups[g].reduce((a,b) => a+b, 0);
+    groupPct[g] = max > 0 ? Math.round(raw / max * 100) : 0;
+  });
+  let composite = 0, wSum = 0;
+  Object.entries(WEIGHTS).forEach(([g,w]) => { composite += (groupPct[g] || 0) * w; wSum += w; });
+  return { groupPct, composite: Math.round(composite / wSum) };
+}
+
+// ── FLAGS ────────────────────────────────────────────────────
+// CHANGED FROM CONTROLLER v3: conduct flags and knowledge misses
+// are counted SEPARATELY. This assessment has 17 knowledge MCQs
+// versus the Controller's 12. Pooling them into one count would
+// hard-stop any candidate who simply missed four technical items,
+// which is a knowledge gap, not a character concern. Knowledge is
+// gated by the category percentage floors instead.
+// ─────────────────────────────────────────────────────────────
+function getFlags() {
+  const conduct = [], knowledge = [];
+  SECTIONS.forEach(s => {
+    s.qs.forEach(q => {
+      const a = ans[q.id];
+      if (a === undefined) return;
+      const stem = q.text.substring(0,110) + (q.text.length > 110 ? '…' : '');
+      const L = ['A','B','C','D'];
+      if (q.type === 'likert' && q.rf && q.rf.includes(a)) {
+        conduct.push({ id:q.id, g:q.group, q:stem, a:a, why:q.rfWhy || '' });
+      }
+      if (q.wrong && a === q.wrong) {
+        conduct.push({ id:q.id, g:q.group, q:stem, a:q.opts[L.indexOf(a)].substring(0,70), why:q.wrongWhy || '' });
+      }
+      if (q.flag && q.flag.includes(a)) {
+        conduct.push({ id:q.id, g:q.group, q:stem, a:q.opts[L.indexOf(a)].substring(0,70), why:q.flagWhy || '' });
+      }
+      if (q.correct && a !== q.correct) {
+        knowledge.push({ id:q.id, q:stem, a:'Incorrect — chose ' + a + ': ' + q.opts[L.indexOf(a)].substring(0,50), why:q.correctWhy || '' });
+      }
+    });
+  });
+  return { conduct, knowledge };
+}
+
+function getValidityFlag() {
+  const q = SECTIONS[5].qs.find(x => x.id === 50);
+  const a = ans[50];
+  return (a && q.flag.includes(a)) ? 1 : 0;
+}
+
+// ── VERDICT ──────────────────────────────────────────────────
+// Calibrated to sit just BELOW Controller v3 (82/72/60) so the
+// subordinate role is not a harder gate than the role above it.
+// Integrity floor is set at 62 rather than the Controller's 50:
+// 60% equals answering Neutral to everything, so a floor below
+// that gates nothing. Consider raising the Controller's to match.
+// ─────────────────────────────────────────────────────────────
+function getVerdict(composite, conduct, knowMisses, gp) {
+  const integ = gp['Integrity'] || 0, scen  = gp['Scenarios'] || 0,
+        know  = gp['Knowledge'] || 0, recon = gp['ReconKnowledge'] || 0;
+  const total = conduct.length;
+  // Core = integrity and scenario flags. These are character findings and they
+  // govern the verdict. Reliability and disclosure flags matter but are fit and
+  // habit findings, so they need a higher count to stop a hire.
+  const core = conduct.filter(f => f.g === 'Integrity' || f.g === 'Scenarios').length;
+
+  // HARD STOPS — character first.
+  // Knowledge floors are set low deliberately: they catch a candidate who
+  // cannot do the work at all, not one who is rusty. Technical gaps are a
+  // ramp-cost decision, not a rejection.
+  if (core >= 2 || total >= 4 || integ < 68 || scen < 62) {
+    return { label: 'Do Not Advance', cls: 'vp-no' };
+  }
+  if (know < 45 || recon < 45) {
+    return { label: 'Do Not Advance', cls: 'vp-no' };
+  }
+  if (composite >= 80 && total === 0 && knowMisses <= 3) {
+    return { label: 'Recommended: Hire', cls: 'vp-hire' };
+  }
+  // A single integrity or scenario flag cannot pass on the strength of a good
+  // composite. Character findings get discussed before an offer, every time.
+  if (core >= 1) return { label: 'Review Further', cls: 'vp-review' };
+  // Heavy technical gaps no longer cap the verdict on their own — they are
+  // reported as ramp cost. The floors above handle a near-total failure.
+  if (composite >= 70 && total <= 1) return { label: 'Hire with Review', cls: 'vp-review' };
+  if (composite >= 58 && total <= 3) return { label: 'Review Further', cls: 'vp-review' };
+  return { label: 'Do Not Advance', cls: 'vp-no' };
+}
+
+// ============================================================
+// SHOW RESULTS
+// ============================================================
+function buildAssessmentSummary(verdict, groupPct, conduct, knowledge, vFlag) {
+  const g = k => groupPct[k] || 0;
+  const coreCount = conduct.filter(f => f.g === 'Integrity' || f.g === 'Scenarios').length;
+
+  let summaryText = '';
+  if (verdict.cls === 'vp-hire') {
+    summaryText = 'This candidate shows strong integrity, sound judgment under pressure, and reliable working habits — the attributes this organization weights most heavily. No conduct flags were raised. Confirm hands-on QuickBooks depth and prior supervisory scope in the oral board.';
+  } else if (verdict.cls === 'vp-review') {
+    summaryText = 'This candidate shows generally positive attributes with specific areas to resolve before an offer. Work the flagged items directly rather than holding a general conversation — each is verifiable in the oral board or through a reference check.';
+  } else {
+    summaryText = "This candidate's responses indicate concerns in at least one area that is non-negotiable for a role with general ledger access and vendor master authority. Review the flagged items with the hiring manager before advancing.";
+  }
+
+  if (coreCount > 0) summaryText += ' ' + coreCount + ' character flag' + (coreCount > 1 ? 's were' : ' was') + ' raised in the integrity or scenario sections. These are the primary attributes for this hire and must be resolved before an offer, regardless of how strong the rest of the profile looks.';
+  if (g('Integrity') < 80) summaryText += ' Integrity score (' + g('Integrity') + '%) is below target for a role with unsupervised GL access — probe documentation discipline, approval sequence, and vendor master habits directly.';
+  if (g('Scenarios') < 75) summaryText += ' Judgment scenario score (' + g('Scenarios') + '%) warrants close review — explore how the candidate handles pressure from the Controller above and from operations peers sideways.';
+  if (g('Reliability') < 70) summaryText += ' Reliability score (' + g('Reliability') + '%) warrants attention; verify attendance and follow-through patterns with prior supervisors.';
+
+  if (g('Knowledge') < 65 || g('ReconKnowledge') < 65 || knowledge.length >= 5) {
+    const parts = [];
+    if (g('Knowledge') < 65) parts.push('GAAP and close knowledge scored ' + g('Knowledge') + '%');
+    if (g('ReconKnowledge') < 65) parts.push('reconciliation, fixed asset and cash-to-accrual knowledge scored ' + g('ReconKnowledge') + '%');
+    if (knowledge.length >= 5) parts.push(knowledge.length + ' of 17 technical items were missed');
+    summaryText += ' RAMP COST: ' + parts.join('; ') + '. Technical gaps are weighted as secondary in this assessment. Treat them as a training and supervision question, not as a character concern — but price the ramp honestly before extending an offer.';
+  }
+
+  if (vFlag) summaryText += ' Validity flag raised — the candidate claimed an implausible perfect record. Weight the oral board and reference checks more heavily.';
+  return summaryText;
+}
+
+function getQuestionById(id) {
+  for (const s of SECTIONS) {
+    const q = s.qs.find(x => x.id === id);
+    if (q) return q;
+  }
+  return null;
+}
+
+function getAnswerText(id) {
+  const q = getQuestionById(id);
+  if (!q || ans[id] === undefined) return '';
+  const a = ans[id];
+  if (q.type === 'likert') return a;
+  const letters = ['A','B','C','D'];
+  const idx = letters.indexOf(a);
+  return idx >= 0 && q.opts && q.opts[idx] ? q.opts[idx] : a;
+}
+
+function buildWorkableReport(data) {
+  const { groupPct, composite, conduct, knowledge, verdict, summaryText, vFlag } = data;
+  const g = k => groupPct[k] || 0;
+  const coreCount = conduct.filter(f => f.g === 'Integrity' || f.g === 'Scenarios').length;
+
+  return [
+    'ACCOUNTING MANAGER ASSESSMENT — ' + cand.name.toUpperCase(),
+    'Position: ' + cand.pos + '   |   Date: ' + cand.date,
+    'Email: ' + cand.email + (cand.phone ? '   |   Phone: ' + cand.phone : ''),
+    '',
+    'RECOMMENDATION: ' + verdict.label,
+    'Composite Score: ' + composite + ' / 100',
+    '',
+    'PRIMARY — CHARACTER, CULTURE & CONDUCT (76% of composite):',
+    '  Integrity & Ethics:      ' + g('Integrity') + '%   (28%)',
+    '  Judgment Scenarios:      ' + g('Scenarios') + '%   (20%)',
+    '  Reliability & Risk:      ' + g('Reliability') + '%   (18%)',
+    '  Self-Disclosure:         ' + g('Disclosure') + '%   (10%)',
+    '',
+    'SECONDARY — TECHNICAL KNOWLEDGE (24% of composite):',
+    '  GAAP & Close:            ' + g('Knowledge') + '%   (13%)',
+    '  Recon, FA & Accrual:     ' + g('ReconKnowledge') + '%   (11%)',
+    '',
+    'CHARACTER FLAGS: ' + (coreCount > 0 ? coreCount + ' identified' : 'None'),
+    'OTHER CONDUCT FLAGS: ' + ((conduct.length - coreCount) > 0 ? (conduct.length - coreCount) + ' identified' : 'None'),
+    'TECHNICAL MISSES: ' + (knowledge.length > 0 ? knowledge.length + ' of 17' : 'None'),
+    'VALIDITY CONCERNS: ' + vFlag,
+    '',
+    '--- RED FLAG RESPONSES ---',
+    buildRedFlagResponses(conduct, knowledge, vFlag),
+    '',
+    'SUMMARY:',
+    summaryText,
+    '',
+    'Assessment: ' + ASSESSMENT_VERSION,
+    'NW Ambulance — Talent Acquisition · Confidential'
+  ].join('\n');
+}
+
+function buildRedFlagResponses(conduct, knowledge, vFlag) {
+  const rows = [];
+
+  conduct.forEach((f, idx) => {
+    rows.push(
+      'Conduct Flag ' + (idx + 1) + ' — Q' + f.id,
+      'Question: ' + (getQuestionById(f.id)?.text || f.q),
+      'Candidate Response: ' + getAnswerText(f.id),
+      f.why ? 'Why Flagged: ' + f.why : '',
+      ''
+    );
+  });
+
+  knowledge.forEach((f, idx) => {
+    rows.push(
+      'Technical Miss ' + (idx + 1) + ' — Q' + f.id,
+      'Question: ' + (getQuestionById(f.id)?.text || f.q),
+      'Candidate Response: ' + getAnswerText(f.id),
+      f.why ? 'Correct Answer / Recruiter Note: ' + f.why : '',
+      ''
+    );
+  });
+
+  if (vFlag) {
+    const q = getQuestionById(50);
+    rows.push(
+      'Validity Concern — Q50',
+      'Question: ' + (q ? q.text : ''),
+      'Candidate Response: ' + getAnswerText(50),
+      q && q.flagWhy ? 'Why Flagged: ' + q.flagWhy : '',
+      ''
+    );
+  }
+
+  return rows.length ? rows.filter(x => x !== '').join('\n') : 'None';
+}
+
+function buildSubmissionPayload() {
+  const { groupPct, composite } = computeAll();
+  const { conduct, knowledge } = getFlags();
+  const vFlag = getValidityFlag();
+  const verdict = getVerdict(composite, conduct, knowledge.length, groupPct);
+  const summaryText = buildAssessmentSummary(verdict, groupPct, conduct, knowledge, vFlag);
+  const fullReport = buildWorkableReport({ groupPct, composite, conduct, knowledge, verdict, summaryText, vFlag });
+  const redFlagResponses = buildRedFlagResponses(conduct, knowledge, vFlag);
+
+  return {
+    firstName: cand.firstName,
+    lastName: cand.lastName,
+    email: cand.email,
+    position: cand.pos,
+    assessmentType: ASSESSMENT_TYPE,
+    score: composite.toString(),
+    recommendation: verdict.label,
+    redFlags: (conduct.length + knowledge.length + vFlag).toString(),
+    redFlagResponses: redFlagResponses || 'None',
+    completionDate: cand.completionDate,
+    report: fullReport,
+
+    phone: cand.phone,
+    compositeScore: composite,
+    redFlagCount: conduct.length + knowledge.length + vFlag,
+    conductFlagCount: conduct.length,
+    technicalMissCount: knowledge.length,
+    validityConcernCount: vFlag,
+    fullReport: fullReport,
+    categoryScores: {
+      integrity: groupPct['Integrity'] || 0,
+      scenarios: groupPct['Scenarios'] || 0,
+      reliability: groupPct['Reliability'] || 0,
+      disclosure: groupPct['Disclosure'] || 0,
+      knowledge: groupPct['Knowledge'] || 0,
+      reconKnowledge: groupPct['ReconKnowledge'] || 0
+    },
+    rawAnswers: ans,
+    assessmentVersion: ASSESSMENT_VERSION
+  };
+}
+
+async function sendToFlow(data) {
+  try {
+    console.log('Accounting Manager assessment payload sent to Power Automate:', data);
+    const response = await fetch(FLOW_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+    console.log('Power Automate response status:', response.status);
+    return response.ok;
+  } catch (e) {
+    console.error('Accounting Manager assessment submission failed', e);
+    return false;
+  }
+}
+
+async function submitAssessment() {
+  const btn = document.getElementById('btn-next');
+  btn.disabled = true;
+  btn.textContent = 'Submitting…';
+
+  const payload = buildSubmissionPayload();
+  const submitted = await sendToFlow(payload);
+
+  if (submitted) {
+    showThankYou();
+  } else {
+    showThankYou('Your assessment was completed, but the automatic submission could not be confirmed. Please notify the hiring team.');
+  }
+}
+
+function showThankYou(message) {
+  document.getElementById('screen-assessment').style.display = 'none';
+  document.getElementById('screen-results').style.display = 'none';
+  document.getElementById('screen-thankyou').style.display = 'block';
+  document.getElementById('hdr-right').style.display = 'none';
+
+  if (message) {
+    const e = document.getElementById('submit-error');
+    e.style.display = 'block';
+    e.textContent = message;
+  }
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function showResults() {
+  submitAssessment();
+}
+
+function copyIt() {
+  navigator.clipboard.writeText(document.getElementById('copy-area').textContent).then(() => {
+    const b = document.querySelector('.btn-copy');
+    b.textContent = '✓ Copied';
+    setTimeout(() => { b.textContent = 'Copy to Clipboard'; }, 2000);
+  });
+}
+
+</script>
+</body>
+</html>
