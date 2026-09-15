@@ -117,6 +117,15 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 .nav-info{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--muted)}
 .nav-btns{display:flex;gap:10px}
 
+
+/* THANK YOU — mirrors production hidden-results behavior */
+#screen-thankyou{display:none}
+.thank-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:42px 34px;text-align:center;margin-top:40px}
+.thank-icon{width:54px;height:54px;border-radius:50%;background:var(--green-bg);border:1px solid var(--green-border);display:flex;align-items:center;justify-content:center;margin:0 auto 18px;color:var(--green);font-size:26px}
+.thank-h{font-family:'Playfair Display',serif;font-size:32px;font-weight:700;color:var(--ink);margin-bottom:10px}
+.thank-p{font-size:14px;color:var(--muted);line-height:1.7;max-width:520px;margin:0 auto}
+.submit-error{display:none;margin-top:18px;background:var(--red-bg);border:1px solid var(--red-border);color:var(--red);border-radius:var(--r);padding:12px 14px;font-size:12px;line-height:1.5;text-align:left}
+
 /* RESULTS */
 #screen-results{display:none}
 .r-top{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:34px;text-align:center;margin-bottom:20px}
@@ -173,13 +182,6 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
   .hdr{background:#1b2d4a}
   .btn-primary,.btn-ghost,.btn-copy,.export-row,.wb-box .btn-copy{display:none!important}
 }
-
-/* Candidate-facing security: assessment results are recruiter-only. */
-#screen-results,
-#screen-results * {
-  display: none !important;
-}
-
 </style>
 </head>
 <body>
@@ -241,6 +243,18 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
   </div>
 </div>
 
+
+<!-- THANK YOU -->
+<div id="screen-thankyou">
+  <div class="thank-card">
+    <div class="thank-icon">✓</div>
+    <h2 class="thank-h">Assessment Submitted</h2>
+    <p class="thank-p">Your responses have been received. The hiring team will review your assessment as part of the candidate review process.</p>
+    <div class="submit-error" id="submit-error"></div>
+  </div>
+</div>
+
+
 <div id="screen-results">
   <div class="r-top">
     <div class="v-pill" id="v-pill"></div>
@@ -273,16 +287,14 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 </main>
 
 <script>
-const FLOW_URL = 'https://defaultb9fe31c2de0742529875da1c500446.c8.environment.api.powerplatform.com:443/powerautomate/automations/direct/cu/14/workflows/78ad970dde0a4d83b102f1f97b5ac728/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=nbT1OEpeb6SorEEfr-q0-SBNwz61WngxFbQfvhOxs18';
+
+// ============================================================
+// POWER AUTOMATE CONFIGURATION
+// Mirrors the production hidden-results submission pattern.
+// ============================================================
+const POWER_AUTOMATE_URL = "https://defaultb9fe31c2de0742529875da1c500446.c8.environment.api.powerplatform.com:443/powerautomate/automations/direct/cu/14/workflows/78ad970dde0a4d83b102f1f97b5ac728/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=nbT1OEpeb6SorEEfr-q0-SBNwz61WngxFbQfvhOxs18";
 const ASSESSMENT_TYPE = 'Payroll Manager';
-const ASSESSMENT_VERSION = '1.0-fieldstaff-v3-mirrored';
-const urlParams = new URLSearchParams(window.location.search);
-const applicationContext = {candidate_id:urlParams.get('candidate_id')||'',application_id:urlParams.get('application_id')||'',job_shortcode:urlParams.get('job_shortcode')||'',job_title:urlParams.get('job_title')||'',job_id:urlParams.get('job_id')||'',source:urlParams.get('source')||'workable_email'};
-function excelSafeText(v,max=30000){return String(v||'').replace(/\r\n/g,'\n').replace(/\r/g,'\n').replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g,'').substring(0,max);}
-function findQuestion(id){for(const s of SECTIONS){const q=s.qs.find(x=>x.id===id);if(q)return q;}return null;}
-function fullAnswer(id){const q=findQuestion(id),a=ans[id];if(!q||a===undefined)return '';if(q.type==='likert')return a;const i=['A','B','C','D'].indexOf(a);return i>=0&&q.opts? q.opts[i]:a;}
-function recruiterFlags(conduct,knowledge,vFlag){const arr=[];for(const f of conduct)arr.push('CONDUCT FLAG - Q'+f.id+'\nQuestion: '+findQuestion(f.id).text+'\nCandidate Response: '+fullAnswer(f.id)+'\nRecruiter Note: '+(f.why||''));for(const f of knowledge)arr.push('TECHNICAL MISS - Q'+f.id+'\nQuestion: '+findQuestion(f.id).text+'\nCandidate Response: '+fullAnswer(f.id)+'\nRecruiter Note: '+(f.why||''));if(vFlag){const q=findQuestion(57);arr.push('VALIDITY CONCERN - Q57\nQuestion: '+q.text+'\nCandidate Response: '+fullAnswer(57)+'\nRecruiter Note: '+(q.flagWhy||''));}return arr.join('\n\n')||'None';}
-async function submitToFlow(data){try{const r=await fetch(FLOW_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});return r.ok;}catch(e){console.error(e);return false;}}
+const ASSESSMENT_VERSION = 'Payroll Manager Character, Conduct & Knowledge Assessment v1.0';
 
 const LIKERT = ['Strongly Disagree','Disagree','Neutral','Agree','Strongly Agree'];
 const TOTAL_Q = 57;
@@ -1013,10 +1025,14 @@ function start() {
   const em = document.getElementById('i-em').value.trim();
   if (!fn || !ln || !em) { alert('Please enter your first name, last name, and email.'); return; }
   cand = {
-    firstName: fn, lastName: ln, name: fn + ' ' + ln, email: em,
+    firstName: fn,
+    lastName: ln,
+    name: fn + ' ' + ln,
+    email: em,
     phone: document.getElementById('i-ph').value.trim(),
     pos: document.getElementById('i-pos').value.trim() || 'Payroll Manager',
-    date: new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
+    date: new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }),
+    completionDate: new Date().toISOString().split('T')[0]
   };
   document.getElementById('screen-welcome').style.display = 'none';
   document.getElementById('screen-assessment').style.display = 'block';
@@ -1256,153 +1272,222 @@ function getVerdict(composite, conduct, knowMisses, gp) {
 // ============================================================
 // SHOW RESULTS
 // ============================================================
-async function showResults() {
-  document.getElementById('screen-assessment').style.display = 'none';
-  document.getElementById('screen-results').style.display = 'block';
-  document.getElementById('hdr-right').style.display = 'none';
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-
-  const { groupPct, composite } = computeAll();
-  const { conduct, knowledge } = getFlags();
-  const vFlag = getValidityFlag();
-  const verdict = getVerdict(composite, conduct, knowledge.length, groupPct);
-  const redFlagResponses = recruiterFlags(conduct, knowledge, vFlag);
-  const redFlagQuestions = [...conduct,...knowledge].map(f=>'Q'+f.id+': '+findQuestion(f.id).text).concat(vFlag?['Q57: '+findQuestion(57).text]:[]).join('\n') || 'None';
-  const redFlagAnswers = [...conduct,...knowledge].map(f=>'Q'+f.id+': '+fullAnswer(f.id)).concat(vFlag?['Q57: '+fullAnswer(57)]:[]).join('\n') || 'None';
-  const completedAt = new Date().toISOString();
-  const payload = {
-    completionDate: completedAt,
-    email: cand.email || '', firstName: cand.firstName || '', lastName: cand.lastName || '', phone: cand.phone || '',
-    position: cand.pos || 'Payroll Manager', assessmentType: ASSESSMENT_TYPE, assessmentVersion: ASSESSMENT_VERSION,
-    score: String(composite), compositeScore: String(composite), recommendation: verdict.label,
-    redFlags: String(conduct.length + knowledge.length + vFlag), redFlagCount: String(conduct.length + knowledge.length + vFlag),
-    conductFlagCount: String(conduct.length), technicalMissCount: String(knowledge.length), validityConcernCount: String(vFlag),
-    redFlagResponses: excelSafeText(redFlagResponses,16000), redFlagQuestions: excelSafeText(redFlagQuestions,12000), redFlagAnswers: excelSafeText(redFlagAnswers,12000),
-    candidate_id: applicationContext.candidate_id, application_id: applicationContext.application_id, job_id: applicationContext.job_id,
-    job_shortcode: applicationContext.job_shortcode, job_title: applicationContext.job_title || cand.pos || '', source: applicationContext.source,
-    integrity: String(groupPct['Integrity']||0), scenarios: String(groupPct['Scenarios']||0), reliability: String(groupPct['Reliability']||0),
-    concurrency: String(groupPct['Concurrency']||0), disclosure: String(groupPct['Disclosure']||0), adp: String(groupPct['ADP']||0), compliance: String(groupPct['Compliance']||0)
-  };
-  payload.report = "'" + excelSafeText('PAYROLL MANAGER ASSESSMENT - '+cand.name+'\nRECOMMENDATION: '+verdict.label+'\nComposite Score: '+composite+' / 100\n\nRED FLAG RESPONSES:\n'+redFlagResponses,30000);
-  payload.fullReport = payload.report;
-  payload.payloadJson = excelSafeText(JSON.stringify({candidate:cand,applicationContext,scores:{composite,recommendation:verdict.label,groupPct},redFlagResponses,redFlagQuestions,redFlagAnswers,completedAt}),30000);
-  submitToFlow(payload).then(ok => { if(!ok) console.error('Power Automate did not confirm assessment submission.'); });
-
-  const vp = document.getElementById('v-pill');
-  vp.textContent = verdict.label;
-  vp.className = 'v-pill ' + verdict.cls;
-  document.getElementById('r-name').textContent = cand.name;
-  document.getElementById('r-meta').textContent = cand.pos + '  ·  ' + cand.date;
-  document.getElementById('r-score').textContent = composite;
-
-  const cg = document.getElementById('cat-grid');
-  cg.innerHTML = '';
-  CATS.forEach(cat => {
-    const pct = groupPct[cat.key] || 0;
-    const color = pct >= 80 ? '#2d6a3f' : pct >= 60 ? '#7c5a00' : '#8b1a1a';
-    const card = document.createElement('div');
-    card.className = 'cat-card';
-    card.innerHTML =
-      '<div class="cat-lbl">' + cat.label + '</div><div class="cat-row">' +
-      '<div class="cat-bar-bg"><div class="cat-bar" style="width:0%;background:' + color + '" data-pct="' + pct + '"></div></div>' +
-      '<div class="cat-val" style="color:' + color + '">' + pct + '%</div></div>';
-    cg.appendChild(card);
-  });
-  setTimeout(() => { document.querySelectorAll('.cat-bar').forEach(b => { b.style.width = b.dataset.pct + '%'; }); }, 100);
-
-  const row = f => '<div class="flag-row"><div class="flag-q">Q' + f.id + ' · ' + f.q + '</div>' +
-    '<div class="flag-a">→ ' + f.a + '</div>' + (f.why ? '<div class="flag-why">' + f.why + '</div>' : '') + '</div>';
-
-  if (conduct.length > 0) {
-    document.getElementById('flags-box').style.display = 'block';
-    document.getElementById('flags-list').innerHTML = conduct.map(row).join('');
-  }
-  if (knowledge.length > 0) {
-    document.getElementById('know-box').style.display = 'block';
-    document.getElementById('know-list').innerHTML = knowledge.map(row).join('');
-  }
-
-  let summaryText = '';
-  if (verdict.cls === 'vp-hire') {
-    summaryText = 'This candidate shows strong integrity, sound judgment under pressure, and reliable working habits \u2014 the attributes this organization weights most heavily. No conduct flags were raised. Confirm ADP configuration depth with a live walkthrough and verify agency audit experience in the oral board.';
-  } else if (verdict.cls === 'vp-review') {
-    summaryText = 'This candidate shows generally positive attributes with specific areas to resolve before an offer. Work the flagged items below directly rather than holding a general conversation \u2014 each is verifiable in the oral board or through a reference check.';
-  } else {
-    summaryText = 'This candidate\'s responses indicate concerns in at least one area that is non-negotiable for a role that owns pay determinations, holds sole access to compensation data, and represents the organization before regulatory agencies. Review the flagged items with the hiring manager before advancing.';
-  }
+function buildAssessmentSummary(verdict, groupPct, conduct, knowledge, vFlag) {
   const g = k => groupPct[k] || 0;
   const coreCount = conduct.filter(f => f.g === 'Integrity' || f.g === 'Scenarios').length;
 
-  // ── Character first ──
-  if (coreCount > 0) summaryText += ' ' + coreCount + ' character flag' + (coreCount > 1 ? 's were' : ' was') + ' raised in the integrity or scenario sections. These are the primary attributes for this hire and must be resolved before an offer, regardless of how strong the rest of the profile looks.';
-  if (g('Integrity') < 80) summaryText += ' Integrity score (' + g('Integrity') + '%) is below target for a sole-custodian role with no second reviewer \u2014 probe self-processing controls and pay-data access habits directly.';
-  if (g('Scenarios') < 75) summaryText += ' Judgment scenario score (' + g('Scenarios') + '%) warrants close review \u2014 explore how the candidate handles pressure from operations and from executives on classification and release decisions.';
-  if (g('Reliability') < 70) summaryText += ' Reliability score (' + g('Reliability') + '%) warrants attention; this is a single point of failure by design. Verify attendance and follow-through with prior supervisors.';
-  if (g('Concurrency') < 70) summaryText += ' Concurrent load score (' + g('Concurrency') + '%) is a concern \u2014 statutory deadlines routinely collide in this function. Probe how they sequence competing obligations and whether they track commitments externally.';
-
-  // ── Knowledge second: reported as ramp cost, not as a verdict driver ──
-  if (g('ADP') < 70 || g('Compliance') < 65 || knowledge.length >= 5) {
-    summaryText += ' RAMP COST: ';
-    const parts = [];
-    if (g('ADP') < 70) parts.push('ADP configuration scored ' + g('ADP') + '%, suggesting the candidate may be an end user rather than a configurator \u2014 run a live configuration exercise and budget onboarding time');
-    if (g('Compliance') < 65) parts.push('wage-hour, L&I and Washington knowledge scored ' + g('Compliance') + '%, which is teachable but means the first two quarters need Controller oversight on determinations');
-    if (knowledge.length >= 5) parts.push(knowledge.length + ' of 18 technical items were missed');
-    summaryText += parts.join('; ') + '. Technical gaps are weighted as secondary in this assessment. Treat them as a training and supervision question, not as a character concern \u2014 but price the ramp honestly before extending an offer.';
+  let summaryText = '';
+  if (verdict.cls === 'vp-hire') {
+    summaryText = 'This candidate shows strong integrity, sound judgment under pressure, and reliable working habits — the attributes this organization weights most heavily. No conduct flags were raised. Confirm ADP configuration depth with a live walkthrough and verify agency audit experience in the oral board.';
+  } else if (verdict.cls === 'vp-review') {
+    summaryText = 'This candidate shows generally positive attributes with specific areas to resolve before an offer. Work the flagged items below directly rather than holding a general conversation — each is verifiable in the oral board or through a reference check.';
+  } else {
+    summaryText = "This candidate's responses indicate concerns in at least one area that is non-negotiable for a role that owns pay determinations, holds sole access to compensation data, and represents the organization before regulatory agencies. Review the flagged items with the hiring manager before advancing.";
   }
-  if (vFlag) summaryText += ' Validity flag raised \u2014 the candidate claimed an implausible perfect record in a function where notices and corrections are routine. Weight the oral board and reference checks more heavily.';
 
-  const rows = [
-    { l:'Composite Score', v: composite + ' / 100', n: verdict.label },
-    { l:'Character Flags', v: coreCount === 0 ? 'None' : coreCount + ' flagged', n:'Integrity and scenario items \u2014 2 or more is a hard stop; even 1 blocks a clean hire' },
-    { l:'Other Conduct Flags', v: (conduct.length - coreCount) === 0 ? 'None' : (conduct.length - coreCount) + ' flagged', n:'Reliability, concurrency and disclosure items \u2014 fit and habit findings' },
-    { l:'Technical Misses', v: knowledge.length === 0 ? 'None' : knowledge.length + ' of 18', n:'Secondary. Reported as ramp cost, not weighted into the character judgment' },
-    { l:'Integrity & Confidentiality', v: g('Integrity') + '%', n:'PRIMARY \u2014 sole-custodian access, self-processing, classification under cost pressure, back-pay exposure (26%)' },
-    { l:'Judgment Scenarios', v: g('Scenarios') + '%', n:'PRIMARY \u2014 character under operational and executive pressure (19%)' },
-    { l:'Reliability & Risk', v: g('Reliability') + '%', n:'Discretionary absence in a single-owner function, entitlement, exempt-hours expectations (14%)' },
-    { l:'Concurrent Load', v: g('Concurrency') + '%', n:'Triage by consequence, external tracking, interruption control, closing loops (9%)' },
-    { l:'Self-Disclosure', v: g('Disclosure') + '%', n:'Verifiable claims about ADP depth, owned scope, audit representation, costly determinations (8%)' },
-    { l:'ADP Configuration', v: g('ADP') + '%', n:'SECONDARY \u2014 earnings codes, workweek, accruals, deductions, GL burden, filing-agent liability (14%)' },
-    { l:'Wage-Hour, L&I & WA', v: g('Compliance') + '%', n:'SECONDARY \u2014 regular rate, risk classification, ACA safe harbors, exempt duties, WA rules (10%)' },
-  ];
+  if (coreCount > 0) summaryText += ' ' + coreCount + ' character flag' + (coreCount > 1 ? 's were' : ' was') + ' raised in the integrity or scenario sections. These are the primary attributes for this hire and must be resolved before an offer.';
+  if (g('Integrity') < 80) summaryText += ' Integrity score (' + g('Integrity') + '%) is below target for a sole-custodian role with no second reviewer — probe self-processing controls and pay-data access habits directly.';
+  if (g('Scenarios') < 75) summaryText += ' Judgment scenario score (' + g('Scenarios') + '%) warrants close review — explore how the candidate handles pressure from operations and executives.';
+  if (g('Reliability') < 70) summaryText += ' Reliability score (' + g('Reliability') + '%) warrants attention; verify attendance and follow-through with prior supervisors.';
+  if (g('Concurrency') < 70) summaryText += ' Concurrent load score (' + g('Concurrency') + '%) is a concern — probe how competing statutory obligations are sequenced and tracked.';
+  if (g('ADP') < 70 || g('Compliance') < 65 || knowledge.length >= 5) {
+    const parts = [];
+    if (g('ADP') < 70) parts.push('ADP configuration scored ' + g('ADP') + '%');
+    if (g('Compliance') < 65) parts.push('wage-hour, L&I and Washington knowledge scored ' + g('Compliance') + '%');
+    if (knowledge.length >= 5) parts.push(knowledge.length + ' technical items were missed');
+    summaryText += ' RAMP COST: ' + parts.join('; ') + '. Technical gaps are secondary to character but should be priced into onboarding.';
+  }
+  if (vFlag) summaryText += ' Validity flag raised — the candidate selected an implausible perfect-record response. Weight the oral board and reference checks more heavily.';
 
-  document.getElementById('sum-box').innerHTML = '<h3>Assessment Summary</h3>' +
-    '<div style="font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid var(--border)">' + summaryText + '</div>' +
-    rows.map(r => '<div class="sum-row"><div class="sum-lbl">' + r.l + '</div><div><div class="sum-val">' + r.v + '</div>' +
-      (r.n ? '<div class="sum-note">' + r.n + '</div>' : '') + '</div></div>').join('');
+  return summaryText;
+}
+
+function getQuestionById(id) {
+  for (const s of SECTIONS) {
+    const q = s.qs.find(x => x.id === id);
+    if (q) return q;
+  }
+  return null;
+}
+
+function getAnswerText(id) {
+  const q = getQuestionById(id);
+  if (!q || ans[id] === undefined) return '';
+  const a = ans[id];
+  if (q.type === 'likert') return a;
+  const letters = ['A','B','C','D'];
+  const idx = letters.indexOf(a);
+  return idx >= 0 && q.opts && q.opts[idx] ? q.opts[idx] : a;
+}
+
+function buildWorkableReport(data) {
+  const { groupPct, composite, conduct, knowledge, verdict, summaryText, vFlag } = data;
+  const g = k => groupPct[k] || 0;
+  const coreCount = conduct.filter(f => f.g === 'Integrity' || f.g === 'Scenarios').length;
 
   const lines = [
-    'PAYROLL MANAGER ASSESSMENT \u2014 ' + cand.name.toUpperCase(),
+    'PAYROLL MANAGER ASSESSMENT — ' + cand.name.toUpperCase(),
     'Position: ' + cand.pos + '   |   Date: ' + cand.date,
     'Email: ' + cand.email + (cand.phone ? '   |   Phone: ' + cand.phone : ''),
     '',
     'RECOMMENDATION: ' + verdict.label,
     'Composite Score: ' + composite + ' / 100',
     '',
-    'PRIMARY \u2014 CHARACTER, CULTURE & CONDUCT (76% of composite):',
-    '  Integrity & Confidentiality:  ' + g('Integrity') + '%   (26%)',
-    '  Judgment Scenarios:           ' + g('Scenarios') + '%   (19%)',
-    '  Reliability & Risk:           ' + g('Reliability') + '%   (14%)',
-    '  Concurrent Load:              ' + g('Concurrency') + '%   (9%)',
-    '  Self-Disclosure:              ' + g('Disclosure') + '%   (8%)',
+    'PRIMARY — CHARACTER, CULTURE & CONDUCT:',
+    '  Integrity & Confidentiality:  ' + g('Integrity') + '%',
+    '  Judgment Scenarios:           ' + g('Scenarios') + '%',
+    '  Reliability & Risk:           ' + g('Reliability') + '%',
+    '  Concurrent Load:              ' + g('Concurrency') + '%',
+    '  Self-Disclosure:              ' + g('Disclosure') + '%',
     '',
-    'SECONDARY \u2014 TECHNICAL KNOWLEDGE (24% of composite):',
-    '  ADP Configuration:            ' + g('ADP') + '%   (14%)',
-    '  Wage-Hour, L&I & WA:          ' + g('Compliance') + '%   (10%)',
+    'SECONDARY — TECHNICAL KNOWLEDGE:',
+    '  ADP Configuration:            ' + g('ADP') + '%',
+    '  Wage-Hour, L&I & WA:          ' + g('Compliance') + '%',
     '',
-    'CHARACTER FLAGS: ' + (coreCount > 0 ? coreCount + ' identified' : 'None'),
-    'OTHER CONDUCT FLAGS: ' + ((conduct.length - coreCount) > 0 ? (conduct.length - coreCount) + ' identified' : 'None'),
-    ...conduct.map(f => '  \u2022 Q' + f.id + ' ' + f.q.substring(0,80) + ' \u2192 ' + f.a.substring(0,50)),
-    '',
-    'TECHNICAL MISSES (secondary \u2014 ramp cost): ' + (knowledge.length > 0 ? knowledge.length + ' of 18' : 'None'),
-    ...knowledge.map(f => '  \u2022 Q' + f.id + ' ' + f.q.substring(0,80)),
+    'CHARACTER FLAGS: ' + coreCount,
+    'OTHER CONDUCT FLAGS: ' + (conduct.length - coreCount),
+    'TECHNICAL MISSES: ' + knowledge.length,
+    'VALIDITY CONCERNS: ' + vFlag,
     '',
     'SUMMARY:',
     summaryText,
     '',
-    'Assessment: Payroll Manager Character, Conduct & Knowledge Assessment v1.0',
-    'NW Ambulance \u2014 Talent Acquisition \u00b7 Confidential',
+    'Assessment: ' + ASSESSMENT_VERSION,
+    'NW Ambulance — Talent Acquisition · Confidential'
   ];
-  document.getElementById('copy-area').textContent = lines.join('\n');
+  return lines.join('\n');
+}
+
+function buildRedFlagResponses(conduct, knowledge, vFlag) {
+  const rows = [];
+
+  conduct.forEach((f, idx) => {
+    rows.push(
+      'Conduct Flag ' + (idx + 1),
+      'Question: Q' + f.id + ' — ' + (getQuestionById(f.id)?.text || f.q),
+      'Candidate Response: ' + getAnswerText(f.id),
+      f.why ? 'Why Flagged: ' + f.why : '',
+      ''
+    );
+  });
+
+  knowledge.forEach((f, idx) => {
+    rows.push(
+      'Technical Miss ' + (idx + 1),
+      'Question: Q' + f.id + ' — ' + (getQuestionById(f.id)?.text || f.q),
+      'Candidate Response: ' + getAnswerText(f.id),
+      f.why ? 'Correct Answer / Recruiter Note: ' + f.why : '',
+      ''
+    );
+  });
+
+  if (vFlag) {
+    const q = getQuestionById(57);
+    rows.push(
+      'Validity Concern',
+      'Question: Q57 — ' + (q ? q.text : ''),
+      'Candidate Response: ' + getAnswerText(57),
+      q && q.flagWhy ? 'Why Flagged: ' + q.flagWhy : '',
+      ''
+    );
+  }
+
+  return rows.length ? rows.filter(x => x !== '').join('\n') : 'None';
+}
+
+function buildSubmissionPayload() {
+  const { groupPct, composite } = computeAll();
+  const { conduct, knowledge } = getFlags();
+  const vFlag = getValidityFlag();
+  const verdict = getVerdict(composite, conduct, knowledge.length, groupPct);
+  const summaryText = buildAssessmentSummary(verdict, groupPct, conduct, knowledge, vFlag);
+  const fullReport = buildWorkableReport({ groupPct, composite, conduct, knowledge, verdict, summaryText, vFlag });
+  const redFlagResponses = buildRedFlagResponses(conduct, knowledge, vFlag);
+
+  return {
+    // Same production field names used by the mirrored assessments.
+    firstName: cand.firstName,
+    lastName: cand.lastName,
+    email: cand.email,
+    position: cand.pos,
+    assessmentType: ASSESSMENT_TYPE,
+    score: composite.toString(),
+    recommendation: verdict.label,
+    redFlags: (conduct.length + knowledge.length + vFlag).toString(),
+    redFlagResponses: redFlagResponses || 'None',
+    completionDate: cand.completionDate,
+    report: fullReport,
+
+    // Extra recruiter/reporting fields.
+    phone: cand.phone,
+    compositeScore: composite,
+    redFlagCount: conduct.length + knowledge.length + vFlag,
+    conductFlagCount: conduct.length,
+    technicalMissCount: knowledge.length,
+    validityConcernCount: vFlag,
+    fullReport: fullReport,
+    categoryScores: {
+      integrity: groupPct['Integrity'] || 0,
+      scenarios: groupPct['Scenarios'] || 0,
+      reliability: groupPct['Reliability'] || 0,
+      concurrency: groupPct['Concurrency'] || 0,
+      disclosure: groupPct['Disclosure'] || 0,
+      adp: groupPct['ADP'] || 0,
+      compliance: groupPct['Compliance'] || 0
+    },
+    rawAnswers: ans,
+    assessmentVersion: ASSESSMENT_VERSION
+  };
+}
+
+async function submitAssessment() {
+  const btn = document.getElementById('btn-next');
+  btn.disabled = true;
+  btn.textContent = 'Submitting…';
+
+  const payload = buildSubmissionPayload();
+
+  if (!POWER_AUTOMATE_URL) {
+    console.error('Power Automate URL is blank. Payload:', payload);
+    showThankYou('Your assessment was completed, but the Power Automate URL is blank. Please notify the hiring team.');
+    return;
+  }
+
+  console.log('Power Automate URL configured:', POWER_AUTOMATE_URL.substring(0, 120) + '...');
+  console.log('Assessment payload sent to Power Automate:', payload);
+
+  try {
+    // Mirrors production behavior: avoid CORS preflight from GitHub Pages.
+    await fetch(POWER_AUTOMATE_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify(payload)
+    });
+    showThankYou();
+  } catch (err) {
+    console.error('Submission failed:', err, payload);
+    showThankYou('Your assessment was completed, but the automatic submission could not be confirmed. Please notify the hiring team.');
+  }
+}
+
+function showThankYou(message) {
+  document.getElementById('screen-assessment').style.display = 'none';
+  document.getElementById('screen-results').style.display = 'none';
+  document.getElementById('screen-thankyou').style.display = 'block';
+  document.getElementById('hdr-right').style.display = 'none';
+
+  if (message) {
+    const e = document.getElementById('submit-error');
+    e.style.display = 'block';
+    e.textContent = message;
+  }
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function showResults() {
+  submitAssessment();
 }
 
 function copyIt() {
