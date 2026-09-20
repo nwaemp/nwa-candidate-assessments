@@ -1349,6 +1349,9 @@ function buildWorkableReport(data) {
     'TECHNICAL MISSES: ' + knowledge.length,
     'VALIDITY CONCERNS: ' + vFlag,
     '',
+    '--- RED FLAG RESPONSES ---',
+    buildRedFlagResponses(conduct, knowledge, vFlag),
+    '',
     'SUMMARY:',
     summaryText,
     '',
@@ -1362,9 +1365,10 @@ function buildRedFlagResponses(conduct, knowledge, vFlag) {
   const rows = [];
 
   conduct.forEach((f, idx) => {
+    const q = getQuestionById(f.id);
     rows.push(
-      'Conduct Flag ' + (idx + 1),
-      'Question: Q' + f.id + ' — ' + (getQuestionById(f.id)?.text || f.q),
+      'Conduct Flag ' + (idx + 1) + ' - Q' + f.id,
+      'Question: ' + (q ? q.text : f.q),
       'Candidate Response: ' + getAnswerText(f.id),
       f.why ? 'Why Flagged: ' + f.why : '',
       ''
@@ -1372,9 +1376,10 @@ function buildRedFlagResponses(conduct, knowledge, vFlag) {
   });
 
   knowledge.forEach((f, idx) => {
+    const q = getQuestionById(f.id);
     rows.push(
-      'Technical Miss ' + (idx + 1),
-      'Question: Q' + f.id + ' — ' + (getQuestionById(f.id)?.text || f.q),
+      'Technical Miss ' + (idx + 1) + ' - Q' + f.id,
+      'Question: ' + (q ? q.text : f.q),
       'Candidate Response: ' + getAnswerText(f.id),
       f.why ? 'Correct Answer / Recruiter Note: ' + f.why : '',
       ''
@@ -1384,8 +1389,8 @@ function buildRedFlagResponses(conduct, knowledge, vFlag) {
   if (vFlag) {
     const q = getQuestionById(57);
     rows.push(
-      'Validity Concern',
-      'Question: Q57 — ' + (q ? q.text : ''),
+      'Validity Concern - Q57',
+      'Question: ' + (q ? q.text : ''),
       'Candidate Response: ' + getAnswerText(57),
       q && q.flagWhy ? 'Why Flagged: ' + q.flagWhy : '',
       ''
