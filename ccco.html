@@ -1,0 +1,1340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chief Compliance &amp; Contracting Officer — Character, Conduct &amp; Knowledge Assessment v1.0</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,500&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f7f5f0;
+  --surface: #ffffff;
+  --ink: #1c1a17;
+  --ink2: #3a3733;
+  --muted: #7a7872;
+  --border: rgba(28,26,23,0.1);
+  --border-hi: rgba(28,26,23,0.2);
+  --navy: #1b2d4a;
+  --navy-light: #243d62;
+  --gold: #b8860b;
+  --gold-light: #d4a017;
+  --gold-bg: rgba(184,134,11,0.08);
+  --gold-border: rgba(184,134,11,0.25);
+  --green: #2d6a3f;
+  --green-bg: rgba(45,106,63,0.1);
+  --green-border: rgba(45,106,63,0.3);
+  --amber: #9a5a00;
+  --amber-bg: rgba(154,90,0,0.1);
+  --amber-border: rgba(154,90,0,0.3);
+  --red: #8b1a1a;
+  --red-bg: rgba(139,26,26,0.08);
+  --red-border: rgba(139,26,26,0.25);
+  --r: 6px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'IBM Plex Sans',sans-serif;background:var(--bg);color:var(--ink);min-height:100vh;font-size:15px;line-height:1.65}
+body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(28,26,23,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(28,26,23,0.025) 1px,transparent 1px);background-size:48px 48px;pointer-events:none;z-index:0}
+
+/* HEADER */
+.hdr{background:var(--navy);border-bottom:2px solid var(--gold);padding:0 40px;height:60px;display:flex;align-items:center;gap:16px;position:sticky;top:0;z-index:100}
+.hdr-logo{width:32px;height:32px;background:var(--gold);border-radius:4px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.hdr-logo span{font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:500;color:var(--navy);letter-spacing:0.02em}
+.hdr-title{font-size:13px;font-weight:500;color:#e8e4da;letter-spacing:0.01em}
+.hdr-title small{display:block;font-size:10px;font-weight:400;color:rgba(232,228,218,0.5);letter-spacing:0.06em;text-transform:uppercase;margin-top:1px}
+.hdr-right{margin-left:auto;display:flex;align-items:center;gap:12px}
+.prog-pill{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:99px;padding:5px 14px}
+.prog-txt{font-family:'IBM Plex Mono',monospace;font-size:11px;color:rgba(232,228,218,0.6)}
+.prog-outer{width:90px;height:3px;background:rgba(255,255,255,0.12);border-radius:2px;overflow:hidden}
+.prog-inner{height:100%;background:var(--gold-light);border-radius:2px;transition:width .4s ease;width:0%}
+
+/* MAIN */
+.main{max-width:760px;margin:0 auto;padding:44px 24px 100px;position:relative;z-index:1}
+
+/* WELCOME */
+.eyebrow{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--gold);margin-bottom:18px;display:flex;align-items:center;gap:8px}
+.eyebrow::before{content:'';display:inline-block;width:20px;height:1px;background:var(--gold)}
+.welcome-h{font-family:'Playfair Display',serif;font-size:clamp(30px,5vw,50px);font-weight:700;line-height:1.08;letter-spacing:-0.02em;color:var(--ink);margin-bottom:20px}
+.welcome-h em{font-style:italic;color:var(--navy)}
+.welcome-p{font-size:14px;color:var(--muted);max-width:520px;line-height:1.8;margin-bottom:32px}
+.meta-row{display:flex;gap:1px;margin-bottom:36px;max-width:440px}
+.meta-cell{flex:1;background:var(--surface);border:1px solid var(--border);padding:14px 16px}
+.meta-cell:first-child{border-radius:var(--r) 0 0 var(--r)}
+.meta-cell:last-child{border-radius:0 var(--r) var(--r) 0}
+.meta-v{font-family:'Playfair Display',serif;font-size:26px;font-weight:600;color:var(--navy);line-height:1;margin-bottom:3px}
+.meta-l{font-size:10px;letter-spacing:0.06em;text-transform:uppercase;color:var(--muted)}
+
+/* FORM */
+.cand-form{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:22px;margin-bottom:24px;max-width:500px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+.fg{display:flex;flex-direction:column;gap:5px}
+.fg label{font-size:10px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted)}
+.fg input{background:var(--bg);border:1px solid var(--border-hi);border-radius:var(--r);padding:9px 12px;color:var(--ink);font-family:'IBM Plex Sans',sans-serif;font-size:13px;outline:none;transition:border-color .2s}
+.fg input:focus{border-color:var(--navy)}
+.fg input::placeholder{color:rgba(122,120,114,0.4)}
+
+/* BUTTONS */
+.btn-primary{background:var(--navy);color:#e8e4da;border:none;border-radius:var(--r);padding:13px 28px;font-family:'IBM Plex Sans',sans-serif;font-size:13px;font-weight:600;letter-spacing:0.04em;cursor:pointer;transition:background .2s,transform .1s;display:inline-flex;align-items:center;gap:8px}
+.btn-primary:hover{background:var(--navy-light)}
+.btn-primary:active{transform:scale(0.98)}
+.btn-ghost{background:transparent;color:var(--muted);border:1px solid var(--border-hi);border-radius:var(--r);padding:11px 22px;font-family:'IBM Plex Sans',sans-serif;font-size:13px;cursor:pointer;transition:all .15s}
+.btn-ghost:hover{border-color:var(--ink2);color:var(--ink)}
+
+/* ASSESSMENT */
+#screen-assessment{display:none}
+.sec-eye{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:var(--gold);margin-bottom:6px}
+.sec-h{font-family:'Playfair Display',serif;font-size:22px;font-weight:600;color:var(--ink);margin-bottom:3px}
+.sec-badge{display:inline-block;font-size:10px;font-weight:600;letter-spacing:0.07em;text-transform:uppercase;padding:3px 11px;border-radius:99px;margin-bottom:22px}
+.badge-likert{background:var(--gold-bg);color:var(--gold);border:1px solid var(--gold-border)}
+.badge-ems{background:rgba(139,26,26,0.12);color:#8B1A1A;border:1px solid rgba(139,26,26,0.3)}
+.badge-know{background:rgba(27,45,74,0.08);color:var(--navy);border:1px solid rgba(27,45,74,0.2)}
+.badge-disc{background:rgba(45,106,63,0.1);color:var(--green);border:1px solid rgba(45,106,63,0.3)}
+.badge-trade{background:var(--red-bg);color:var(--red);border:1px solid var(--red-border)}
+
+/* QUESTION CARD */
+.q-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:22px 24px;margin-bottom:10px;transition:border-color .2s}
+.q-card.answered{border-color:var(--gold-border)}
+.q-num{font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-bottom:7px}
+.q-text{font-size:15px;line-height:1.6;color:var(--ink);margin-bottom:16px}
+.q-context{background:rgba(27,45,74,0.05);border-left:3px solid var(--navy);padding:10px 14px;font-size:13px;color:var(--navy-light);line-height:1.65;margin-bottom:14px;border-radius:0 var(--r) var(--r) 0}
+
+/* LIKERT */
+.likert-wrap{display:flex;gap:5px;flex-wrap:wrap}
+.l-opt{flex:1 1 0;min-width:80px;background:var(--bg);border:1px solid var(--border);border-radius:var(--r);padding:9px 6px;text-align:center;cursor:pointer;font-size:11px;color:var(--muted);line-height:1.3;transition:all .15s;user-select:none}
+.l-opt:hover{background:var(--gold-bg);border-color:var(--gold-border);color:var(--ink)}
+.l-opt.selected{background:var(--gold-bg);border-color:var(--gold-border);color:var(--ink);font-weight:500}
+.likert-ends{display:flex;justify-content:space-between;font-size:10px;color:var(--muted);margin-top:5px;padding:0 2px}
+
+/* MCQ / SCENARIO */
+.opts{display:flex;flex-direction:column;gap:6px}
+.opt-radio{display:none}
+.opt-label{display:flex;align-items:flex-start;gap:12px;padding:11px 14px;border:1px solid var(--border);border-radius:var(--r);cursor:pointer;transition:all .15s;font-size:13px;color:var(--muted);line-height:1.5;user-select:none}
+.opt-label:hover{background:var(--gold-bg);border-color:var(--gold-border);color:var(--ink)}
+.opt-radio:checked+.opt-label{background:var(--gold-bg);border-color:var(--gold-border);color:var(--ink);font-weight:500}
+.opt-key{flex-shrink:0;width:22px;height:22px;border-radius:50%;border:1.5px solid currentColor;display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:500;margin-top:1px}
+
+/* NAV */
+.q-nav{display:flex;justify-content:space-between;align-items:center;margin-top:28px;padding-top:22px;border-top:1px solid var(--border)}
+.nav-info{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--muted)}
+.nav-btns{display:flex;gap:10px}
+
+
+/* THANK YOU — production hidden-results pattern */
+#screen-thankyou{display:none}
+.thank-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:42px 34px;text-align:center;margin-top:40px}
+.thank-icon{width:54px;height:54px;border-radius:50%;background:var(--green-bg);border:1px solid var(--green-border);display:flex;align-items:center;justify-content:center;margin:0 auto 18px;color:var(--green);font-size:26px}
+.thank-h{font-family:'Playfair Display',serif;font-size:32px;font-weight:700;color:var(--ink);margin-bottom:10px}
+.thank-p{font-size:14px;color:var(--muted);line-height:1.7;max-width:520px;margin:0 auto}
+.submit-error{display:none;margin-top:18px;background:var(--red-bg);border:1px solid var(--red-border);color:var(--red);border-radius:var(--r);padding:12px 14px;font-size:12px;line-height:1.5;text-align:left}
+
+/* RESULTS */
+#screen-results{display:none}
+.r-top{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:34px;text-align:center;margin-bottom:20px}
+.v-pill{display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;padding:6px 18px;border-radius:99px;margin-bottom:16px}
+.vp-hire{background:var(--green-bg);color:var(--green);border:1px solid var(--green-border)}
+.vp-review{background:var(--amber-bg);color:var(--amber);border:1px solid var(--amber-border)}
+.vp-no{background:var(--red-bg);color:var(--red);border:1px solid var(--red-border)}
+.r-name{font-family:'Playfair Display',serif;font-size:28px;font-weight:700;color:var(--ink);margin-bottom:5px}
+.r-meta{font-size:12px;color:var(--muted);margin-bottom:18px}
+.score-big{font-family:'Playfair Display',serif;font-size:56px;font-weight:700;color:var(--navy);line-height:1}
+.score-denom{font-size:18px;color:var(--muted)}
+
+.cat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:18px 0}
+.cat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:14px 16px}
+.cat-lbl{font-size:10px;letter-spacing:0.07em;text-transform:uppercase;color:var(--muted);margin-bottom:9px}
+.cat-row{display:flex;align-items:center;gap:8px}
+.cat-bar-bg{flex:1;height:4px;background:rgba(28,26,23,0.08);border-radius:2px;overflow:hidden}
+.cat-bar{height:100%;border-radius:2px;transition:width 1s ease}
+.cat-val{font-family:'IBM Plex Mono',monospace;font-size:13px;width:38px;text-align:right;flex-shrink:0}
+
+.flags-box{background:var(--red-bg);border:1px solid var(--red-border);border-radius:var(--r);padding:20px 22px;margin-bottom:16px}
+.flags-box h3{font-size:13px;font-weight:600;color:var(--red);margin-bottom:12px;display:flex;align-items:center;gap:6px}
+.flag-row{margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid var(--red-border)}
+.flag-row:last-child{border:none;margin:0;padding:0}
+.flag-q{font-size:12px;color:var(--muted);line-height:1.55;margin-bottom:3px}
+.flag-a{font-size:11px;color:var(--red);font-family:'IBM Plex Mono',monospace;font-weight:500}
+.flag-why{font-size:11px;color:var(--red);opacity:.75;margin-top:3px;line-height:1.5}
+
+.sum-box{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:20px 22px;margin-bottom:16px}
+.sum-box h3{font-size:14px;font-weight:600;color:var(--ink);margin-bottom:14px}
+.sum-row{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px}
+.sum-row:last-child{border:none}
+.sum-lbl{color:var(--muted);max-width:200px;flex-shrink:0}
+.sum-val{color:var(--ink);font-weight:500;text-align:right}
+.sum-note{font-size:11px;color:var(--muted);margin-top:2px}
+
+.wb-box{background:var(--navy);border-radius:var(--r);padding:22px;margin-bottom:16px}
+.wb-box h3{font-size:14px;font-weight:600;color:#e8e4da;margin-bottom:6px}
+.wb-box p{font-size:12px;color:rgba(232,228,218,0.55);margin-bottom:12px}
+.copy-area{background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.08);border-radius:var(--r);padding:13px;font-family:'IBM Plex Mono',monospace;font-size:11px;color:rgba(232,228,218,0.6);white-space:pre-wrap;line-height:1.7;margin-bottom:10px;max-height:200px;overflow-y:auto}
+.btn-copy{font-size:12px;color:rgba(232,228,218,0.7);background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:var(--r);padding:7px 14px;cursor:pointer;font-family:'IBM Plex Sans',sans-serif;transition:all .15s}
+.btn-copy:hover{background:rgba(255,255,255,0.12);color:#e8e4da}
+.export-row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:24px}
+
+@media(max-width:540px){
+  .hdr{padding:0 14px}
+  .main{padding:24px 14px 80px}
+  .form-grid,.cat-grid{grid-template-columns:1fr}
+  .meta-row{flex-wrap:wrap}
+  .prog-pill{display:none}
+}
+@media print{
+  body::before{display:none}
+  .hdr{background:#1b2d4a}
+  .btn-primary,.btn-ghost,.btn-copy,.export-row,.wb-box .btn-copy{display:none!important}
+}
+</style>
+</head>
+<body>
+
+<header class="hdr">
+  <div class="hdr-logo"><span>NWA</span></div>
+  <div class="hdr-title">Chief Compliance &amp; Contracting Officer<small>Character, Conduct &amp; Knowledge</small></div>
+  <div class="hdr-right" id="hdr-right" style="display:none">
+    <div class="prog-pill">
+      <span class="prog-txt" id="prog-txt">0 / 52</span>
+      <div class="prog-outer"><div class="prog-inner" id="prog-bar"></div></div>
+    </div>
+  </div>
+</header>
+
+<main class="main">
+
+<!-- WELCOME -->
+<div id="screen-welcome">
+  <div class="eyebrow">Talent Acquisition · NW Ambulance</div>
+  <h1 class="welcome-h">Chief Compliance<br>&amp; Contracting Officer<br><em>Assessment</em></h1>
+  <p class="welcome-p">
+    This assessment evaluates integrity, independence, professional conduct, regulatory knowledge, and contract judgment
+    for the Chief Compliance &amp; Contracting Officer role. Answer based on what you have actually done and how you would
+    actually respond &mdash; not what sounds ideal. There are no trick questions. Honest answers produce the most useful
+    result for everyone.
+  </p>
+  <div class="meta-row">
+    <div class="meta-cell"><div class="meta-v">52</div><div class="meta-l">Questions</div></div>
+    <div class="meta-cell"><div class="meta-v">6</div><div class="meta-l">Sections</div></div>
+    <div class="meta-cell"><div class="meta-v">25&ndash;35</div><div class="meta-l">Minutes</div></div>
+  </div>
+  <div class="cand-form">
+    <div class="form-grid">
+      <div class="fg"><label>First Name *</label><input type="text" id="i-fn" placeholder="First"></div>
+      <div class="fg"><label>Last Name *</label><input type="text" id="i-ln" placeholder="Last"></div>
+    </div>
+    <div class="form-grid">
+      <div class="fg"><label>Email *</label><input type="email" id="i-em" placeholder="email@domain.com"></div>
+      <div class="fg"><label>Phone</label><input type="tel" id="i-ph" placeholder="(555) 000-0000"></div>
+    </div>
+    <div class="fg" style="margin-bottom:14px">
+      <label>Position Applied For</label>
+      <input type="text" id="i-pos" placeholder="Chief Compliance &amp; Contracting Officer">
+    </div>
+    <button class="btn-primary" onclick="start()">Begin Assessment &rarr;</button>
+  </div>
+</div>
+
+<!-- ASSESSMENT -->
+<div id="screen-assessment">
+  <div class="sec-eye" id="sec-eye">Section 1 of 6</div>
+  <div class="sec-h" id="sec-h">Integrity &amp; Independence</div>
+  <div class="sec-badge badge-likert" id="sec-badge">Attitude &amp; Values</div>
+  <div id="q-container"></div>
+  <div class="q-nav">
+    <span class="nav-info" id="nav-info"></span>
+    <div class="nav-btns">
+      <button class="btn-ghost" id="btn-prev" onclick="prev()" style="display:none">&larr; Back</button>
+      <button class="btn-primary" id="btn-next" onclick="next()">Next Section &rarr;</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- THANK YOU -->
+<div id="screen-thankyou">
+  <div class="thank-card">
+    <div class="thank-icon">✓</div>
+    <h2 class="thank-h">Assessment Submitted</h2>
+    <p class="thank-p">Your responses have been received. The hiring team will review your assessment as part of the candidate review process.</p>
+    <div class="submit-error" id="submit-error"></div>
+  </div>
+</div>
+
+<!-- RESULTS -->
+<div id="screen-results">
+  <div class="r-top">
+    <div class="v-pill" id="v-pill"></div>
+    <div class="r-name" id="r-name"></div>
+    <div class="r-meta" id="r-meta"></div>
+    <div><span class="score-big" id="r-score">&mdash;</span><span class="score-denom"> / 100</span></div>
+  </div>
+  <div class="cat-grid" id="cat-grid"></div>
+  <div class="flags-box" id="flags-box" style="display:none">
+    <h3>&#9888; Flagged Responses</h3>
+    <div id="flags-list"></div>
+  </div>
+  <div class="sum-box" id="sum-box"></div>
+  <div class="wb-box">
+    <h3>Workable Notes &mdash; Copy &amp; Paste</h3>
+    <p>Paste the block below into the candidate's Notes tab in Workable.</p>
+    <div class="copy-area" id="copy-area"></div>
+    <button class="btn-copy" onclick="copyIt()">Copy to Clipboard</button>
+  </div>
+  <div class="export-row">
+    <button class="btn-primary" onclick="window.print()">Print / Save PDF</button>
+    <button class="btn-ghost" onclick="location.reload()">New Candidate</button>
+  </div>
+</div>
+
+</main>
+
+<script>
+
+const FLOW_URL = "https://defaultb9fe31c2de0742529875da1c500446.c8.environment.api.powerplatform.com:443/powerautomate/automations/direct/cu/31/workflows/9d295902a8914414a350559e6ea8532e/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=MqRdt_mMDGVte8sGUt1gNc5aIk2QT-Evu6AEbgZOFew";
+const ASSESSMENT_TYPE = 'Chief Compliance & Contracting Officer';
+const ASSESSMENT_VERSION = 'CCCO Character, Conduct & Knowledge Assessment v1.0';
+
+// ============================================================
+// CHIEF COMPLIANCE & CONTRACTING OFFICER (CCCO)
+// Character, Conduct & Knowledge Assessment — v1.0
+// Northwest Ambulance Critical Care Transport
+//
+// SCORING LEGEND
+//
+// LIKERT STANDARD: SD=1  D=2  N=3  A=4  SA=5
+// LIKERT REVERSE:  SD=5  D=4  N=3  A=2  SA=1
+// RED FLAG: named answer triggers a flag (separate from score)
+//
+// MCQ (type 'mcq'):    one correct answer scores 5; wrong answers
+//                      score 0-2 based on severity of the error.
+// TRADE-OFF ('trade'): one clearly WRONG answer scores 0; the other
+//                      options score 3-5 depending on approach quality.
+// DISCLOSURE ('disc'): factual past-experience items; answers revealing
+//                      gaps or avoidance are flagged for oral board.
+// VALIDITY:            detects implausible claims of perfection.
+//                      Excluded from the composite score.
+//
+// CORRECT-ANSWER LETTERS ARE DELIBERATELY MIXED across A/B/C/D
+// so the key cannot be pattern-guessed.
+//
+// All score maps are written EXPLICITLY next to each question.
+// No score is inferred. Every option has a number.
+// ============================================================
+
+const LIKERT = ['Strongly Disagree','Disagree','Neutral','Agree','Strongly Agree'];
+
+// ============================================================
+// QUESTION DATA
+// 6 sections · 52 questions total
+// ============================================================
+const SECTIONS = [
+
+// ─────────────────────────────────────────────────────────────────────
+// SECTION 1 — Integrity & Independence (Q1–12)
+// Likert attitude items. Weight: 25%. Group: Integrity
+// Measures: willingness to challenge authority, self-dealing resistance,
+// confidentiality, non-retaliation, disclosure instinct.
+// ─────────────────────────────────────────────────────────────────────
+{
+  name: 'Integrity & Independence',
+  eye: 'Section 1 of 6',
+  badge: 'badge-likert',
+  badgeTxt: 'Attitude & Values',
+  qs: [
+    {
+      id: 1, type: 'likert', group: 'Integrity', rev: false,
+      text: 'When I disagree with a decision, I put my position in writing before the decision is carried out.',
+    },
+    {
+      id: 2, type: 'likert', group: 'Integrity', rev: true,
+      text: 'Once the CEO has decided on a course of action, continuing to raise compliance objections mostly creates friction without changing the outcome.',
+      rf: ['Agree','Strongly Agree'],
+      rfWhy: 'Hard flag. The entire structural purpose of this role is independent objection that survives executive pressure. A CCCO who stops raising concerns once leadership has decided provides no protection to the organization.'
+    },
+    {
+      id: 3, type: 'likert', group: 'Integrity', rev: false,
+      text: 'I would escalate a compliance concern involving a senior executive with the same urgency as one involving a field employee.',
+    },
+    {
+      id: 4, type: 'likert', group: 'Integrity', rev: true,
+      text: 'A finding that is technically a violation but unlikely to be detected does not justify the disruption of a formal corrective action.',
+      rf: ['Agree','Strongly Agree'],
+      rfWhy: 'Hard flag. Detection risk is not the standard for corrective action. This answer indicates the candidate calibrates compliance to enforcement probability rather than to obligation.'
+    },
+    {
+      id: 5, type: 'likert', group: 'Integrity', rev: false,
+      text: 'When I find an error in a compliance report or audit finding I have already distributed, I correct the record and notify the recipients.',
+    },
+    {
+      id: 6, type: 'likert', group: 'Integrity', rev: true,
+      text: 'Building a strong working relationship with the department heads I audit matters more than maintaining strict independence from them.',
+      rf: ['Agree','Strongly Agree'],
+      rfWhy: 'Independence is the role. A CCCO who trades independence for rapport with audited departments cannot produce defensible findings against those same departments.'
+    },
+    {
+      id: 7, type: 'likert', group: 'Integrity', rev: false,
+      text: 'Information I learn during a compliance investigation stays confidential even from people who outrank me but have no need to know it.',
+    },
+    {
+      id: 8, type: 'likert', group: 'Integrity', rev: true,
+      text: 'Accepting meals, tickets, or gifts from a vendor or facility I oversee is acceptable as long as it does not actually change my decisions.',
+      rf: ['Agree','Strongly Agree'],
+      rfWhy: 'Hard flag. "It does not influence me" is the standard rationalization in every kickback case. For the executive who owns Anti-Kickback review, accepting remuneration from regulated counterparties is disqualifying judgment.'
+    },
+    {
+      id: 9, type: 'likert', group: 'Integrity', rev: false,
+      text: 'An employee who reports a compliance concern that turns out to be unfounded should face no consequence for having reported it.',
+    },
+    {
+      id: 10, type: 'likert', group: 'Integrity', rev: true,
+      text: 'If an audit is likely to produce findings that embarrass the organization, narrowing the scope of that audit is a reasonable decision.',
+      rf: ['Agree','Strongly Agree'],
+      rfWhy: 'Scope manipulation to avoid findings is the mechanism by which compliance programs become paper programs. This is a hard flag for a role that sets the annual audit plan.'
+    },
+    {
+      id: 11, type: 'likert', group: 'Integrity', rev: false,
+      text: 'I would recommend voluntarily refunding an identified overpayment even if the payer would likely never discover it.',
+    },
+    {
+      id: 12, type: 'likert', group: 'Integrity', rev: true,
+      text: 'Using my executive access to company records to look into something that concerns me personally rather than professionally is a reasonable use of the position.',
+      rf: ['Agree','Strongly Agree'],
+      rfWhy: 'Hard flag. This role has unrestricted access to PHI, payroll, and personnel records. Any endorsement of personal-purpose access is a privacy and misuse risk in the one seat that cannot be audited by anyone below the CEO.'
+    },
+  ]
+},
+
+// ─────────────────────────────────────────────────────────────────────
+// SECTION 2 — Reliability, Capacity & Accountability (Q13–22)
+// Likert attitude items. Weight: 15%. Group: Conduct
+// HIRING-RISK SCREEN: attendance reliability, entitlement, time theft,
+// injury/L&I reporting posture, follow-through, concurrent workload
+// capacity. Written so the measured trait is not obvious to the candidate.
+// ─────────────────────────────────────────────────────────────────────
+{
+  name: 'Reliability, Capacity & Accountability',
+  eye: 'Section 2 of 6',
+  badge: 'badge-likert',
+  badgeTxt: 'Attitude & Values',
+  qs: [
+    {
+      id: 13, type: 'likert', group: 'Conduct', rev: false,
+      text: 'I plan my work so that a deadline is met even when the week does not go as expected.',
+    },
+    {
+      id: 14, type: 'likert', group: 'Conduct', rev: true,
+      text: 'When I am carrying more than my share of the workload, letting some lower-priority commitments slip without telling anyone is fair.',
+      rf: ['Agree','Strongly Agree'],
+      rfWhy: 'Silent abandonment of commitments. Combined with the contract calendar this role owns, a missed notice deadline nobody was warned about is an unrecoverable financial event.'
+    },
+    {
+      id: 15, type: 'likert', group: 'Conduct', rev: false,
+      text: 'I would rather hold three or four active matters at once and keep all of them moving than finish one completely before starting the next.',
+    },
+    {
+      id: 16, type: 'likert', group: 'Conduct', rev: true,
+      text: 'Someone who consistently produces good results has earned flexibility on attendance and start times that others have not.',
+      rf: ['Agree','Strongly Agree'],
+      rfWhy: 'Entitlement indicator. Candidate views reliability as a privilege earned by performance rather than a baseline expectation. Correlates with attendance problems and with resistance to the standards this role is supposed to enforce on others.'
+    },
+    {
+      id: 17, type: 'likert', group: 'Conduct', rev: false,
+      text: 'When a deadline is at risk, I notify the people affected before it passes rather than after.',
+    },
+    {
+      id: 18, type: 'likert', group: 'Conduct', rev: true,
+      text: 'Executives are paid for outcomes, so how many hours or days an executive is actually available is not a meaningful measure of them.',
+      rf: ['Agree','Strongly Agree'],
+      rfWhy: 'Availability-entitlement indicator. Probe attendance and responsiveness directly in reference checks. This role is the escalation point for breaches and government inquiries — unavailability is an operational failure, not a style preference.'
+    },
+    {
+      id: 19, type: 'likert', group: 'Conduct', rev: false,
+      text: 'I follow safety and reporting procedures that apply to me personally even when they seem excessive for the task.',
+    },
+    {
+      id: 20, type: 'likert', group: 'Conduct', rev: true,
+      text: 'A minor injury that does not need treatment is better handled quietly than reported, because reporting only creates paperwork and scrutiny.',
+      rf: ['Agree','Strongly Agree'],
+      rfWhy: 'Hard flag. Unreported injuries are the root of late-reported L&I claims, which are the most expensive kind. This candidate would also be responsible for OSHA/WISHA oversight — an executive who suppresses their own reporting will tolerate suppression below them.'
+    },
+    {
+      id: 21, type: 'likert', group: 'Conduct', rev: false,
+      text: 'When I take on a commitment, I complete it without anyone needing to check whether it was done.',
+    },
+    {
+      id: 22, type: 'likert', group: 'Conduct', rev: true,
+      text: 'In a role this demanding, using work hours for personal business is a fair trade for the hours the role takes outside of work.',
+      rf: ['Agree','Strongly Agree'],
+      rfWhy: 'Time-theft rationalization, and the same reciprocity logic that justifies misuse of company resources. Notable in a role that audits payroll and timekeeping compliance for everyone else.'
+    },
+  ]
+},
+
+// ─────────────────────────────────────────────────────────────────────
+// SECTION 3 — Compliance & Regulatory Knowledge (Q23–32)
+// Correct-answer MCQ. Weight: 20%. Group: Knowledge
+// Correct letters: C, D, B, A, C, D, B, A, C, B  (deliberately mixed)
+// SCORING: correct = 5. Wrong answers score 0–2 by severity.
+// ─────────────────────────────────────────────────────────────────────
+{
+  name: 'Compliance & Regulatory Knowledge',
+  eye: 'Section 3 of 6',
+  badge: 'badge-know',
+  badgeTxt: 'Correct Answer Exists',
+  qs: [
+    {
+      id: 23, type: 'mcq', group: 'Knowledge',
+      text: 'An internal audit confirms Northwest Ambulance was overpaid roughly $46,000 by Medicare because of a level-of-service coding error spanning 14 months. What is the organization\'s obligation?',
+      opts: [
+        'A. Wait for Medicare to identify and request the overpayment, since unsolicited refunds invite broader audits.',
+        'B. Include the refund in the next annual reconciliation cycle.',
+        'C. Report and return the overpayment within 60 days of the date it was identified and quantified, with written notice of the reason for the overpayment.',
+        'D. Correct the coding going forward; retroactive refunds are required only where fraud is established.'
+      ],
+      sc: { A: 0, B: 0, C: 5, D: 0 },
+      correct: 'C',
+      correctWhy: 'The ACA 60-day rule requires an identified overpayment to be reported and returned within 60 days of identification and quantification. Retaining it past that window converts an honest coding error into a False Claims Act reverse-false-claim exposure. A CCCO who does not know this clock exists is not qualified for the role.'
+    },
+    {
+      id: 24, type: 'mcq', group: 'Knowledge',
+      text: 'A skilled nursing facility offers Northwest Ambulance an exclusive transport agreement at rates 30% below your cost, and in exchange will send all of its Medicare-billable emergency transports to you. What is the primary regulatory concern?',
+      opts: [
+        'A. State licensing — exclusive transport arrangements require Washington DOH approval.',
+        'B. None, provided the volume discount is documented in writing.',
+        'C. False Claims Act exposure, but only if the resulting transports are later billed incorrectly.',
+        'D. Anti-Kickback Statute exposure — below-cost pricing on facility-paid transports in exchange for federally reimbursable referrals is remuneration to induce referrals.'
+      ],
+      sc: { A: 0, B: 0, C: 1, D: 5 },
+      correct: 'D',
+      correctWhy: 'This is the classic ambulance "swapping" arrangement and a documented OIG enforcement priority. Discounting the facility-paid leg below cost to capture the facility\'s Medicare-billable volume is treated as remuneration for referrals. The discount must stand on its own as fair market value, independent of the referral stream.'
+    },
+    {
+      id: 25, type: 'mcq', group: 'Knowledge',
+      text: 'A scheduled non-emergency BLS transport for a dialysis patient is billed to Medicare. Which documentation is required to support medical necessity?',
+      opts: [
+        'A. A signed Physician Certification Statement is sufficient on its own.',
+        'B. A Physician Certification Statement together with a PCR narrative describing the patient\'s condition at the time of transport showing that other means of transportation were medically contraindicated.',
+        'C. The patient\'s signature authorizing billing, plus confirmation that the dialysis center is a covered destination.',
+        'D. A dispatch record showing the trip was scheduled and completed, plus the mileage log.'
+      ],
+      sc: { A: 1, B: 5, C: 0, D: 0 },
+      correct: 'B',
+      correctWhy: 'A PCS establishes physician ordering, not medical necessity. Medicare requires contemporaneous clinical documentation in the PCR showing the patient\'s condition contraindicated other transportation. Treating the PCS as sufficient is one of the most common causes of mass denials and repayment demands in non-emergency ambulance billing.'
+    },
+    {
+      id: 26, type: 'mcq', group: 'Knowledge',
+      text: 'A crew member loses an unencrypted personal phone containing photographs of three patients\' ePCR screens. What is the correct compliance action?',
+      opts: [
+        'A. Conduct and document a four-factor breach risk assessment to determine whether notification is required, and retain that documentation regardless of the conclusion.',
+        'B. Notify all three patients and HHS immediately — any loss of a device holding PHI is automatically a reportable breach.',
+        'C. No breach occurred, because the images were on a personal device rather than a company system.',
+        'D. Have the employee remotely wipe the phone and note it in the incident log; no further documentation is needed.'
+      ],
+      sc: { A: 5, B: 2, C: 0, D: 0 },
+      correct: 'A',
+      correctWhy: 'Under the Breach Notification Rule an impermissible use or disclosure is presumed to be a breach unless the covered entity documents a low probability of compromise through the four-factor risk assessment. Option B over-notifies without analysis; C is wrong because the device ownership does not change the PHI status; D destroys evidence and leaves no defensible record.'
+    },
+    {
+      id: 27, type: 'mcq', group: 'Knowledge',
+      text: 'Northwest Ambulance has written compliance policies, an anonymous hotline, and annual training with documented attendance. A government reviewer would still consider the program deficient if which element is missing?',
+      opts: [
+        'A. A compliance committee with representation from every department.',
+        'B. A published standards of conduct signed by every employee at hire.',
+        'C. Auditing and monitoring that tests whether the policies are actually being followed, with findings tracked through to correction.',
+        'D. An annual external audit performed by an independent accounting firm.'
+      ],
+      sc: { A: 1, B: 1, C: 5, D: 0 },
+      correct: 'C',
+      correctWhy: 'Policies, a hotline, and training are inputs. Auditing and monitoring is the element that proves the program works, and it is the element regulators test first when deciding whether a program is effective or merely on paper. An external financial audit is unrelated to compliance program effectiveness.'
+    },
+    {
+      id: 28, type: 'mcq', group: 'Knowledge',
+      text: 'Washington requires employers to provide meal and rest periods. In an ambulance operation where crews are frequently interrupted by calls, what should the CCCO be auditing?',
+      opts: [
+        'A. Nothing — emergency services are exempt from Washington meal and rest period requirements.',
+        'B. Confirmation that crews signed a waiver of all rest periods at hire, which resolves the exposure.',
+        'C. Meal period documentation only; rest periods can be presumed taken unless an employee complains.',
+        'D. Records showing, for each shift, whether each period was provided, taken, or missed — with missed or interrupted periods documented and compensated.'
+      ],
+      sc: { A: 0, B: 0, C: 1, D: 5 },
+      correct: 'D',
+      correctWhy: 'Washington requires that missed or interrupted meal and rest periods be documented and paid, and the burden of proof is on the employer. There is no blanket EMS exemption and no valid blanket waiver signed at hire. Interrupted-break exposure is one of the largest wage-and-hour liabilities in ambulance operations.'
+    },
+    {
+      id: 29, type: 'mcq', group: 'Knowledge',
+      text: 'A review finds that 18% of last quarter\'s ALS claims lacked narrative support for the ALS assessment but were billed at the ALS level. The billing vendor states this is within industry norms. How should this be characterized?',
+      opts: [
+        'A. A vendor performance issue to be raised at the next quarterly vendor review.',
+        'B. Potential False Claims Act exposure requiring the practice to stop immediately, a scoped lookback, quantification, and a documented decision on refund or self-disclosure.',
+        'C. A documentation training gap for field crews, with submitted claims left as billed since the transports did occur.',
+        'D. An acceptable error rate, since claims audits generally tolerate deviations under 20%.'
+      ],
+      sc: { A: 1, B: 5, C: 0, D: 0 },
+      correct: 'B',
+      correctWhy: 'Billing a level of service the record does not support is a false claim, regardless of whether the transport occurred. There is no tolerated error band. The vendor\'s "industry norms" framing is the exact rationalization a CCCO exists to reject. The required response is stop, scope, quantify, and decide on refund or disclosure.'
+    },
+    {
+      id: 30, type: 'mcq', group: 'Knowledge',
+      text: 'Which of the following requires an executed Business Associate Agreement?',
+      opts: [
+        'A. A third-party billing company, an ePCR software vendor, and a document shredding service that handles patient records.',
+        'B. Only vendors that store PHI electronically on their own servers.',
+        'C. Only the third-party billing company, since it is the only vendor that submits claims.',
+        'D. Any vendor paid more than a defined annual dollar threshold.'
+      ],
+      sc: { A: 5, B: 1, C: 0, D: 0 },
+      correct: 'A',
+      correctWhy: 'A BAA is required of any entity that creates, receives, maintains, or transmits PHI on the organization\'s behalf — including paper-handling vendors like shredding services. Neither storage medium nor contract value has any bearing. Missing BAAs are among the most common and most easily proven HIPAA findings.'
+    },
+    {
+      id: 31, type: 'mcq', group: 'Knowledge',
+      text: 'A monthly controlled substance reconciliation shows two vials of fentanyl unaccounted for at one station, and the discrepancy survives a recount. What is the correct sequence?',
+      opts: [
+        'A. Re-audit that station next month to see whether the discrepancy repeats before escalating.',
+        'B. Restrict access at the station and include it in the next quarterly compliance report.',
+        'C. Secure the records and remaining stock, notify the CEO and the medical program director, open an investigation, and report the loss to DEA on the required form within the required timeframe.',
+        'D. Refer it to the station supervisor to identify the responsible employee and report back.'
+      ],
+      sc: { A: 0, B: 1, C: 5, D: 0 },
+      correct: 'C',
+      correctWhy: 'A confirmed unresolved controlled substance loss triggers a mandatory DEA reporting obligation on a defined clock, not a wait-and-see posture. Options A and B delay a required report. Option D hands the investigation to the location where the loss occurred, which compromises both the evidence and the independence of the finding.'
+    },
+    {
+      id: 32, type: 'mcq', group: 'Knowledge',
+      text: 'Northwest Ambulance receives a records request from a Medicare program integrity contractor covering 40 specific claims. What is the correct approach?',
+      opts: [
+        'A. Produce only the claims that internal review confirms are fully documented, and request an extension for the remainder.',
+        'B. Log the request, notify the CEO and outside counsel, review the responsive records internally before production, produce a complete and indexed response within the deadline, and retain a copy of everything produced.',
+        'C. Forward the request to the third-party billing vendor to answer, since they hold the claim files.',
+        'D. Produce everything immediately without internal review, to demonstrate cooperation.'
+      ],
+      sc: { A: 0, B: 5, C: 0, D: 1 },
+      correct: 'B',
+      correctWhy: 'Selective production (A) is itself a violation. Delegating the response to the vendor (C) surrenders control of a government interaction to the party whose work is being examined. Producing blind (D) forfeits the chance to know what the government will see. The correct posture is complete, timely, counsel-informed production with a retained copy.'
+    },
+  ]
+},
+
+// ─────────────────────────────────────────────────────────────────────
+// SECTION 4 — Contract Oversight & Financial Judgment (Q33–40)
+// Correct-answer MCQ. Weight: 15%. Group: Contracting
+// Correct letters: D, A, C, B, D, C, A, B  (deliberately mixed)
+// ─────────────────────────────────────────────────────────────────────
+{
+  name: 'Contract Oversight & Financial Judgment',
+  eye: 'Section 4 of 6',
+  badge: 'badge-ems',
+  badgeTxt: 'Contract & Rate Judgment',
+  qs: [
+    {
+      id: 33, type: 'mcq', group: 'Contracting',
+      text: 'A hospital transport agreement has a three-year term that renews automatically unless either party gives written notice 120 days before expiration. The agreement has been unprofitable. Expiration is 90 days away and no notice was sent. What is the situation?',
+      opts: [
+        'A. It can still be terminated for convenience on 30 days\' notice under standard commercial practice.',
+        'B. Nothing is lost — the renewal can simply be declined at expiration, since no new signature is required.',
+        'C. It renews, but rates reset to market and can be renegotiated at the renewal date.',
+        'D. The notice window has closed and the agreement has renewed for a full additional term; the remaining options are renegotiation or a negotiated exit, and the calendar failure that allowed it must be corrected.'
+      ],
+      sc: { A: 0, B: 0, C: 0, D: 5 },
+      correct: 'D',
+      correctWhy: 'Missing a notice deadline is unrecoverable — the organization is bound to another full term of a money-losing agreement with no remaining leverage. A, B, and C each invent a remedy that does not exist. This is precisely why the job description lists zero missed renewal, notice, or expiration deadlines as a performance measure.'
+    },
+    {
+      id: 34, type: 'mcq', group: 'Contracting',
+      text: 'A hospital proposes paying $175 per transport for facility-paid discharges, against your loaded cost of $310 per transport. The same hospital is also a significant source of Medicare-billable 911 and interfacility volume. What must be established before this is recommended?',
+      opts: [
+        'A. Whether the below-cost rate can be supported as fair market value and commercially reasonable on its own terms, independent of any referral volume — and if it cannot, the arrangement should not be recommended in that form.',
+        'B. Whether the overall relationship, including the Medicare volume, makes the hospital profitable in aggregate.',
+        'C. Whether competitors in the market are accepting comparable rates.',
+        'D. Whether Operations can absorb the discharge volume with existing unit hours.'
+      ],
+      sc: { A: 5, B: 0, C: 1, D: 1 },
+      correct: 'A',
+      correctWhy: 'Option B is the trap and is the reasoning that creates Anti-Kickback liability: justifying a below-cost rate by the federally reimbursable volume it attracts is the definition of remuneration for referrals. The rate must be defensible as FMV standing alone. C and D are relevant business questions but neither addresses the regulatory defect.'
+    },
+    {
+      id: 35, type: 'mcq', group: 'Contracting',
+      text: 'A proposed SNF agreement guarantees a 30-minute response time for scheduled transports between 0700 and 1900, with a $250 penalty for each missed response. What must happen before it is routed for signature?',
+      opts: [
+        'A. Add a force majeure clause so the penalty does not apply during periods of high call volume.',
+        'B. Accept it — response time guarantees are standard and penalties are rarely enforced.',
+        'C. Confirm with Operations whether the commitment can be met with current unit hours, model the cost of the dedicated capacity and the expected penalty exposure, and price both into the rate before execution.',
+        'D. Negotiate the penalty down to a nominal figure and proceed.'
+      ],
+      sc: { A: 2, B: 0, C: 5, D: 1 },
+      correct: 'C',
+      correctWhy: 'A performance guarantee is a cost obligation, not a clause. The job description requires identifying and pricing obligations that carry operational cost — dedicated units, guaranteed response times, standby coverage — and confirming Operations can deliver them before execution. Negotiating the penalty down (D) leaves the organization contractually bound to a service level it may not be able to meet.'
+    },
+    {
+      id: 36, type: 'mcq', group: 'Contracting',
+      text: 'A payer agreement sets a contracted ALS1 base rate of $850. Twelve months in, realized reimbursement on ALS1 claims under that contract averages $611. What is the correct first step?',
+      opts: [
+        'A. Notify the payer of a breach and demand retroactive payment of the difference.',
+        'B. Determine what is driving the variance — denials, downcoding, patient responsibility, claims billed under the wrong contract, or genuine payer underpayment — before characterizing it as a payer problem.',
+        'C. Renegotiate the contracted rate upward to offset the shortfall.',
+        'D. Accept it — realized rates are always below contracted rates.'
+      ],
+      sc: { A: 1, B: 5, C: 0, D: 0 },
+      correct: 'B',
+      correctWhy: 'Rate realization gaps are usually internal before they are external: denials not reworked, level-of-service downcoding, claims routed under the wrong contract. Declaring breach (A) before diagnosis damages a payer relationship over a problem that may be your own. Raising the contracted rate (C) does nothing if the gap is a submission defect.'
+    },
+    {
+      id: 37, type: 'mcq', group: 'Contracting',
+      text: 'A software vendor\'s proposed agreement caps the vendor\'s total liability at the fees paid in the preceding three months and requires Northwest Ambulance to indemnify the vendor for claims arising from use of the software. The software will store PHI. What is the specific concern?',
+      opts: [
+        'A. The three-month cap is below industry norm and should be raised to twelve months.',
+        'B. The indemnity obligation requires CEO approval before execution.',
+        'C. There is no concern, provided a Business Associate Agreement is executed alongside the contract.',
+        'D. The organization would carry the full financial consequence of a vendor-caused PHI breach while the vendor\'s exposure is capped at a trivial amount; breach liability caused by the vendor must be carved out of both the cap and the indemnity.'
+      ],
+      sc: { A: 2, B: 1, C: 0, D: 5 },
+      correct: 'D',
+      correctWhy: 'A BAA (option C) creates the obligation but does not allocate the money — breach notification, credit monitoring, and penalties can run into seven figures while the cap holds the vendor to a few thousand dollars. Raising the cap generically (A) is weaker than carving breach liability out of it entirely. This is the single most common way healthcare organizations absorb someone else\'s breach cost.'
+    },
+    {
+      id: 38, type: 'mcq', group: 'Contracting',
+      text: 'The Operations Director has verbally committed to dedicated standby coverage for a hospital event, and the hospital has sent a short confirming letter for signature today. What do you do?',
+      opts: [
+        'A. Sign it — the commitment is already made and refusing now damages the relationship.',
+        'B. Have Operations sign it, since they negotiated it and own delivery.',
+        'C. Hold execution, review the terms and cost, confirm coverage capacity and insurance implications, route to the CEO for signature if acceptable, and separately address the intake failure that let a commitment be made outside the process.',
+        'D. Sign it with a written side note stating the terms are non-binding pending review.'
+      ],
+      sc: { A: 0, B: 0, C: 5, D: 1 },
+      correct: 'C',
+      correctWhy: 'Two failures need to be handled at once: the unreviewed document and the broken intake process that produced it. Option B also violates the signature authority structure — execution authority sits with the CEO and Owner. A unilateral "non-binding" note (D) has no legal effect on a signed document.'
+    },
+    {
+      id: 39, type: 'mcq', group: 'Contracting',
+      text: 'You inherit a contract function with no central repository. Agreements are held by whichever department negotiated them. What is the correct first action?',
+      opts: [
+        'A. Build a complete inventory of every active agreement — executed originals, terms, rates, notice deadlines, renewal dates — before attempting to renegotiate or terminate anything.',
+        'B. Issue a policy that no department may negotiate contracts, and begin enforcing it immediately.',
+        'C. Start with the largest-dollar agreements and renegotiate those first, since that is where the exposure sits.',
+        'D. Require every department to re-paper its agreements onto a standard template.'
+      ],
+      sc: { A: 5, B: 3, C: 1, D: 0 },
+      correct: 'A',
+      correctWhy: 'You cannot manage, renegotiate, or calendar a portfolio you have not inventoried, and every day without the inventory is a day a notice deadline can pass unseen. Option B is necessary but second. Option C skips the small agreements where auto-renewal traps usually hide. Option D would attempt to re-open every agreement at once with no baseline.'
+    },
+    {
+      id: 40, type: 'mcq', group: 'Contracting',
+      text: 'A proposed facility agreement offers $420 per transport at an estimated 90 transports per month. Your loaded cost is $355 per transport. Operations advises that meeting the committed response window requires one additional 12-hour unit at roughly $9,800 per month. Is the agreement accretive?',
+      opts: [
+        'A. Yes — the $420 rate exceeds cost per transport, producing about $5,850 per month in margin.',
+        'B. No — the roughly $5,850 in contribution does not cover the $9,800 cost of the unit required to perform, producing a loss of about $3,950 per month.',
+        'C. Yes, provided volume reaches the estimated 90 transports per month.',
+        'D. It cannot be determined without knowing the payer mix on the transports.'
+      ],
+      sc: { A: 0, B: 5, C: 1, D: 1 },
+      correct: 'B',
+      correctWhy: 'Contribution is ($420 − $355) × 90 = $5,850 against $9,800 of incremental capacity cost, so the agreement loses roughly $3,950 per month. Options A and C evaluate per-transport margin while ignoring the cost of the capacity the contract obligates. Payer mix (D) is irrelevant here because the facility pays a flat rate.'
+    },
+  ]
+},
+
+// ─────────────────────────────────────────────────────────────────────
+// SECTION 5 — Executive Conduct Under Pressure (Q41–47)
+// TYPE: trade | Exactly one clearly WRONG answer per question.
+// Weight: 15%. Group: Scenarios
+// Wrong-answer letters: C, B, D, A, C, B, D  (deliberately mixed)
+// ─────────────────────────────────────────────────────────────────────
+{
+  name: 'Executive Conduct Under Pressure',
+  eye: 'Section 5 of 6',
+  badge: 'badge-trade',
+  badgeTxt: 'One Wrong Answer',
+  qs: [
+    {
+      id: 41, type: 'trade', group: 'Scenarios',
+      text: 'Your audit finds that a facility agreement the CEO personally negotiated contains a rate structure that likely violates the Anti-Kickback Statute. The CEO asks you to sit on the finding until the fiscal year closes.',
+      context: 'Direct, unfiltered access to the CEO and Owner is the structural protection built into this role. It only matters if it is used.',
+      opts: [
+        'A. Document the finding and the request in writing, present the exposure and the cost of delay to the CEO and Owner, and recommend outside counsel.',
+        'B. Escalate directly to the Owner with the finding and a recommended remediation path.',
+        'C. Hold the finding until the fiscal year closes as asked — the CEO has the authority to set the timing of compliance matters.',
+        'D. Recommend suspending the arrangement pending review, notify the CEO and Owner in writing, and engage outside counsel on the disclosure question.'
+      ],
+      sc: { A: 4, B: 4, C: 0, D: 5 },
+      wrong: 'C',
+      wrongWhy: 'Timing a known regulatory violation around a fiscal calendar at the request of the person who created it is a compliance program failure in the one seat designed to prevent exactly that. Every month of delay extends the conduct and undermines any later claim of good faith. The CEO does not have authority to defer the CCCO\'s compliance findings.'
+    },
+    {
+      id: 42, type: 'trade', group: 'Scenarios',
+      text: 'On the same morning: a payer audit response is due in 48 hours, a potential PHI breach was reported overnight, a hospital contract auto-renews in six days, and the CEO wants a compliance briefing this afternoon.',
+      context: 'Several of these have fixed external deadlines. One has a regulatory clock that started running before you arrived.',
+      opts: [
+        'A. Begin breach containment and the risk assessment first, since the notification clock runs from discovery — then set the contract notice and audit response in motion the same day and move the briefing if needed.',
+        'B. Take the CEO briefing first, since executive visibility determines how the rest of the day\'s priorities get supported.',
+        'C. Triage all four within the first hour, delegate or sequence each against its own deadline, and confirm breach containment is underway before anything else moves.',
+        'D. Send the contract non-renewal notice first because that deadline is unrecoverable if missed, then start the breach assessment.'
+      ],
+      sc: { A: 5, B: 0, C: 5, D: 3 },
+      wrong: 'B',
+      wrongWhy: 'Sequencing an internal briefing ahead of a running breach clock and two external deadlines reveals a candidate who prioritizes visibility over exposure. The briefing is the only one of the four items with no external consequence and the only one that can be moved by a phone call.'
+    },
+    {
+      id: 43, type: 'trade', group: 'Scenarios',
+      text: 'An anonymous hotline report alleges that a billing supervisor is instructing staff to upcode BLS transports to ALS. What is your first action?',
+      context: 'Sequence matters. Alerting the subject of an allegation before securing records changes what evidence still exists.',
+      opts: [
+        'A. Preserve the relevant claims data and communications, define the scope and period of review, and begin the investigation without notifying the supervisor.',
+        'B. Preserve records, notify the CEO and outside counsel given the False Claims Act exposure, and begin a scoped claims review.',
+        'C. Pull a statistically valid sample of that supervisor\'s claims to test whether the allegation is supported before deciding how far to take it.',
+        'D. Meet with the supervisor to hear their explanation before deciding whether an investigation is warranted.'
+      ],
+      sc: { A: 5, B: 5, C: 4, D: 0 },
+      wrong: 'D',
+      wrongWhy: 'Interviewing the subject before securing evidence gives advance warning to the one person with both the motive and the access to alter records and align stories. It also converts a potential False Claims Act matter into an informal conversation with no preserved record. The subject interview belongs later in the sequence, not first.'
+    },
+    {
+      id: 44, type: 'trade', group: 'Scenarios',
+      text: 'Six weeks after an employee filed a hotline complaint about documentation practices, their supervisor issues a written warning for an unrelated attendance issue. The supervisor says the timing is coincidental.',
+      context: 'Non-retaliation is not satisfied by the absence of retaliatory intent. It is satisfied by a documented, defensible record.',
+      opts: [
+        'A. Accept the supervisor\'s explanation — the two matters are unrelated, and second-guessing supervisors on discipline undermines them.',
+        'B. Review the attendance record and the supervisor\'s discipline history for comparable employees to test whether the warning is consistent with past practice, and document that review.',
+        'C. Ask HR to hold the warning until the underlying complaint is resolved, and document the reason for the hold.',
+        'D. Document the timing, review comparability with HR, and advise the CEO of the retaliation exposure regardless of what the review concludes.'
+      ],
+      sc: { A: 0, B: 5, C: 3, D: 5 },
+      wrong: 'A',
+      wrongWhy: 'Taking the supervisor\'s word and creating no record leaves the organization with nothing to show if the employee later claims retaliation — and close temporal proximity is exactly what establishes a prima facie case. The CCCO owns the non-retaliation obligation; accepting an assurance is not discharging it.'
+    },
+    {
+      id: 45, type: 'trade', group: 'Scenarios',
+      text: 'Your billing vendor has missed the contractual 95% clean-claim submission rate for four consecutive months. The vendor\'s principal has a long personal relationship with the Owner and asks you to raise the concern informally with them rather than in your written report.',
+      context: 'The written report is the organizational record. What is left out of it did not happen.',
+      opts: [
+        'A. Report the shortfall in the written report as measured, and separately notify the vendor in writing of the contractual failure and the required remediation.',
+        'B. Report it in writing and recommend a defined remediation plan with a deadline and a termination trigger if it is not met.',
+        'C. Raise it informally with the principal first as asked, and report it formally only if performance does not improve.',
+        'D. Report the metric in writing without characterization, and let the Owner weigh the relationship.'
+      ],
+      sc: { A: 5, B: 5, C: 0, D: 3 },
+      wrong: 'C',
+      wrongWhy: 'Suppressing a measured contractual failure from the written report at the request of the underperforming vendor is capture. Four consecutive months is a pattern, not an incident, and routing it around the record because of a personal relationship with the Owner is the precise conflict this role is structured to resist.'
+    },
+    {
+      id: 46, type: 'trade', group: 'Scenarios',
+      text: 'A completed lookback quantifies $210,000 in Medicare overpayments arising from a documentation deficiency. The organization is in a tight cash position and the CFO asks whether the refund can be deferred to the next fiscal year.',
+      context: 'The obligation to report and return runs from identification, not from when the organization can comfortably afford it.',
+      opts: [
+        'A. Report and return within the required window, and if cash is genuinely constrained, request an extended repayment schedule through the proper channel rather than delaying the disclosure.',
+        'B. Defer the refund to the next fiscal year and disclose it then — the amount is known, so this is a cash timing decision rather than a compliance decision.',
+        'C. Report and return within the required window, and engage counsel on whether the facts warrant a formal self-disclosure.',
+        'D. Report and return within the required window, and separately brief the Owner on the cash impact and on the cost of the alternative.'
+      ],
+      sc: { A: 5, B: 0, C: 5, D: 5 },
+      wrong: 'B',
+      wrongWhy: 'Knowingly retaining an identified overpayment past the 60-day window converts a correctable documentation problem into a reverse false claim with treble damages and per-claim penalties. Reframing it as a cash timing decision is the rationalization, not a defense. Extended repayment plans exist precisely for this situation and require disclosure first.'
+    },
+    {
+      id: 47, type: 'trade', group: 'Scenarios',
+      text: 'During a compliance investigation you learn that a senior manager — someone you consider a personal friend — has been falsifying certification records for two employees.',
+      context: 'Uncertified personnel on transports is both a licensing exposure and a patient safety exposure.',
+      opts: [
+        'A. Follow the investigation protocol exactly as you would for anyone else, document it, disclose the relationship to the CEO, and recuse yourself from the disciplinary recommendation.',
+        'B. Complete the investigation, document the findings, and escalate to the CEO and HR without discussing it with the manager first.',
+        'C. Disclose the relationship to the CEO before proceeding and ask whether the matter should be handled by outside counsel.',
+        'D. Speak with the manager privately first — a friend should get the chance to correct the records and self-report before the matter becomes formal.'
+      ],
+      sc: { A: 5, B: 5, C: 4, D: 0 },
+      wrong: 'D',
+      wrongWhy: 'Offering a friend the opportunity to correct falsified records before the matter becomes formal is an invitation to destroy evidence, and it applies a standard to a friend that would not be extended to anyone else. Personnel may currently be working transports without valid certification; that risk does not pause for a private conversation.'
+    },
+  ]
+},
+
+// ─────────────────────────────────────────────────────────────────────
+// SECTION 6 — Self-Disclosure & Validity (Q48–52)
+// Weight: 10%. Groups: Disclosure (Q48–51), Validity (Q52, unscored)
+// All items are verifiable in reference checks and oral board.
+// ─────────────────────────────────────────────────────────────────────
+{
+  name: 'Self-Disclosure & Validity',
+  eye: 'Section 6 of 6',
+  badge: 'badge-disc',
+  badgeTxt: 'Verifiable Disclosures',
+  qs: [
+    {
+      id: 48, type: 'disc', group: 'Disclosure',
+      text: 'In a previous role, did you ever formally recommend against an agreement or practice that senior leadership wanted to proceed with?',
+      opts: [
+        'A. Yes — I documented the recommendation in writing, presented the exposure, and held the position. I can describe the matter and the outcome.',
+        'B. Yes — I raised it, but withdrew the objection once leadership made their position clear.',
+        'C. I have raised concerns informally, but have not formally recommended against a leadership decision.',
+        'D. I have not been in a position where that was required.'
+      ],
+      sc: { A: 5, B: 2, C: 1, D: 1 },
+      flag: ['B','C','D'],
+      flagWhy: 'The job description requires the ability to work independently of operational pressure and to appropriately challenge decisions made by senior leadership. B indicates the candidate folds under pressure; C and D indicate the capability is untested. Probe in oral board for a specific instance, what was at stake, and what the candidate did when told no.'
+    },
+    {
+      id: 49, type: 'disc', group: 'Disclosure',
+      text: 'Have you personally identified an overpayment or improper claim pattern and driven it through to refund or disclosure?',
+      opts: [
+        'A. Yes — I identified it, quantified it through a lookback, and can describe the amount, the decision process, and the resolution.',
+        'B. Yes — I identified the issue and handed it to legal or billing to resolve.',
+        'C. I have participated in overpayment resolutions that others identified.',
+        'D. I have not been involved in an overpayment identification or refund.'
+      ],
+      sc: { A: 5, B: 3, C: 1, D: 0 },
+      flag: ['C','D'],
+      flagWhy: 'Overpayment identification, quantification, and the refund-versus-self-disclosure decision are core duties of this role. A candidate who has never driven one has not exercised the judgment the position requires under real financial and legal pressure. Probe for the closest adjacent experience and test the 60-day rule verbally.'
+    },
+    {
+      id: 50, type: 'disc', group: 'Disclosure',
+      text: 'Which best describes the contract function you have most recently owned?',
+      opts: [
+        'A. I maintained a central repository and renewal calendar for the full portfolio, and I led or co-led negotiations.',
+        'B. I reviewed contracts before signature, but the repository and calendar were maintained elsewhere.',
+        'C. I reviewed specific contract types — primarily payer or vendor — rather than the full portfolio.',
+        'D. Contract administration was handled by legal or an executive assistant; I was consulted occasionally.'
+      ],
+      sc: { A: 5, B: 3, C: 2, D: 0 },
+      flag: ['C','D'],
+      flagWhy: 'This role is the single accountable owner of the full contract portfolio from intake through termination. C and D indicate review experience rather than ownership experience — a meaningful difference when the performance measure is zero missed renewal or notice deadlines. Probe how they would build the repository and calendar in the first 90 days.'
+    },
+    {
+      id: 51, type: 'disc', group: 'Disclosure',
+      text: 'Over the past two years, approximately how many unplanned absences have you had — days missed without advance notice, not counting approved or scheduled leave?',
+      opts: [
+        'A. None, or one to two.',
+        'B. Roughly three to five.',
+        'C. Roughly six to ten.',
+        'D. More than ten, or I have not tracked it.'
+      ],
+      sc: { A: 5, B: 4, C: 2, D: 0 },
+      flag: ['C','D'],
+      flagWhy: 'This item excludes approved, scheduled, and protected leave by design and must not be used as a proxy for any of those. It measures unplanned, no-notice absence only. C or D warrants a factual attendance verification with prior employers — this role is the escalation point for breaches, government inquiries, and contract deadlines, where no-notice unavailability has direct consequences. Note that "I have not tracked it" is also a self-awareness signal worth probing.'
+    },
+    {
+      id: 52, type: 'validity', group: 'Validity',
+      text: 'Which best describes your record as a compliance professional?',
+      opts: [
+        'A. No compliance program I have run has ever produced a significant finding or an adverse audit result.',
+        'B. I have run programs that surfaced real problems, and I can describe what was found and how it was corrected.',
+        'C. I have had audits produce findings I did not anticipate, and I changed my monitoring approach as a result.',
+        'D. No contract deadline, notice period, or renewal date has ever been missed on my watch, under any circumstances.'
+      ],
+      sc: { A: 1, B: 5, C: 4, D: 1 },
+      flag: ['A','D'],
+      flagWhy: 'A and D are implausible claims of perfection. A program that never produces a significant finding is a program that is not looking. An unqualified claim that nothing has ever been missed under any circumstances is either inaccurate or reflects a portfolio too small to be relevant here. Either answer means weighting the oral board and reference checks more heavily across the whole assessment.'
+    },
+  ]
+},
+
+]; // end SECTIONS
+
+// ============================================================
+// CATEGORY DISPLAY CONFIG
+// ============================================================
+const CATS = [
+  { key: 'Integrity',   label: 'Integrity & Independence',   color: '#1b2d4a', max: null },
+  { key: 'Conduct',     label: 'Reliability & Accountability', color: '#4a7c1b', max: null },
+  { key: 'Knowledge',   label: 'Compliance Knowledge',       color: '#7c4a1b', max: null },
+  { key: 'Contracting', label: 'Contract & Financial Judgment', color: '#8B1A1A', max: null },
+  { key: 'Scenarios',   label: 'Conduct Under Pressure',     color: '#7c1b1b', max: null },
+  { key: 'Disclosure',  label: 'Self-Disclosure',            color: '#1b5c7c', max: null },
+];
+
+// ============================================================
+// STATE
+// ============================================================
+const TOTAL_Q = 52;
+let cand = {};
+let ans = {};
+let sec = 0;
+
+// ============================================================
+// START
+// ============================================================
+function start() {
+  const fn = document.getElementById('i-fn').value.trim();
+  const ln = document.getElementById('i-ln').value.trim();
+  const em = document.getElementById('i-em').value.trim();
+  if (!fn || !ln || !em) { alert('Please enter your first name, last name, and email to begin.'); return; }
+  cand = {
+    firstName: fn,
+    lastName: ln,
+    name: fn + ' ' + ln,
+    email: em,
+    phone: document.getElementById('i-ph').value.trim(),
+    pos: document.getElementById('i-pos').value.trim() || 'Chief Compliance & Contracting Officer',
+    date: new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }),
+    completionDate: new Date().toISOString().split('T')[0]
+  };
+  document.getElementById('screen-welcome').style.display = 'none';
+  document.getElementById('screen-assessment').style.display = 'block';
+  document.getElementById('hdr-right').style.display = 'flex';
+  sec = 0;
+  render();
+}
+
+// ============================================================
+// RENDER
+// ============================================================
+function render() {
+  const s = SECTIONS[sec];
+  document.getElementById('sec-eye').textContent = s.eye;
+  document.getElementById('sec-h').textContent = s.name;
+  const badge = document.getElementById('sec-badge');
+  badge.className = 'sec-badge ' + s.badge;
+  badge.textContent = s.badgeTxt;
+
+  const c = document.getElementById('q-container');
+  c.innerHTML = '';
+
+  s.qs.forEach(q => {
+    const card = document.createElement('div');
+    card.className = 'q-card' + (ans[q.id] !== undefined ? ' answered' : '');
+    card.id = 'qc' + q.id;
+
+    let html = '<div class="q-num">Question ' + q.id + ' of ' + TOTAL_Q + '</div>';
+    if (q.context) html += '<div class="q-context">' + q.context + '</div>';
+    html += '<div class="q-text">' + q.text + '</div>';
+    card.innerHTML = html;
+
+    if (q.type === 'likert') card.appendChild(buildLikert(q));
+    else card.appendChild(buildMCQ(q));
+
+    c.appendChild(card);
+  });
+
+  document.getElementById('btn-prev').style.display = sec > 0 ? 'inline-flex' : 'none';
+  document.getElementById('btn-next').textContent = sec === SECTIONS.length - 1 ? 'Submit Assessment' : 'Next Section \u2192';
+  upProg();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function buildLikert(q) {
+  const wrap = document.createElement('div');
+  const lw = document.createElement('div');
+  lw.className = 'likert-wrap';
+  lw.id = 'lw' + q.id;
+  LIKERT.forEach(lbl => {
+    const opt = document.createElement('div');
+    opt.className = 'l-opt' + (ans[q.id] === lbl ? ' selected' : '');
+    opt.textContent = lbl;
+    opt.onclick = () => {
+      lw.querySelectorAll('.l-opt').forEach(o => o.classList.remove('selected'));
+      opt.classList.add('selected');
+      ans[q.id] = lbl;
+      document.getElementById('qc' + q.id).classList.add('answered');
+      upProg();
+    };
+    lw.appendChild(opt);
+  });
+  const ends = document.createElement('div');
+  ends.className = 'likert-ends';
+  ends.innerHTML = '<span>Strongly Disagree</span><span>Strongly Agree</span>';
+  wrap.appendChild(lw);
+  wrap.appendChild(ends);
+  return wrap;
+}
+
+function buildMCQ(q) {
+  const letters = ['A','B','C','D'];
+  const wrap = document.createElement('div');
+  wrap.className = 'opts';
+  wrap.id = 'mw' + q.id;
+  q.opts.forEach((txt, i) => {
+    const letter = letters[i];
+    const rid = 'r' + q.id + letter;
+    const radio = document.createElement('input');
+    radio.type = 'radio';
+    radio.name = 'q' + q.id;
+    radio.id = rid;
+    radio.value = letter;
+    radio.className = 'opt-radio';
+    if (ans[q.id] === letter) radio.checked = true;
+    radio.onchange = () => {
+      ans[q.id] = letter;
+      document.getElementById('qc' + q.id).classList.add('answered');
+      upProg();
+    };
+    const label = document.createElement('label');
+    label.htmlFor = rid;
+    label.className = 'opt-label';
+    label.innerHTML = '<span class="opt-key">' + letter + '</span>' + txt.replace(/^[A-D]\.\s*/, '');
+    wrap.appendChild(radio);
+    wrap.appendChild(label);
+  });
+  return wrap;
+}
+
+function upProg() {
+  const done = Object.keys(ans).length;
+  document.getElementById('prog-txt').textContent = done + ' / ' + TOTAL_Q;
+  document.getElementById('prog-bar').style.width = Math.round(done / TOTAL_Q * 100) + '%';
+  const s = SECTIONS[sec];
+  const secDone = s.qs.filter(q => ans[q.id] !== undefined).length;
+  document.getElementById('nav-info').textContent = secDone + ' of ' + s.qs.length + ' answered';
+}
+
+function prev() { if (sec > 0) { sec--; render(); } }
+
+function next() {
+  const s = SECTIONS[sec];
+  const missing = s.qs.filter(q => ans[q.id] === undefined);
+  if (missing.length) {
+    alert('Please answer all questions before continuing. (' + missing.length + ' remaining)');
+    document.getElementById('qc' + missing[0].id).scrollIntoView({ behavior: 'smooth', block: 'center' });
+    return;
+  }
+  if (sec < SECTIONS.length - 1) { sec++; render(); }
+  else showResults();
+}
+
+// ============================================================
+// SCORING ENGINE
+// ============================================================
+function scoreLikert(q, response) {
+  const raw = LIKERT.indexOf(response) + 1; // 1–5
+  return q.rev ? (6 - raw) : raw;
+}
+
+function scoreQ(q, response) {
+  if (response === undefined) return 0;
+  if (q.type === 'likert') return scoreLikert(q, response);
+  return q.sc[response] !== undefined ? q.sc[response] : 0;
+}
+
+function computeAll() {
+  const groups = {};
+  const maxGroups = {};
+
+  SECTIONS.forEach(s => {
+    s.qs.forEach(q => {
+      if (q.group === 'Validity') return; // validity excluded from score
+      const v = scoreQ(q, ans[q.id]);
+      if (!groups[q.group]) { groups[q.group] = []; maxGroups[q.group] = []; }
+      groups[q.group].push(v);
+      if (q.type === 'likert') maxGroups[q.group].push(5);
+      else maxGroups[q.group].push(Math.max(...Object.values(q.sc)));
+    });
+  });
+
+  const groupPct = {};
+  Object.keys(groups).forEach(g => {
+    const totalRaw = groups[g].reduce((a, b) => a + b, 0);
+    const totalMax = maxGroups[g].reduce((a, b) => a + b, 0);
+    groupPct[g] = totalMax > 0 ? Math.round(totalRaw / totalMax * 100) : 0;
+  });
+
+  // Weighted composite (out of 100)
+  // Integrity 25% · Conduct 15% · Knowledge 20% · Contracting 15% · Scenarios 15% · Disclosure 10%
+  const weights = { Integrity: 0.25, Conduct: 0.15, Knowledge: 0.20, Contracting: 0.15, Scenarios: 0.15, Disclosure: 0.10 };
+  let composite = 0, wSum = 0;
+  Object.entries(weights).forEach(([g, w]) => { composite += (groupPct[g] || 0) * w; wSum += w; });
+  composite = Math.round(composite / wSum);
+
+  return { groupPct, composite };
+}
+
+function getFlags() {
+  const flags = [];
+  const letters = ['A','B','C','D'];
+  SECTIONS.forEach(s => {
+    s.qs.forEach(q => {
+      const a = ans[q.id];
+      if (a === undefined) return;
+      // Likert red flags
+      if (q.type === 'likert' && q.rf && q.rf.includes(a)) {
+        flags.push({ kind: 'concern', tag: 'Red Flag', id: q.id, q: q.text.substring(0, 110) + (q.text.length > 110 ? '\u2026' : ''), a: a, why: q.rfWhy || '' });
+      }
+      // Trade-off wrong answer
+      if (q.wrong && a === q.wrong) {
+        flags.push({ kind: 'concern', tag: 'Wrong Answer', id: q.id, q: q.text.substring(0, 110) + (q.text.length > 110 ? '\u2026' : ''), a: 'Chose ' + a + ': ' + q.opts[letters.indexOf(a)].substring(0, 70), why: q.wrongWhy || '' });
+      }
+      // MCQ incorrect
+      if (q.correct && a !== q.correct) {
+        flags.push({ kind: 'knowledge', tag: 'Knowledge Gap', id: q.id, q: q.text.substring(0, 110) + (q.text.length > 110 ? '\u2026' : ''), a: 'Incorrect \u2014 chose ' + a + ' (correct: ' + q.correct + ')', why: q.correctWhy || '' });
+      }
+      // Disclosure / validity
+      if (q.flag && q.flag.includes(a)) {
+        flags.push({ kind: 'concern', tag: (q.type === 'validity' ? 'Validity' : 'Disclosure Gap'), id: q.id, q: q.text.substring(0, 110) + (q.text.length > 110 ? '\u2026' : ''), a: q.opts[letters.indexOf(a)].substring(0, 80), why: q.flagWhy || '' });
+      }
+    });
+  });
+  return flags;
+}
+
+// Hard-stop items: any Agree/Strongly Agree here is disqualifying on its own.
+const HARD_STOP_IDS = [2, 4, 8, 10, 12, 20];
+function getHardStops() {
+  const out = [];
+  SECTIONS.forEach(s => s.qs.forEach(q => {
+    if (HARD_STOP_IDS.includes(q.id) && q.rf && q.rf.includes(ans[q.id])) out.push(q.id);
+  }));
+  return out;
+}
+
+function getValidityFlag() {
+  const q = SECTIONS[5].qs.find(x => x.id === 52);
+  const a = ans[52];
+  if (!a) return 0;
+  return (q.flag && q.flag.includes(a)) ? 1 : 0;
+}
+
+function getVerdict(composite, concerns, misses, hardStops, g) {
+  // Hard gates — any one of these ends the process regardless of composite score.
+  if (hardStops.length >= 1) return { label: 'Do Not Advance', cls: 'vp-no' };
+  if ((g.Integrity   || 0) < 75) return { label: 'Do Not Advance', cls: 'vp-no' };
+  if ((g.Conduct     || 0) < 60) return { label: 'Do Not Advance', cls: 'vp-no' };
+  if ((g.Knowledge   || 0) < 60) return { label: 'Do Not Advance', cls: 'vp-no' };
+  if ((g.Contracting || 0) < 55) return { label: 'Do Not Advance', cls: 'vp-no' };
+  if ((g.Scenarios   || 0) < 60) return { label: 'Do Not Advance', cls: 'vp-no' };
+  if (concerns >= 5) return { label: 'Do Not Advance', cls: 'vp-no' };
+  // Bands
+  if (composite >= 85 && concerns === 0 && misses <= 2) return { label: 'Recommended: Hire', cls: 'vp-hire' };
+  if (composite >= 75 && concerns <= 2) return { label: 'Hire with Review', cls: 'vp-review' };
+  if (composite >= 65 && concerns <= 4) return { label: 'Review Further', cls: 'vp-review' };
+  return { label: 'Do Not Advance', cls: 'vp-no' };
+}
+
+// ============================================================
+// SHOW RESULTS
+// ============================================================
+function getQuestionById(id) {
+  for (const s of SECTIONS) {
+    const q = s.qs.find(x => x.id === id);
+    if (q) return q;
+  }
+  return null;
+}
+
+function getAnswerText(id) {
+  const q = getQuestionById(id);
+  if (!q || ans[id] === undefined) return '';
+  const a = ans[id];
+  if (q.type === 'likert') return a;
+  const letters = ['A','B','C','D'];
+  const idx = letters.indexOf(a);
+  return idx >= 0 && q.opts && q.opts[idx] ? q.opts[idx] : a;
+}
+
+function buildAssessmentSummary(verdict, groupPct, flags, hardStops, validityFlag) {
+  const concerns = flags.filter(f => f.kind === 'concern').length;
+  const misses = flags.filter(f => f.kind === 'knowledge').length;
+  let summaryText = '';
+  if (verdict.cls === 'vp-hire') {
+    summaryText = 'This candidate demonstrates the independence, regulatory knowledge, and contract judgment the CCCO role requires. Scores are above threshold across every measured dimension and no responses were flagged.';
+  } else if (verdict.cls === 'vp-review') {
+    summaryText = 'This candidate shows generally sound judgment with specific areas that warrant focused probing in the oral board. Each flagged response is verifiable through a structured interview question or a reference check.';
+  } else {
+    summaryText = "This candidate's responses indicate significant concerns in one or more critical areas. Review the flagged items before any next step. This role is the organization's only independent check on billing, contracting, and privacy exposure, so integrity and independence findings should not be discounted against strong technical scores.";
+  }
+  if (hardStops.length) summaryText += ' HARD STOP: the candidate endorsed ' + hardStops.length + ' disqualifying attitude statement(s) — see Q' + hardStops.join(', Q') + '.';
+  if ((groupPct['Integrity'] || 0) < 80) summaryText += ' Integrity & Independence (' + (groupPct['Integrity'] || 0) + '%) is below the level this role requires.';
+  if ((groupPct['Conduct'] || 0) < 70) summaryText += ' Reliability & Accountability (' + (groupPct['Conduct'] || 0) + '%) indicates hiring risk.';
+  if ((groupPct['Knowledge'] || 0) < 70) summaryText += ' Compliance Knowledge (' + (groupPct['Knowledge'] || 0) + '%) shows gaps.';
+  if ((groupPct['Contracting'] || 0) < 70) summaryText += ' Contract & Financial Judgment (' + (groupPct['Contracting'] || 0) + '%) is below threshold.';
+  if ((groupPct['Scenarios'] || 0) < 70) summaryText += ' Conduct Under Pressure (' + (groupPct['Scenarios'] || 0) + '%) warrants close review.';
+  if (validityFlag) summaryText += ' Validity flag raised — the candidate claimed an implausibly perfect record. Weight the oral board and reference checks more heavily.';
+  if (concerns > 0) summaryText += ' Character / conduct concerns identified: ' + concerns + '.';
+  if (misses > 0) summaryText += ' Knowledge gaps identified: ' + misses + '.';
+  return summaryText;
+}
+
+function buildRedFlagResponses(flags, hardStops, validityFlag) {
+  const rows = [];
+  const ordered = flags.filter(f => f.kind === 'concern').concat(flags.filter(f => f.kind === 'knowledge'));
+  ordered.forEach((f, idx) => {
+    const q = getQuestionById(f.id);
+    rows.push(
+      (f.kind === 'knowledge' ? 'Knowledge Gap ' : 'Flagged Response ') + (idx + 1) + ' - Q' + f.id,
+      'Type: ' + f.tag,
+      'Question: ' + (q ? q.text : f.q),
+      'Candidate Response: ' + getAnswerText(f.id),
+      f.why ? 'Recruiter Note: ' + f.why : '',
+      hardStops.includes(f.id) ? 'HARD STOP: Yes' : '',
+      ''
+    );
+  });
+  if (validityFlag && !ordered.some(f => f.id === 52)) {
+    const q = getQuestionById(52);
+    rows.push('Validity Concern - Q52','Question: ' + (q ? q.text : ''),'Candidate Response: ' + getAnswerText(52),q && q.flagWhy ? 'Recruiter Note: ' + q.flagWhy : '','');
+  }
+  return rows.length ? rows.filter(x => x !== '').join('\n') : 'None';
+}
+
+function buildWorkableReport(data) {
+  const { groupPct, composite, flags, hardStops, validityFlag, verdict, summaryText } = data;
+  const concerns = flags.filter(f => f.kind === 'concern').length;
+  const misses = flags.filter(f => f.kind === 'knowledge').length;
+  const redFlagResponses = buildRedFlagResponses(flags, hardStops, validityFlag);
+  return [
+    '=== CCCO ASSESSMENT RESULTS ===','Chief Compliance & Contracting Officer','',
+    'Candidate: ' + cand.name,'Email: ' + cand.email,'Phone: ' + (cand.phone || 'N/A'),'Position: ' + cand.pos,'Date: ' + cand.date,'',
+    'RECOMMENDATION: ' + verdict.label,'Composite Score: ' + composite + ' / 100','Hard Stops: ' + (hardStops.length ? hardStops.length + ' (Q' + hardStops.join(', Q') + ')' : 'None'),'','--- CATEGORY SCORES ---',
+    'Integrity & Independence: ' + (groupPct['Integrity'] || 0) + '%','Reliability & Accountability: ' + (groupPct['Conduct'] || 0) + '%','Compliance Knowledge: ' + (groupPct['Knowledge'] || 0) + '%','Contract & Financial Judgment: ' + (groupPct['Contracting'] || 0) + '%','Conduct Under Pressure: ' + (groupPct['Scenarios'] || 0) + '%','Self-Disclosure: ' + (groupPct['Disclosure'] || 0) + '%','Validity Check: ' + (validityFlag ? 'FLAGGED' : 'Clear'),'','Character / Conduct Concerns: ' + concerns,'Knowledge Gaps: ' + misses,'','--- RED FLAG RESPONSES ---',redFlagResponses,'','--- SUMMARY ---',summaryText,'','Assessment: ' + ASSESSMENT_VERSION,'NW Ambulance — Talent Acquisition · Confidential'
+  ].join('\n');
+}
+
+function buildSubmissionPayload() {
+  const { groupPct, composite } = computeAll();
+  const flags = getFlags();
+  const hardStops = getHardStops();
+  const validityFlag = getValidityFlag();
+  const concerns = flags.filter(f => f.kind === 'concern').length;
+  const misses = flags.filter(f => f.kind === 'knowledge').length;
+  const verdict = getVerdict(composite, concerns, misses, hardStops, groupPct);
+  const summaryText = buildAssessmentSummary(verdict, groupPct, flags, hardStops, validityFlag);
+  const redFlagResponses = buildRedFlagResponses(flags, hardStops, validityFlag);
+  const fullReport = buildWorkableReport({ groupPct, composite, flags, hardStops, validityFlag, verdict, summaryText });
+  return {
+    firstName: cand.firstName,lastName: cand.lastName,email: cand.email,position: cand.pos,assessmentType: ASSESSMENT_TYPE,score: composite.toString(),recommendation: verdict.label,redFlags: flags.length.toString(),redFlagResponses: redFlagResponses || 'None',completionDate: cand.completionDate,report: fullReport,
+    phone: cand.phone,compositeScore: composite,redFlagCount: flags.length,concernCount: concerns,knowledgeGapCount: misses,hardStopCount: hardStops.length,hardStopQuestions: hardStops.length ? hardStops.map(id => 'Q' + id).join(', ') : 'None',validityConcernCount: validityFlag,fullReport: fullReport,
+    categoryScores: {integrity: groupPct['Integrity'] || 0,conduct: groupPct['Conduct'] || 0,knowledge: groupPct['Knowledge'] || 0,contracting: groupPct['Contracting'] || 0,scenarios: groupPct['Scenarios'] || 0,disclosure: groupPct['Disclosure'] || 0},
+    rawAnswers: ans,assessmentVersion: ASSESSMENT_VERSION
+  };
+}
+
+async function sendToFlow(data) {
+  try {
+    console.log('CCCO assessment payload sent to Power Automate:', data);
+    const response = await fetch(FLOW_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
+    console.log('Power Automate response status:', response.status);
+    return response.ok;
+  } catch (e) {
+    console.error('CCCO assessment submission failed', e);
+    return false;
+  }
+}
+
+async function submitAssessment() {
+  const btn = document.getElementById('btn-next');
+  btn.disabled = true;
+  btn.textContent = 'Submitting…';
+  const payload = buildSubmissionPayload();
+  const submitted = await sendToFlow(payload);
+  if (submitted) showThankYou();
+  else showThankYou('Your assessment was completed, but the automatic submission could not be confirmed. Please notify the hiring team.');
+}
+
+function showThankYou(message) {
+  document.getElementById('screen-assessment').style.display = 'none';
+  document.getElementById('screen-results').style.display = 'none';
+  document.getElementById('screen-thankyou').style.display = 'block';
+  document.getElementById('hdr-right').style.display = 'none';
+  if (message) {
+    const e = document.getElementById('submit-error');
+    e.style.display = 'block';
+    e.textContent = message;
+  }
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function showResults() {
+  submitAssessment();
+}
+
+function copyIt() {
+  navigator.clipboard.writeText(document.getElementById('copy-area').textContent).then(() => {
+    const b = document.querySelector('.btn-copy');
+    b.textContent = '\u2713 Copied';
+    setTimeout(() => { b.textContent = 'Copy to Clipboard'; }, 2000);
+  });
+}
+</script>
+</body>
+</html>
