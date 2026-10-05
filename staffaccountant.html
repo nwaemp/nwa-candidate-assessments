@@ -134,7 +134,6 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 .likert-wrap .l-opt{min-width:96px}
 .l-opt.selected{background:var(--navy)!important;border-color:var(--navy)!important;color:#fff!important;font-weight:600}
 .opt-radio:checked+.opt-label{border-color:var(--navy)!important;box-shadow:inset 3px 0 0 var(--navy)}
-#screen-done{display:none}
 .done-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:34px;text-align:center;margin-bottom:20px}
 .code-box{width:100%;min-height:110px;background:var(--bg);border:1px solid var(--border-hi);border-radius:var(--r);padding:12px;font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--ink);word-break:break-all;resize:none;margin:14px 0 10px}
 .err{color:var(--red);font-size:12px;margin-top:10px;min-height:16px}
@@ -319,11 +318,99 @@ function getFullAnswerText(n) {
   return idx >= 0 && q.o && q.o[idx] ? q.o[idx] : a;
 }
 
+// Explicit Staff Accountant risk key.
+// Likert: A=Strongly Disagree, B=Disagree, C=Agree, D=Strongly Agree.
+// Scenario arrays contain the answer letters that trigger recruiter review.
+const RED_FLAG_RULES = {
+  5:  {answers:['C','D'], category:'Professional Conduct', note:'Response suggests service quality may vary based on how courteously the other person behaves.'},
+  11: {answers:['C','D'], category:'Timekeeping Integrity', note:'Response accepts recording planned time instead of actual time worked.'},
+  12: {answers:['C','D'], category:'Validity', note:'Absolute error-free claim may indicate impression management.'},
+  17: {answers:['C','D'], category:'Control Discipline', note:'Response suggests established controls may be relaxed based on a coworker’s prior accuracy.'},
+  22: {answers:['C','D'], category:'Accuracy Under Pressure', note:'Response accepts pushing a payment run forward while an unresolved difference remains.'},
+  24: {answers:['C','D'], category:'Follow-Through', note:'Response suggests commitments may be abandoned when others do not follow up.'},
+  27: {answers:['A'], category:'Validity', note:'Strong denial of ever delaying a tedious task may indicate impression management.'},
+  32: {answers:['C','D'], category:'Accountability', note:'Response shifts responsibility for a prepared error to the approver.'},
+  36: {answers:['C','D'], category:'Control Discipline', note:'Response suggests checklist controls can be skipped once a process feels familiar.'},
+  38: {answers:['C','D'], category:'Coachability', note:'Response dismisses questions from outside accounting rather than considering that the coding may need review.'},
+  41: {answers:['C','D'], category:'Validity', note:'Absolute claim of never being even one minute late may indicate impression management.'},
+  44: {answers:['C','D'], category:'Conflict of Interest', note:'Response accepts keeping a vendor gift card.'},
+  49: {answers:['C','D'], category:'Teamwork', note:'Response favors completing shared work unilaterally rather than resolving disagreement.'},
+  55: {answers:['A'], category:'Validity', note:'Strong denial of ever being irritated with a coworker over something minor may indicate impression management.'},
+
+  3:  {answers:['C'], category:'AP Controls', note:'Would pay an invoice above authorization without revised support.'},
+  6:  {answers:['C','D'], category:'AP Integrity', note:'Would conceal or unilaterally offset a duplicate vendor payment rather than report and correct it promptly.'},
+  9:  {answers:['B','C'], category:'Payroll Accountability', note:'Response either delays the correction or shifts emphasis away from ownership of the export error.'},
+  13: {answers:['D'], category:'Follow-Through', note:'Would allow an unresolved employee commitment to lapse because the employee did not follow up.'},
+  16: {answers:['A','D'], category:'Refund Controls', note:'Would use an unverified address or delay a time-sensitive refund rather than resolve the discrepancy promptly.'},
+  18: {answers:['A'], category:'Coachability', note:'Dismisses a junior employee’s potentially valid accounting correction based on seniority.'},
+  20: {answers:['C','D'], category:'Fraud / Vendor Controls', note:'Would omit or suppress the fact that a fraudulent bank-change process had already been started.'},
+  23: {answers:['A','C'], category:'Professional Conduct', note:'Would alter processing priority or communication treatment because a patient was rude.'},
+  25: {answers:['A','C'], category:'Reconciliation Integrity', note:'Would characterize an unexplained difference without evidence or plug it to expense solely to make the reconciliation tie.'},
+  28: {answers:['B'], category:'Revenue Reconciliation', note:'Would post an adjusting entry before investigating the underlying cash-versus-billing difference.'},
+  30: {answers:['A','B'], category:'Control Discipline', note:'Would self-create an exception to a newly established receiving-confirmation control.'},
+  33: {answers:['B','C'], category:'Ownership / Reconciliation', note:'Would clear unsupported transactions from merchant names alone or leave an inherited backlog untouched until assigned.'},
+  35: {answers:['A','B'], category:'Expense Integrity', note:'Would conceal or delay proper classification of a known personal card charge.'},
+  37: {answers:['A','D'], category:'Prioritization / Escalation', note:'Would attempt to absorb conflicting critical deadlines without timely escalation.'},
+  39: {answers:['A','D'], category:'Payroll Controls', note:'Would send a clearly abnormal payroll record forward without verification or alter hours without support.'},
+  42: {answers:['D'], category:'Reliability / Escalation', note:'Would let a known payroll commitment slip rather than surface the conflict to the Accounting Manager.'},
+  45: {answers:['C'], category:'Professional Conduct', note:'Escalates a new employee based on a generalized negative assumption rather than first resolving the training issue.'},
+  47: {answers:['A'], category:'Payroll Compliance', note:'Would delay a garnishment requirement past the next payroll solely because the primary owner is unavailable.'},
+  50: {answers:['B'], category:'Process Improvement', note:'Would retain a confusing form because it had already been approved rather than evaluate user feedback.'},
+  52: {answers:['C','D'], category:'Team Accountability', note:'Would either ignore a payroll control weakness or escalate it as a criticism of the coworker instead of addressing the process.'},
+  54: {answers:['D'], category:'Team Reliability', note:'Would seek exemption from an evenly shared year-end coverage obligation based on prior effort.'},
+  56: {answers:['A','C'], category:'Safety', note:'Would bypass the required lifting control to save time.'},
+  57: {answers:['B','C'], category:'Payroll Confidentiality', note:'Would disclose or indirectly spread confidential garnishment information.'},
+  58: {answers:['A','D'], category:'Accountability / Reconciliation', note:'Would defend or rationalize a known reconciliation error instead of owning and correcting the process.'},
+  59: {answers:['B','C'], category:'Year-End Readiness', note:'Would defer a known large W-9 backlog despite a foreseeable 1099 deadline.'},
+  60: {answers:['A','C'], category:'Outstanding Checks', note:'Would either reverse an aged check without investigation or leave it unresolved indefinitely.'}
+};
+
+function getFlags() {
+  const flags = [];
+  Object.entries(RED_FLAG_RULES).forEach(([idText, rule]) => {
+    const id = Number(idText);
+    const selected = ans[id];
+    if (!selected || !rule.answers.includes(selected)) return;
+    flags.push({
+      id,
+      question: getQuestionText(id),
+      answerCode: selected,
+      response: getFullAnswerText(id),
+      category: rule.category,
+      note: rule.note
+    });
+  });
+  return flags.sort((a,b) => a.id - b.id);
+}
+
+function excelSafeText(value, maxLength = 30000) {
+  return String(value || '')
+    .replace(/\r\n/g, '\n')
+    .replace(/\r/g, '\n')
+    .replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g, '')
+    .replace(/[⚠✓→—–]/g, '-')
+    .replace(/[“”]/g, '"')
+    .replace(/[‘’]/g, "'")
+    .replace(/[\t ]+/g, ' ')
+    .substring(0, maxLength);
+}
+
 function buildResponseDetail() {
   return ITEMS.map(q => [
     'Item ' + q.n,
     'Question: ' + q.q,
     'Candidate Response: ' + getFullAnswerText(q.n)
+  ].join('\n')).join('\n\n');
+}
+
+function buildRedFlagDetail(flags) {
+  if (!flags.length) return 'None';
+  return flags.map((f,i) => [
+    'Red Flag ' + (i + 1) + ' - Item ' + f.id,
+    'Category: ' + f.category,
+    'Question: ' + f.question,
+    'Candidate Response: ' + f.response,
+    'Recruiter Note: ' + f.note
   ].join('\n')).join('\n\n');
 }
 
@@ -335,7 +422,10 @@ function buildCompactAnswers() {
 
 function buildSubmissionPayload() {
   const fullResponses = buildResponseDetail();
+  const flags = getFlags();
+  const redFlagDetail = buildRedFlagDetail(flags);
   const durationMinutes = Math.round((Date.now() - t0) / 60000);
+  const submittedAt = new Date().toISOString();
 
   const report = [
     '=== Staff Accountant Assessment ===',
@@ -347,34 +437,57 @@ function buildSubmissionPayload() {
     'Completion Date: ' + cand.completionDate,
     'Duration: ' + durationMinutes + ' minutes',
     '',
-    '--- ASSESSMENT RESPONSES ---',
+    'RED FLAG COUNT: ' + flags.length,
+    '',
+    '--- RED FLAG RESPONSES ---',
+    redFlagDetail,
+    '',
+    '--- ALL ASSESSMENT RESPONSES ---',
     fullResponses,
     '',
     '--- COMPACT ANSWER KEY ---',
     buildCompactAnswers(),
     '',
     'Assessment: ' + ASSESSMENT_VERSION,
-    'NW Ambulance — Talent Acquisition · Confidential'
+    'NW Ambulance - Talent Acquisition - Confidential'
   ].join('\n');
 
+  // Mirrors the production red-flags-to-Excel pattern:
+  // serialize the actual flags array into a safe top-level redFlagResponses field.
+  const safeRedFlagResponses = excelSafeText(JSON.stringify(flags), 12000);
+  const safeReport = "'" + excelSafeText(report, 30000);
+
   return {
+    completionDate: submittedAt,
+    email: cand.email,
     firstName: cand.firstName,
     lastName: cand.lastName,
-    email: cand.email,
+    phone: cand.phone,
     position: cand.position,
     assessmentType: ASSESSMENT_TYPE,
-    score: '',
-    recommendation: '',
-    redFlags: '',
-    redFlagResponses: fullResponses,
-    completionDate: cand.completionDate,
-    report: report,
-    phone: cand.phone,
-    fullReport: report,
     assessmentVersion: ASSESSMENT_VERSION,
-    durationMinutes: durationMinutes.toString(),
+    score: '',
+    compositeScore: '',
+    recommendation: '',
+    riskProfile: '',
+    redFlags: String(flags.length),
+    redFlagCount: String(flags.length),
+    validityConcernCount: String(flags.filter(f => f.category === 'Validity').length),
+    redFlagResponses: safeRedFlagResponses,
+    workableComment: excelSafeText(redFlagDetail, 12000),
+    report: safeReport,
+    fullReport: safeReport,
+    durationMinutes: String(durationMinutes),
     compactAnswers: buildCompactAnswers(),
-    rawAnswers: ans
+    rawAnswers: ans,
+    payloadJson: excelSafeText(JSON.stringify({
+      assessmentType: ASSESSMENT_TYPE,
+      assessmentVersion: ASSESSMENT_VERSION,
+      candidate: cand,
+      flagCount: flags.length,
+      flags,
+      submittedAt
+    }), 30000)
   };
 }
 
