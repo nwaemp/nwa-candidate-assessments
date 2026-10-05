@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Staff Accountant — Professional Judgment &amp; Work Scenarios</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,500&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+
+:root {
+  --bg: #f7f5f0;
+  --surface: #ffffff;
+  --ink: #1c1a17;
+  --ink2: #3a3733;
+  --muted: #7a7872;
+  --border: rgba(28,26,23,0.1);
+  --border-hi: rgba(28,26,23,0.2);
+  --navy: #1b2d4a;
+  --navy-light: #243d62;
+  --gold: #b8860b;
+  --gold-light: #d4a017;
+  --gold-bg: rgba(184,134,11,0.08);
+  --gold-border: rgba(184,134,11,0.25);
+  --green: #2d6a3f;
+  --green-bg: rgba(45,106,63,0.1);
+  --green-border: rgba(45,106,63,0.3);
+  --amber: #9a5a00;
+  --amber-bg: rgba(154,90,0,0.1);
+  --amber-border: rgba(154,90,0,0.3);
+  --red: #8b1a1a;
+  --red-bg: rgba(139,26,26,0.08);
+  --red-border: rgba(139,26,26,0.25);
+  --r: 6px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'IBM Plex Sans',sans-serif;background:var(--bg);color:var(--ink);min-height:100vh;font-size:15px;line-height:1.65}
+body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(28,26,23,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(28,26,23,0.025) 1px,transparent 1px);background-size:48px 48px;pointer-events:none;z-index:0}
+
+
+.hdr{background:var(--navy);border-bottom:2px solid var(--gold);padding:0 40px;height:60px;display:flex;align-items:center;gap:16px;position:sticky;top:0;z-index:100}
+.hdr-logo{width:32px;height:32px;background:var(--gold);border-radius:4px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.hdr-logo span{font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:500;color:var(--navy);letter-spacing:0.02em}
+.hdr-title{font-size:13px;font-weight:500;color:#e8e4da;letter-spacing:0.01em}
+.hdr-title small{display:block;font-size:10px;font-weight:400;color:rgba(232,228,218,0.5);letter-spacing:0.06em;text-transform:uppercase;margin-top:1px}
+.hdr-right{margin-left:auto;display:flex;align-items:center;gap:12px}
+.prog-pill{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:99px;padding:5px 14px}
+.prog-txt{font-family:'IBM Plex Mono',monospace;font-size:11px;color:rgba(232,228,218,0.6)}
+.prog-outer{width:90px;height:3px;background:rgba(255,255,255,0.12);border-radius:2px;overflow:hidden}
+.prog-inner{height:100%;background:var(--gold-light);border-radius:2px;transition:width .4s ease;width:0%}
+
+
+.main{max-width:760px;margin:0 auto;padding:44px 24px 100px;position:relative;z-index:1}
+
+
+.eyebrow{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--gold);margin-bottom:18px;display:flex;align-items:center;gap:8px}
+.eyebrow::before{content:'';display:inline-block;width:20px;height:1px;background:var(--gold)}
+.welcome-h{font-family:'Playfair Display',serif;font-size:clamp(30px,5vw,50px);font-weight:700;line-height:1.08;letter-spacing:-0.02em;color:var(--ink);margin-bottom:20px}
+.welcome-h em{font-style:italic;color:var(--navy)}
+.welcome-p{font-size:14px;color:var(--muted);max-width:520px;line-height:1.8;margin-bottom:32px}
+.meta-row{display:flex;gap:1px;margin-bottom:36px;max-width:440px}
+.meta-cell{flex:1;background:var(--surface);border:1px solid var(--border);padding:14px 16px}
+.meta-cell:first-child{border-radius:var(--r) 0 0 var(--r)}
+.meta-cell:last-child{border-radius:0 var(--r) var(--r) 0}
+.meta-v{font-family:'Playfair Display',serif;font-size:26px;font-weight:600;color:var(--navy);line-height:1;margin-bottom:3px}
+.meta-l{font-size:10px;letter-spacing:0.06em;text-transform:uppercase;color:var(--muted)}
+
+
+.cand-form{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:22px;margin-bottom:24px;max-width:500px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+.fg{display:flex;flex-direction:column;gap:5px}
+.fg label{font-size:10px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted)}
+.fg input{background:var(--bg);border:1px solid var(--border-hi);border-radius:var(--r);padding:9px 12px;color:var(--ink);font-family:'IBM Plex Sans',sans-serif;font-size:13px;outline:none;transition:border-color .2s}
+.fg input:focus{border-color:var(--navy)}
+.fg input::placeholder{color:rgba(122,120,114,0.4)}
+
+
+.btn-primary{background:var(--navy);color:#e8e4da;border:none;border-radius:var(--r);padding:13px 28px;font-family:'IBM Plex Sans',sans-serif;font-size:13px;font-weight:600;letter-spacing:0.04em;cursor:pointer;transition:background .2s,transform .1s;display:inline-flex;align-items:center;gap:8px}
+.btn-primary:hover{background:var(--navy-light)}
+.btn-primary:active{transform:scale(0.98)}
+.btn-ghost{background:transparent;color:var(--muted);border:1px solid var(--border-hi);border-radius:var(--r);padding:11px 22px;font-family:'IBM Plex Sans',sans-serif;font-size:13px;cursor:pointer;transition:all .15s}
+.btn-ghost:hover{border-color:var(--ink2);color:var(--ink)}
+
+
+#screen-assessment{display:none}
+.sec-eye{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:var(--gold);margin-bottom:6px}
+.sec-h{font-family:'Playfair Display',serif;font-size:22px;font-weight:600;color:var(--ink);margin-bottom:3px}
+.sec-badge{display:inline-block;font-size:10px;font-weight:600;letter-spacing:0.07em;text-transform:uppercase;padding:3px 11px;border-radius:99px;margin-bottom:22px}
+.badge-likert{background:var(--gold-bg);color:var(--gold);border:1px solid var(--gold-border)}
+.badge-ems{background:rgba(139,26,26,0.12);color:#8B1A1A;border:1px solid rgba(139,26,26,0.3)}
+.badge-know{background:rgba(27,45,74,0.08);color:var(--navy);border:1px solid rgba(27,45,74,0.2)}
+.badge-disc{background:rgba(45,106,63,0.1);color:var(--green);border:1px solid rgba(45,106,63,0.3)}
+.badge-trade{background:var(--red-bg);color:var(--red);border:1px solid var(--red-border)}
+
+
+.q-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:22px 24px;margin-bottom:10px;transition:border-color .2s}
+.q-card.answered{border-color:var(--gold-border)}
+.q-num{font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-bottom:7px}
+.q-text{font-size:15px;line-height:1.6;color:var(--ink);margin-bottom:16px}
+.q-context{background:rgba(27,45,74,0.05);border-left:3px solid var(--navy);padding:10px 14px;font-size:13px;color:var(--navy-light);line-height:1.65;margin-bottom:14px;border-radius:0 var(--r) var(--r) 0}
+
+
+.likert-wrap{display:flex;gap:5px;flex-wrap:wrap}
+.l-opt{flex:1 1 0;min-width:80px;background:var(--bg);border:1px solid var(--border);border-radius:var(--r);padding:9px 6px;text-align:center;cursor:pointer;font-size:11px;color:var(--muted);line-height:1.3;transition:all .15s;user-select:none}
+.l-opt:hover{background:var(--gold-bg);border-color:var(--gold-border);color:var(--ink)}
+.l-opt.selected{background:var(--gold-bg);border-color:var(--gold-border);color:var(--ink);font-weight:500}
+.likert-ends{display:flex;justify-content:space-between;font-size:10px;color:var(--muted);margin-top:5px;padding:0 2px}
+
+
+.opts{display:flex;flex-direction:column;gap:6px}
+.opt-radio{display:none}
+.opt-label{display:flex;align-items:flex-start;gap:12px;padding:11px 14px;border:1px solid var(--border);border-radius:var(--r);cursor:pointer;transition:all .15s;font-size:13px;color:var(--muted);line-height:1.5;user-select:none}
+.opt-label:hover{background:var(--gold-bg);border-color:var(--gold-border);color:var(--ink)}
+.opt-radio:checked+.opt-label{background:var(--gold-bg);border-color:var(--gold-border);color:var(--ink);font-weight:500}
+.opt-key{flex-shrink:0;width:22px;height:22px;border-radius:50%;border:1.5px solid currentColor;display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:500;margin-top:1px}
+
+
+.q-nav{display:flex;justify-content:space-between;align-items:center;margin-top:28px;padding-top:22px;border-top:1px solid var(--border)}
+.nav-info{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--muted)}
+.nav-btns{display:flex;gap:10px}
+
+@media(max-width:540px){
+  .hdr{padding:0 14px}
+  .main{padding:24px 14px 80px}
+  .form-grid,{grid-template-columns:1fr}
+  .meta-row{flex-wrap:wrap}
+  .prog-pill{display:none}
+}
+@media print{
+  body::before{display:none}
+  .hdr{background:#1b2d4a}
+  .btn-primary,.btn-ghost,.export-row,{display:none!important}
+}
+
+.likert-wrap .l-opt{min-width:96px}
+.l-opt.selected{background:var(--navy)!important;border-color:var(--navy)!important;color:#fff!important;font-weight:600}
+.opt-radio:checked+.opt-label{border-color:var(--navy)!important;box-shadow:inset 3px 0 0 var(--navy)}
+#screen-done{display:none}
+.done-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:34px;text-align:center;margin-bottom:20px}
+.code-box{width:100%;min-height:110px;background:var(--bg);border:1px solid var(--border-hi);border-radius:var(--r);padding:12px;font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--ink);word-break:break-all;resize:none;margin:14px 0 10px}
+.err{color:var(--red);font-size:12px;margin-top:10px;min-height:16px}
+.q-card.missing{border-color:var(--red-border);background:rgba(139,26,26,0.03)}
+
+#screen-thankyou{display:none}
+.thank-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:42px 34px;text-align:center;margin-top:40px}
+.thank-icon{width:54px;height:54px;border-radius:50%;background:var(--green-bg);border:1px solid var(--green-border);display:flex;align-items:center;justify-content:center;margin:0 auto 18px;color:var(--green);font-size:26px}
+.thank-h{font-family:'Playfair Display',serif;font-size:32px;font-weight:700;color:var(--ink);margin-bottom:10px}
+.thank-p{font-size:14px;color:var(--muted);line-height:1.7;max-width:520px;margin:0 auto}
+.submit-error{display:none;margin-top:18px;background:var(--red-bg);border:1px solid var(--red-border);color:var(--red);border-radius:var(--r);padding:12px 14px;font-size:12px;line-height:1.5;text-align:left}
+
+</style>
+</head>
+<body>
+<header class="hdr">
+  <div class="hdr-logo"><span>NWA</span></div>
+  <div class="hdr-title">Staff Accountant<small>Professional Judgment &amp; Work Scenarios</small></div>
+  <div class="hdr-right" id="hdr-right" style="display:none">
+    <div class="prog-pill"><span class="prog-txt" id="prog-txt">0 / 60</span>
+      <div class="prog-outer"><div class="prog-inner" id="prog-bar"></div></div></div>
+  </div>
+</header>
+<main class="main">
+
+<div id="screen-welcome">
+  <div class="eyebrow">Talent Acquisition &middot; NW Ambulance</div>
+  <h1 class="welcome-h">Staff Accountant<br><em>Professional Judgment</em><br>&amp; Work Scenarios</h1>
+  <p class="welcome-p">Some items are statements: choose the response that best describes you. Others describe a situation: choose the response closest to what you would actually do, not what you think you are expected to do. Several responses may seem reasonable. Pick the one you would choose.</p>
+  <div class="meta-row">
+    <div class="meta-cell"><div class="meta-v">60</div><div class="meta-l">Items</div></div>
+    <div class="meta-cell"><div class="meta-v">6</div><div class="meta-l">Parts</div></div>
+    <div class="meta-cell"><div class="meta-v">15</div><div class="meta-l">Minutes</div></div>
+  </div>
+  <div class="cand-form">
+    <div class="form-grid">
+      <div class="fg"><label>First Name *</label><input type="text" id="i-fn" placeholder="First"></div>
+      <div class="fg"><label>Last Name *</label><input type="text" id="i-ln" placeholder="Last"></div>
+    </div>
+    <div class="form-grid">
+      <div class="fg"><label>Email *</label><input type="email" id="i-em" placeholder="email@domain.com"></div>
+      <div class="fg"><label>Phone</label><input type="tel" id="i-ph" placeholder="(555) 000-0000"></div>
+    </div>
+    <button class="btn-primary" onclick="start()">Begin &rarr;</button>
+    <div class="err" id="w-err"></div>
+  </div>
+</div>
+
+<div id="screen-assessment">
+  <div class="sec-eye" id="sec-eye">Part 1 of 6</div>
+  <div class="sec-h" id="sec-h">Items 1&ndash;10</div>
+  <div style="height:18px"></div>
+  <div id="q-container"></div>
+  <div class="q-nav">
+    <span class="nav-info" id="nav-info"></span>
+    <div class="nav-btns">
+      <button class="btn-ghost" id="btn-prev" onclick="prev()" style="display:none">&larr; Back</button>
+      <button class="btn-primary" id="btn-next" onclick="next()">Next Part &rarr;</button>
+    </div>
+  </div>
+  <div class="err" id="a-err" style="text-align:right"></div>
+</div>
+
+<div id="screen-thankyou">
+  <div class="thank-card">
+    <div class="thank-icon">✓</div>
+    <h2 class="thank-h">Assessment Submitted</h2>
+    <p class="thank-p">Your responses have been received. The hiring team will review your assessment as part of the candidate review process.</p>
+    <div class="submit-error" id="submit-error"></div>
+  </div>
+</div>
+
+</main>
+<script>
+
+const FLOW_URL = "https://defaultb9fe31c2de0742529875da1c500446.c8.environment.api.powerplatform.com:443/powerautomate/automations/direct/cu/07/workflows/731e94479a7c4e819e9a85a06430a716/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=IV9ZvKA6vg_AMA0jCXgc8JVBBfh-3kqklaVdRPVv7_I";
+const ASSESSMENT_TYPE = 'Staff Accountant';
+const ASSESSMENT_VERSION = 'Staff Accountant Professional Judgment & Work Scenarios v1.0';
+
+const ROLE_JS = 'SA2';
+const LIKERT = ['Strongly Disagree','Disagree','Agree','Strongly Agree'];
+const L = ['A','B','C','D'];
+const ITEMS = [{"n": 1, "t": true, "q": "When I hand off a reconciliation or payment run partway through, I write a note of where it stands, even if I expect to be back the next morning."}, {"n": 2, "t": true, "q": "I would not initial a close checklist step as done before actually doing it, even if I was about to do it next."}, {"n": 3, "t": false, "q": "A fuel vendor's invoice is $1,880 higher than its purchase authorization. The fleet manager emails: \"Price went up. Just pay it. We need fuel delivered tomorrow.\" Today's payment run closes in two hours. What do you do?", "o": ["Ask the fleet manager for the price notice or a revised authorization today. Include the invoice if it arrives before cutoff; if not, tell the Accounting Manager.", "Hold the full invoice for next week's run, since differences must be resolved before payment.", "Pay it in full. The fleet manager owns the fuel budget, has confirmed the increase in writing, and a missed delivery would take trucks off the road.", "Include the authorized amount in today's run and hold the $1,880 until the difference is documented."]}, {"n": 4, "t": true, "q": "Receipt and coding requirements should apply to the Controller's company card exactly as they apply to a field crew's card."}, {"n": 5, "t": true, "q": "I am more willing to go an extra step for a vendor or employee who is courteous to me than for one who is rude."}, {"n": 6, "t": false, "q": "After the weekly payment file has been released, you discover you entered one vendor's invoice twice. The vendor was paid $2,140 twice. No one else has noticed, and the vendor's next invoice is due in two weeks. What do you do?", "o": ["Contact the vendor first to arrange a credit, then tell the Accounting Manager once it is confirmed, so you bring her a solution rather than a problem.", "Tell the Accounting Manager today and contact the vendor about a refund or credit.", "Short-pay the vendor's next invoice by $2,140 and note the offset in the vendor file.", "Do nothing for now. Most vendors apply overpayments as a credit on their own, and raising it now reopens a run that was already approved."]}, {"n": 7, "t": true, "q": "When a new control slows my work down, I follow it fully while I make my case for changing it."}, {"n": 8, "t": true, "q": "When several things are due at once, I decide what matters most before starting, rather than working in the order requests arrived."}, {"n": 9, "t": false, "q": "You ran payroll as the backup. Two days later, an EMT calls: her check is $312 short. You find you exported time before one late approval had posted in the scheduling system. The cutoff reminder went out late that week, and the Controller's register review did not catch it either. How do you handle it?", "o": ["Tell the Payroll Manager and Controller what happened, including that you did not confirm all approvals had posted, and propose comparing approval counts to the export before every run.", "Add the missing hours to the next regular payroll without raising the cause. She is paid correctly, and it avoids processing an off-cycle check.", "Explain to the Payroll Manager that the late cutoff reminder and the missed review made this hard to catch, and arrange the correction.", "Arrange an off-cycle correction through the Payroll Manager and keep the explanation brief, since the employee is being made whole."]}, {"n": 10, "t": true, "q": "When I finish my assigned close tasks early, I find the next thing that needs doing before anyone asks."}, {"n": 11, "t": true, "q": "Recording my start time as when I planned to arrive, rather than when I actually arrived, is fine if I make up the minutes later that day."}, {"n": 12, "t": true, "q": "I have never made a data-entry error that I later needed to correct."}, {"n": 13, "t": false, "q": "Last week, a newly hired station supply technician asked why his expense reimbursement was rejected. You told him you would find out and get back to him. The answer turned out to be more involved than expected, and you have not replied. He has not followed up. What do you do?", "o": ["Message him today with what you have found so far, what happens next, and when he will hear from you.", "Ask his station supervisor to pass the answer along, since most of it is a station-level issue.", "Wait until you have the complete answer so you only need to contact him once.", "Let it ride. You have handled enough of these to know rejected reimbursements usually sort themselves out on the next submission."]}, {"n": 14, "t": true, "q": "I would tell a coworker more senior than me that leaving the payroll register open on an unlocked screen is a problem."}, {"n": 15, "t": true, "q": "When I finish my own work and the shared AP inbox still has unassigned items, I pick some up rather than leaving them for whoever gets to them."}, {"n": 16, "t": false, "q": "A patient refund of $85 has a statutory deadline in three days. The address in the billing partner's refund packet does not match the address in the billing system. What do you do?", "o": ["Mail it to the address in the packet; the packet is the authorized document.", "Tell the Accounting Manager the deadline may be missed and ask how she wants it handled.", "Ask the billing partner today to confirm the correct address, then prepare the check as soon as it is confirmed.", "Hold it for the next weekly refund batch so all of this month's address questions can be resolved with the billing partner at once."]}, {"n": 17, "t": true, "q": "Someone with a long record of accurate work has earned some flexibility in how strictly the close calendar applies to them."}, {"n": 18, "t": false, "q": "A community-college intern helping with close tells you, politely, that your prepaid expense schedule spreads a software contract over 12 months, but the contract term is 18 months. How do you respond?", "o": ["Thank her, and explain that you built that schedule and review it every month, so an error that size is very unlikely.", "Tell her you will look, and suggest that next time she raise it as a question rather than a correction.", "Thank her, pull the contract, and correct the schedule if she is right.", "Check it later on your own and fix it if needed; there is no reason to make a point of it with an intern."]}, {"n": 19, "t": true, "q": "If a coworker asked me to check whether someone they know is owed a patient refund, I would decline, even if the answer seemed harmless."}, {"n": 20, "t": false, "q": "A vendor emails new bank details from what looks like their usual address. You begin the vendor-file change, then stop and call the number on the vendor's W-9 instead of the one in the email. The vendor never sent it, and nothing was paid. The Accounting Manager is already frustrated about AP delays this week. What do you do?", "o": ["Forward the email to IT as phishing. You know this vendor's payment history well enough that you would have caught it before any payment went out.", "Report it to the Accounting Manager in full, including that you started the change before calling.", "Delete the email and move on; nothing was paid, and the callback worked as intended.", "Report the fraud attempt, but omit that you started the change; the control did its job."]}, {"n": 21, "t": true, "q": "If I prepared a reconciliation or payroll register incorrectly, I would rather find the error and say so myself than wait for the reviewer to catch it."}, {"n": 22, "t": true, "q": "When a payment run is due within the hour and something won't tie, I push ahead and sort out the details afterward."}, {"n": 23, "t": false, "q": "A patient is transferred to you. He is rude and swearing, demands his $640 refund, and says the company rips people off. His packet is complete, but it is third in your queue behind two refunds with earlier deadlines. What do you do?", "o": ["Process his refund first so he stops calling; that saves everyone time.", "Tell him you won't continue while he is swearing, and transfer him back to the billing partner.", "Process it in order, and since he has made his view of the company clear, send any further updates by mail only.", "Stay courteous, tell him where his refund stands and when to expect it, and process it in its normal order."]}, {"n": 24, "t": true, "q": "If no one follows up on something I said I would do, it is reasonable to assume it is no longer urgent."}, {"n": 25, "t": false, "q": "It is day 5 of close. Your cash reconciliation is off by $38.12, and the workpaper is due at noon. You have spent an hour and cannot find the cause. What do you do?", "o": ["Submit on time and label it a timing difference. In your experience, small differences like this are almost always timing and clear next month.", "Submit on time, showing the $38.12 as an unexplained item on the difference log with what you have already ruled out.", "Record the $38.12 to miscellaneous expense with a note that it is immaterial, so the workpaper ties; it is far below any audit threshold.", "Ask the Accounting Manager for a few more hours and submit once it ties."]}, {"n": 26, "t": true, "q": "When a reviewer's comments on my reconciliation are mostly about formatting, I address them as carefully as I would a correction to a number."}, {"n": 27, "t": true, "q": "I have occasionally put off a tedious task longer than I should have."}, {"n": 28, "t": false, "q": "June bank deposits are $11,400 lower than the cash the billing partner reports posting. GL revenue agrees with the billing partner's report. What do you do first?", "o": ["Compare the billing partner's deposit detail to the bank by date, looking for a deposit that landed in July or a posting with no matching deposit.", "Prepare an entry reducing revenue by $11,400 to match the bank while you investigate.", "Ask the billing partner to explain the difference.", "Send the Accounting Manager the $11,400 variance so she can decide how to pursue it."]}, {"n": 29, "t": true, "q": "Scanning and filing paper card receipts should be finished by whoever collected them, not by accounting."}, {"n": 30, "t": false, "q": "The Accounting Manager now requires a receiving confirmation attached to every invoice before entry. You have six years of AP experience and know which recurring vendors never have discrepancies. What do you do?", "o": ["Follow it for new and irregular vendors, and skip it for recurring vendors you know well; your experience is what makes that safe.", "Follow it, and ask whether it needs to apply to you, since it seems designed for staff still learning the vendor base.", "Follow it for every invoice, and propose a written exception list for fixed-fee recurring vendors for her to approve.", "Follow it as written and say nothing; it is her process."]}, {"n": 31, "t": true, "q": "Even when the payment run is due within the hour, I would hold a vendor banking change until the callback is complete."}, {"n": 32, "t": true, "q": "Because someone else approves every payment run, an error that gets through approval is as much the approver's responsibility as mine."}, {"n": 33, "t": false, "q": "You take over card reconciliation from the outsourced firm and find three months of statements with 60 uncoded transactions and no receipts. No one has assigned the cleanup, and it is not on your close calendar. What do you do?", "o": ["Tell the Accounting Manager you will work the backlog alongside current months, and give her a completion date.", "Code the backlog from the merchant names to clear it quickly. With your AP experience, most charges are obvious from the merchant alone.", "Keep current months clean and hold off on the backlog until someone assigns it, since the outsourced firm left it.", "Ask the Accounting Manager to have the outsourced firm finish it, since it was their work."]}, {"n": 34, "t": true, "q": "If I can see days ahead that I will miss a close-calendar date, I tell the Accounting Manager then, not on the day."}, {"n": 35, "t": false, "q": "While coding card transactions, you find a $186 charge on a station supervisor's card for a personal gaming headset. He says he used the wrong card, will pay it back this week, and asks you to code it to station supplies so it doesn't become \"a whole thing.\" What do you do?", "o": ["Code it to station supplies as asked; once he repays it, the company is whole.", "Hold the transaction uncoded until he repays, then code the charge and repayment together so they net to zero.", "Code it as a personal charge owed by the employee, and tell him you are required to flag it to the Accounting Manager.", "Tell him you can't code it as supplies, and let him report it to his manager himself."]}, {"n": 36, "t": true, "q": "Once I know a process well, such as a payment run or refund check, some of its checklist steps become formalities I can safely skip."}, {"n": 37, "t": false, "q": "It is 10 a.m. Thursday. The payment run is due for approval at 2 p.m., payroll must be funded by 4 p.m., and two balance sheet reconciliations are due by end of day. The payroll export shows 14 employees with no hours, and the Payroll Manager is on a flight until evening. What do you do?", "o": ["Handle all three yourself. You have worked close weeks like this before, and bringing someone else in usually costs more time than it saves.", "Tell the Accounting Manager now what is due, what is wrong with payroll, and what you need; then work payroll first.", "Finish the payment run first since it is due soonest, then turn to payroll.", "Work payroll first, and hold off on telling anyone about the other deadlines until you know how long payroll will take."]}, {"n": 38, "t": true, "q": "When someone outside accounting questions how I coded an invoice, it usually means they don't understand the chart of accounts."}, {"n": 39, "t": false, "q": "Running payroll as backup, you see one paramedic with 112 hours in a single week in the scheduling-system export. Everything else looks normal. The Controller's review is in an hour. What do you do?", "o": ["Send it as is; the Controller reviews every register and will catch it if it is wrong.", "Send it through, highlighting the line for the Controller with a note.", "Pull that employee's time detail and confirm with the station supervisor or Payroll Manager before the register goes to review.", "Reduce the hours to the paramedic's normal schedule so the register isn't inflated, and correct it next cycle if the hours turn out to be real."]}, {"n": 40, "t": true, "q": "I give the same care to an $85 refund for a patient with a collections history as to a $4,000 refund owed to an insurance company."}, {"n": 41, "t": true, "q": "I have never been even a minute late to work."}, {"n": 42, "t": false, "q": "You agreed to run Thursday's payroll export so the Payroll Manager can attend an off-site conference. On Wednesday afternoon, the Accounting Manager asks you to spend Thursday morning pulling support for the CPA firm. What do you do?", "o": ["Come in early Thursday to run payroll, then do the CPA request, without raising the conflict.", "Ask the Payroll Manager to run the export remotely from the conference.", "Tell the Accounting Manager about your payroll commitment and ask which deadline can move.", "Start on the CPA request since it comes from your manager, and run payroll when it is done; there is usually slack before the bank cutoff."]}, {"n": 43, "t": true, "q": "I expect my own expense receipts to be held to the same standard I apply when coding everyone else's."}, {"n": 44, "t": true, "q": "If a vendor sent me a gift card as thanks for resolving their payment, keeping it would be harmless as long as I had not done anything special for them."}, {"n": 45, "t": false, "q": "A new EMT, three weeks into the job, owes four missing card receipts. When you email her, she replies sharply that nobody trained her on receipts. The receipt guide was sent to her during onboarding. What do you do?", "o": ["Reply briefly with the steps, offer a five-minute call, and give her a due date.", "Tell her the guide was sent during onboarding, so training isn't the issue, and ask for the receipts by Friday.", "Escalate to her supervisor. You have run card programs long enough to know that new hires who push back early keep pushing back.", "Forward the guide again and copy her station supervisor."]}, {"n": 46, "t": true, "q": "After a difficult call, I re-check the last thing I was working on before I continue."}, {"n": 47, "t": false, "q": "A new garnishment order arrives requiring withholding to begin with the next pay date, which is processed tomorrow. You are the designated backup. The Payroll Manager, who normally handles these, is at an off-site conference until Monday. What do you do?", "o": ["Wait until Monday so the Payroll Manager can set it up the way he prefers.", "Set it up for tomorrow's cycle using the garnishment procedure, and send the Payroll Manager a complete note.", "Call the Payroll Manager at the conference and have him walk you through it before setting it up.", "Ask the Controller to decide whether it should start this cycle or next."]}, {"n": 48, "t": true, "q": "When a close deadline slips because the billing partner's report came in late, I still consider the slip mine to explain."}, {"n": 49, "t": true, "q": "When a coworker and I disagree about how to handle part of a shared task, I would rather finish my half my way than argue about it."}, {"n": 50, "t": false, "q": "You designed the new card-receipt form. The front-desk receptionist, who collects receipts from crews, tells you the form is confusing and crews are leaving it blank. What do you do?", "o": ["Explain the reason for each field so she can walk crews through it.", "Keep the form as is. The Accounting Manager approved it, and changing it now would confuse people more.", "Thank her and send crews a reminder on how to complete it.", "Ask her what crews get stuck on and revise the form based on what she is seeing."]}, {"n": 51, "t": true, "q": "If I caught myself about to mail a patient refund to an outdated address, I would still report it so the address could be fixed at the source."}, {"n": 52, "t": false, "q": "The Payroll Manager ran last cycle's payroll. You notice a dispatcher was paid $280 short because time was exported before one late approval posted in the scheduling system. The cutoff reminder went out late that week. How do you handle it?", "o": ["Assume the late cutoff reminder caused it, help him correct it, and mention the timing gap to the Accounting Manager.", "Raise it with him directly and suggest adding an approval-count check before every export, for both of you.", "Point it out to him in passing and let it go from there; it is his process and his call.", "Tell the Accounting Manager that the Payroll Manager has been rushing lately and missing details."]}, {"n": 53, "t": true, "q": "I keep track of what I have told people I would do and close those items without being reminded."}, {"n": 54, "t": false, "q": "For year-end, the Accounting Manager asks each of the four team members to work one Saturday. The Payroll Manager has already taken the date you wanted. The remaining date conflicts with plans you made months ago. What do you do?", "o": ["Ask the Payroll Manager whether he would trade dates, and take the remaining Saturday if he can't.", "Take the remaining date, but ask to work a shorter day since you are giving up plans the others didn't have to.", "Offer to do your share on weeknights instead, since the work gets done either way.", "Ask to be excused this year, since you have been the one staying late on payment-run weeks."]}, {"n": 55, "t": true, "q": "There have been times I was irritated with a coworker over something minor."}, {"n": 56, "t": false, "q": "The CPA firm arrives in an hour. You and a billing clerk in his first month are moving archive boxes of about 40 pounds each. Policy requires the hand truck for anything over 20 pounds, and it is in the other building. He starts carrying boxes alone to save time and tells you to do the same. What do you do?", "o": ["Carry them yourself using careful lifting technique. You have moved plenty of boxes and know how to lift properly.", "Repack the boxes into lighter loads so each is under the limit, and let him handle his own lifting.", "Help him with two-person carries so neither of you lifts one alone, and skip the hand truck.", "Ask him to stop, get the hand truck, and let the CPA firm know the boxes will be about 20 minutes late."]}, {"n": 57, "t": false, "q": "A billing-office coworker you are friendly with asks, \"Is it true Dana in dispatch has a wage garnishment?\" As the garnishment backup, you know the answer. What do you say?", "o": ["Say you don't know anything about it; that is simpler than explaining why you can't answer.", "Confirm it quietly, since she seems concerned rather than gossipy, and ask her to keep it to herself.", "Tell her you can't discuss payroll, then let Dana know people are asking about her.", "Tell her you can't discuss anyone's payroll."]}, {"n": 58, "t": false, "q": "Reviewing your revenue reconciliation, the Accounting Manager points out that you explained a $9,600 difference as billing-partner timing. It was actually a deposit you recorded in the wrong month. How do you respond?", "o": ["Acknowledge it, but note that the billing partner's report dates are inconsistent, which is what led you there.", "Acknowledge it, correct the workpaper, and add a step to tie deposits by date before attributing a difference to timing.", "Correct it and thank her. It was a one-off in a reconciliation that is otherwise sound, so there is no need to change how you approach it.", "Explain that you have done many of these, and timing is the cause nine times out of ten, so it was a reasonable call."]}, {"n": 59, "t": false, "q": "It is September. About 300 of the 900 vendors in the file are missing W-9s, and the 1099 file is due in January. Nobody has asked you to start. What do you do?", "o": ["Flag the gap to the Accounting Manager and ask how she wants it prioritized.", "Plan a concentrated push in December. You have been through 1099 season before and know it can be done in a few long weeks.", "Wait for the year-end close calendar so the work is scheduled and approved.", "Start requesting W-9s now in weekly batches, beginning with vendors likely to need a 1099."]}, {"n": 60, "t": false, "q": "Your outstanding check list includes a $430 vendor check issued 14 months ago. The vendor is still active. What do you do?", "o": ["Void it and prepare an entry reversing the expense. A check that old is unlikely ever to clear, and carrying it distorts the cash balance.", "Flag it to the Accounting Manager as aged and let her decide.", "Keep it on the list; if it is ever cashed, the bank will clear it.", "Contact the vendor to confirm whether they received it, then pursue a reissue or unclaimed-property handling based on the answer."]}];
+const PER = 10, TOTAL = ITEMS.length, PARTS = Math.ceil(TOTAL / PER);
+let part = 0, ans = {}, cand = {}, t0 = 0;
+
+function start() {
+  const fn = v('i-fn'), ln = v('i-ln'), em = v('i-em');
+  if (!fn || !ln || !em || em.indexOf('@') < 1) { document.getElementById('w-err').textContent = 'Please enter your first name, last name, and a valid email.'; return; }
+  cand = {
+    firstName: fn,
+    lastName: ln,
+    name: fn + ' ' + ln,
+    email: em,
+    phone: v('i-ph'),
+    position: 'Staff Accountant',
+    completionDate: new Date().toISOString().split('T')[0]
+  };
+  t0 = Date.now();
+  show('screen-assessment'); document.getElementById('hdr-right').style.display = 'flex';
+  render();
+}
+function v(id) { return document.getElementById(id).value.trim(); }
+function show(id) { ['screen-welcome','screen-assessment','screen-thankyou'].forEach(s => document.getElementById(s).style.display = s === id ? 'block' : 'none'); }
+function esc(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+function render() {
+  const lo = part * PER, hi = Math.min(TOTAL, lo + PER);
+  document.getElementById('sec-eye').textContent = 'Part ' + (part + 1) + ' of ' + PARTS;
+  document.getElementById('sec-h').textContent = 'Items ' + (lo + 1) + '\u2013' + hi;
+  document.getElementById('a-err').textContent = '';
+  const c = document.getElementById('q-container'); c.innerHTML = '';
+  ITEMS.slice(lo, hi).forEach(q => {
+    const card = document.createElement('div');
+    card.className = 'q-card' + (ans[q.n] ? ' answered' : ''); card.id = 'qc' + q.n;
+    card.innerHTML = '<div class="q-num">Item ' + q.n + ' of ' + TOTAL + '</div><div class="q-text">' + esc(q.q) + '</div>';
+    card.appendChild(q.t ? likert(q) : mcq(q));
+    c.appendChild(card);
+  });
+  document.getElementById('btn-prev').style.display = part > 0 ? 'inline-flex' : 'none';
+  document.getElementById('btn-next').textContent = part === PARTS - 1 ? 'Submit' : 'Next Part \u2192';
+  prog(); window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+function mark(n, letter) { ans[n] = letter; const c = document.getElementById('qc' + n); c.classList.add('answered'); c.classList.remove('missing'); if (!document.querySelector('.q-card.missing')) document.getElementById('a-err').textContent = ''; prog(); }
+function likert(q) {
+  const wrap = document.createElement('div'), lw = document.createElement('div'); lw.className = 'likert-wrap';
+  LIKERT.forEach((lbl, i) => {
+    const o = document.createElement('div'); o.className = 'l-opt' + (ans[q.n] === L[i] ? ' selected' : ''); o.textContent = lbl;
+    o.onclick = () => { lw.querySelectorAll('.l-opt').forEach(x => x.classList.remove('selected')); o.classList.add('selected'); mark(q.n, L[i]); };
+    lw.appendChild(o);
+  });
+  wrap.appendChild(lw); return wrap;
+}
+function mcq(q) {
+  const wrap = document.createElement('div'); wrap.className = 'opts';
+  q.o.forEach((txt, i) => {
+    const id = 'r' + q.n + L[i], r = document.createElement('input');
+    r.type = 'radio'; r.name = 'q' + q.n; r.id = id; r.className = 'opt-radio'; r.checked = ans[q.n] === L[i];
+    r.onchange = () => mark(q.n, L[i]);
+    const lab = document.createElement('label'); lab.htmlFor = id; lab.className = 'opt-label';
+    lab.innerHTML = '<span class="opt-key">' + L[i] + '</span>' + esc(txt);
+    wrap.appendChild(r); wrap.appendChild(lab);
+  });
+  return wrap;
+}
+function prog() {
+  const done = Object.keys(ans).length;
+  document.getElementById('prog-txt').textContent = done + ' / ' + TOTAL;
+  document.getElementById('prog-bar').style.width = Math.round(done / TOTAL * 100) + '%';
+  const lo = part * PER, hi = Math.min(TOTAL, lo + PER);
+  const pd = ITEMS.slice(lo, hi).filter(q => ans[q.n]).length;
+  document.getElementById('nav-info').textContent = pd + ' of ' + (hi - lo) + ' answered';
+}
+function prev() { if (part > 0) { part--; render(); } }
+function next() {
+  const lo = part * PER, hi = Math.min(TOTAL, lo + PER);
+  const miss = ITEMS.slice(lo, hi).filter(q => !ans[q.n]);
+  if (miss.length) {
+    miss.forEach(q => document.getElementById('qc' + q.n).classList.add('missing'));
+    document.getElementById('a-err').textContent = 'Please answer every item in this part (' + miss.length + ' remaining).';
+    document.getElementById('qc' + miss[0].n).scrollIntoView({ behavior: 'smooth', block: 'center' });
+    return;
+  }
+  if (part < PARTS - 1) { part++; render(); } else finish();
+}
+function getQuestionText(n) {
+  const q = ITEMS.find(x => x.n === n);
+  return q ? q.q : '';
+}
+
+function getFullAnswerText(n) {
+  const q = ITEMS.find(x => x.n === n);
+  const a = ans[n];
+  if (!q || !a) return '';
+
+  if (q.t) {
+    const idx = L.indexOf(a);
+    return idx >= 0 ? LIKERT[idx] : a;
+  }
+
+  const idx = L.indexOf(a);
+  return idx >= 0 && q.o && q.o[idx] ? q.o[idx] : a;
+}
+
+function buildResponseDetail() {
+  return ITEMS.map(q => [
+    'Item ' + q.n,
+    'Question: ' + q.q,
+    'Candidate Response: ' + getFullAnswerText(q.n)
+  ].join('\n')).join('\n\n');
+}
+
+function buildCompactAnswers() {
+  const pairs = [];
+  for (let i = 1; i <= TOTAL; i++) pairs.push(i + ':' + ans[i]);
+  return pairs.join('  ');
+}
+
+function buildSubmissionPayload() {
+  const fullResponses = buildResponseDetail();
+  const durationMinutes = Math.round((Date.now() - t0) / 60000);
+
+  const report = [
+    '=== Staff Accountant Assessment ===',
+    '',
+    'Candidate: ' + cand.name,
+    'Email: ' + cand.email,
+    'Phone: ' + (cand.phone || 'N/A'),
+    'Position: Staff Accountant',
+    'Completion Date: ' + cand.completionDate,
+    'Duration: ' + durationMinutes + ' minutes',
+    '',
+    '--- ASSESSMENT RESPONSES ---',
+    fullResponses,
+    '',
+    '--- COMPACT ANSWER KEY ---',
+    buildCompactAnswers(),
+    '',
+    'Assessment: ' + ASSESSMENT_VERSION,
+    'NW Ambulance — Talent Acquisition · Confidential'
+  ].join('\n');
+
+  return {
+    firstName: cand.firstName,
+    lastName: cand.lastName,
+    email: cand.email,
+    position: cand.position,
+    assessmentType: ASSESSMENT_TYPE,
+    score: '',
+    recommendation: '',
+    redFlags: '',
+    redFlagResponses: fullResponses,
+    completionDate: cand.completionDate,
+    report: report,
+    phone: cand.phone,
+    fullReport: report,
+    assessmentVersion: ASSESSMENT_VERSION,
+    durationMinutes: durationMinutes.toString(),
+    compactAnswers: buildCompactAnswers(),
+    rawAnswers: ans
+  };
+}
+
+async function sendToFlow(data) {
+  try {
+    console.log('Staff Accountant assessment payload sent to Power Automate:', data);
+
+    const response = await fetch(FLOW_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+
+    console.log('Power Automate response status:', response.status);
+    return response.ok;
+  } catch (e) {
+    console.error('Staff Accountant assessment submission failed', e);
+    return false;
+  }
+}
+
+async function finish() {
+  const btn = document.getElementById('btn-next');
+  btn.disabled = true;
+  btn.textContent = 'Submitting…';
+
+  const payload = buildSubmissionPayload();
+  const submitted = await sendToFlow(payload);
+
+  document.getElementById('hdr-right').style.display = 'none';
+  show('screen-thankyou');
+
+  if (!submitted) {
+    const e = document.getElementById('submit-error');
+    e.style.display = 'block';
+    e.textContent = 'Submission issue: Power Automate did not confirm receipt. Please notify recruiting that your assessment did not submit successfully.';
+  }
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+window.addEventListener('beforeunload', e => { if (Object.keys(ans).length && document.getElementById('screen-thankyou').style.display !== 'block') { e.preventDefault(); e.returnValue = ''; } });
+</script>
+</body>
+</html>
