@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Staff Accountant — Professional Judgment &amp; Work Scenarios</title>
+<title>Staff Accountant — Character, Conduct &amp; Accounting Judgment Assessment v2.0</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,500&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 
@@ -151,7 +151,7 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 <body>
 <header class="hdr">
   <div class="hdr-logo"><span>NWA</span></div>
-  <div class="hdr-title">Staff Accountant<small>Professional Judgment &amp; Work Scenarios</small></div>
+  <div class="hdr-title">Staff Accountant<small>Character, Conduct &amp; Accounting Judgment</small></div>
   <div class="hdr-right" id="hdr-right" style="display:none">
     <div class="prog-pill"><span class="prog-txt" id="prog-txt">0 / 60</span>
       <div class="prog-outer"><div class="prog-inner" id="prog-bar"></div></div></div>
@@ -211,7 +211,7 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 
 const FLOW_URL = "https://defaultb9fe31c2de0742529875da1c500446.c8.environment.api.powerplatform.com:443/powerautomate/automations/direct/cu/07/workflows/731e94479a7c4e819e9a85a06430a716/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=IV9ZvKA6vg_AMA0jCXgc8JVBBfh-3kqklaVdRPVv7_I";
 const ASSESSMENT_TYPE = 'Staff Accountant';
-const ASSESSMENT_VERSION = 'Staff Accountant Professional Judgment & Work Scenarios v2.0';
+const ASSESSMENT_VERSION = 'Staff Accountant Character, Conduct & Accounting Judgment Assessment v2.0';
 
 const ROLE_JS = 'SA2';
 const LIKERT = ['Strongly Disagree','Disagree','Agree','Strongly Agree'];
@@ -318,9 +318,83 @@ function getFullAnswerText(n) {
   return idx >= 0 && q.o && q.o[idx] ? q.o[idx] : a;
 }
 
-// Explicit Staff Accountant risk key.
-// Likert: A=Strongly Disagree, B=Disagree, C=Agree, D=Strongly Agree.
-// Scenario arrays contain the answer letters that trigger recruiter review.
+// ============================================================
+// STAFF ACCOUNTANT SCORING MODEL
+// Mirrors the production architecture used by the attached role
+// assessment: explicit scoring, category scores, composite,
+// red flags, validity, recruiter report, hidden candidate results.
+// ============================================================
+
+// Five scored job-related categories plus an unscored validity cluster.
+const CATEGORY_BY_ID = {
+  1:'Accuracy', 2:'Controls', 3:'Controls', 4:'Controls', 5:'Professionalism',
+  6:'Controls', 7:'Controls', 8:'Reliability', 9:'Payroll', 10:'Reliability',
+  11:'Controls', 12:'Validity', 13:'Reliability', 14:'Payroll', 15:'Reliability',
+  16:'Payroll', 17:'Controls', 18:'Accuracy', 19:'Payroll', 20:'Controls',
+  21:'Accuracy', 22:'Accuracy', 23:'Professionalism', 24:'Reliability', 25:'Accuracy',
+  26:'Accuracy', 27:'Validity', 28:'Accuracy', 29:'Professionalism', 30:'Controls',
+  31:'Controls', 32:'Controls', 33:'Accuracy', 34:'Reliability', 35:'Controls',
+  36:'Controls', 37:'Reliability', 38:'Accuracy', 39:'Payroll', 40:'Professionalism',
+  41:'Validity', 42:'Reliability', 43:'Controls', 44:'Controls', 45:'Professionalism',
+  46:'Accuracy', 47:'Payroll', 48:'Accuracy', 49:'Professionalism', 50:'Professionalism',
+  51:'Controls', 52:'Payroll', 53:'Reliability', 54:'Reliability', 55:'Validity',
+  56:'Professionalism', 57:'Payroll', 58:'Accuracy', 59:'Reliability', 60:'Accuracy'
+};
+
+const CATEGORY_LABELS = {
+  Controls: 'Integrity & Control Discipline',
+  Accuracy: 'Accuracy & Reconciliation',
+  Reliability: 'Reliability & Follow-Through',
+  Payroll: 'Payroll, Privacy & Compliance',
+  Professionalism: 'Professional Judgment & Teamwork'
+};
+
+const CATEGORY_WEIGHTS = {
+  Controls: 0.25,
+  Accuracy: 0.25,
+  Reliability: 0.20,
+  Payroll: 0.15,
+  Professionalism: 0.15
+};
+
+// Likert items where disagreement is the stronger answer.
+// A=Strongly Disagree, B=Disagree, C=Agree, D=Strongly Agree.
+const REVERSE_LIKERT_IDS = new Set([5,11,17,22,24,29,32,36,38,44,49]);
+
+// Validity items are excluded from category/composite scoring.
+const VALIDITY_IDS = new Set([12,27,41,55]);
+
+// Explicit scenario score maps. Every option is scored 0-5.
+const SCENARIO_SCORES = {
+  3:  {A:5,B:3,C:0,D:4},
+  6:  {A:4,B:5,C:1,D:0},
+  9:  {A:5,B:0,C:2,D:4},
+  13: {A:5,B:3,C:2,D:0},
+  16: {A:1,B:3,C:5,D:0},
+  18: {A:0,B:2,C:5,D:3},
+  20: {A:3,B:5,C:0,D:0},
+  23: {A:0,B:3,C:1,D:5},
+  25: {A:1,B:5,C:0,D:4},
+  28: {A:5,B:0,C:3,D:2},
+  30: {A:0,B:1,C:5,D:4},
+  33: {A:5,B:0,C:0,D:3},
+  35: {A:0,B:1,C:5,D:3},
+  37: {A:1,B:5,C:3,D:0},
+  39: {A:0,B:3,C:5,D:0},
+  42: {A:4,B:2,C:5,D:0},
+  45: {A:5,B:3,C:0,D:2},
+  47: {A:0,B:5,C:3,D:2},
+  50: {A:3,B:0,C:2,D:5},
+  52: {A:3,B:5,C:0,D:0},
+  54: {A:5,B:3,C:4,D:0},
+  56: {A:0,B:3,C:1,D:5},
+  57: {A:3,B:0,C:1,D:5},
+  58: {A:1,B:5,C:3,D:0},
+  59: {A:3,B:0,C:1,D:5},
+  60: {A:0,B:3,C:0,D:5}
+};
+
+// Red flags are separate from scoring.
 const RED_FLAG_RULES = {
   5:  {answers:['C','D'], category:'Professional Conduct', note:'Response suggests service quality may vary based on how courteously the other person behaves.'},
   11: {answers:['C','D'], category:'Timekeeping Integrity', note:'Response accepts recording planned time instead of actual time worked.'},
@@ -365,22 +439,249 @@ const RED_FLAG_RULES = {
   60: {answers:['A','C'], category:'Outstanding Checks', note:'Would either reverse an aged check without investigation or leave it unresolved indefinitely.'}
 };
 
+function getQuestionById(id) {
+  return ITEMS.find(q => q.n === id) || null;
+}
+
+function getQuestionText(id) {
+  const q = getQuestionById(id);
+  return q ? q.q : '';
+}
+
+function getFullAnswerText(id) {
+  const q = getQuestionById(id);
+  const a = ans[id];
+  if (!q || !a) return '';
+
+  if (q.t) {
+    const idx = L.indexOf(a);
+    return idx >= 0 ? LIKERT[idx] : a;
+  }
+
+  const idx = L.indexOf(a);
+  return idx >= 0 && q.o && q.o[idx] ? q.o[idx] : a;
+}
+
+function scoreQuestion(q) {
+  const a = ans[q.n];
+  if (!a) return 0;
+
+  if (VALIDITY_IDS.has(q.n)) return null;
+
+  if (q.t) {
+    const raw = {A:1, B:2, C:4, D:5}[a] || 0;
+    return REVERSE_LIKERT_IDS.has(q.n) ? (6 - raw) : raw;
+  }
+
+  const map = SCENARIO_SCORES[q.n];
+  return map && map[a] !== undefined ? map[a] : 0;
+}
+
+function computeAll() {
+  const sums = {};
+  const maxes = {};
+
+  ITEMS.forEach(q => {
+    const category = CATEGORY_BY_ID[q.n];
+    if (!category || category === 'Validity') return;
+
+    const score = scoreQuestion(q);
+    if (score === null) return;
+
+    if (!sums[category]) {
+      sums[category] = 0;
+      maxes[category] = 0;
+    }
+
+    sums[category] += score;
+    maxes[category] += 5;
+  });
+
+  const categoryScores = {};
+  Object.keys(CATEGORY_WEIGHTS).forEach(category => {
+    categoryScores[category] = maxes[category]
+      ? Math.round((sums[category] / maxes[category]) * 100)
+      : 0;
+  });
+
+  let composite = 0;
+  Object.entries(CATEGORY_WEIGHTS).forEach(([category, weight]) => {
+    composite += (categoryScores[category] || 0) * weight;
+  });
+
+  return {
+    categoryScores,
+    composite: Math.round(composite)
+  };
+}
+
 function getFlags() {
   const flags = [];
+
   Object.entries(RED_FLAG_RULES).forEach(([idText, rule]) => {
     const id = Number(idText);
     const selected = ans[id];
     if (!selected || !rule.answers.includes(selected)) return;
+
     flags.push({
       id,
+      kind: VALIDITY_IDS.has(id) ? 'validity' : 'concern',
+      category: rule.category,
       question: getQuestionText(id),
       answerCode: selected,
       response: getFullAnswerText(id),
-      category: rule.category,
       note: rule.note
     });
   });
+
   return flags.sort((a,b) => a.id - b.id);
+}
+
+function getValidity() {
+  const flags = getFlags().filter(f => f.kind === 'validity');
+  return {
+    count: flags.length,
+    flaggedItems: flags.map(f => f.id),
+    concern: flags.length >= 2
+  };
+}
+
+function getVerdict(composite, categoryScores, flags, validity) {
+  const substantiveFlags = flags.filter(f => f.kind !== 'validity').length;
+
+  if (
+    (categoryScores.Controls || 0) < 60 ||
+    (categoryScores.Accuracy || 0) < 60 ||
+    (categoryScores.Payroll || 0) < 55 ||
+    substantiveFlags >= 8
+  ) {
+    return { label:'Do Not Advance', cls:'vp-no' };
+  }
+
+  if (composite >= 85 && substantiveFlags <= 1 && !validity.concern) {
+    return { label:'Recommended: Hire', cls:'vp-hire' };
+  }
+
+  if (composite >= 75 && substantiveFlags <= 3) {
+    return { label:'Hire with Review', cls:'vp-review' };
+  }
+
+  if (composite >= 65 && substantiveFlags <= 5) {
+    return { label:'Review Further', cls:'vp-review' };
+  }
+
+  return { label:'Do Not Advance', cls:'vp-no' };
+}
+
+function buildAssessmentSummary(verdict, composite, categoryScores, flags, validity) {
+  const substantiveFlags = flags.filter(f => f.kind !== 'validity').length;
+
+  let summary = '';
+
+  if (verdict.label === 'Recommended: Hire') {
+    summary = 'This candidate demonstrates strong accounting control discipline, accuracy, reliability, payroll/compliance judgment, and professional conduct across the assessment.';
+  } else if (verdict.cls === 'vp-review') {
+    summary = 'This candidate shows a generally workable Staff Accountant profile with specific areas that warrant focused review. Use the flagged responses as structured interview and reference-check prompts.';
+  } else {
+    summary = 'This candidate shows material concerns in one or more job-related accounting dimensions. Review the category scores and flagged responses before advancing.';
+  }
+
+  if ((categoryScores.Controls || 0) < 70) {
+    summary += ' Integrity & Control Discipline (' + (categoryScores.Controls || 0) + '%) is below target; probe approval discipline, vendor controls, expense integrity, and willingness to follow documented procedures.';
+  }
+
+  if ((categoryScores.Accuracy || 0) < 70) {
+    summary += ' Accuracy & Reconciliation (' + (categoryScores.Accuracy || 0) + '%) is below target; probe reconciliation ownership, unexplained differences, correction habits, and review response.';
+  }
+
+  if ((categoryScores.Reliability || 0) < 70) {
+    summary += ' Reliability & Follow-Through (' + (categoryScores.Reliability || 0) + '%) warrants review; verify deadline ownership, escalation habits, and follow-through with prior supervisors.';
+  }
+
+  if ((categoryScores.Payroll || 0) < 70) {
+    summary += ' Payroll, Privacy & Compliance (' + (categoryScores.Payroll || 0) + '%) is below target; probe payroll backup procedures, confidentiality, garnishments, refunds, and abnormal-time verification.';
+  }
+
+  if ((categoryScores.Professionalism || 0) < 70) {
+    summary += ' Professional Judgment & Teamwork (' + (categoryScores.Professionalism || 0) + '%) warrants review; probe fairness, coachability, conflict handling, safety, and process-improvement behavior.';
+  }
+
+  if (substantiveFlags > 0) {
+    summary += ' Substantive red flags identified: ' + substantiveFlags + '.';
+  }
+
+  if (validity.count > 0) {
+    summary += ' Validity flags identified: ' + validity.count + '.';
+  }
+
+  if (validity.concern) {
+    summary += ' Multiple validity items were flagged, so interview examples and reference checks should be weighted more heavily.';
+  }
+
+  return summary;
+}
+
+function buildRedFlagResponses(flags) {
+  if (!flags.length) return 'None';
+
+  return [
+    '=== Red Flag Responses ===',
+    '',
+    ...flags.flatMap((f, i) => [
+      (f.kind === 'validity' ? 'Validity Flag ' : 'Flagged Response ') + (i + 1) + ' - Item ' + f.id,
+      'Category: ' + f.category,
+      'Question: ' + f.question,
+      'Candidate Response: ' + f.response,
+      'Recruiter Note: ' + f.note,
+      '',
+      '--------------------------------------------------',
+      ''
+    ])
+  ].join('\n');
+}
+
+function buildCompactAnswers() {
+  const pairs = [];
+  for (let i = 1; i <= TOTAL; i++) pairs.push(i + ':' + ans[i]);
+  return pairs.join('  ');
+}
+
+function buildWorkableReport(data) {
+  const { categoryScores, composite, flags, validity, verdict, summaryText } = data;
+  const substantiveFlags = flags.filter(f => f.kind !== 'validity').length;
+  const redFlagResponses = buildRedFlagResponses(flags);
+
+  return [
+    '=== STAFF ACCOUNTANT ASSESSMENT RESULTS ===',
+    '',
+    'Candidate: ' + cand.name,
+    'Email: ' + cand.email,
+    'Phone: ' + (cand.phone || 'N/A'),
+    'Position: ' + cand.position,
+    'Date: ' + cand.completionDate,
+    '',
+    'RECOMMENDATION: ' + verdict.label,
+    'Composite Score: ' + composite + ' / 100',
+    '',
+    '--- CATEGORY SCORES ---',
+    'Integrity & Control Discipline: ' + (categoryScores.Controls || 0) + '%',
+    'Accuracy & Reconciliation: ' + (categoryScores.Accuracy || 0) + '%',
+    'Reliability & Follow-Through: ' + (categoryScores.Reliability || 0) + '%',
+    'Payroll, Privacy & Compliance: ' + (categoryScores.Payroll || 0) + '%',
+    'Professional Judgment & Teamwork: ' + (categoryScores.Professionalism || 0) + '%',
+    '',
+    'Substantive Red Flags: ' + substantiveFlags,
+    'Validity Flags: ' + validity.count,
+    '',
+    '--- RED FLAG RESPONSES ---',
+    redFlagResponses,
+    '',
+    '--- SUMMARY ---',
+    summaryText,
+    '',
+    'Assessment: ' + ASSESSMENT_VERSION,
+    'NW Ambulance - Talent Acquisition - Confidential'
+  ].join('\n');
 }
 
 function excelSafeText(value, maxLength = 30000) {
@@ -395,61 +696,23 @@ function excelSafeText(value, maxLength = 30000) {
     .substring(0, maxLength);
 }
 
-function buildResponseDetail() {
-  return ITEMS.map(q => [
-    'Item ' + q.n,
-    'Question: ' + q.q,
-    'Candidate Response: ' + getFullAnswerText(q.n)
-  ].join('\n')).join('\n\n');
-}
-
-function buildRedFlagDetail(flags) {
-  if (!flags.length) return 'None';
-
-  return [
-    '=== Red Flag Responses ===',
-    '',
-    ...flags.flatMap((f, i) => [
-      `Flag ${i + 1}`,
-      `Item: ${f.id}`,
-      `Category: ${f.category}`,
-      `Question: ${f.question}`,
-      `Candidate Response: ${f.response}`,
-      `Reason Flagged: ${f.note}`,
-      '',
-      '--------------------------------------------------',
-      ''
-    ])
-  ].join('\n');
-}
-
-function buildCompactAnswers() {
-  const pairs = [];
-  for (let i = 1; i <= TOTAL; i++) pairs.push(i + ':' + ans[i]);
-  return pairs.join('  ');
-}
-
 function buildSubmissionPayload() {
+  const { categoryScores, composite } = computeAll();
   const flags = getFlags();
-  const redFlagResponses = buildRedFlagDetail(flags);
-  const durationMinutes = Math.round((Date.now() - t0) / 60000);
-  const submittedAt = new Date().toISOString();
+  const validity = getValidity();
+  const verdict = getVerdict(composite, categoryScores, flags, validity);
+  const summaryText = buildAssessmentSummary(verdict, composite, categoryScores, flags, validity);
+  const redFlagResponses = buildRedFlagResponses(flags);
+  const fullReport = buildWorkableReport({
+    categoryScores,
+    composite,
+    flags,
+    validity,
+    verdict,
+    summaryText
+  });
 
-  const reportText = [
-    'STAFF ACCOUNTANT ASSESSMENT - ' + cand.name.toUpperCase(),
-    'Position: ' + cand.position + '   |   Date: ' + cand.completionDate,
-    'Email: ' + cand.email + (cand.phone ? '   |   Phone: ' + cand.phone : ''),
-    '',
-    'RED FLAGS: ' + (flags.length > 0 ? flags.length + ' identified' : 'None'),
-    '',
-    redFlagResponses,
-    '',
-    '--- ALL ANSWERS ---',
-    buildCompactAnswers(),
-    '',
-    'Assessment: ' + ASSESSMENT_VERSION,
-    'NW Ambulance - Talent Acquisition - Confidential'
-  ].join('\n');
+  const submittedAt = new Date().toISOString();
 
   return {
     firstName: cand.firstName,
@@ -459,23 +722,37 @@ function buildSubmissionPayload() {
     assessmentType: ASSESSMENT_TYPE,
     assessmentVersion: ASSESSMENT_VERSION,
 
-    // Staff Accountant source does not contain an authored numeric scoring model.
-    // Preserve the assessment and red-flag logic without inventing a score.
-    score: '',
-    recommendation: '',
+    score: composite.toString(),
+    compositeScore: composite.toString(),
+    recommendation: verdict.label,
 
     redFlags: flags.length.toString(),
     redFlagCount: flags.length.toString(),
-    redFlagResponses: redFlagResponses,
+    redFlagResponses: excelSafeText(redFlagResponses, 12000),
+    validityConcernCount: validity.count.toString(),
 
     completionDate: submittedAt,
     phone: cand.phone,
-    report: reportText,
-    fullReport: reportText,
-    workableComment: redFlagResponses,
-    durationMinutes: durationMinutes.toString(),
-    compactAnswers: buildCompactAnswers(),
-    rawAnswers: ans
+
+    report: "'" + excelSafeText(fullReport, 30000),
+    fullReport: "'" + excelSafeText(fullReport, 30000),
+
+    categoryScores: {
+      controls: categoryScores.Controls || 0,
+      accuracy: categoryScores.Accuracy || 0,
+      reliability: categoryScores.Reliability || 0,
+      payrollCompliance: categoryScores.Payroll || 0,
+      professionalJudgment: categoryScores.Professionalism || 0
+    },
+
+    integrityControlDiscipline: String(categoryScores.Controls || 0),
+    accuracyReconciliation: String(categoryScores.Accuracy || 0),
+    reliabilityFollowThrough: String(categoryScores.Reliability || 0),
+    payrollPrivacyCompliance: String(categoryScores.Payroll || 0),
+    professionalJudgmentTeamwork: String(categoryScores.Professionalism || 0),
+
+    rawAnswers: ans,
+    compactAnswers: buildCompactAnswers()
   };
 }
 
@@ -489,9 +766,10 @@ async function sendToFlow(data) {
       body: JSON.stringify(data)
     });
 
+    console.log('Power Automate response status:', response.status);
     return response.ok;
   } catch (e) {
-    console.error('Flow submission failed', e);
+    console.error('Staff Accountant assessment submission failed', e);
     return false;
   }
 }
@@ -505,26 +783,14 @@ async function finish() {
   const submitted = await sendToFlow(payload);
 
   document.getElementById('hdr-right').style.display = 'none';
-
-  // Mirror the Controller reference: candidate sees confirmation only.
-  const thank = document.getElementById('screen-thankyou');
-  thank.innerHTML = `
-    <div style="text-align:center; padding:100px 24px 60px;">
-      <div style="font-family:'Playfair Display',serif; font-size:26px; font-weight:700; color:var(--ink); margin-bottom:16px;">
-        Thank you for submitting your assessment.
-      </div>
-      <div style="font-size:15px; color:var(--muted); line-height:1.75;">
-        Recruiting will reach out to discuss next steps.
-      </div>
-      ${submitted ? '' : `
-        <div id="submit-error" style="margin:22px auto 0;max-width:560px;background:var(--red-bg);border:1px solid var(--red-border);color:var(--red);border-radius:var(--r);padding:12px 14px;font-size:12px;line-height:1.5;text-align:left;">
-          Submission issue: Power Automate did not confirm receipt. Please notify recruiting that your assessment did not submit successfully.
-        </div>
-      `}
-    </div>
-  `;
-
   show('screen-thankyou');
+
+  if (!submitted) {
+    const e = document.getElementById('submit-error');
+    e.style.display = 'block';
+    e.textContent = 'Submission issue: Power Automate did not confirm receipt. Please notify recruiting that your assessment did not submit successfully.';
+  }
+
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
