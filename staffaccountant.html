@@ -211,7 +211,7 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 
 const FLOW_URL = "https://defaultb9fe31c2de0742529875da1c500446.c8.environment.api.powerplatform.com:443/powerautomate/automations/direct/cu/07/workflows/731e94479a7c4e819e9a85a06430a716/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=IV9ZvKA6vg_AMA0jCXgc8JVBBfh-3kqklaVdRPVv7_I";
 const ASSESSMENT_TYPE = 'Staff Accountant';
-const ASSESSMENT_VERSION = 'Staff Accountant Professional Judgment & Work Scenarios v1.0';
+const ASSESSMENT_VERSION = 'Staff Accountant Professional Judgment & Work Scenarios v2.0';
 
 const ROLE_JS = 'SA2';
 const LIKERT = ['Strongly Disagree','Disagree','Agree','Strongly Agree'];
@@ -405,13 +405,22 @@ function buildResponseDetail() {
 
 function buildRedFlagDetail(flags) {
   if (!flags.length) return 'None';
-  return flags.map((f,i) => [
-    'Red Flag ' + (i + 1) + ' - Item ' + f.id,
-    'Category: ' + f.category,
-    'Question: ' + f.question,
-    'Candidate Response: ' + f.response,
-    'Recruiter Note: ' + f.note
-  ].join('\n')).join('\n\n');
+
+  return [
+    '=== Red Flag Responses ===',
+    '',
+    ...flags.flatMap((f, i) => [
+      `Flag ${i + 1}`,
+      `Item: ${f.id}`,
+      `Category: ${f.category}`,
+      `Question: ${f.question}`,
+      `Candidate Response: ${f.response}`,
+      `Reason Flagged: ${f.note}`,
+      '',
+      '--------------------------------------------------',
+      ''
+    ])
+  ].join('\n');
 }
 
 function buildCompactAnswers() {
@@ -421,73 +430,52 @@ function buildCompactAnswers() {
 }
 
 function buildSubmissionPayload() {
-  const fullResponses = buildResponseDetail();
   const flags = getFlags();
-  const redFlagDetail = buildRedFlagDetail(flags);
+  const redFlagResponses = buildRedFlagDetail(flags);
   const durationMinutes = Math.round((Date.now() - t0) / 60000);
   const submittedAt = new Date().toISOString();
 
-  const report = [
-    '=== Staff Accountant Assessment ===',
+  const reportText = [
+    'STAFF ACCOUNTANT ASSESSMENT - ' + cand.name.toUpperCase(),
+    'Position: ' + cand.position + '   |   Date: ' + cand.completionDate,
+    'Email: ' + cand.email + (cand.phone ? '   |   Phone: ' + cand.phone : ''),
     '',
-    'Candidate: ' + cand.name,
-    'Email: ' + cand.email,
-    'Phone: ' + (cand.phone || 'N/A'),
-    'Position: Staff Accountant',
-    'Completion Date: ' + cand.completionDate,
-    'Duration: ' + durationMinutes + ' minutes',
+    'RED FLAGS: ' + (flags.length > 0 ? flags.length + ' identified' : 'None'),
     '',
-    'RED FLAG COUNT: ' + flags.length,
+    redFlagResponses,
     '',
-    '--- RED FLAG RESPONSES ---',
-    redFlagDetail,
-    '',
-    '--- ALL ASSESSMENT RESPONSES ---',
-    fullResponses,
-    '',
-    '--- COMPACT ANSWER KEY ---',
+    '--- ALL ANSWERS ---',
     buildCompactAnswers(),
     '',
     'Assessment: ' + ASSESSMENT_VERSION,
     'NW Ambulance - Talent Acquisition - Confidential'
   ].join('\n');
 
-  // Mirrors the production red-flags-to-Excel pattern:
-  // serialize the actual flags array into a safe top-level redFlagResponses field.
-  const safeRedFlagResponses = excelSafeText(JSON.stringify(flags), 12000);
-  const safeReport = "'" + excelSafeText(report, 30000);
-
   return {
-    completionDate: submittedAt,
-    email: cand.email,
     firstName: cand.firstName,
     lastName: cand.lastName,
-    phone: cand.phone,
+    email: cand.email,
     position: cand.position,
     assessmentType: ASSESSMENT_TYPE,
     assessmentVersion: ASSESSMENT_VERSION,
+
+    // Staff Accountant source does not contain an authored numeric scoring model.
+    // Preserve the assessment and red-flag logic without inventing a score.
     score: '',
-    compositeScore: '',
     recommendation: '',
-    riskProfile: '',
-    redFlags: String(flags.length),
-    redFlagCount: String(flags.length),
-    validityConcernCount: String(flags.filter(f => f.category === 'Validity').length),
-    redFlagResponses: safeRedFlagResponses,
-    workableComment: excelSafeText(redFlagDetail, 12000),
-    report: safeReport,
-    fullReport: safeReport,
-    durationMinutes: String(durationMinutes),
+
+    redFlags: flags.length.toString(),
+    redFlagCount: flags.length.toString(),
+    redFlagResponses: redFlagResponses,
+
+    completionDate: submittedAt,
+    phone: cand.phone,
+    report: reportText,
+    fullReport: reportText,
+    workableComment: redFlagResponses,
+    durationMinutes: durationMinutes.toString(),
     compactAnswers: buildCompactAnswers(),
-    rawAnswers: ans,
-    payloadJson: excelSafeText(JSON.stringify({
-      assessmentType: ASSESSMENT_TYPE,
-      assessmentVersion: ASSESSMENT_VERSION,
-      candidate: cand,
-      flagCount: flags.length,
-      flags,
-      submittedAt
-    }), 30000)
+    rawAnswers: ans
   };
 }
 
@@ -501,10 +489,9 @@ async function sendToFlow(data) {
       body: JSON.stringify(data)
     });
 
-    console.log('Power Automate response status:', response.status);
     return response.ok;
   } catch (e) {
-    console.error('Staff Accountant assessment submission failed', e);
+    console.error('Flow submission failed', e);
     return false;
   }
 }
@@ -512,20 +499,32 @@ async function sendToFlow(data) {
 async function finish() {
   const btn = document.getElementById('btn-next');
   btn.disabled = true;
-  btn.textContent = 'Submitting…';
+  btn.textContent = 'Submitting...';
 
   const payload = buildSubmissionPayload();
   const submitted = await sendToFlow(payload);
 
   document.getElementById('hdr-right').style.display = 'none';
+
+  // Mirror the Controller reference: candidate sees confirmation only.
+  const thank = document.getElementById('screen-thankyou');
+  thank.innerHTML = `
+    <div style="text-align:center; padding:100px 24px 60px;">
+      <div style="font-family:'Playfair Display',serif; font-size:26px; font-weight:700; color:var(--ink); margin-bottom:16px;">
+        Thank you for submitting your assessment.
+      </div>
+      <div style="font-size:15px; color:var(--muted); line-height:1.75;">
+        Recruiting will reach out to discuss next steps.
+      </div>
+      ${submitted ? '' : `
+        <div id="submit-error" style="margin:22px auto 0;max-width:560px;background:var(--red-bg);border:1px solid var(--red-border);color:var(--red);border-radius:var(--r);padding:12px 14px;font-size:12px;line-height:1.5;text-align:left;">
+          Submission issue: Power Automate did not confirm receipt. Please notify recruiting that your assessment did not submit successfully.
+        </div>
+      `}
+    </div>
+  `;
+
   show('screen-thankyou');
-
-  if (!submitted) {
-    const e = document.getElementById('submit-error');
-    e.style.display = 'block';
-    e.textContent = 'Submission issue: Power Automate did not confirm receipt. Please notify recruiting that your assessment did not submit successfully.';
-  }
-
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
