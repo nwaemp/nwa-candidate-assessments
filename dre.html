@@ -1,0 +1,2297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Director of Real Estate Development Assessment</title>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Barlow:wght@300;400;500;600&family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --slate:      #1b2332;
+    --slate-mid:  #243044;
+    --slate-lite: #2e3d57;
+    --steel:      #3d4f6e;
+    --cream:      #f0ebe0;
+    --cream2:     #e6e0d4;
+    --muted:      #8a9ab5;
+    --border:     rgba(240,235,224,0.1);
+    --border2:    rgba(240,235,224,0.18);
+    --accent:     #c8a96e;
+    --accent2:    #e8cc96;
+    --accent-bg:  rgba(200,169,110,0.1);
+    --accent-bd:  rgba(200,169,110,0.3);
+    --green:      #4caf82;
+    --green-bg:   rgba(76,175,130,0.12);
+    --green-bd:   rgba(76,175,130,0.3);
+    --amber:      #d4973a;
+    --amber-bg:   rgba(212,151,58,0.12);
+    --amber-bd:   rgba(212,151,58,0.3);
+    --red:        #d45252;
+    --red-bg:     rgba(212,82,82,0.1);
+    --red-bd:     rgba(212,82,82,0.28);
+    --risk:       #e8724a;
+    --risk-bg:    rgba(232,114,74,0.1);
+    --risk-bd:    rgba(232,114,74,0.28);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Barlow', sans-serif;
+    background: var(--slate);
+    color: var(--cream);
+    min-height: 100vh;
+    font-size: 15px;
+    line-height: 1.65;
+  }
+
+  /* Crosshatch texture overlay */
+  body::before {
+    content: '';
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background-image:
+      repeating-linear-gradient(45deg, rgba(240,235,224,0.015) 0px, rgba(240,235,224,0.015) 1px, transparent 1px, transparent 8px),
+      repeating-linear-gradient(-45deg, rgba(240,235,224,0.015) 0px, rgba(240,235,224,0.015) 1px, transparent 1px, transparent 8px);
+  }
+
+  /* ── HEADER ─────────────────────────────────── */
+  .header {
+    background: var(--slate-mid);
+    border-bottom: 1px solid var(--border2);
+    padding: 0 40px;
+    height: 60px;
+    display: flex; align-items: center; gap: 16px;
+    position: sticky; top: 0; z-index: 100;
+  }
+
+  .h-emblem {
+    width: 32px; height: 32px; flex-shrink: 0;
+    background: var(--accent);
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  .h-emblem span {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 10px; font-weight: 700;
+    color: var(--slate); letter-spacing: 0.04em;
+  }
+
+  .h-name {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 14px; font-weight: 700;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--cream);
+  }
+
+  .h-name small {
+    display: block;
+    font-size: 10px; font-weight: 400;
+    letter-spacing: 0.06em; color: var(--muted);
+    text-transform: uppercase;
+  }
+
+  .h-sep { width: 1px; height: 22px; background: var(--border2); }
+
+  .h-tag {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px; font-weight: 600;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .h-right { margin-left: auto; display: flex; align-items: center; gap: 12px; }
+
+  .prog-strip {
+    display: flex; align-items: center; gap: 10px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    padding: 5px 14px;
+  }
+
+  .prog-num { font-family: 'Barlow Condensed', monospace; font-size: 12px; color: var(--muted); letter-spacing: 0.06em; }
+  .prog-track { width: 110px; height: 2px; background: rgba(255,255,255,0.08); border-radius: 1px; overflow: hidden; }
+  .prog-fill { height: 100%; background: var(--accent); border-radius: 1px; transition: width 0.35s ease; width: 0%; }
+
+  /* ── MAIN ───────────────────────────────────── */
+  .main { max-width: 780px; margin: 0 auto; padding: 52px 24px 100px; position: relative; z-index: 1; }
+
+  /* ── WELCOME ────────────────────────────────── */
+  #screen-welcome { display: block; }
+
+  .w-overline {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px; font-weight: 700;
+    letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 20px;
+    display: flex; align-items: center; gap: 12px;
+  }
+
+  .w-overline::before {
+    content: '';
+    display: inline-block;
+    width: 32px; height: 1px;
+    background: var(--accent);
+  }
+
+  .w-title {
+    font-family: 'Libre Baskerville', serif;
+    font-size: clamp(30px, 5.5vw, 50px);
+    font-weight: 700;
+    line-height: 1.06;
+    letter-spacing: -0.01em;
+    color: var(--cream);
+    margin-bottom: 22px;
+  }
+
+  .w-title em {
+    font-style: italic;
+    font-weight: 400;
+    color: var(--accent2);
+  }
+
+  .w-desc {
+    font-size: 15px;
+    color: var(--muted);
+    max-width: 520px;
+    line-height: 1.8;
+    margin-bottom: 40px;
+    font-weight: 300;
+  }
+
+  .stat-row {
+    display: flex;
+    gap: 1px;
+    max-width: 440px;
+    margin-bottom: 48px;
+    border: 1px solid var(--border2);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .stat {
+    flex: 1;
+    background: rgba(255,255,255,0.03);
+    padding: 14px 18px;
+    border-right: 1px solid var(--border);
+  }
+  .stat:last-child { border-right: none; }
+
+  .stat-val {
+    font-family: 'Libre Baskerville', serif;
+    font-size: 26px;
+    color: var(--accent2);
+    line-height: 1;
+    margin-bottom: 3px;
+  }
+
+  .stat-lbl {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /* FORM */
+  .cform { max-width: 480px; margin-bottom: 40px; }
+
+  .frow { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+
+  .fg { display: flex; flex-direction: column; gap: 5px; }
+
+  .fg label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 10px; font-weight: 700;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .fg input {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border2);
+    border-radius: 3px;
+    padding: 9px 12px;
+    color: var(--cream);
+    font-family: 'Barlow', sans-serif;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .fg input:focus { border-color: var(--accent-bd); }
+  .fg input::placeholder { color: rgba(240,235,224,0.2); }
+
+  /* BUTTONS */
+  .btn-primary {
+    background: var(--accent);
+    color: var(--slate);
+    border: none; border-radius: 3px;
+    padding: 13px 30px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 14px; font-weight: 700;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+
+  .btn-primary:hover { background: var(--accent2); }
+  .btn-primary:active { transform: scale(0.98); }
+
+  .btn-ghost {
+    background: transparent;
+    color: var(--muted);
+    border: 1px solid var(--border2);
+    border-radius: 3px;
+    padding: 11px 22px;
+    font-family: 'Barlow', sans-serif;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .btn-ghost:hover { border-color: var(--border2); color: var(--cream); }
+
+  /* ── ASSESSMENT ─────────────────────────────── */
+  #screen-assessment { display: none; }
+
+  .sec-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 10px; font-weight: 700;
+    letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 6px;
+  }
+
+  .sec-title {
+    font-family: 'Libre Baskerville', serif;
+    font-size: 24px; font-weight: 700;
+    color: var(--cream); margin-bottom: 4px;
+  }
+
+  .sec-sub {
+    font-size: 12px; color: var(--muted);
+    margin-bottom: 32px; font-weight: 300;
+  }
+
+  /* QUESTION */
+  .q-block { animation: qfade 0.22s ease both; }
+
+  @keyframes qfade {
+    from { opacity:0; transform: translateY(7px); }
+    to   { opacity:1; transform: translateY(0); }
+  }
+
+  .q-rule { height: 1px; background: var(--border); margin: 22px 0; }
+
+  .q-num {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 10px; font-weight: 700;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 7px;
+  }
+
+  .q-text {
+    font-size: 15px; color: var(--cream);
+    line-height: 1.55; margin-bottom: 14px;
+    font-weight: 400;
+  }
+
+  /* LIKERT */
+  .lw { display: flex; gap: 5px; flex-wrap: wrap; }
+
+  .lo {
+    flex: 1 1 0; min-width: 82px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--border2);
+    border-radius: 3px;
+    padding: 9px 6px;
+    text-align: center; cursor: pointer;
+    font-size: 11px; color: var(--muted);
+    font-family: 'Barlow', sans-serif;
+    line-height: 1.3; transition: all 0.15s; user-select: none;
+  }
+
+  .lo:hover { background: var(--accent-bg); color: var(--cream); border-color: var(--accent-bd); }
+
+  .lo.sel {
+    background: var(--accent-bg);
+    border-color: var(--accent-bd);
+    color: var(--cream);
+    font-weight: 600;
+  }
+
+  .l-ends {
+    display: flex; justify-content: space-between;
+    font-size: 10px; color: var(--muted);
+    margin-top: 5px; padding: 0 2px;
+    letter-spacing: 0.04em;
+    font-family: 'Barlow Condensed', sans-serif;
+    text-transform: uppercase;
+  }
+
+  /* SCENARIO */
+  .so-wrap { display: flex; flex-direction: column; gap: 6px; }
+
+  .so {
+    display: flex; align-items: flex-start; gap: 12px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--border2);
+    border-radius: 3px;
+    padding: 12px 15px;
+    cursor: pointer; transition: all 0.15s; user-select: none;
+  }
+
+  .so:hover { background: var(--accent-bg); border-color: var(--accent-bd); }
+
+  .so.sel { background: var(--accent-bg); border-color: var(--accent-bd); }
+
+  .so-letter {
+    width: 22px; height: 22px; border-radius: 50%;
+    border: 1.5px solid var(--muted);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px; font-weight: 700; flex-shrink: 0; margin-top: 1px;
+    font-family: 'Barlow Condensed', sans-serif;
+    letter-spacing: 0.04em; transition: all 0.15s;
+  }
+
+  .so.sel .so-letter { background: var(--accent); border-color: var(--accent); color: var(--slate); }
+  .so-text { font-size: 13px; color: var(--cream2); line-height: 1.5; }
+
+  /* NAV */
+  .q-nav {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-top: 32px; padding-top: 22px;
+    border-top: 1px solid var(--border);
+  }
+
+  .nav-info { font-size: 11px; color: var(--muted); font-family: 'Barlow Condensed', sans-serif; letter-spacing: 0.06em; }
+  .nav-btns { display: flex; gap: 10px; }
+
+
+  /* ── THANK YOU — production hidden-results pattern ───────── */
+  #screen-thankyou { display: none; }
+
+  .thank-card {
+    background: var(--slate-mid);
+    border: 1px solid var(--border2);
+    border-radius: 4px;
+    padding: 42px 34px;
+    text-align: center;
+    margin-top: 40px;
+  }
+
+  .thank-icon {
+    width: 54px; height: 54px;
+    border-radius: 50%;
+    background: var(--green-bg);
+    border: 1px solid var(--green-bd);
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 18px;
+    color: var(--green);
+    font-size: 26px;
+  }
+
+  .thank-h {
+    font-family: 'Libre Baskerville', serif;
+    font-size: 30px;
+    font-weight: 700;
+    color: var(--cream);
+    margin-bottom: 10px;
+  }
+
+  .thank-p {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.7;
+    max-width: 520px;
+    margin: 0 auto;
+  }
+
+  .submit-error {
+    display: none;
+    margin-top: 18px;
+    background: var(--red-bg);
+    border: 1px solid var(--red-bd);
+    color: var(--red);
+    border-radius: 4px;
+    padding: 12px 14px;
+    font-size: 12px;
+    line-height: 1.5;
+    text-align: left;
+  }
+
+  /* ── RESULTS ────────────────────────────────── */
+  #screen-results { display: none; }
+
+  .rt { text-align: center; padding: 40px 0 28px; }
+
+  .v-badge {
+    display: inline-block;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 12px; font-weight: 700;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    padding: 6px 20px; border-radius: 2px; margin-bottom: 16px;
+  }
+
+  .vb-hire   { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-bd); }
+  .vb-review { background: var(--amber-bg); color: var(--amber); border: 1px solid var(--amber-bd); }
+  .vb-no     { background: var(--red-bg);   color: var(--red);   border: 1px solid var(--red-bd); }
+
+  .r-name {
+    font-family: 'Libre Baskerville', serif;
+    font-size: 34px; color: var(--cream); margin-bottom: 5px;
+  }
+
+  .r-meta { font-size: 12px; color: var(--muted); font-weight: 300; }
+
+  .r-comp { margin-top: 16px; display: inline-flex; align-items: baseline; gap: 5px; }
+  .r-big { font-family: 'Libre Baskerville', serif; font-size: 54px; color: var(--accent2); line-height: 1; }
+  .r-denom { font-size: 18px; color: var(--muted); }
+
+  /* RISK INDICATOR */
+  .risk-bar-wrap {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--border2);
+    border-radius: 4px;
+    padding: 18px 22px;
+    margin: 24px 0;
+  }
+
+  .risk-bar-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px; font-weight: 700;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 10px;
+    display: flex; justify-content: space-between;
+  }
+
+  .risk-track { height: 8px; background: rgba(255,255,255,0.06); border-radius: 4px; overflow: hidden; position: relative; }
+  .risk-fill  { height: 100%; border-radius: 4px; transition: width 1s ease; }
+
+  .risk-zones {
+    display: flex; margin-top: 5px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 10px; letter-spacing: 0.06em;
+  }
+  .rz { flex: 1; text-align: center; }
+
+  /* SCORE GRID */
+  .sgrid {
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    gap: 8px; margin: 20px 0;
+  }
+
+  .sc {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--border2);
+    border-radius: 4px;
+    padding: 14px 16px;
+  }
+
+  .sc-lbl {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 10px; font-weight: 700;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 10px;
+  }
+
+  .sc-row { display: flex; align-items: center; gap: 8px; }
+  .sc-bg  { flex:1; height: 3px; background: rgba(255,255,255,0.07); border-radius: 2px; overflow: hidden; }
+  .sc-fill{ height: 100%; border-radius: 2px; transition: width 1s ease; }
+  .sc-val {
+    font-family: 'Barlow Condensed', monospace;
+    font-size: 15px; font-weight: 600;
+    width: 34px; text-align: right; flex-shrink: 0;
+  }
+
+  /* FLAGS */
+  .flags-box {
+    background: var(--risk-bg);
+    border: 1px solid var(--risk-bd);
+    border-radius: 4px;
+    padding: 18px 20px; margin-bottom: 14px;
+  }
+
+  .flags-box h3 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 13px; font-weight: 700;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--risk); margin-bottom: 10px;
+  }
+
+  .fi {
+    font-size: 12px; color: var(--muted);
+    padding: 5px 0; border-bottom: 1px solid rgba(255,255,255,0.05);
+    line-height: 1.5;
+  }
+  .fi:last-child { border-bottom: none; }
+  .fi strong { color: var(--risk); }
+
+  /* RISK PROFILE */
+  .risk-profile {
+    background: rgba(255,255,255,0.02);
+    border: 1px solid var(--border2);
+    border-radius: 4px;
+    padding: 18px 20px; margin-bottom: 16px;
+  }
+
+  .risk-profile h3 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 12px; font-weight: 700;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 10px;
+  }
+
+  .risk-profile p { font-size: 13px; color: var(--muted); line-height: 1.75; }
+
+  /* WORKABLE */
+  .wbox {
+    background: var(--slate-mid);
+    border: 1px solid var(--accent-bd);
+    border-radius: 4px; padding: 20px; margin-top: 20px;
+  }
+
+  .wbox h3 {
+    font-family: 'Libre Baskerville', serif;
+    font-size: 15px; font-weight: 700;
+    color: var(--cream); margin-bottom: 5px;
+  }
+
+  .wbox p { font-size: 12px; color: var(--muted); margin-bottom: 12px; }
+
+  .wtext {
+    background: rgba(0,0,0,0.25);
+    border: 1px solid var(--border);
+    border-radius: 3px; padding: 14px;
+    font-family: 'Courier New', monospace;
+    font-size: 11px; color: var(--muted);
+    white-space: pre-wrap; line-height: 1.7; margin-bottom: 10px;
+  }
+
+  .btn-copy {
+    font-size: 12px; color: var(--muted);
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border2);
+    border-radius: 3px; padding: 7px 14px;
+    cursor: pointer; transition: all 0.15s;
+    font-family: 'Barlow', sans-serif;
+  }
+  .btn-copy:hover { background: rgba(255,255,255,0.08); color: var(--cream); }
+
+  .exp-row { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 26px; }
+
+  @media (max-width: 560px) {
+    .header { padding: 0 14px; }
+    .main { padding: 24px 14px 80px; }
+    .frow { grid-template-columns: 1fr; }
+    .sgrid { grid-template-columns: 1fr 1fr; }
+    .lw { gap: 4px; }
+    .lo { min-width: 58px; padding: 7px 3px; font-size: 10px; }
+    .prog-strip { display: none; }
+  }
+
+  @media print {
+    body::before { display: none; }
+    body { background: white; color: #111; }
+    .header { position: static; background: #1b2332; }
+    .btn-primary, .btn-ghost, .btn-copy, .exp-row { display: none !important; }
+    .wbox { background: #1b2332; }
+  }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="h-emblem"><span>NWA</span></div>
+  <div class="h-name">
+    Work Style &amp; Judgement Assessment
+    <small>Talent Acquisition</small>
+  </div>
+  <div class="h-sep"></div>
+  <div class="h-tag">Director of Real Estate Development</div>
+  <div class="h-right" id="hRight" style="display:none">
+    <div class="prog-strip">
+      <span class="prog-num" id="prog-num">0 / 60</span>
+      <div class="prog-track"><div class="prog-fill" id="prog-fill"></div></div>
+    </div>
+  </div>
+</header>
+
+<main class="main">
+
+  <!-- ═══════ WELCOME ═══════ -->
+  <div id="screen-welcome">
+    <div class="w-overline">Director of Real Estate Development · Facilities & Development</div>
+    <h2 class="w-title">Work Style<br>&amp; <em>Judgement</em> Assessment</h2>
+    <p class="w-desc">
+      This assessment is part of our hiring process for the Clinical Manager position.
+      Most questions ask you to choose between two statements that both sound reasonable —
+      pick whichever is genuinely closer to how you work. There is no scoring key you can
+      guess at, and trying to give the "expected" answer will make your profile less
+      accurate, not better. Answer quickly and honestly. Your responses are confidential.
+    </p>
+
+    <div class="stat-row">
+      <div class="stat"><div class="stat-val">60</div><div class="stat-lbl">Questions</div></div>
+      <div class="stat"><div class="stat-val">About 15</div><div class="stat-lbl">Minutes</div></div>
+      <div class="stat"><div class="stat-val">6</div><div class="stat-lbl">Sections</div></div>
+    </div>
+
+    <div class="cform">
+      <div class="frow">
+        <div class="fg"><label>First Name *</label><input type="text" id="i-fn" placeholder="Jane"></div>
+        <div class="fg"><label>Last Name *</label><input type="text" id="i-ln" placeholder="Smith"></div>
+      </div>
+      <div class="frow">
+        <div class="fg"><label>Email *</label><input type="email" id="i-em" placeholder="jane@email.com"></div>
+        <div class="fg"><label>Phone</label><input type="tel" id="i-ph" placeholder="(555) 000-0000"></div>
+      </div>
+      <div class="fg" style="margin-bottom:12px">
+        <label>Position Applied For</label>
+        <input type="text" id="i-pos" placeholder="Director of Real Estate Development">
+      </div>
+    </div>
+
+    <button class="btn-primary" onclick="start()">Begin →</button>
+  </div>
+
+  <!-- ═══════ ASSESSMENT ═══════ -->
+  <div id="screen-assessment">
+    <div class="sec-label" id="sec-label">Section 1 of 6</div>
+    <div class="sec-title" id="sec-title">Standards &amp; Accountability</div>
+    <div class="sec-sub"   id="sec-sub">Questions 1–10</div>
+    <div id="qcont"></div>
+    <div class="q-nav">
+      <span class="nav-info" id="nav-info"></span>
+      <div class="nav-btns">
+        <button class="btn-ghost" id="btn-prev" onclick="prevSec()" style="display:none">← Back</button>
+        <button class="btn-primary" id="btn-next" onclick="nextSec()">Next Section →</button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ═══════ THANK YOU ═══════ -->
+  <div id="screen-thankyou">
+    <div class="thank-card">
+      <div class="thank-icon">✓</div>
+      <h2 class="thank-h">Assessment Submitted</h2>
+      <p class="thank-p">Your responses have been received. The hiring team will review your assessment as part of the candidate review process.</p>
+      <div class="submit-error" id="submit-error"></div>
+    </div>
+  </div>
+
+  <!-- ═══════ RESULTS ═══════ -->
+  <div id="screen-results">
+    <div class="rt">
+      <div class="v-badge" id="v-badge"></div>
+      <div class="r-name"  id="r-name"></div>
+      <div class="r-meta"  id="r-meta"></div>
+      <div class="r-comp"><span class="r-big" id="r-score">—</span><span class="r-denom">/ 100</span></div>
+    </div>
+
+    <div class="risk-bar-wrap">
+      <div class="risk-bar-label">
+        <span>Overall Risk Profile</span>
+        <span id="risk-label-text">—</span>
+      </div>
+      <div class="risk-track"><div class="risk-fill" id="risk-fill" style="width:0%"></div></div>
+      <div class="risk-zones">
+        <div class="rz" style="color:var(--green)">Low Risk</div>
+        <div class="rz" style="color:var(--amber)">Moderate</div>
+        <div class="rz" style="color:var(--risk)">Elevated</div>
+        <div class="rz" style="color:var(--red)">High Risk</div>
+      </div>
+    </div>
+
+    <div class="sgrid" id="score-grid"></div>
+
+    <div class="flags-box" id="flags-box" style="display:none">
+      <h3>⚠ Risk Indicators Detected</h3>
+      <div id="flags-list"></div>
+    </div>
+
+    <div class="risk-profile" id="risk-profile">
+      <h3>Risk &amp; Character Profile</h3>
+      <p id="profile-text"></p>
+    </div>
+
+    <div class="wbox">
+      <h3>Workable Notes — Copy &amp; Paste</h3>
+      <p>Paste into the candidate's Notes tab in Workable.</p>
+      <div class="wtext" id="wtext"></div>
+      <button class="btn-copy" onclick="copyReport()">Copy to Clipboard</button>
+    </div>
+
+    <div class="exp-row">
+      <button class="btn-primary" onclick="window.print()">Print / Save PDF</button>
+      <button class="btn-ghost"   onclick="location.reload()">New Assessment</button>
+    </div>
+  </div>
+
+</main>
+
+<script>
+const FLOW_URL = "https://defaultb9fe31c2de0742529875da1c500446.c8.environment.api.powerplatform.com:443/powerautomate/automations/direct/cu/09/workflows/b78dc7642e68404c8026817c59b9213a/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=DQsiFz2LQZaBhwDA97KHfjDAiQ7k1Z3HpGnkp9Ml3nI";
+const ASSESSMENT_TYPE = 'Director of Real Estate Development';
+const ASSESSMENT_VERSION = 'Director of Real Estate Development Assessment v2.0';
+
+// ===================================================================
+// DIRECTOR OF REAL ESTATE DEVELOPMENT
+// 60 items · 6 sections
+// Production scoring, risk, validity and Power Automate submission.
+// ===================================================================
+
+const LIKERT = ["Strongly Disagree","Disagree","Agree","Strongly Agree"];
+
+const QS = [
+  {
+    "id": 1,
+    "s": "Standards & Accountability",
+    "g": "Integrity",
+    "t": "l",
+    "q": "If a contractor's pay application undercharges us, I point it out, even though correcting it costs the Owner money.",
+    "rev": false,
+    "anchor": true,
+    "rf": []
+  },
+  {
+    "id": 2,
+    "s": "Standards & Accountability",
+    "g": "Development",
+    "t": "c",
+    "q": "A seller wants a signed LOI by Friday. The city code allows emergency services in two of three nearby districts; it's unclear for this parcel's district.",
+    "opts": [
+      "Order the ALTA survey and Phase I now, and sort out zoning in parallel.",
+      "Get a written zoning interpretation from the city before signing.",
+      "Sign with a zoning contingency and resolve it in diligence.",
+      "Sign as written; most cities treat ambulance stations like fire stations."
+    ],
+    "sc": {
+      "A": 3,
+      "B": 5,
+      "C": 4,
+      "D": 1
+    },
+    "rf": [
+      "D"
+    ]
+  },
+  {
+    "id": 3,
+    "s": "Standards & Accountability",
+    "g": "Reliability",
+    "t": "l",
+    "q": "If a deadline will slip by a day or two, it isn't worth raising until it does.",
+    "rev": true,
+    "anchor": true,
+    "rf": [
+      "Agree",
+      "Strongly Agree"
+    ]
+  },
+  {
+    "id": 4,
+    "s": "Standards & Accountability",
+    "g": "Construction Safety",
+    "t": "l",
+    "q": "On an active job site, I wear the required PPE even when I'm only there for a five-minute look.",
+    "rev": false,
+    "anchor": true,
+    "rf": [
+      "Strongly Disagree",
+      "Disagree"
+    ]
+  },
+  {
+    "id": 5,
+    "s": "Standards & Accountability",
+    "g": "Financial Controls",
+    "t": "c",
+    "q": "A GC's pay application bills roofing at 100%. You walked the roof today: about 85% done. The lender's draw deadline is today, and missing it delays payment a month.",
+    "opts": [
+      "Approve roofing at 85% with a note, and tell the GC and lender today.",
+      "Hold the whole pay application until you re-walk the roof Friday.",
+      "Approve 100%; you've seen enough roofs to know it'll be done by Friday.",
+      "Approve whatever percentage the lender's inspector accepts."
+    ],
+    "sc": {
+      "A": 5,
+      "B": 3,
+      "C": 1,
+      "D": 2
+    },
+    "rf": [
+      "C",
+      "D"
+    ]
+  },
+  {
+    "id": 6,
+    "s": "Standards & Accountability",
+    "g": "Stakeholder Judgment",
+    "t": "l",
+    "q": "When someone junior, like a new planning tech, catches my error, I correct it as readily as if my boss had.",
+    "rev": false,
+    "anchor": true,
+    "rf": []
+  },
+  {
+    "id": 7,
+    "s": "Standards & Accountability",
+    "g": "Validity",
+    "t": "l",
+    "q": "I have never missed a deadline I committed to, at any point in my career.",
+    "rev": false,
+    "anchor": false,
+    "rf": [
+      "Agree",
+      "Strongly Agree"
+    ]
+  },
+  {
+    "id": 8,
+    "s": "Standards & Accountability",
+    "g": "Capacity",
+    "t": "c",
+    "q": "You promised the Owner capital budgets Friday. It's Wednesday. A station roof is leaking, a city correction letter is due Friday, and the lender needs Monday's closing package. You can't do all four.",
+    "opts": [
+      "Tell the Owner today the budgets move to Tuesday, and why.",
+      "Work nights on all four and deliver Friday without raising it.",
+      "Hand the closing package to Baker Tilly, though they're behind on your requests.",
+      "Deliver the budgets Friday and let the correction letter slip."
+    ],
+    "sc": {
+      "A": 5,
+      "B": 2,
+      "C": 3,
+      "D": 1
+    },
+    "rf": [
+      "B",
+      "D"
+    ]
+  },
+  {
+    "id": 9,
+    "s": "Standards & Accountability",
+    "g": "Reliability",
+    "t": "c",
+    "q": "Your permit resubmittal missed the city deadline by two days, costing a new fee and three weeks. You were closing an acquisition that week. What do you tell the Owner?",
+    "opts": [
+      "\"It slipped. I've refiled; the new date is the 22nd.\"",
+      "\"It landed mid-closing. With two major items that week, something had to give.\"",
+      "\"The architect had the letter and should have flagged the date.\"",
+      "\"I missed it. I should have calendared it. Here's the new date and my fix.\""
+    ],
+    "sc": {
+      "A": 3,
+      "B": 2,
+      "C": 1,
+      "D": 5
+    },
+    "rf": [
+      "B",
+      "C"
+    ]
+  },
+  {
+    "id": 10,
+    "s": "Standards & Accountability",
+    "g": "Governance",
+    "t": "l",
+    "q": "Someone with my deal experience shouldn't need a memo justifying every purchase recommendation.",
+    "rev": true,
+    "anchor": true,
+    "rf": [
+      "Agree",
+      "Strongly Agree"
+    ]
+  },
+  {
+    "id": 11,
+    "s": "Sites, Contracts & Safety",
+    "g": "Facilities Service",
+    "t": "c",
+    "q": "A janitorial worker at an NWA station says, in limited English, that the mop sink floods every time it's used. Her supervisor says she exaggerates.",
+    "opts": [
+      "Enter a work order from her report for the plumber to assess.",
+      "Go look at the sink with her before you leave.",
+      "Ask her supervisor to confirm it and let you know.",
+      "Wait for the next walk-through; you'd have seen a pattern in the work orders."
+    ],
+    "sc": {
+      "A": 4,
+      "B": 5,
+      "C": 2,
+      "D": 1
+    },
+    "rf": [
+      "C",
+      "D"
+    ]
+  },
+  {
+    "id": 12,
+    "s": "Sites, Contracts & Safety",
+    "g": "Construction Safety",
+    "t": "l",
+    "q": "When I'm running late between sites, a few miles over the speed limit is a reasonable trade.",
+    "rev": true,
+    "anchor": true,
+    "rf": [
+      "Agree",
+      "Strongly Agree"
+    ]
+  },
+  {
+    "id": 13,
+    "s": "Sites, Contracts & Safety",
+    "g": "Reliability",
+    "t": "l",
+    "q": "Follow-up items from a project meeting are on my calendar before I leave the site.",
+    "rev": false,
+    "anchor": true,
+    "rf": []
+  },
+  {
+    "id": 14,
+    "s": "Sites, Contracts & Safety",
+    "g": "Financial Controls",
+    "t": "c",
+    "q": "The GC submits a $60,000 change order for rock hit during excavation. The geotech report said rock was possible.",
+    "opts": [
+      "Approve it; unforeseen ground conditions are usually the owner's risk.",
+      "Offer to split it 50/50 to keep the project moving.",
+      "Check the geotech report and the contract's site-conditions clause first.",
+      "Reject it; the GC should have priced rock from the geotech report."
+    ],
+    "sc": {
+      "A": 1,
+      "B": 3,
+      "C": 5,
+      "D": 2
+    },
+    "rf": [
+      "A",
+      "D"
+    ]
+  },
+  {
+    "id": 15,
+    "s": "Sites, Contracts & Safety",
+    "g": "Facilities Service",
+    "t": "l",
+    "q": "If NWA's facilities team leaves a work order half-done, finishing it is their job, not mine.",
+    "rev": true,
+    "anchor": true,
+    "rf": [
+      "Agree",
+      "Strongly Agree"
+    ]
+  },
+  {
+    "id": 16,
+    "s": "Sites, Contracts & Safety",
+    "g": "Integrity",
+    "t": "l",
+    "q": "Accepting event tickets from a seller's broker mid-negotiation is fine if it doesn't change my position.",
+    "rev": true,
+    "anchor": true,
+    "rf": [
+      "Agree",
+      "Strongly Agree"
+    ]
+  },
+  {
+    "id": 17,
+    "s": "Sites, Contracts & Safety",
+    "g": "Capacity",
+    "t": "c",
+    "q": "You're redlining a lease amendment when a planner calls back, the GC's superintendent texts a question, and the Owner wants a quick number. The three take fifteen minutes.",
+    "opts": [
+      "Handle the three, then re-read the amendment to find your place.",
+      "Handle the three and return to the amendment when it comes to mind.",
+      "Keep redlining while handling all three; you've marked up hundreds of leases.",
+      "Note where you stopped and what's next, then finish it after the three."
+    ],
+    "sc": {
+      "A": 3,
+      "B": 2,
+      "C": 1,
+      "D": 5
+    },
+    "rf": [
+      "B",
+      "C"
+    ]
+  },
+  {
+    "id": 18,
+    "s": "Sites, Contracts & Safety",
+    "g": "Stakeholder Judgment",
+    "t": "l",
+    "q": "Once the Owner decides against my recommendation, I carry out his decision as if it were my own.",
+    "rev": false,
+    "anchor": true,
+    "rf": []
+  },
+  {
+    "id": 19,
+    "s": "Sites, Contracts & Safety",
+    "g": "Construction Safety",
+    "t": "c",
+    "q": "During a build-out at an operating station, the GC wants material staged in the apparatus bay, with a second-week laborer flagging ambulances past it.",
+    "opts": [
+      "Allow it today and raise it at the weekly project meeting.",
+      "Ask the GC for a more experienced flagger.",
+      "Allow it; you've run occupied build-outs for years and this is common.",
+      "Stop bay staging until there's a barrier and set route, and tell the CAO the delay."
+    ],
+    "sc": {
+      "A": 1,
+      "B": 2,
+      "C": 1,
+      "D": 5
+    },
+    "rf": [
+      "A",
+      "B",
+      "C"
+    ]
+  },
+  {
+    "id": 20,
+    "s": "Sites, Contracts & Safety",
+    "g": "Governance",
+    "t": "l",
+    "q": "Approval limits that apply to a new hire should apply to me, whatever budgets I've managed before.",
+    "rev": false,
+    "anchor": true,
+    "rf": [
+      "Strongly Disagree",
+      "Disagree"
+    ]
+  },
+  {
+    "id": 21,
+    "s": "Ownership & Controls",
+    "g": "Facilities Service",
+    "t": "l",
+    "q": "Once a project reaches closeout, the remaining punch-list items are mostly the contractor's problem.",
+    "rev": true,
+    "anchor": true,
+    "rf": [
+      "Agree",
+      "Strongly Agree"
+    ]
+  },
+  {
+    "id": 22,
+    "s": "Ownership & Controls",
+    "g": "Integrity",
+    "t": "c",
+    "q": "Your monthly update is due tomorrow. A change order you approved double-counted electrical work: $38,000 over, your error. Savings on a later phase could cover it with no variance ever showing.",
+    "opts": [
+      "Report the variance as a change-order scope overlap.",
+      "Report it tomorrow as your error, with a recovery plan.",
+      "Hold it until you know what contingency recovers, then report the net.",
+      "Absorb it in contingency; you've run enough budgets to know it nets out."
+    ],
+    "sc": {
+      "A": 3,
+      "B": 5,
+      "C": 2,
+      "D": 1
+    },
+    "rf": [
+      "C",
+      "D"
+    ]
+  },
+  {
+    "id": 23,
+    "s": "Ownership & Controls",
+    "g": "Validity",
+    "t": "l",
+    "q": "I have put off a tedious task even when I had time to do it.",
+    "rev": false,
+    "anchor": false,
+    "rf": [
+      "Strongly Disagree",
+      "Disagree"
+    ]
+  },
+  {
+    "id": 24,
+    "s": "Ownership & Controls",
+    "g": "Integrity",
+    "t": "l",
+    "q": "If I didn't see something myself on a site visit, my report says so.",
+    "rev": false,
+    "anchor": true,
+    "rf": []
+  },
+  {
+    "id": 25,
+    "s": "Ownership & Controls",
+    "g": "Governance",
+    "t": "c",
+    "q": "NWA's CAO wants crews to move into a new station a week before the certificate of occupancy.",
+    "opts": [
+      "Let NWA stage equipment without checking with the city.",
+      "Push the GC to speed the certificate, and give the CAO a realistic date.",
+      "Allow it; NWA is the affiliated tenant, so the risk stays in-house.",
+      "Keep crews out until the certificate; ask the city about early equipment access."
+    ],
+    "sc": {
+      "A": 2,
+      "B": 4,
+      "C": 1,
+      "D": 5
+    },
+    "rf": [
+      "A",
+      "C"
+    ]
+  },
+  {
+    "id": 26,
+    "s": "Ownership & Controls",
+    "g": "Facilities Service",
+    "t": "l",
+    "q": "A maintenance tech who is short with me on a call still gets a callback the same day.",
+    "rev": false,
+    "anchor": true,
+    "rf": []
+  },
+  {
+    "id": 27,
+    "s": "Ownership & Controls",
+    "g": "Capacity",
+    "t": "c",
+    "q": "The Owner asks you to run diligence on a second acquisition this month. You're mid-closeout on a build-out and starting a pre-app. Something will slip; you're not sure what.",
+    "opts": [
+      "Accept, and within the week tell him what moved and by how much.",
+      "Before accepting, tell him what's likely to move and let him choose.",
+      "Accept, and raise anything that slips when it slips.",
+      "Accept; you've run three deals at once and know what you can handle."
+    ],
+    "sc": {
+      "A": 4,
+      "B": 5,
+      "C": 2,
+      "D": 1
+    },
+    "rf": [
+      "C",
+      "D"
+    ]
+  },
+  {
+    "id": 28,
+    "s": "Ownership & Controls",
+    "g": "Construction Safety",
+    "t": "l",
+    "q": "A station fire door that won't latch can usually wait for the next scheduled maintenance visit.",
+    "rev": true,
+    "anchor": true,
+    "rf": [
+      "Agree",
+      "Strongly Agree"
+    ]
+  },
+  {
+    "id": 29,
+    "s": "Ownership & Controls",
+    "g": "Reliability",
+    "t": "c",
+    "q": "HUB needs building values for an insurance renewal in ten days. The request went to the previous director, who never sent them. It's tedious, and unassigned.",
+    "opts": [
+      "Pull the values yourself and send them.",
+      "Tell HUB to resend the request to the Owner.",
+      "Send last year's values; you know this portfolio well enough.",
+      "Ask Baker Tilly to pull them from the fixed-asset records."
+    ],
+    "sc": {
+      "A": 5,
+      "B": 2,
+      "C": 1,
+      "D": 4
+    },
+    "rf": [
+      "B",
+      "C"
+    ]
+  },
+  {
+    "id": 30,
+    "s": "Ownership & Controls",
+    "g": "Facilities Service",
+    "t": "l",
+    "q": "I confirm a vendor actually fixed an issue rather than wait to hear it wasn't.",
+    "rev": false,
+    "anchor": true,
+    "rf": []
+  },
+  {
+    "id": 31,
+    "s": "Governance & Project Judgment",
+    "g": "Integrity",
+    "t": "c",
+    "q": "You negotiated a purchase with no buyer's broker. The listing broker offers to pay a 1.5% cooperating fee to a consulting LLC you own.",
+    "opts": [
+      "Accept it into your LLC; the company's price is the same either way.",
+      "Decline it and leave the price as negotiated.",
+      "Decline, tell the Owner, and ask for it as a price reduction.",
+      "Ask for it as a price reduction without mentioning the offer to the Owner."
+    ],
+    "sc": {
+      "A": 1,
+      "B": 4,
+      "C": 5,
+      "D": 2
+    },
+    "rf": [
+      "A",
+      "D"
+    ]
+  },
+  {
+    "id": 32,
+    "s": "Governance & Project Judgment",
+    "g": "Stakeholder Judgment",
+    "t": "l",
+    "q": "A critique of my work from someone who has never run a construction project is hard to take seriously.",
+    "rev": true,
+    "anchor": true,
+    "rf": [
+      "Agree",
+      "Strongly Agree"
+    ]
+  },
+  {
+    "id": 33,
+    "s": "Governance & Project Judgment",
+    "g": "Governance",
+    "t": "l",
+    "q": "Reporting requirements the Owner sets apply to me as much as anyone, even when they feel unnecessary.",
+    "rev": false,
+    "anchor": true,
+    "rf": [
+      "Strongly Disagree",
+      "Disagree"
+    ]
+  },
+  {
+    "id": 34,
+    "s": "Governance & Project Judgment",
+    "g": "Reliability",
+    "t": "c",
+    "q": "Which is more like you?",
+    "opts": [
+      "I'd rather bring the Owner a problem once I know its size and what I'm doing about it.",
+      "I'd rather tell the Owner early that a date is at risk, even if it turns out fine."
+    ],
+    "sc": {
+      "A": 3,
+      "B": 5
+    },
+    "rf": []
+  },
+  {
+    "id": 35,
+    "s": "Governance & Project Judgment",
+    "g": "Development",
+    "t": "c",
+    "q": "A planning tech in her first month says your site plan is four parking stalls short. The senior planner at pre-app didn't mention it. A variance takes four months.",
+    "opts": [
+      "Ask her for the code section and what alternatives it allows.",
+      "Proceed as submitted; the senior planner reviewed it.",
+      "Redesign to add four stalls, losing a bay.",
+      "Start the variance application now so the four months begin."
+    ],
+    "sc": {
+      "A": 5,
+      "B": 1,
+      "C": 3,
+      "D": 2
+    },
+    "rf": [
+      "B",
+      "D"
+    ]
+  },
+  {
+    "id": 36,
+    "s": "Governance & Project Judgment",
+    "g": "Integrity",
+    "t": "l",
+    "q": "When a project slips, explaining the city's or contractor's part is usually more useful than explaining mine.",
+    "rev": true,
+    "anchor": true,
+    "rf": [
+      "Agree",
+      "Strongly Agree"
+    ]
+  },
+  {
+    "id": 37,
+    "s": "Governance & Project Judgment",
+    "g": "Construction Safety",
+    "t": "c",
+    "q": "On a site walk, a drywall stack you'd asked the GC to move slides off its pallet where you'd just been standing. A near-miss report means a half-day stand-down on a schedule already at risk.",
+    "opts": [
+      "Mention it informally to the superintendent.",
+      "Have it restacked; nothing came of it, and you'd already spotted the risk.",
+      "Report the near-miss and accept the half-day.",
+      "Have it restacked and note it in your site log."
+    ],
+    "sc": {
+      "A": 2,
+      "B": 1,
+      "C": 5,
+      "D": 3
+    },
+    "rf": [
+      "A",
+      "B"
+    ]
+  },
+  {
+    "id": 38,
+    "s": "Governance & Project Judgment",
+    "g": "Validity",
+    "t": "l",
+    "q": "I have never made a mistake in a contract or budget that someone else caught first.",
+    "rev": false,
+    "anchor": false,
+    "rf": [
+      "Agree",
+      "Strongly Agree"
+    ]
+  },
+  {
+    "id": 39,
+    "s": "Governance & Project Judgment",
+    "g": "Financial Controls",
+    "t": "l",
+    "q": "When a pro forma assumption is on the optimistic end, I label it that way for the Owner.",
+    "rev": false,
+    "anchor": true,
+    "rf": []
+  },
+  {
+    "id": 40,
+    "s": "Governance & Project Judgment",
+    "g": "Stakeholder Judgment",
+    "t": "c",
+    "q": "A GC superintendent you've worked with for years keeps commenting on a young EMT's appearance as crews pass the build-out. She hasn't complained.",
+    "opts": [
+      "Tell him it stops now, and leave it there unless it repeats.",
+      "Tell him it stops now, and report it to the GC and NWA's CAO today.",
+      "Mention it informally to the GC's project manager.",
+      "Leave it; she hasn't complained, and he's the best superintendent you've had."
+    ],
+    "sc": {
+      "A": 3,
+      "B": 5,
+      "C": 2,
+      "D": 1
+    },
+    "rf": [
+      "C",
+      "D"
+    ]
+  },
+  {
+    "id": 41,
+    "s": "Execution, Service & Risk",
+    "g": "Facilities Service",
+    "t": "l",
+    "q": "Chasing down missing lease exhibits and old certificates of insurance is work I'd expect an assistant to handle.",
+    "rev": true,
+    "anchor": true,
+    "rf": [
+      "Agree",
+      "Strongly Agree"
+    ]
+  },
+  {
+    "id": 42,
+    "s": "Execution, Service & Risk",
+    "g": "Reliability",
+    "t": "c",
+    "q": "You promised NWA's CAO a station move-in on the 15th. It's the 2nd. The earliest fire inspection is the 14th; if anything fails, you miss the date.",
+    "opts": [
+      "Keep the 15th; you've walked enough fire inspections to know it'll pass.",
+      "Keep the 15th and book a backup reinspection slot.",
+      "Tell the CAO now that the date hinges on the 14th, and set a fallback.",
+      "Tell the CAO on the 14th, once you have the result."
+    ],
+    "sc": {
+      "A": 1,
+      "B": 3,
+      "C": 5,
+      "D": 2
+    },
+    "rf": [
+      "A",
+      "D"
+    ]
+  },
+  {
+    "id": 43,
+    "s": "Execution, Service & Risk",
+    "g": "Facilities Service",
+    "t": "l",
+    "q": "An outside tenant gets the same maintenance response as NWA, the affiliated tenant.",
+    "rev": false,
+    "anchor": true,
+    "rf": []
+  },
+  {
+    "id": 44,
+    "s": "Execution, Service & Risk",
+    "g": "Financial Controls",
+    "t": "c",
+    "q": "You're reading back wire instructions for $1.2 million in closing funds with the title company. The Owner texts for status, the lender emails a revised settlement statement, and the GC calls twice.",
+    "opts": [
+      "Finish the read-back and confirm the call-back number first.",
+      "Take them as they come; you've verified dozens of wires.",
+      "Text the Owner you're on the wire, then finish and take the rest.",
+      "Skim the revised statement while the title officer reads."
+    ],
+    "sc": {
+      "A": 5,
+      "B": 1,
+      "C": 4,
+      "D": 1
+    },
+    "rf": [
+      "B",
+      "D"
+    ]
+  },
+  {
+    "id": 45,
+    "s": "Execution, Service & Risk",
+    "g": "Construction Safety",
+    "t": "l",
+    "q": "I stop a site visit if a trench or roof edge lacks protection, even when the GC says it'll be fixed shortly.",
+    "rev": false,
+    "anchor": true,
+    "rf": [
+      "Strongly Disagree",
+      "Disagree"
+    ]
+  },
+  {
+    "id": 46,
+    "s": "Execution, Service & Risk",
+    "g": "Stakeholder Judgment",
+    "t": "c",
+    "q": "A station maintenance tech says the rooftop unit you approved is a model he's replaced twice elsewhere. The submittal is approved; reopening it may delay the order.",
+    "opts": [
+      "Tell him the engineer specified it, so it stands.",
+      "Ask for his replacement records, and take them to the engineer if they hold up.",
+      "Keep it; you've approved dozens, and failures are usually maintenance.",
+      "Thank him and ask the engineer to confirm the spec."
+    ],
+    "sc": {
+      "A": 2,
+      "B": 5,
+      "C": 1,
+      "D": 4
+    },
+    "rf": [
+      "A",
+      "C"
+    ]
+  },
+  {
+    "id": 47,
+    "s": "Execution, Service & Risk",
+    "g": "Integrity",
+    "t": "l",
+    "q": "If the company passes on a property I found through work, I'm free to pursue it personally without asking.",
+    "rev": true,
+    "anchor": true,
+    "rf": [
+      "Agree",
+      "Strongly Agree"
+    ]
+  },
+  {
+    "id": 48,
+    "s": "Execution, Service & Risk",
+    "g": "Financial Controls",
+    "t": "c",
+    "q": "You're building next year's capital budget. One station's roof is 22 years old and has never leaked.",
+    "opts": [
+      "Budget a full replacement this year to be safe.",
+      "Leave it out of the budget until it leaks.",
+      "Budget a small repair allowance; roofs like this often last 30 years.",
+      "Get a roof condition assessment and budget from what it finds."
+    ],
+    "sc": {
+      "A": 2,
+      "B": 1,
+      "C": 2,
+      "D": 5
+    },
+    "rf": [
+      "A",
+      "B",
+      "C"
+    ]
+  },
+  {
+    "id": 49,
+    "s": "Execution, Service & Risk",
+    "g": "Stakeholder Judgment",
+    "t": "l",
+    "q": "When I disagree with outside counsel or the CPA on a deal point, I tell them before the Owner hears it.",
+    "rev": false,
+    "anchor": true,
+    "rf": []
+  },
+  {
+    "id": 50,
+    "s": "Execution, Service & Risk",
+    "g": "Reliability",
+    "t": "c",
+    "q": "Your architect missed a permit resubmittal deadline by two days, costing a new fee and three weeks. They were finishing another client's project that week. What do you tell the Owner?",
+    "opts": [
+      "\"The architect got careless with our deadline. I'd consider replacing them.\"",
+      "\"The architect missed it. It's refiled; the new date is the 22nd.\"",
+      "\"They had another project closing that week. These things happen.\"",
+      "\"It was missed, and I wasn't tracking it myself; I am now. New date: the 22nd.\""
+    ],
+    "sc": {
+      "A": 2,
+      "B": 4,
+      "C": 1,
+      "D": 5
+    },
+    "rf": [
+      "A",
+      "C"
+    ]
+  },
+  {
+    "id": 51,
+    "s": "Stewardship & Closeout",
+    "g": "Integrity",
+    "t": "l",
+    "q": "When my estimate to the Owner proves wrong, I tell him what I got wrong, not just what changed.",
+    "rev": false,
+    "anchor": true,
+    "rf": []
+  },
+  {
+    "id": 52,
+    "s": "Stewardship & Closeout",
+    "g": "Integrity",
+    "t": "c",
+    "q": "The GC on your station build-out offers to rebuild your home deck at cost after the project closes. You'll review their pay applications on two more projects.",
+    "opts": [
+      "Decline, and tell the Owner about the offer.",
+      "Accept at cost; it's after this project and won't affect your reviews.",
+      "Decline, and leave it there since nothing was accepted.",
+      "Accept, but pay full market price and tell the Owner."
+    ],
+    "sc": {
+      "A": 5,
+      "B": 1,
+      "C": 3,
+      "D": 2
+    },
+    "rf": [
+      "B",
+      "D"
+    ]
+  },
+  {
+    "id": 53,
+    "s": "Stewardship & Closeout",
+    "g": "Reliability",
+    "t": "l",
+    "q": "When I tell a planner \"I'll get that to you,\" they get it when I said, even if no one would notice.",
+    "rev": false,
+    "anchor": true,
+    "rf": [
+      "Strongly Disagree",
+      "Disagree"
+    ]
+  },
+  {
+    "id": 54,
+    "s": "Stewardship & Closeout",
+    "g": "Facilities Service",
+    "t": "c",
+    "q": "At 4:30 Friday, a new EMT mentions that station gutters overflow onto the crew walkway. No work order exists, and you're due at a lender meeting.",
+    "opts": [
+      "Enter the work order Monday and mark it priority.",
+      "Call the gutter vendor now and enter the work order yourself.",
+      "Add it to the next quarterly walk-through; you know these stations.",
+      "Ask the EMT to submit it through NWA's request system."
+    ],
+    "sc": {
+      "A": 3,
+      "B": 5,
+      "C": 1,
+      "D": 2
+    },
+    "rf": [
+      "C",
+      "D"
+    ]
+  },
+  {
+    "id": 55,
+    "s": "Stewardship & Closeout",
+    "g": "Validity",
+    "t": "l",
+    "q": "There have been times I was short with someone who didn't deserve it.",
+    "rev": false,
+    "anchor": false,
+    "rf": [
+      "Strongly Disagree",
+      "Disagree"
+    ]
+  },
+  {
+    "id": 56,
+    "s": "Stewardship & Closeout",
+    "g": "Governance",
+    "t": "c",
+    "q": "Policy requires three bids over $25,000. A $40,000 parking lot repair is needed, and after 15 years in this market you know which contractor is best.",
+    "opts": [
+      "Get three bids and include your view on which is best.",
+      "Ask the Owner in writing for a one-time waiver.",
+      "Award it to that contractor; your experience beats three quotes.",
+      "Get two bids; the market is thin this time of year."
+    ],
+    "sc": {
+      "A": 5,
+      "B": 4,
+      "C": 1,
+      "D": 2
+    },
+    "rf": [
+      "C",
+      "D"
+    ]
+  },
+  {
+    "id": 57,
+    "s": "Stewardship & Closeout",
+    "g": "Stakeholder Judgment",
+    "t": "l",
+    "q": "I give a concern raised by a station crew member the same attention as one raised by NWA leadership.",
+    "rev": false,
+    "anchor": true,
+    "rf": [
+      "Strongly Disagree",
+      "Disagree"
+    ]
+  },
+  {
+    "id": 58,
+    "s": "Stewardship & Closeout",
+    "g": "Development",
+    "t": "c",
+    "q": "A deal you worked three months dies in diligence: the Phase I finds a former dry cleaner. The Owner knows. You've spent $14,000, and three vendors are mid-work.",
+    "opts": [
+      "Let the vendors finish in case the deal revives.",
+      "Stop the vendors and get back to the pipeline; the Owner already knows.",
+      "Stop the vendors today and send the Owner a short write-up of findings and costs.",
+      "Find a replacement property first, so your next update has good news too."
+    ],
+    "sc": {
+      "A": 1,
+      "B": 3,
+      "C": 5,
+      "D": 1
+    },
+    "rf": [
+      "A",
+      "D"
+    ]
+  },
+  {
+    "id": 59,
+    "s": "Stewardship & Closeout",
+    "g": "Stakeholder Judgment",
+    "t": "l",
+    "q": "Station crews' feedback on my site plans has changed my designs before, and I go looking for it.",
+    "rev": false,
+    "anchor": true,
+    "rf": []
+  },
+  {
+    "id": 60,
+    "s": "Stewardship & Closeout",
+    "g": "Development",
+    "t": "c",
+    "q": "The lender requires the Phase I to be dated within 180 days of closing. Closing has slipped, and the report will be 190 days old.",
+    "opts": [
+      "Close, and update the Phase I afterward.",
+      "Ask the lender for a waiver.",
+      "Order a Phase I update now and tell the lender.",
+      "Leave it; lenders rarely check report dates."
+    ],
+    "sc": {
+      "A": 1,
+      "B": 4,
+      "C": 5,
+      "D": 1
+    },
+    "rf": [
+      "A",
+      "D"
+    ]
+  }
+];
+
+const SECTIONS = [
+  { name:"Standards & Accountability",       label:"Section 1 of 6", range:[1,10] },
+  { name:"Sites, Contracts & Safety",        label:"Section 2 of 6", range:[11,20] },
+  { name:"Ownership & Controls",              label:"Section 3 of 6", range:[21,30] },
+  { name:"Governance & Project Judgment",    label:"Section 4 of 6", range:[31,40] },
+  { name:"Execution, Service & Risk",         label:"Section 5 of 6", range:[41,50] },
+  { name:"Stewardship & Closeout",            label:"Section 6 of 6", range:[51,60] }
+];
+
+const DCATS = [
+  { key:"Integrity",            label:"Integrity & Fiduciary Stewardship", w:0.16 },
+  { key:"Development",          label:"Development & Due Diligence",       w:0.14 },
+  { key:"Construction Safety",  label:"Construction & Safety",             w:0.14 },
+  { key:"Financial Controls",   label:"Financial & Contract Controls",     w:0.15 },
+  { key:"Reliability",          label:"Reliability & Follow-Through",      w:0.12 },
+  { key:"Capacity",             label:"Capacity & Prioritization",         w:0.10 },
+  { key:"Facilities Service",   label:"Facilities & Service Responsiveness",w:0.07 },
+  { key:"Stakeholder Judgment", label:"Stakeholder & Professional Judgment",w:0.06 },
+  { key:"Governance",           label:"Governance & Compliance",           w:0.06 }
+];
+const TOTAL_W = DCATS.reduce((a,c)=>a+c.w,0);
+
+let cand={}, ans={}, curS=0;
+
+function start(){
+  const fn=document.getElementById('i-fn').value.trim();
+  const ln=document.getElementById('i-ln').value.trim();
+  const em=document.getElementById('i-em').value.trim();
+  if(!fn||!ln||!em){
+    alert('Please enter your first name, last name, and email.');
+    return;
+  }
+
+  cand={
+    firstName:fn,
+    lastName:ln,
+    name:fn+' '+ln,
+    email:em,
+    phone:document.getElementById('i-ph').value.trim(),
+    position:document.getElementById('i-pos').value.trim()||'Director of Real Estate Development',
+    date:new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'}),
+    completionDate:new Date().toISOString().split('T')[0]
+  };
+
+  document.getElementById('screen-welcome').style.display='none';
+  document.getElementById('screen-assessment').style.display='block';
+  document.getElementById('hRight').style.display='flex';
+  curS=0;
+  render();
+}
+
+function render(){
+  const sec=SECTIONS[curS],[s,e]=sec.range;
+  document.getElementById('sec-label').textContent=sec.label;
+  document.getElementById('sec-title').textContent=sec.name;
+  document.getElementById('sec-sub').textContent=`Questions ${s}–${e} of ${QS.length}`;
+
+  const qs=QS.filter(q=>q.id>=s&&q.id<=e);
+  const cont=document.getElementById('qcont');
+  cont.innerHTML='';
+
+  qs.forEach((q,i)=>{
+    if(i>0){
+      const d=document.createElement('div');
+      d.className='q-rule';
+      cont.appendChild(d);
+    }
+    const b=document.createElement('div');
+    b.className='q-block';
+    b.style.animationDelay=(i*35)+'ms';
+    b.innerHTML=`<div class="q-num">Q${q.id}</div><div class="q-text">${q.q}</div>`;
+    b.appendChild(q.t==='l'?mkLikert(q):mkChoice(q));
+    cont.appendChild(b);
+  });
+
+  document.getElementById('btn-prev').style.display=curS>0?'':'none';
+  document.getElementById('btn-next').textContent=curS<SECTIONS.length-1?'Next Section →':'Submit';
+  updateProg();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function mkLikert(q){
+  const wrap=document.createElement('div');
+  const lw=document.createElement('div');
+  lw.className='lw';
+  lw.id='lw'+q.id;
+
+  LIKERT.forEach(lbl=>{
+    const o=document.createElement('div');
+    o.className='lo'+(ans[q.id]===lbl?' sel':'');
+    o.textContent=lbl;
+    o.onclick=()=>{
+      lw.querySelectorAll('.lo').forEach(x=>x.classList.remove('sel'));
+      o.classList.add('sel');
+      ans[q.id]=lbl;
+      updateProg();
+    };
+    lw.appendChild(o);
+  });
+
+  const ends=document.createElement('div');
+  ends.className='l-ends';
+  ends.innerHTML='<span>Strongly Disagree</span><span>Strongly Agree</span>';
+  wrap.appendChild(lw);
+  wrap.appendChild(ends);
+  return wrap;
+}
+
+function mkChoice(q){
+  const letters=['A','B','C','D'];
+  const wrap=document.createElement('div');
+  wrap.className='so-wrap';
+
+  q.opts.forEach((txt,i)=>{
+    const l=letters[i];
+    const o=document.createElement('div');
+    o.className='so'+(ans[q.id]===l?' sel':'');
+    o.innerHTML=`<div class="so-letter">${l}</div><div class="so-text">${txt}</div>`;
+    o.onclick=()=>{
+      wrap.querySelectorAll('.so').forEach(x=>x.classList.remove('sel'));
+      o.classList.add('sel');
+      ans[q.id]=l;
+      updateProg();
+    };
+    wrap.appendChild(o);
+  });
+
+  return wrap;
+}
+
+function updateProg(){
+  const n=Object.keys(ans).length,total=QS.length;
+  document.getElementById('prog-num').textContent=n+' / '+total;
+  document.getElementById('prog-fill').style.width=Math.round((n/total)*100)+'%';
+
+  const sec=SECTIONS[curS];
+  const qs=QS.filter(q=>q.id>=sec.range[0]&&q.id<=sec.range[1]);
+  const done=qs.filter(q=>ans[q.id]!==undefined).length;
+  document.getElementById('nav-info').textContent=done+' of '+qs.length+' answered';
+}
+
+function nextSec(){
+  const sec=SECTIONS[curS];
+  const missing=QS.filter(q=>q.id>=sec.range[0]&&q.id<=sec.range[1]&&ans[q.id]===undefined);
+
+  if(missing.length){
+    alert('Please answer all questions before continuing. ('+missing.length+' remaining)');
+    return;
+  }
+
+  if(curS<SECTIONS.length-1){
+    curS++;
+    render();
+  }else{
+    showResults();
+  }
+}
+
+function prevSec(){
+  if(curS>0){
+    curS--;
+    render();
+  }
+}
+
+function scoreQ(q,a){
+  if(q.t==='c') return q.sc[a]||0;
+
+  const base={"Strongly Disagree":1,"Disagree":2,"Agree":4,"Strongly Agree":5}[a]||0;
+  return q.rev?(6-base):base;
+}
+
+function computeScores(){
+  const grps={};
+
+  QS.forEach(q=>{
+    if(q.g==='Validity')return;
+    const v=scoreQ(q,ans[q.id]);
+    if(!grps[q.g])grps[q.g]=[];
+    grps[q.g].push(v);
+  });
+
+  const avg={};
+  for(const g in grps){
+    const vals=grps[g];
+    avg[g]=vals.reduce((a,b)=>a+b,0)/vals.length;
+  }
+
+  let raw=0;
+  DCATS.forEach(({key,w})=>{raw+=(avg[key]||0)*w;});
+  const composite=raw/TOTAL_W;
+
+  return{avg,composite,score100:Math.round(((composite-1)/4)*100)};
+}
+
+function to100(v){
+  return Math.max(0,Math.min(100,Math.round((((v||0)-1)/4)*100)));
+}
+
+function getFlags(){
+  return QS.filter(q=>{
+    if(q.g==='Validity')return false;
+    if(!q.rf||!q.rf.length)return false;
+    return q.rf.includes(ans[q.id]);
+  }).map(q=>({
+    id:q.id,
+    g:q.g,
+    a:ans[q.id],
+    type:q.t
+  }));
+}
+
+function getValidity(){
+  const impossibleHits=[7,38].filter(id=>['Agree','Strongly Agree'].includes(ans[id])).length;
+  const denialHits=[23,55].filter(id=>['Strongly Disagree','Disagree'].includes(ans[id])).length;
+
+  const impossibleConcern=impossibleHits>=2;
+  const denialConcern=denialHits>=2;
+  const concerns=(impossibleConcern?1:0)+(denialConcern?1:0);
+  const strongConcern=(impossibleHits>=1&&denialHits>=1)||impossibleHits>=2||denialHits>=2;
+
+  return{impossibleHits,denialHits,impossibleConcern,denialConcern,concerns,strongConcern};
+}
+
+function getConsistency(){
+  const anchors=QS.filter(q=>q.anchor&&q.g!=='Validity');
+  const aScores=anchors.map(q=>scoreQ(q,ans[q.id]));
+  const anchorAvg=aScores.length?aScores.reduce((a,b)=>a+b,0)/aScores.length:0;
+
+  const opaque=QS.filter(q=>q.t==='c'&&q.g!=='Validity');
+  const oScores=opaque.map(q=>scoreQ(q,ans[q.id]));
+  const opaqueAvg=oScores.length?oScores.reduce((a,b)=>a+b,0)/oScores.length:0;
+
+  const gap=anchorAvg-opaqueAvg;
+
+  return{
+    anchorAvg,opaqueAvg,gap,
+    anchor100:to100(anchorAvg),
+    opaque100:to100(opaqueAvg),
+    inconsistent:gap>=1.0,
+    marked:gap>=1.5
+  };
+}
+
+function getRiskLevel(score100,flagCount){
+  if(flagCount>=6||score100<40)return{label:'High Risk',color:'var(--red)',pct:90};
+  if(flagCount>=4||score100<55)return{label:'Elevated Risk',color:'var(--risk)',pct:72};
+  if(flagCount>=2||score100<65)return{label:'Moderate Risk',color:'var(--amber)',pct:50};
+  if(score100>=80&&flagCount===0)return{label:'Low Risk',color:'var(--green)',pct:15};
+  return{label:'Low–Moderate Risk',color:'var(--green)',pct:28};
+}
+
+function getVerdict(score100,flagCount,avg,validity,cons){
+  const integrity=to100(avg['Integrity']);
+  const development=to100(avg['Development']);
+  const safety=to100(avg['Construction Safety']);
+  const financial=to100(avg['Financial Controls']);
+  const governance=to100(avg['Governance']);
+
+  if(
+    flagCount>=6||
+    score100<40||
+    integrity<60||
+    financial<60||
+    safety<58||
+    development<55||
+    governance<55
+  ) return{label:'Do Not Advance',cls:'vb-no'};
+
+  if(validity&&validity.strongConcern)
+    return{label:'Review Further — Validity',cls:'vb-review'};
+
+  if(cons&&cons.marked)
+    return{label:'Review Further — Inconsistent',cls:'vb-review'};
+
+  if(score100>=85&&flagCount===0)
+    return{label:'Recommended: Hire',cls:'vb-hire'};
+
+  if(score100>=75&&flagCount<=2)
+    return{label:'Hire with Review',cls:'vb-hire'};
+
+  if(score100>=65)
+    return{label:'Review Further',cls:'vb-review'};
+
+  return{label:'Do Not Advance',cls:'vb-no'};
+}
+
+function getAnswerText(q){
+  const a=ans[q.id];
+  if(a===undefined)return'';
+  if(q.t==='l')return a;
+
+  const idx=['A','B','C','D'].indexOf(a);
+  return idx>=0&&q.opts&&q.opts[idx]?q.opts[idx]:a;
+}
+
+function buildRedFlagResponses(flags,validity,cons){
+  const rows=[];
+
+  flags.forEach((f,i)=>{
+    const q=QS.find(x=>x.id===f.id);
+    rows.push(
+      `Risk Flag ${i+1} — Q${f.id}`,
+      `Question: ${q?q.q:''}`,
+      `Candidate Response: ${q?getAnswerText(q):f.a}`,
+      `Category: ${f.g}`,
+      ''
+    );
+  });
+
+  [7,23,38,55].forEach(id=>{
+    const q=QS.find(x=>x.id===id);
+    if(!q||!q.rf||!q.rf.includes(ans[id]))return;
+
+    rows.push(
+      `Validity Concern — Q${id}`,
+      `Question: ${q.q}`,
+      `Candidate Response: ${getAnswerText(q)}`,
+      ''
+    );
+  });
+
+  if(cons&&cons.marked){
+    rows.push(
+      'Anchor Consistency Concern',
+      `Transparent items: ${cons.anchor100}/100`,
+      `Scenario choices: ${cons.opaque100}/100`,
+      `Gap: ${cons.gap.toFixed(2)} on a 5-point scale`,
+      ''
+    );
+  }
+
+  return rows.length?rows.filter(Boolean).join('\\n'):'None';
+}
+
+function buildAssessmentData(){
+  const{avg,composite,score100}=computeScores();
+  const flags=getFlags();
+  const validity=getValidity();
+  const cons=getConsistency();
+  const risk=getRiskLevel(score100,flags.length);
+  const verdict=getVerdict(score100,flags.length,avg,validity,cons);
+
+  const integrity=to100(avg['Integrity']);
+  const development=to100(avg['Development']);
+  const safety=to100(avg['Construction Safety']);
+  const financial=to100(avg['Financial Controls']);
+  const reliability=to100(avg['Reliability']);
+  const capacity=to100(avg['Capacity']);
+  const facilities=to100(avg['Facilities Service']);
+  const stakeholder=to100(avg['Stakeholder Judgment']);
+  const governance=to100(avg['Governance']);
+
+  let profile='';
+
+  if(verdict.cls==='vb-hire'&&verdict.label.includes('Recommended')){
+    profile='This candidate shows a strong Director of Real Estate Development profile across fiduciary stewardship, project execution, construction safety, financial controls, due diligence, and follow-through. Their scenario choices generally favor documented controls, early escalation, verification, and owner transparency.';
+  }else if(verdict.label.includes('Validity')){
+    profile='This candidate scored adequately on the job-content items, but the validity cluster contains an unusually polished response pattern. Treat the composite as one data point and verify examples through a structured interview and references.';
+  }else if(verdict.label.includes('Inconsistent')){
+    profile='This candidate scored materially better on transparent work-style statements than on scenario choices. The gap suggests their stated standards and decisions under pressure may not be fully aligned. Review the flagged scenarios closely.';
+  }else if(verdict.cls==='vb-hire'){
+    profile='This candidate presents a generally strong real-estate development profile with a small number of risk indicators that should be explored during the interview.';
+  }else if(verdict.cls==='vb-review'){
+    profile='This candidate shows a mixed profile. Review the category scores and flagged responses, especially where schedule pressure, contractor relationships, personal discretion, or executive expectations competed with documented controls.';
+  }else{
+    profile='This candidate shows significant concerns in one or more core Director of Real Estate Development dimensions. Review the flagged responses and category floors before any advancement.';
+  }
+
+  if(integrity<60)profile+=` Integrity & Fiduciary Stewardship (${integrity}/100) is below threshold.`;
+  if(financial<60)profile+=` Financial & Contract Controls (${financial}/100) is below threshold.`;
+  if(safety<58)profile+=` Construction & Safety (${safety}/100) is below threshold.`;
+  if(development<55)profile+=` Development & Due Diligence (${development}/100) is below threshold.`;
+  if(governance<55)profile+=` Governance & Compliance (${governance}/100) is below threshold.`;
+  if(reliability<60)profile+=` Reliability & Follow-Through (${reliability}/100) warrants review.`;
+  if(capacity<60)profile+=` Capacity & Prioritization (${capacity}/100) warrants review.`;
+
+  if(validity.strongConcern){
+    profile+=` Validity: ${validity.impossibleHits} perfection claim(s) endorsed and ${validity.denialHits} ordinary-imperfection item(s) denied.`;
+  }
+
+  const redFlagResponses=buildRedFlagResponses(flags,validity,cons);
+
+  const report=[
+    '=== Director of Real Estate Development Assessment ===',
+    'Northwest Ambulance · Talent Acquisition',
+    '',
+    `Candidate: ${cand.name}`,
+    `Email:     ${cand.email}`,
+    `Phone:     ${cand.phone||'N/A'}`,
+    `Position:  ${cand.position}`,
+    `Date:      ${cand.date}`,
+    '',
+    `RECOMMENDATION:  ${verdict.label}`,
+    `Composite Score: ${score100} / 100`,
+    `Risk Profile:    ${risk.label}`,
+    '',
+    '--- CATEGORY SCORES (0-100) ---',
+    `Integrity & Fiduciary Stewardship:      ${integrity}`,
+    `Development & Due Diligence:            ${development}`,
+    `Construction & Safety:                  ${safety}`,
+    `Financial & Contract Controls:          ${financial}`,
+    `Reliability & Follow-Through:           ${reliability}`,
+    `Capacity & Prioritization:              ${capacity}`,
+    `Facilities & Service Responsiveness:    ${facilities}`,
+    `Stakeholder & Professional Judgment:    ${stakeholder}`,
+    `Governance & Compliance:                ${governance}`,
+    '',
+    '--- RESPONSE CONSISTENCY ---',
+    `Transparent items: ${cons.anchor100}/100`,
+    `Scenario choices:  ${cons.opaque100}/100`,
+    `Gap: ${cons.gap.toFixed(2)}`,
+    '',
+    `Risk Indicators: ${flags.length}`,
+    `Validity Concerns: ${validity.concerns}`,
+    '',
+    '--- RED FLAG RESPONSES ---',
+    redFlagResponses,
+    '',
+    '--- PROFILE ---',
+    profile
+  ].join('\\n');
+
+  return{
+    avg,composite,score100,flags,validity,cons,risk,verdict,profile,redFlagResponses,report,
+    categoryScores:{
+      integrity,
+      development,
+      constructionSafety:safety,
+      financialControls:financial,
+      reliability,
+      capacity,
+      facilitiesService:facilities,
+      stakeholderJudgment:stakeholder,
+      governance
+    }
+  };
+}
+
+function buildSubmissionPayload(){
+  const d=buildAssessmentData();
+
+  return{
+    firstName:cand.firstName,
+    lastName:cand.lastName,
+    email:cand.email,
+    position:cand.position,
+    assessmentType:ASSESSMENT_TYPE,
+    score:d.score100.toString(),
+    recommendation:d.verdict.label,
+    redFlags:d.flags.length.toString(),
+    redFlagResponses:d.redFlagResponses||'None',
+    completionDate:cand.completionDate,
+    report:d.report,
+
+    phone:cand.phone,
+    compositeScore:d.score100,
+    redFlagCount:d.flags.length,
+    validityConcernCount:d.validity.concerns,
+    validityStrongConcern:d.validity.strongConcern,
+    anchorConsistencyGap:d.cons.gap.toFixed(2),
+    anchorConsistencyStatus:d.cons.marked?'Marked':d.cons.inconsistent?'Mild Gap':'Consistent',
+    riskProfile:d.risk.label,
+    fullReport:d.report,
+    categoryScores:d.categoryScores,
+    rawAnswers:ans,
+    assessmentVersion:ASSESSMENT_VERSION
+  };
+}
+
+async function sendToFlow(data){
+  try{
+    console.log('Director of Real Estate Development assessment payload sent to Power Automate:',data);
+
+    const response=await fetch(FLOW_URL,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify(data)
+    });
+
+    console.log('Power Automate response status:',response.status);
+    return response.ok;
+  }catch(e){
+    console.error('Director of Real Estate Development assessment submission failed',e);
+    return false;
+  }
+}
+
+async function submitAssessment(){
+  const btn=document.getElementById('btn-next');
+  btn.disabled=true;
+  btn.textContent='Submitting…';
+
+  const payload=buildSubmissionPayload();
+  const submitted=await sendToFlow(payload);
+
+  if(submitted){
+    showThankYou();
+  }else{
+    showThankYou('Your assessment was completed, but the automatic submission could not be confirmed. Please notify the hiring team.');
+  }
+}
+
+function showThankYou(message){
+  document.getElementById('screen-assessment').style.display='none';
+  document.getElementById('screen-results').style.display='none';
+  document.getElementById('screen-thankyou').style.display='block';
+  document.getElementById('hRight').style.display='none';
+
+  if(message){
+    const e=document.getElementById('submit-error');
+    e.style.display='block';
+    e.textContent=message;
+  }
+
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function showResults(){
+  submitAssessment();
+}
+
+function copyReport(){
+  const el=document.getElementById('wtext');
+  if(!el)return;
+
+  navigator.clipboard.writeText(el.textContent).then(()=>{
+    const b=document.querySelector('.btn-copy');
+    if(!b)return;
+    b.textContent='✓ Copied';
+    setTimeout(()=>b.textContent='Copy to Clipboard',2000);
+  });
+}
+</script>
+</body>
+</html>
