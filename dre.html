@@ -2091,7 +2091,7 @@ function buildRedFlagResponses(flags,validity,cons){
     );
   }
 
-  return rows.length?rows.filter(Boolean).join('\\n'):'None';
+  return rows.length?rows.filter(Boolean).join('\n'):'None';
 }
 
 function buildAssessmentData(){
@@ -2180,7 +2180,7 @@ function buildAssessmentData(){
     '',
     '--- PROFILE ---',
     profile
-  ].join('\\n');
+  ].join('\n');
 
   return{
     avg,composite,score100,flags,validity,cons,risk,verdict,profile,redFlagResponses,report,
